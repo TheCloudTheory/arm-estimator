@@ -13,4 +13,10 @@
     <PackageReference Include="Azure.Identity" Version="1.6.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="templates\sa.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
