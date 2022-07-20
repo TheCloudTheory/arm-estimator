@@ -20,10 +20,7 @@
             "DZH318Z0BPH7/00BJ",
             "DZH318Z0BPH7/00BZ",
             "DZH318Z0BPH7/00C0",
-            "DZH318Z0BZ0C/000N",
-            "DZH318Z0CBTJ/00RR",
-            "DZH318Z0CBTJ/00S9",
-            "DZH318Z0CBTJ/00SB"
+            "DZH318Z0BZ0C/000N"
             }
         }
     };
