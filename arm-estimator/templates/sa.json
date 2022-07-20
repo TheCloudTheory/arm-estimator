@@ -25,6 +25,17 @@
         "name": "Standard_LRS"
       },
       "kind": "StorageV2"
+    },
+    {
+      "type": "Microsoft.Network/virtualNetworks",
+      "apiVersion": "2021-08-01",
+      "name": "jasd786gfds78a",
+      "location": "[parameters('rgLocation')]",
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [ "10.0.0.0/20" ]
+        }
+      }
     }
   ]
 }

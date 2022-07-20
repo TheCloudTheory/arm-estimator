@@ -3,7 +3,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32526.322
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "arm-estimator", "arm-estimator.csproj", "{E982BFCE-A233-472D-B1E8-269B11E4916D}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6A9F70C1-5847-4260-9F92-9FEAC5773B8B}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "arm-estimator-generator", "arm-estimator-generator\arm-estimator-generator.csproj", "{29E06D28-7839-418E-B261-0FE9F3D78DB5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "arm-estimator", "arm-estimator\arm-estimator.csproj", "{4D5DFE1A-2AC4-4218-98A7-238FE78AE799}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +18,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E982BFCE-A233-472D-B1E8-269B11E4916D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E982BFCE-A233-472D-B1E8-269B11E4916D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E982BFCE-A233-472D-B1E8-269B11E4916D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E982BFCE-A233-472D-B1E8-269B11E4916D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29E06D28-7839-418E-B261-0FE9F3D78DB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29E06D28-7839-418E-B261-0FE9F3D78DB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29E06D28-7839-418E-B261-0FE9F3D78DB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29E06D28-7839-418E-B261-0FE9F3D78DB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D5DFE1A-2AC4-4218-98A7-238FE78AE799}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D5DFE1A-2AC4-4218-98A7-238FE78AE799}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D5DFE1A-2AC4-4218-98A7-238FE78AE799}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D5DFE1A-2AC4-4218-98A7-238FE78AE799}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
