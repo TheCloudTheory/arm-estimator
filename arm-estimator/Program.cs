@@ -25,7 +25,7 @@ internal class Program
         using (var loggerFactory = LoggerFactory.Create(builder =>
         {
             builder.ClearProviders();
-            builder.AddSimpleConsole();
+            builder.AddEstimatorLogger();
         }))
         {
             var logger = loggerFactory.CreateLogger<Program>();

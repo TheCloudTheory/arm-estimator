@@ -45,7 +45,7 @@ internal class WhatIfProcessor
                 continue;
             }
 
-            var itemsWithoutReservations = data.Items.Where(_ => _.type != "Reservation");
+            var itemsWithoutReservations = data.Items.Where(_ => _.type != "Reservation").OrderByDescending(_ => _.retailPrice);
             var totalCost = itemsWithoutReservations.Select(_ => _.retailPrice).Sum();
 
             logger.LogInformation("Price for {name} [{resourceType}] will be {totalCost} USD.", id.Name, id.ResourceType, totalCost);
@@ -55,14 +55,7 @@ internal class WhatIfProcessor
 
             foreach (var item in itemsWithoutReservations)
             {
-                logger.LogInformation("- {id}", item.skuId);
-                logger.LogInformation("- {skuName}", item.skuName);
-                logger.LogInformation("- {productId}", item.productId);
-                logger.LogInformation("- {productName}", item.productName);
-                logger.LogInformation("- {meterId}", item.meterId);
-                logger.LogInformation("- {meterName}", item.meterName);
-                logger.LogInformation("- {retailPrice}", item.retailPrice);
-                logger.LogInformation("- {measure}", item.unitOfMeasure);
+                logger.LogInformation("{skuName} | {productName} | {meterName} | {retailPrice} for {measure}", item.skuName, item.productName, item.meterName, item.retailPrice, item.unitOfMeasure);
             }
         }
     }
