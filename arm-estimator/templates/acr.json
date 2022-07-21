@@ -1,0 +1,23 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.3.255.40792",
+      "templateHash": "12309390030775337032"
+    }
+  },
+  "functions": [],
+  "resources": [
+    {
+      "type": "Microsoft.ContainerRegistry/registries",
+      "apiVersion": "2021-09-01",
+      "name": "armestimatoracr",
+      "location": "westeurope",
+      "sku": {
+        "name": "Basic"
+      }
+    }
+  ]
+}

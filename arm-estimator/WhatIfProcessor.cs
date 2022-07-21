@@ -21,8 +21,13 @@ internal class WhatIfProcessor
             switch (id.ResourceType)
             {
                 case "Microsoft.Storage/storageAccounts":
-                    var query = new StorageAccountRetailQuery(change, logger);
-                    url = query.GetQueryUrl();
+                    var saQuery = new StorageAccountRetailQuery(change, logger);
+                    url = saQuery.GetQueryUrl();
+
+                    break;
+                case "Microsoft.ContainerRegistry/registries":
+                    var acrQuery = new ContainerRegistryRetailQuery(change, logger);
+                    url = acrQuery.GetQueryUrl();
 
                     break;
                 default:
