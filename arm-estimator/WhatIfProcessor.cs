@@ -105,13 +105,20 @@ internal class WhatIfProcessor
     private void ReportEstimationToConsole(ResourceIdentifier id, IOrderedEnumerable<RetailItem> items, double? totalCost)
     {
         this.logger.LogInformation("Price for {name} [{resourceType}] will be {totalCost} USD.", id.Name, id.ResourceType, totalCost);
-        this.logger.LogInformation("----------------------");
-        this.logger.LogInformation("Instance: {name}", id.Name);
-        this.logger.LogInformation("Type: {type}", id.ResourceType);
+        this.logger.LogInformation("");
+        this.logger.LogInformation("-> Instance: {name}", id.Name);
+        this.logger.LogInformation("-> Type: {type}", id.ResourceType);
+        this.logger.LogInformation("");
+        this.logger.LogInformation("Aggregated metrics:");
+        this.logger.LogInformation("");
 
         foreach (var item in items)
         {
-            this.logger.LogInformation("{skuName} | {productName} | {meterName} | {retailPrice} for {measure}", item.skuName, item.productName, item.meterName, item.retailPrice, item.unitOfMeasure);
+            this.logger.LogInformation("-> {skuName} | {productName} | {meterName} | {retailPrice} for {measure}", item.skuName, item.productName, item.meterName, item.retailPrice, item.unitOfMeasure);
         }
+
+        this.logger.LogInformation("");
+        this.logger.LogInformation("-------------------------------");
+        this.logger.LogInformation("");
     }
 }
