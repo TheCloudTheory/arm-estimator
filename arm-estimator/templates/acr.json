@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.3.255.40792",
-      "templateHash": "12309390030775337032"
+      "templateHash": "11091165150315385497"
     }
   },
   "functions": [],
@@ -17,6 +17,24 @@
       "location": "westeurope",
       "sku": {
         "name": "Basic"
+      }
+    },
+    {
+      "type": "Microsoft.ContainerRegistry/registries",
+      "apiVersion": "2021-09-01",
+      "name": "armestimatoracr2",
+      "location": "westeurope",
+      "sku": {
+        "name": "Standard"
+      }
+    },
+    {
+      "type": "Microsoft.ContainerRegistry/registries",
+      "apiVersion": "2021-09-01",
+      "name": "armestimatoracr3",
+      "location": "westeurope",
+      "sku": {
+        "name": "Premium"
       }
     }
   ]
