@@ -1,15 +1,10 @@
-﻿using Azure.Core;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 
-internal class StorageAccountRetailQuery : IRetailQuery
+internal class StorageAccountRetailQuery : BaseRetailQuery, IRetailQuery
 {
-    private readonly WhatIfChange change;
-    private readonly ILogger logger;
-
     public StorageAccountRetailQuery(WhatIfChange change, ILogger logger)
+        : base(change, logger)
     {
-        this.change = change;
-        this.logger = logger;
     }
 
     public string? GetQueryUrl()

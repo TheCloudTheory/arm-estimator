@@ -1,14 +1,10 @@
 ﻿using Microsoft.Extensions.Logging;
 
-internal class ContainerRegistryRetailQuery : IRetailQuery
+internal class ContainerRegistryRetailQuery : BaseRetailQuery, IRetailQuery
 {
-    private readonly WhatIfChange change;
-    private readonly ILogger logger;
-
     public ContainerRegistryRetailQuery(WhatIfChange change, ILogger logger)
+        : base(change, logger)
     {
-        this.change = change;
-        this.logger = logger;
     }
 
     public string? GetQueryUrl()

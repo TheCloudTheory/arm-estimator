@@ -39,7 +39,7 @@ internal class Program
             }
 
             logger.LogInformation("Detected {noOfChanges} changes.", whatIfData.properties.changes.Length);
-            await WhatIfProcessor.Process(whatIfData.properties.changes, logger);
+            await new WhatIfProcessor(logger).Process(whatIfData.properties.changes);
 
             await Task.Delay(100);
         }
