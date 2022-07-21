@@ -14,6 +14,8 @@ internal class WhatIfProcessor
 
     public async Task Process(WhatIfChange[] changes)
     {
+        double totalCost = 0;
+
         foreach (WhatIfChange change in changes)
         {
             if (change.resourceId == null || change.after == null || change.after.location == null)
@@ -26,44 +28,50 @@ internal class WhatIfProcessor
             switch (id.ResourceType)
             {
                 case "Microsoft.Storage/storageAccounts":
-                    await CalculateForStorageAccount(change, id);
+                    totalCost += await CalculateForStorageAccount(change, id);
                     break;
                 case "Microsoft.ContainerRegistry/registries":
-                    await CalculateForContainerRegistry(change, id);
+                    totalCost += await CalculateForContainerRegistry(change, id);
                     break;
                 default:
                     logger.LogWarning("{resourceType} is not yet supported.", id.ResourceType);
                     break;
             }
         }
+
+        this.logger.LogError("Total cost: {cost} USD", totalCost);
     }
 
-    private async Task CalculateForStorageAccount(WhatIfChange change, ResourceIdentifier id)
+    private async Task<double> CalculateForStorageAccount(WhatIfChange change, ResourceIdentifier id)
     {
         var data = await GetAPIResponse<ContainerRegistryRetailQuery>(change, id);
         if(data == null || data.Items == null)
         {
             this.logger.LogWarning("Got no records for {type} from Retail API", id.ResourceType);
-            return;
+            return 0;
         }
 
         var itemsWithoutReservations = data.Items.Where(_ => _.type != "Reservation").OrderByDescending(_ => _.retailPrice);
         var totalCost = itemsWithoutReservations.Select(_ => _.retailPrice).Sum();
 
         ReportEstimationToConsole(id, itemsWithoutReservations, totalCost);
+        return totalCost == null ? 0 : (double)totalCost;
     }
 
-    private async Task CalculateForContainerRegistry(WhatIfChange change, ResourceIdentifier id)
+    private async Task<double> CalculateForContainerRegistry(WhatIfChange change, ResourceIdentifier id)
     {
         var data = await GetAPIResponse<ContainerRegistryRetailQuery>(change, id);
         if (data == null || data.Items == null)
         {
             this.logger.LogWarning("Got no records for {type} from Retail API", id.ResourceType);
-            return;
+            return 0;
         }
 
         var estimation = new ContainerRegistryEstimationCalculation(data.Items);
-        ReportEstimationToConsole(id, estimation.GetItems(), estimation.GetTotalCost());
+        var totalCost = estimation.GetTotalCost();
+        ReportEstimationToConsole(id, estimation.GetItems(), totalCost);
+
+        return totalCost;
     }
 
     private async Task<RetailAPIResponse?> GetAPIResponse<T>(WhatIfChange change, ResourceIdentifier id) where T : BaseRetailQuery, IRetailQuery
