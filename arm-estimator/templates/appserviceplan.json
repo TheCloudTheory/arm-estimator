@@ -1,0 +1,64 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.3.255.40792",
+      "templateHash": "15820953408849002595"
+    }
+  },
+  "functions": [],
+  "resources": [
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2022-03-01",
+      "name": "free",
+      "location": "westeurope",
+      "sku": {
+        "name": "F1"
+      },
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2022-03-01",
+      "name": "shared",
+      "location": "westeurope",
+      "sku": {
+        "name": "D1"
+      },
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2022-03-01",
+      "name": "basic1",
+      "location": "westeurope",
+      "sku": {
+        "name": "B1"
+      },
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2022-03-01",
+      "name": "basic2",
+      "location": "westeurope",
+      "sku": {
+        "name": "B2"
+      },
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2022-03-01",
+      "name": "basic3",
+      "location": "westeurope",
+      "sku": {
+        "name": "B3"
+      },
+      "properties": {}
+    }
+  ]
+}

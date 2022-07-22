@@ -2,7 +2,7 @@
   "profiles": {
     "arm-estimator": {
       "commandName": "Project",
-      "commandLineArgs": "templates/functions.json f81e70a7-e819-49b2-a980-8e9c433743dd arm-estimator-rg"
+      "commandLineArgs": "templates/appserviceplan.json f81e70a7-e819-49b2-a980-8e9c433743dd arm-estimator-rg"
     }
   }
 }

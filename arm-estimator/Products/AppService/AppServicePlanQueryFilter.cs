@@ -2,8 +2,6 @@
 
 internal class AppServicePlanQueryFilter : IQueryFilter
 {
-    private const string ServiceId = "DZH319HJX2WX";
-
     private readonly WhatIfAfterChange afterState;
     private readonly ILogger logger;
 
@@ -23,9 +21,10 @@ internal class AppServicePlanQueryFilter : IQueryFilter
             return null;
         }
 
+        var serviceId = AppServicePlanSupportedData.SkuToServiceId[sku];
         var skuIds = AppServicePlanSupportedData.SkuToSkuIdMap[sku];
         var skuIdsFilter = string.Join(" or ", skuIds.Select(_ => $"skuId eq '{_}'"));
 
-        return $"$filter=serviceId eq '{ServiceId}' and armRegionName eq '{location}' and ({skuIdsFilter})";
+        return $"$filter=serviceId eq '{serviceId}' and armRegionName eq '{location}' and ({skuIdsFilter})";
     }
 }

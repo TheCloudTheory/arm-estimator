@@ -7,9 +7,8 @@
 
     public IOrderedEnumerable<RetailItem> GetItems()
     {
-        var consumptionMetrics = this.items.Where(_ => _.type != "Reservation");
-
-        return this.items.Where(_ => _.type != "Reservation").OrderByDescending(_ => _.retailPrice);
+        return this.items.Where(_ => _.type != "Reservation" && _.type != "DevTestConsumption")
+            .OrderByDescending(_ => _.retailPrice);
     }
 
     // TODO: Functions Premium plan calculation should include multiplication if used EP2 / EP3
