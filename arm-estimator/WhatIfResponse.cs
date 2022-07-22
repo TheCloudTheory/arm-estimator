@@ -19,9 +19,12 @@ internal class WhatIfAfterChange
 {
     public string? location { get; set; }
     public WhatIfSku? sku { get; set; }
+    public string? kind { get; set; }
+
 }
 
 internal class WhatIfSku
 {
     public string? name { get; set; }
+    public string? tier { get; set; }
 }

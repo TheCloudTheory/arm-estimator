@@ -31,7 +31,14 @@ internal class WhatIfProcessor
                     totalCost += await CalculateForStorageAccount(change, id);
                     break;
                 case "Microsoft.ContainerRegistry/registries":
-                    totalCost += await CalculateForContainerRegistry(change, id);
+                    totalCost += await Calculate<ContainerRegistryRetailQuery, ContainerRegistryEstimationCalculation>(change, id);
+                    break;
+                case "Microsoft.Web/serverfarms":
+                    totalCost += await Calculate<AppServicePlanRetailQuery, AppServicePlanEstimationCalculation>(change, id);
+                    break;
+                case "Microsoft.Web/sites":
+                    //totalCost += await Calculate<AppServicePlanRetailQuery, AppServicePlanEstimationCalculation>(change, id);
+                    totalCost += 0;
                     break;
                 default:
                     logger.LogWarning("{resourceType} is not yet supported.", id.ResourceType);
@@ -58,16 +65,23 @@ internal class WhatIfProcessor
         return totalCost == null ? 0 : (double)totalCost;
     }
 
-    private async Task<double> CalculateForContainerRegistry(WhatIfChange change, ResourceIdentifier id)
+    private async Task<double> Calculate<TQuery, TCalculation>(WhatIfChange change, ResourceIdentifier id) 
+        where TQuery : BaseRetailQuery, IRetailQuery
+        where TCalculation : BaseEstimation, IEstimationCalculation
     {
-        var data = await GetAPIResponse<ContainerRegistryRetailQuery>(change, id);
+        var data = await GetAPIResponse<TQuery>(change, id);
         if (data == null || data.Items == null)
         {
             this.logger.LogWarning("Got no records for {type} from Retail API", id.ResourceType);
             return 0;
         }
 
-        var estimation = new ContainerRegistryEstimationCalculation(data.Items);
+        if (Activator.CreateInstance(typeof(TCalculation), new object[] { data.Items }) is not TCalculation estimation)
+        {
+            this.logger.LogError("Couldn't create an instance of {type}.", typeof(TCalculation));
+            return 0;
+        }
+
         var totalCost = estimation.GetTotalCost();
         ReportEstimationToConsole(id, estimation.GetItems(), totalCost);
 
@@ -85,7 +99,7 @@ internal class WhatIfProcessor
         var url = saQuery.GetQueryUrl();
         if(url == null)
         {
-            this.logger.LogError("URL generatet for {type} is null.", typeof(T));
+            this.logger.LogError("URL generated for {type} is null.", typeof(T));
             return null;
         }
 

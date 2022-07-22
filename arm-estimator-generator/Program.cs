@@ -4,16 +4,16 @@ internal class Program
 {
     private static async Task<int> Main(string[] args)
     {
-        File.AppendAllText("acr.csv", "type;serviceId;serviceName;skuId;skuName;productId;productName;meterId;meterName" + Environment.NewLine);
+        File.AppendAllText("compute.csv", "type;serviceId;serviceName;skuId;skuName;productId;productName;meterId;meterName" + Environment.NewLine);
 
         var client = new HttpClient();
-        var request = new HttpRequestMessage(HttpMethod.Get, $"https://prices.azure.com/api/retail/prices?$filter=serviceId eq 'DZH315F9L8DM' and armRegionName eq 'westeurope'");
+        var request = new HttpRequestMessage(HttpMethod.Get, $"https://prices.azure.com/api/retail/prices?$filter=serviceFamily eq 'Compute' and armRegionName eq 'westeurope'");
         var response = await client.SendAsync(request);
         var data = JsonSerializer.Deserialize<RetailAPIResponse>(await response.Content.ReadAsStreamAsync());
 
         foreach(var item in data.Items)
         {
-            File.AppendAllText("acr.csv", $"{item.type};{item.serviceId};{item.serviceName};{item.skuId};{item.skuName};{item.productId};{item.productName};{item.meterId};{item.meterName}" + Environment.NewLine);
+            File.AppendAllText("compute.csv", $"{item.type};{item.serviceId};{item.serviceName};{item.skuId};{item.skuName};{item.productId};{item.productName};{item.meterId};{item.meterName}" + Environment.NewLine);
         }
 
         var nextLink = data.NextPageLink;
@@ -33,7 +33,7 @@ internal class Program
 
         foreach (var item in data.Items)
         {
-            File.AppendAllText("acr.csv", $"{item.type};{item.serviceId};{item.serviceName};{item.skuId};{item.skuName};{item.productId};{item.productName};{item.meterId};{item.meterName}" + Environment.NewLine);
+            File.AppendAllText("compute.csv", $"{item.type};{item.serviceId};{item.serviceName};{item.skuId};{item.skuName};{item.productId};{item.productName};{item.meterId};{item.meterName}" + Environment.NewLine);
         }
 
         return data.NextPageLink;

@@ -1,10 +1,8 @@
-﻿internal class ContainerRegistryEstimationCalculation : IEstimationCalculation
+﻿internal class ContainerRegistryEstimationCalculation : BaseEstimation, IEstimationCalculation
 {
-    private readonly RetailItem[] items;
-
     public ContainerRegistryEstimationCalculation(RetailItem[] items)
+        : base(items)
     {
-        this.items = items;
     }
 
     public IOrderedEnumerable<RetailItem> GetItems()

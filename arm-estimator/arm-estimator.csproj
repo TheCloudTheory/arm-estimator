@@ -20,6 +20,9 @@
     <None Update="templates\acr.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="templates\functions.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="templates\sa.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

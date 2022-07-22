@@ -1,0 +1,38 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.3.255.40792",
+      "templateHash": "465088477805446696"
+    }
+  },
+  "functions": [],
+  "resources": [
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2021-03-01",
+      "name": "armestimatorfunction",
+      "location": "westeurope",
+      "sku": {
+        "name": "Y1",
+        "tier": "Dynamic"
+      },
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2022-03-01",
+      "name": "armestimatorfunction",
+      "location": "westeurope",
+      "kind": "functionapp",
+      "properties": {
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', 'armestimatorfunction')]"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', 'armestimatorfunction')]"
+      ]
+    }
+  ]
+}
