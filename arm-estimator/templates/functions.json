@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.3.255.40792",
-      "templateHash": "465088477805446696"
+      "templateHash": "11244106011450902070"
     }
   },
   "functions": [],
@@ -33,6 +33,17 @@
       "dependsOn": [
         "[resourceId('Microsoft.Web/serverfarms', 'armestimatorfunction')]"
       ]
+    },
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2021-03-01",
+      "name": "armestimatorfunctionpremium",
+      "location": "westeurope",
+      "sku": {
+        "name": "EP1",
+        "tier": "ElasticPremium"
+      },
+      "properties": {}
     }
   ]
 }

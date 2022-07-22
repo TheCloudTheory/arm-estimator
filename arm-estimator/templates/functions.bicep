@@ -16,3 +16,13 @@ resource af 'Microsoft.Web/sites@2022-03-01' = {
     serverFarmId: hostingPlan.id
   }
 }
+
+resource hostingPlanPremium 'Microsoft.Web/serverfarms@2021-03-01' = {
+  name: 'armestimatorfunctionpremium'
+  location: 'westeurope'
+  sku: {
+    name: 'EP1'
+    tier: 'ElasticPremium'
+  }
+  properties: {}
+}

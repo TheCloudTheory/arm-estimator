@@ -9,6 +9,14 @@
         { "EP1", new[] {
             "DZH318Z0BXVK/0007"
             }
+        },
+        { "EP2", new[] {
+            "DZH318Z0BXVK/0007"
+            }
+        },
+        { "EP3", new[] {
+            "DZH318Z0BXVK/0007"
+            }
         }
     };
 }
