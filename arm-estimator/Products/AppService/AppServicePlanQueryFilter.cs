@@ -20,11 +20,38 @@ internal class AppServicePlanQueryFilter : IQueryFilter
             this.logger.LogError("Can't create a filter for App Service Plan when SKU is unavailable.");
             return null;
         }
-
+           
         var serviceId = AppServicePlanSupportedData.SkuToServiceId[sku];
-        var skuIds = AppServicePlanSupportedData.SkuToSkuIdMap[sku];
+        string[] skuIds;
+
+        if(IsLinuxPlan())
+        {
+            skuIds = AppServicePlanSupportedData.SkuToSkuIdMap[sku]
+                .Where(_ => AppServicePlanSupportedData.LinuxSkuIds.Contains(_)).ToArray();
+        }
+        else
+        {
+            skuIds = AppServicePlanSupportedData.SkuToSkuIdMap[sku]
+                .Where(_ => AppServicePlanSupportedData.LinuxSkuIds.Contains(_) == false).ToArray();
+        }
+
         var skuIdsFilter = string.Join(" or ", skuIds.Select(_ => $"skuId eq '{_}'"));
 
         return $"$filter=serviceId eq '{serviceId}' and armRegionName eq '{location}' and ({skuIdsFilter})";
+    }
+
+    private bool IsLinuxPlan()
+    {
+        var isLinuxPlan = false;
+        if (this.afterState.properties != null && this.afterState.properties.ContainsKey("reserved"))
+        {
+            var isReserved = this.afterState.properties["reserved"].ToString();
+            if (isReserved != null)
+            {
+                isLinuxPlan = bool.Parse(isReserved);
+            }
+        }
+
+        return isLinuxPlan;
     }
 }

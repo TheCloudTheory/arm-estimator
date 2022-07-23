@@ -28,6 +28,10 @@ internal class AzureWhatIfHandler
             response = await SendAndWaitForResponse(subscriptionId, resourceGroupName, template, location);
         }
 
+#if DEBUG
+        var rawData = await response.Content.ReadAsStringAsync();
+#endif
+
         var data = JsonSerializer.Deserialize<WhatIfResponse>(await response.Content.ReadAsStreamAsync());
         return data;
     }

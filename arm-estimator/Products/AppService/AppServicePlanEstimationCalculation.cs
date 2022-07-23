@@ -29,6 +29,21 @@
             {
                 estimatedCost += item.retailPrice * 720;
             }
+            // D1
+            else if (item.meterId == "0c3885bd-351d-4c28-830a-446d7bb4295c")
+            {
+                estimatedCost += item.retailPrice * 720;
+            }
+            // B1 Windows
+            else if (item.meterId == "ba302f7a-078b-4141-a636-a76315ba44ce")
+            {
+                estimatedCost += item.retailPrice * 720;
+            }
+            // B1 Linux
+            else if (item.meterId == "e08d4be1-d8c1-49ba-a814-6369d6f14c34")
+            {
+                estimatedCost += item.retailPrice * 720;
+            }
             else
             {
                 estimatedCost += item.retailPrice;

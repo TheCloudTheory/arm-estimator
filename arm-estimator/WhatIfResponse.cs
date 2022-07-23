@@ -20,6 +20,7 @@ internal class WhatIfAfterChange
     public string? location { get; set; }
     public WhatIfSku? sku { get; set; }
     public string? kind { get; set; }
+    public IDictionary<string, object>? properties { get; set; }
 
 }
 

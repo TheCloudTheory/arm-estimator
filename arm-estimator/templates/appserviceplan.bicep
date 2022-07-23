@@ -27,7 +27,7 @@ resource asp3 'Microsoft.Web/serverfarms@2022-03-01' = {
     name: 'B1'
   }
   properties: {
-    
+    reserved: true
   }
 }
 

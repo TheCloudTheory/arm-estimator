@@ -129,4 +129,79 @@
             }
         },
     };
+
+    public static readonly IReadOnlyDictionary<string, string[]> SkuIdToProductIdMap = new Dictionary<string, string[]>()
+    {
+        {
+            "DZH318Z0C1K2/0002", new[]
+            {
+                "DZH318Z0C1K2"
+            }
+        },
+        {
+            "DZH318Z0BQJM/000Z", new[]
+            {
+                "DZH318Z0BQJM"
+            }
+        },
+        {
+            "DZH318Z0BQJQ/0013", new[]
+            {
+                "DZH318Z0BQJQ"
+            }
+        },
+        {
+            "DZH318Z0BQJK/003T", new[]
+            {
+                "DZH318Z0BQJK"
+            }
+        },
+        {
+            "DZH318Z0BXW9/002H", new[]
+            {
+                "DZH318Z0BXW9"
+            }
+        },
+        {
+            "DZH318Z0BQJK/003S", new[]
+            {
+                "DZH318Z0BQJK"
+            }
+        },
+        {
+            "DZH318Z0BXW9/002S", new[]
+            {
+                "DZH318Z0BXW9"
+            }
+        },
+        {
+            "DZH318Z0BQJK/003P", new[]
+            {
+                "DZH318Z0BQJK"
+            }
+        },
+        {
+            "DZH318Z0BXW9/002Q", new[]
+            {
+                "DZH318Z0BXW9"
+            }
+        }
+    };
+
+    public static readonly string[] LinuxSkuIds = new[]
+    {
+        "DZH318Z0BXWP/002M",
+        "DZH318Z0DCR6/000N",
+        "DZH318Z0BXW7/002M",
+        "DZH318Z0BXW7/002Q",
+        "DZH318Z0DCR6/0003",
+        "DZH318Z0BXW9/002S",
+        "DZH318Z0C1K2/0002",
+        "DZH318Z0BXW7/002P",
+        "DZH318Z0BXWP/002T",
+        "DZH318Z0DCR6/000X",
+        "DZH318Z0BXWP/002K",
+        "DZH318Z0BXW9/002H",
+        "DZH318Z0BXW9/002Q"
+    }; 
 }
