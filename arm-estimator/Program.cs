@@ -1,6 +1,7 @@
 ﻿using Azure.Core;
 using Microsoft.Extensions.Logging;
 using System.CommandLine;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 
 internal class Program
@@ -32,6 +33,23 @@ internal class Program
             var logger = loggerFactory.CreateLogger<Program>();
             var template = Regex.Replace(File.ReadAllText(file.FullName), @"\s+", string.Empty);  // Make JSON a single-line value
             var whatIfData = await AzureWhatIfHandler.GetResponseWithRetries(subscriptionId, resourceGroupName, template);
+
+            if(whatIfData != null && whatIfData.status == "Failed")
+            {
+                logger.LogError("An error happened when performing WhatIf operation.");
+
+                if(whatIfData.error != null)
+                {
+                    var errorDetails = JsonSerializer.Serialize(whatIfData.error, typeof(WhatIfError), new JsonSerializerOptions()
+                    {
+                        WriteIndented = true
+                    });
+
+                    logger.LogError(errorDetails);
+                }
+
+                return;
+            }
 
             if (whatIfData == null || whatIfData.properties == null || whatIfData.properties.changes == null || whatIfData.properties.changes.Length == 0)
             {

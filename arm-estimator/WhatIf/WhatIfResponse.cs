@@ -2,7 +2,30 @@
 
 internal class WhatIfResponse
 {
+    public string? status { get; set; }
+    public WhatIfError? error { get; set; }
     public WhatIfProperties? properties { get; set; }
+}
+
+internal class WhatIfError
+{
+    public string? code { get; set; }
+    public string? message { get; set; }
+    public WhatIfErrorDetail[]? details { get; set; }
+}
+
+internal class WhatIfErrorDetail
+{
+    public string? code { get; set; }
+    public string? message { get; set; }
+    public WhatIfSpecificErrorDetail[]? details { get; set; }
+}
+
+internal class WhatIfSpecificErrorDetail
+{
+    public string? code { get; set; }
+    public string? target { get; set; }
+    public string? message { get; set; }
 }
 
 internal class WhatIfProperties

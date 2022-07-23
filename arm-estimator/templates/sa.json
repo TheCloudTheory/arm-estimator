@@ -5,13 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.3.255.40792",
-      "templateHash": "6429062163147447458"
-    }
-  },
-  "parameters": {
-    "rgLocation": {
-      "type": "string",
-      "defaultValue": "[resourceGroup().location]"
+      "templateHash": "5040483429781622528"
     }
   },
   "functions": [],
@@ -19,22 +13,37 @@
     {
       "type": "Microsoft.Storage/storageAccounts",
       "apiVersion": "2021-09-01",
-      "name": "ks7f7asdghuas6",
-      "location": "[parameters('rgLocation')]",
+      "name": "sa1",
+      "location": "westeurope",
       "sku": {
         "name": "Standard_LRS"
       },
       "kind": "StorageV2"
     },
     {
-      "type": "Microsoft.Network/virtualNetworks",
-      "apiVersion": "2021-08-01",
-      "name": "jasd786gfds78a",
-      "location": "[parameters('rgLocation')]",
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2021-09-01",
+      "name": "sa2",
+      "location": "westeurope",
+      "sku": {
+        "name": "Standard_LRS"
+      },
+      "kind": "StorageV2",
       "properties": {
-        "addressSpace": {
-          "addressPrefixes": [ "10.0.0.0/20" ]
-        }
+        "accessTier": "Cool"
+      }
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2021-09-01",
+      "name": "sa3",
+      "location": "westeurope",
+      "sku": {
+        "name": "Standard_LRS"
+      },
+      "kind": "StorageV2",
+      "properties": {
+        "accessTier": "Premium"
       }
     }
   ]

@@ -28,7 +28,7 @@ internal class WhatIfProcessor
             switch (id.ResourceType)
             {
                 case "Microsoft.Storage/storageAccounts":
-                    totalCost += await CalculateForStorageAccount(change, id);
+                    totalCost += await Calculate<StorageAccountRetailQuery, StorageAccountEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.ContainerRegistry/registries":
                     totalCost += await Calculate<ContainerRegistryRetailQuery, ContainerRegistryEstimationCalculation>(change, id);
@@ -37,7 +37,6 @@ internal class WhatIfProcessor
                     totalCost += await Calculate<AppServicePlanRetailQuery, AppServicePlanEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.Web/sites":
-                    //totalCost += await Calculate<AppServicePlanRetailQuery, AppServicePlanEstimationCalculation>(change, id);
                     totalCost += 0;
                     break;
                 default:
@@ -47,22 +46,6 @@ internal class WhatIfProcessor
         }
 
         this.logger.LogError("Total cost: {cost} USD", totalCost);
-    }
-
-    private async Task<double> CalculateForStorageAccount(WhatIfChange change, ResourceIdentifier id)
-    {
-        var data = await GetAPIResponse<ContainerRegistryRetailQuery>(change, id);
-        if(data == null || data.Items == null)
-        {
-            this.logger.LogWarning("Got no records for {type} from Retail API", id.ResourceType);
-            return 0;
-        }
-
-        var itemsWithoutReservations = data.Items.Where(_ => _.type != "Reservation").OrderByDescending(_ => _.retailPrice);
-        var totalCost = itemsWithoutReservations.Select(_ => _.retailPrice).Sum();
-
-        ReportEstimationToConsole(id, itemsWithoutReservations, totalCost);
-        return totalCost == null ? 0 : (double)totalCost;
     }
 
     private async Task<double> Calculate<TQuery, TCalculation>(WhatIfChange change, ResourceIdentifier id) 
