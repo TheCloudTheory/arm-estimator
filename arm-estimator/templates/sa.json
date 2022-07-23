@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.3.255.40792",
-      "templateHash": "5040483429781622528"
+      "templateHash": "6057818078513106220"
     }
   },
   "functions": [],
@@ -13,7 +13,7 @@
     {
       "type": "Microsoft.Storage/storageAccounts",
       "apiVersion": "2021-09-01",
-      "name": "sa1",
+      "name": "armestimatorsa1",
       "location": "westeurope",
       "sku": {
         "name": "Standard_LRS"
@@ -23,7 +23,7 @@
     {
       "type": "Microsoft.Storage/storageAccounts",
       "apiVersion": "2021-09-01",
-      "name": "sa2",
+      "name": "armestimatorsa2",
       "location": "westeurope",
       "sku": {
         "name": "Standard_LRS"
@@ -36,7 +36,7 @@
     {
       "type": "Microsoft.Storage/storageAccounts",
       "apiVersion": "2021-09-01",
-      "name": "sa3",
+      "name": "armestimatorsa3",
       "location": "westeurope",
       "sku": {
         "name": "Standard_LRS"

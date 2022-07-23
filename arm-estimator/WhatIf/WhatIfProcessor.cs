@@ -25,6 +25,12 @@ internal class WhatIfProcessor
             }
 
             var id = new ResourceIdentifier(change.resourceId);
+            if (change.changeType == WhatIfChangeType.NoChange)
+            {
+                logger.LogInformation("Ignoring {name} [{type}] - no change detected.", id.Name, id.ResourceType);
+                continue;
+            }
+
             switch (id.ResourceType)
             {
                 case "Microsoft.Storage/storageAccounts":
