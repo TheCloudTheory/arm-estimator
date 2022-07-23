@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Azure.Core;
+using Microsoft.Extensions.Logging;
 using System.CommandLine;
 using System.Text.RegularExpressions;
 
@@ -32,7 +33,7 @@ internal class Program
             var template = Regex.Replace(File.ReadAllText(file.FullName), @"\s+", string.Empty);  // Make JSON a single-line value
             var whatIfData = await AzureWhatIfHandler.GetResponseWithRetries(subscriptionId, resourceGroupName, template);
 
-            if (whatIfData == null || whatIfData.properties == null || whatIfData.properties.changes == null)
+            if (whatIfData == null || whatIfData.properties == null || whatIfData.properties.changes == null || whatIfData.properties.changes.Length == 0)
             {
                 logger.LogInformation("No changes detected.");
                 return;
@@ -40,7 +41,38 @@ internal class Program
 
             logger.LogInformation("Detected {noOfChanges} changes.", whatIfData.properties.changes.Length);
             logger.LogInformation("-------------------------------");
+
+            ReportChangesToConsole(whatIfData.properties.changes, logger);
+
+            logger.LogInformation("");
+            logger.LogInformation("-------------------------------");
+            logger.LogInformation("");
+
             await new WhatIfProcessor(logger).Process(whatIfData.properties.changes);
+        }
+    }
+
+    private static void ReportChangesToConsole(WhatIfChange[] changes, ILogger logger)
+    {
+        foreach (var change in changes)
+        {
+            if (change == null) continue;
+
+            if(change.resourceId == null)
+            {
+                logger.LogWarning("Couldn't find resource ID.");
+                continue;
+            }
+
+            if (change.changeType == null)
+            {
+                logger.LogWarning("Couldn't find change type.");
+                continue;
+            }
+
+            var id = new ResourceIdentifier(change.resourceId);
+            var formattedChangeType = change.changeType?.ToString().ToUpperInvariant();
+            logger.LogInformation("{change} - {name} [{type}]", formattedChangeType, id.Name, id.ResourceType);
         }
     }
 }

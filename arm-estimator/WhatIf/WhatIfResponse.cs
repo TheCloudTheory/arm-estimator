@@ -1,4 +1,6 @@
-﻿internal class WhatIfResponse
+﻿using System.Text.Json.Serialization;
+
+internal class WhatIfResponse
 {
     public WhatIfProperties? properties { get; set; }
 }
@@ -11,7 +13,9 @@ internal class WhatIfProperties
 internal class WhatIfChange
 {
     public string? resourceId { get; set; }
-    public string? changeType { get; set; }
+
+    [JsonConverter(typeof(JsonStringEnumConverter))]
+    public WhatIfChangeType? changeType { get; set; }
     public WhatIfAfterChange? after { get; set; }
 }
 
