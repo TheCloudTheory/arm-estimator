@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.3.255.40792",
-      "templateHash": "15955507781078881347"
+      "templateHash": "13433228202709919139"
     }
   },
   "functions": [],
@@ -28,6 +28,13 @@
       "sku": {
         "name": "Basic"
       }
+    },
+    {
+      "type": "Microsoft.App/containerApps",
+      "apiVersion": "2022-03-01",
+      "name": "containerapp",
+      "location": "westeurope",
+      "properties": {}
     }
   ]
 }

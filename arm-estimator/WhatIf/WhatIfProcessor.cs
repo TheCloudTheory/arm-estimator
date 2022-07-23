@@ -48,6 +48,9 @@ internal class WhatIfProcessor
                 case "Microsoft.ContainerService/managedClusters":
                     totalCost += await Calculate<AKSRetailQuery, AKSEstimationCalculation>(change, id);
                     break;
+                case "Microsoft.App/containerApps":
+                    totalCost += await Calculate<ContainerAppsRetailQuery, ContainerAppsEstimationCalculation>(change, id);
+                    break;
                 default:
                     logger.LogWarning("{resourceType} is not yet supported.", id.ResourceType);
                     break;
