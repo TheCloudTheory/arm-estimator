@@ -45,6 +45,9 @@ internal class WhatIfProcessor
                 case "Microsoft.Web/sites":
                     totalCost += 0;
                     break;
+                case "Microsoft.ContainerService/managedClusters":
+                    totalCost += await Calculate<AKSRetailQuery, AKSEstimationCalculation>(change, id);
+                    break;
                 default:
                     logger.LogWarning("{resourceType} is not yet supported.", id.ResourceType);
                     break;
@@ -123,9 +126,16 @@ internal class WhatIfProcessor
         this.logger.LogInformation("Aggregated metrics:");
         this.logger.LogInformation("");
 
-        foreach (var item in items)
+        if(items.Any())
         {
-            this.logger.LogInformation("-> {skuName} | {productName} | {meterName} | {retailPrice} for {measure}", item.skuName, item.productName, item.meterName, item.retailPrice, item.unitOfMeasure);
+            foreach (var item in items)
+            {
+                this.logger.LogInformation("-> {skuName} | {productName} | {meterName} | {retailPrice} for {measure}", item.skuName, item.productName, item.meterName, item.retailPrice, item.unitOfMeasure);
+            }
+        }
+        else
+        {
+            this.logger.LogInformation("No metrics available.");
         }
 
         this.logger.LogInformation("");

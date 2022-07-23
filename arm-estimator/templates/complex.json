@@ -1,0 +1,33 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.3.255.40792",
+      "templateHash": "15955507781078881347"
+    }
+  },
+  "functions": [],
+  "resources": [
+    {
+      "type": "Microsoft.ContainerService/managedClusters",
+      "apiVersion": "2022-05-02-preview",
+      "name": "aksuptime",
+      "location": "westeurope",
+      "sku": {
+        "name": "Basic",
+        "tier": "Paid"
+      }
+    },
+    {
+      "type": "Microsoft.ContainerService/managedClusters",
+      "apiVersion": "2022-05-02-preview",
+      "name": "aks",
+      "location": "westeurope",
+      "sku": {
+        "name": "Basic"
+      }
+    }
+  ]
+}
