@@ -1,7 +1,7 @@
 ﻿internal class ContainerAppsEstimationCalculation : BaseEstimation, IEstimationCalculation
 {
-    public ContainerAppsEstimationCalculation(RetailItem[] items)
-        : base(items)
+    public ContainerAppsEstimationCalculation(RetailItem[] items, WhatIfAfterChange change)
+        : base(items, change)
     {
     }
 

@@ -1,7 +1,7 @@
 ﻿internal class ContainerRegistryEstimationCalculation : BaseEstimation, IEstimationCalculation
 {
-    public ContainerRegistryEstimationCalculation(RetailItem[] items)
-        : base(items)
+    public ContainerRegistryEstimationCalculation(RetailItem[] items, WhatIfAfterChange change)
+        : base(items, change)
     {
     }
 

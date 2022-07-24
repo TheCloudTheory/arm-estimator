@@ -1,7 +1,7 @@
 ﻿internal class AppServicePlanEstimationCalculation : BaseEstimation, IEstimationCalculation
 {
-    public AppServicePlanEstimationCalculation(RetailItem[] items)
-        : base(items)
+    public AppServicePlanEstimationCalculation(RetailItem[] items, WhatIfAfterChange change)
+        : base(items, change)
     {
     }
 

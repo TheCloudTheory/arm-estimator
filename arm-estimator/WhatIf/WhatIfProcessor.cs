@@ -51,6 +51,12 @@ internal class WhatIfProcessor
                 case "Microsoft.App/containerApps":
                     totalCost += await Calculate<ContainerAppsRetailQuery, ContainerAppsEstimationCalculation>(change, id);
                     break;
+                case "Microsoft.Sql/servers":
+                    totalCost += 0;
+                    break;
+                case "Microsoft.Sql/servers/databases":
+                    totalCost += await Calculate<SQLRetailQuery, SQLEstimationCalculation>(change, id);
+                    break;
                 default:
                     logger.LogWarning("{resourceType} is not yet supported.", id.ResourceType);
                     break;
@@ -71,7 +77,13 @@ internal class WhatIfProcessor
             return 0;
         }
 
-        if (Activator.CreateInstance(typeof(TCalculation), new object[] { data.Items }) is not TCalculation estimation)
+        if(change.after == null)
+        {
+            this.logger.LogError("No data available for WhatIf operation.");
+            return 0;
+        }
+
+        if (Activator.CreateInstance(typeof(TCalculation), new object[] { data.Items, change.after }) is not TCalculation estimation)
         {
             this.logger.LogError("Couldn't create an instance of {type}.", typeof(TCalculation));
             return 0;

@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.3.255.40792",
-      "templateHash": "13433228202709919139"
+      "templateHash": "1139297868522658401"
     }
   },
   "functions": [],
@@ -35,6 +35,85 @@
       "name": "containerapp",
       "location": "westeurope",
       "properties": {}
+    },
+    {
+      "type": "Microsoft.Sql/servers",
+      "apiVersion": "2021-11-01-preview",
+      "name": "sqlserver",
+      "location": "westeurope",
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.Sql/servers/databases",
+      "apiVersion": "2021-11-01-preview",
+      "name": "[format('{0}/{1}', 'sqlserver', 'dbbasic')]",
+      "location": "westeurope",
+      "sku": {
+        "name": "Basic"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Sql/servers', 'sqlserver')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Sql/servers/databases",
+      "apiVersion": "2021-11-01-preview",
+      "name": "[format('{0}/{1}', 'sqlserver', 'dbstandard0')]",
+      "location": "westeurope",
+      "sku": {
+        "name": "S0"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Sql/servers', 'sqlserver')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Sql/servers/databases",
+      "apiVersion": "2021-11-01-preview",
+      "name": "[format('{0}/{1}', 'sqlserver', 'dbstandard1')]",
+      "location": "westeurope",
+      "sku": {
+        "name": "S1"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Sql/servers', 'sqlserver')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Sql/servers/databases",
+      "apiVersion": "2021-11-01-preview",
+      "name": "[format('{0}/{1}', 'sqlserver', 'dbstandard2')]",
+      "location": "westeurope",
+      "sku": {
+        "name": "S2"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Sql/servers', 'sqlserver')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Sql/servers/databases",
+      "apiVersion": "2021-11-01-preview",
+      "name": "[format('{0}/{1}', 'sqlserver', 'dbstandard3')]",
+      "location": "westeurope",
+      "sku": {
+        "name": "S3"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Sql/servers', 'sqlserver')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Sql/servers/databases",
+      "apiVersion": "2021-11-01-preview",
+      "name": "[format('{0}/{1}', 'sqlserver', 'dbstandard4')]",
+      "location": "westeurope",
+      "sku": {
+        "name": "S4"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Sql/servers', 'sqlserver')]"
+      ]
     }
   ]
 }
