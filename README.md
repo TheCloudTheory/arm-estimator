@@ -13,7 +13,7 @@ arm-estimator.exe <template-path>.json <subscription-id> <resource-group>
 ```
 ### Linux
 ```
-dotnet arm-estimator.dll <template-path>.json <subscription-id> <resource-group>
+dotnet arm-estimator <template-path>.json <subscription-id> <resource-group>
 ```
 
 ## Main features
