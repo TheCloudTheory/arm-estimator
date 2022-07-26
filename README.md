@@ -36,6 +36,7 @@ ARM Cost Estimator is currently in `alpha` phase development meaning there're no
 * You cannot generate an output as artifact
 * Retail API responses are not cached meaning sometimes getting an output takes more than normally
 * There's no possibility to define custom usage patterns so some metrics (mainly those described as price per second / hour / day) are projected for full month
+* Nested resources are not supported yet - however, you can define them as separated entities to mitigate that issue
 
 Those limitations will be removed in the future releases of the project.
 
@@ -44,6 +45,7 @@ Services not listed are considered TBD.
 Service|Support level|More information
 ----|----|----
 AKS|Partial|Estimates work for managed service (both Free / Paid), estimation doesn't include agent pools
+APIM|Full|-
 Azure App Service|Partial|Supports Azure App Service Plans (without Isolated tiers) and Azure Functions (Consumption / Premium / App Service Plan)
 Container Apps|Full|-
 Container Registry|Full|-
