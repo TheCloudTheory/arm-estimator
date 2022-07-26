@@ -1,0 +1,32 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.3.255.40792",
+      "templateHash": "7883880076712623505"
+    }
+  },
+  "functions": [],
+  "resources": [
+    {
+      "type": "Microsoft.AppConfiguration/configurationStores",
+      "apiVersion": "2022-05-01",
+      "name": "appconfiguration",
+      "location": "westeurope",
+      "sku": {
+        "name": "Free"
+      }
+    },
+    {
+      "type": "Microsoft.AppConfiguration/configurationStores",
+      "apiVersion": "2022-05-01",
+      "name": "appconfiguration2",
+      "location": "westeurope",
+      "sku": {
+        "name": "Standard"
+      }
+    }
+  ]
+}
