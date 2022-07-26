@@ -1,13 +1,14 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Azure.Core;
+using Microsoft.Extensions.Logging;
 
 internal class AKSRetailQuery : BaseRetailQuery, IRetailQuery
 {
-    public AKSRetailQuery(WhatIfChange change, ILogger logger)
-        : base(change, logger)
+    public AKSRetailQuery(WhatIfChange change, ResourceIdentifier id, ILogger logger)
+        : base(change, id, logger)
     {
     }
 
-    public string? GetQueryUrl()
+    public string? GetQueryUrl(string location)
     {
         if (this.change.after == null && this.change.before == null)
         {
@@ -15,14 +16,14 @@ internal class AKSRetailQuery : BaseRetailQuery, IRetailQuery
             return null;
         }
 
-        var change = this.change.after == null ? this.change.before : this.change.after;
+        var change = this.change.after ?? this.change.before;
         if(change == null)
         {
             this.logger.LogError("Couldn't determine after / before state.");
             return null;
         }
 
-        var filter = new AKSQueryFilter(change, this.logger).GetFiltersBasedOnDesiredState();
+        var filter = new AKSQueryFilter(change, this.logger).GetFiltersBasedOnDesiredState(location);
         return $"https://prices.azure.com/api/retail/prices?{filter}";
     }
 }

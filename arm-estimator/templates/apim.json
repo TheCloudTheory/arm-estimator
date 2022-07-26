@@ -1,0 +1,125 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.3.255.40792",
+      "templateHash": "7994586089890275405"
+    }
+  },
+  "functions": [],
+  "resources": [
+    {
+      "type": "Microsoft.ApiManagement/service",
+      "apiVersion": "2021-12-01-preview",
+      "name": "apimkamilm1",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "capacity": 0,
+        "name": "Consumption"
+      },
+      "properties": {
+        "publisherEmail": "johndoe@mail.com",
+        "publisherName": "johndoe@mail.com"
+      }
+    },
+    {
+      "type": "Microsoft.ApiManagement/service",
+      "apiVersion": "2021-12-01-preview",
+      "name": "apimkamilm2",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "capacity": 1,
+        "name": "Basic"
+      },
+      "properties": {
+        "publisherEmail": "johndoe@mail.com",
+        "publisherName": "johndoe@mail.com"
+      }
+    },
+    {
+      "type": "Microsoft.ApiManagement/service",
+      "apiVersion": "2021-12-01-preview",
+      "name": "apimkamilm22",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "capacity": 2,
+        "name": "Basic"
+      },
+      "properties": {
+        "publisherEmail": "johndoe@mail.com",
+        "publisherName": "johndoe@mail.com"
+      }
+    },
+    {
+      "type": "Microsoft.ApiManagement/service",
+      "apiVersion": "2021-12-01-preview",
+      "name": "apimkamilm3",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "capacity": 1,
+        "name": "Developer"
+      },
+      "properties": {
+        "publisherEmail": "johndoe@mail.com",
+        "publisherName": "johndoe@mail.com"
+      }
+    },
+    {
+      "type": "Microsoft.ApiManagement/service",
+      "apiVersion": "2021-12-01-preview",
+      "name": "apimkamilm4",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "capacity": 1,
+        "name": "Standard"
+      },
+      "properties": {
+        "publisherEmail": "johndoe@mail.com",
+        "publisherName": "johndoe@mail.com"
+      }
+    },
+    {
+      "type": "Microsoft.ApiManagement/service",
+      "apiVersion": "2021-12-01-preview",
+      "name": "apimkamilm5",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "capacity": 1,
+        "name": "Premium"
+      },
+      "properties": {
+        "publisherEmail": "johndoe@mail.com",
+        "publisherName": "johndoe@mail.com"
+      }
+    },
+    {
+      "type": "Microsoft.ApiManagement/service/gateways",
+      "apiVersion": "2021-12-01-preview",
+      "name": "[format('{0}/{1}', 'apimkamilm5', 'apigateway')]",
+      "properties": {
+        "locationData": {
+          "name": "location"
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service', 'apimkamilm5')]"
+      ]
+    },
+    {
+      "type": "Microsoft.ApiManagement/service",
+      "apiVersion": "2021-12-01-preview",
+      "name": "apimkamilm6",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "capacity": 2,
+        "name": "Premium"
+      },
+      "properties": {
+        "publisherEmail": "johndoe@mail.com",
+        "publisherName": "johndoe@mail.com"
+      }
+    }
+  ]
+}

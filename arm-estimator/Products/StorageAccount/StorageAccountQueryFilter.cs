@@ -13,9 +13,8 @@ internal class StorageAccountQueryFilter : IQueryFilter
         this.logger = logger;
     }
 
-    public string? GetFiltersBasedOnDesiredState()
-    {
-        var location = this.afterState.location;
+    public string? GetFiltersBasedOnDesiredState(string location)
+    { 
         var sku = this.afterState.sku?.name;
         var kind = this.afterState.kind;
 
