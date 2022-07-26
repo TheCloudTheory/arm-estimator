@@ -15,55 +15,81 @@ internal class WhatIfProcessor
     public async Task Process(WhatIfChange[] changes)
     {
         double totalCost = 0;
+        double alteredCost = 0;
 
         foreach (WhatIfChange change in changes)
         {
-            if (change.resourceId == null || change.after == null || change.after.location == null)
+
+            if (change.resourceId == null)
             {
-                logger.LogWarning("Ignoring resource with empty resource ID or location.");
+                logger.LogWarning("Ignoring resource with empty resource ID ");
+                continue;
+            }
+
+            if ((change.after == null || change.after.location == null) && (change.before == null || change.before.location == null))
+            {
+                logger.LogWarning("Ignoring resource with empty location.");
                 continue;
             }
 
             var id = new ResourceIdentifier(change.resourceId);
-            if (change.changeType == WhatIfChangeType.NoChange)
-            {
-                logger.LogInformation("Ignoring {name} [{type}] - no change detected.", id.Name, id.ResourceType);
-                continue;
-            }
 
+            double currentChangeCost = 0;
             switch (id.ResourceType)
             {
                 case "Microsoft.Storage/storageAccounts":
-                    totalCost += await Calculate<StorageAccountRetailQuery, StorageAccountEstimationCalculation>(change, id);
+                    currentChangeCost += await Calculate<StorageAccountRetailQuery, StorageAccountEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.ContainerRegistry/registries":
-                    totalCost += await Calculate<ContainerRegistryRetailQuery, ContainerRegistryEstimationCalculation>(change, id);
+                    currentChangeCost += await Calculate<ContainerRegistryRetailQuery, ContainerRegistryEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.Web/serverfarms":
-                    totalCost += await Calculate<AppServicePlanRetailQuery, AppServicePlanEstimationCalculation>(change, id);
+                    currentChangeCost += await Calculate<AppServicePlanRetailQuery, AppServicePlanEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.Web/sites":
-                    totalCost += 0;
+                    currentChangeCost += 0;
                     break;
                 case "Microsoft.ContainerService/managedClusters":
-                    totalCost += await Calculate<AKSRetailQuery, AKSEstimationCalculation>(change, id);
+                    currentChangeCost += await Calculate<AKSRetailQuery, AKSEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.App/containerApps":
-                    totalCost += await Calculate<ContainerAppsRetailQuery, ContainerAppsEstimationCalculation>(change, id);
+                    currentChangeCost += await Calculate<ContainerAppsRetailQuery, ContainerAppsEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.Sql/servers":
-                    totalCost += 0;
+                    currentChangeCost += 0;
                     break;
                 case "Microsoft.Sql/servers/databases":
-                    totalCost += await Calculate<SQLRetailQuery, SQLEstimationCalculation>(change, id);
+                    currentChangeCost += await Calculate<SQLRetailQuery, SQLEstimationCalculation>(change, id);
                     break;
                 default:
                     logger.LogWarning("{resourceType} is not yet supported.", id.ResourceType);
                     break;
             }
+
+           
+            if(change.changeType != WhatIfChangeType.Delete)
+            {
+                totalCost += currentChangeCost;
+            }
+
+            if (change.changeType == WhatIfChangeType.Create)
+            {
+                alteredCost += currentChangeCost;
+            }
+            else if( change.changeType == WhatIfChangeType.Delete)
+            {
+                alteredCost -= currentChangeCost;
+            }
+        }
+
+        var sign = "+";
+        if(alteredCost < 0)
+        {
+            sign = "";
         }
 
         this.logger.LogError("Total cost: {cost} USD", totalCost);
+        this.logger.LogError("Delta: {sign}{cost} USD", sign, alteredCost);
     }
 
     private async Task<double> Calculate<TQuery, TCalculation>(WhatIfChange change, ResourceIdentifier id) 
@@ -77,7 +103,7 @@ internal class WhatIfProcessor
             return 0;
         }
 
-        if(change.after == null)
+        if(change.after == null && change.before == null)
         {
             this.logger.LogError("No data available for WhatIf operation.");
             return 0;

@@ -4,10 +4,10 @@ internal class ContainerRegistryQueryFilter : IQueryFilter
 {
     private const string ServiceId = "DZH315F9L8DM";
 
-    private readonly WhatIfAfterChange afterState;
+    private readonly WhatIfAfterBeforeChange afterState;
     private readonly ILogger logger;
 
-    public ContainerRegistryQueryFilter(WhatIfAfterChange afterState, ILogger logger)
+    public ContainerRegistryQueryFilter(WhatIfAfterBeforeChange afterState, ILogger logger)
     {
         this.afterState = afterState;
         this.logger = logger;

@@ -19,14 +19,14 @@ resource sa2 'Microsoft.Storage/storageAccounts@2021-09-01' = {
   }
 }
 
-resource sa3 'Microsoft.Storage/storageAccounts@2021-09-01' = {
-  name: 'armestimatorsa3'
-  location: 'westeurope'
-  sku: {
-    name: 'Standard_LRS'
-  }
-  kind: 'StorageV2'
-  properties: {
-    accessTier: 'Premium'
-  }
-}
+// resource sa3 'Microsoft.Storage/storageAccounts@2021-09-01' = {
+//   name: 'armestimatorsa3'
+//   location: 'westeurope'
+//   sku: {
+//     name: 'Standard_LRS'
+//   }
+//   kind: 'StorageV2'
+//   properties: {
+//     accessTier: 'Premium'
+//   }
+// }

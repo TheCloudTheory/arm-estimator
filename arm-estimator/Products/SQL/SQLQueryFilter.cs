@@ -4,10 +4,10 @@ internal class SQLQueryFilter : IQueryFilter
 {
     private const string ServiceId = "DZH3180HX10K";
 
-    private readonly WhatIfAfterChange afterState;
+    private readonly WhatIfAfterBeforeChange afterState;
     private readonly ILogger logger;
 
-    public SQLQueryFilter(WhatIfAfterChange afterState, ILogger logger)
+    public SQLQueryFilter(WhatIfAfterBeforeChange afterState, ILogger logger)
     {
         this.afterState = afterState;
         this.logger = logger;

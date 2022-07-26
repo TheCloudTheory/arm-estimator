@@ -1,6 +1,6 @@
 ﻿internal class AKSEstimationCalculation : BaseEstimation, IEstimationCalculation
 {
-    public AKSEstimationCalculation(RetailItem[] items, WhatIfAfterChange change)
+    public AKSEstimationCalculation(RetailItem[] items, WhatIfAfterBeforeChange change)
         : base(items, change)
     {
     }

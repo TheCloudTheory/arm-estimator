@@ -2,10 +2,10 @@
 
 internal class AppServicePlanQueryFilter : IQueryFilter
 {
-    private readonly WhatIfAfterChange afterState;
+    private readonly WhatIfAfterBeforeChange afterState;
     private readonly ILogger logger;
 
-    public AppServicePlanQueryFilter(WhatIfAfterChange afterState, ILogger logger)
+    public AppServicePlanQueryFilter(WhatIfAfterBeforeChange afterState, ILogger logger)
     {
         this.afterState = afterState;
         this.logger = logger;

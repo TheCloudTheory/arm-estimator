@@ -4,9 +4,9 @@ internal class ContainerAppsQueryFilter : IQueryFilter
 {
     private const string ServiceId = "DZH319F70F09";
 
-    private readonly WhatIfAfterChange afterState;
+    private readonly WhatIfAfterBeforeChange afterState;
 
-    public ContainerAppsQueryFilter(WhatIfAfterChange afterState, ILogger logger)
+    public ContainerAppsQueryFilter(WhatIfAfterBeforeChange afterState, ILogger logger)
     {
         this.afterState = afterState;
     }
