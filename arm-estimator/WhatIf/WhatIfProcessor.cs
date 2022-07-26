@@ -67,6 +67,9 @@ internal class WhatIfProcessor
                 case "Microsoft.ApiManagement/service/gateways":
                     currentChangeCost += await Calculate<APIMRetailQuery, APIMEstimationCalculation>(change, id);
                     break;
+                case "Microsoft.AppConfiguration/configurationStores":
+                    currentChangeCost += await Calculate<AppConfigurationRetailQuery, AppConfigurationEstimationCalculation>(change, id);
+                    break;
                 default:
                     logger.LogWarning("{resourceType} is not yet supported.", id?.ResourceType);
                     break;
