@@ -11,10 +11,8 @@ internal class ContainerAppsQueryFilter : IQueryFilter
         this.afterState = afterState;
     }
 
-    public string? GetFiltersBasedOnDesiredState()
+    public string? GetFiltersBasedOnDesiredState(string location)
     {
-        var location = this.afterState.location;
-
         return $"$filter=serviceId eq '{ServiceId}' and armRegionName eq '{location}' and skuId eq 'DZH318Z0B0NC/0001'";
     }
 }

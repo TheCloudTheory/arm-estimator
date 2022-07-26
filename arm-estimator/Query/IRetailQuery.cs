@@ -1,4 +1,4 @@
 ﻿internal interface IRetailQuery
 {
-    string? GetQueryUrl();
+    string? GetQueryUrl(string location);
 }

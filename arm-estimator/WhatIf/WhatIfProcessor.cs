@@ -5,6 +5,8 @@ using System.Text.Json;
 internal class WhatIfProcessor
 {
     private static readonly Lazy<HttpClient> httpClient = new(() => new HttpClient());
+    private static readonly Dictionary<string, string> parentResourceToLocation = new();
+
     private readonly ILogger logger;
 
     public WhatIfProcessor(ILogger logger)
@@ -19,23 +21,21 @@ internal class WhatIfProcessor
 
         foreach (WhatIfChange change in changes)
         {
-
             if (change.resourceId == null)
             {
-                logger.LogWarning("Ignoring resource with empty resource ID ");
+                logger.LogWarning("Ignoring resource with empty resource ID");
                 continue;
             }
 
-            if ((change.after == null || change.after.location == null) && (change.before == null || change.before.location == null))
+            if (change.after == null && change.before == null)
             {
-                logger.LogWarning("Ignoring resource with empty location.");
+                logger.LogWarning("Ignoring resource with empty desired state.");
                 continue;
             }
 
             var id = new ResourceIdentifier(change.resourceId);
-
             double currentChangeCost = 0;
-            switch (id.ResourceType)
+            switch (id?.ResourceType)
             {
                 case "Microsoft.Storage/storageAccounts":
                     currentChangeCost += await Calculate<StorageAccountRetailQuery, StorageAccountEstimationCalculation>(change, id);
@@ -61,13 +61,19 @@ internal class WhatIfProcessor
                 case "Microsoft.Sql/servers/databases":
                     currentChangeCost += await Calculate<SQLRetailQuery, SQLEstimationCalculation>(change, id);
                     break;
+                case "Microsoft.ApiManagement/service":
+                    currentChangeCost += await Calculate<APIMRetailQuery, APIMEstimationCalculation>(change, id);
+                    break;
+                case "Microsoft.ApiManagement/service/gateways":
+                    currentChangeCost += await Calculate<APIMRetailQuery, APIMEstimationCalculation>(change, id);
+                    break;
                 default:
-                    logger.LogWarning("{resourceType} is not yet supported.", id.ResourceType);
+                    logger.LogWarning("{resourceType} is not yet supported.", id?.ResourceType);
                     break;
             }
 
-           
-            if(change.changeType != WhatIfChangeType.Delete)
+
+            if (change.changeType != WhatIfChangeType.Delete)
             {
                 totalCost += currentChangeCost;
             }
@@ -76,14 +82,14 @@ internal class WhatIfProcessor
             {
                 alteredCost += currentChangeCost;
             }
-            else if( change.changeType == WhatIfChangeType.Delete)
+            else if (change.changeType == WhatIfChangeType.Delete)
             {
                 alteredCost -= currentChangeCost;
             }
         }
 
         var sign = "+";
-        if(alteredCost < 0)
+        if (alteredCost < 0)
         {
             sign = "";
         }
@@ -92,7 +98,7 @@ internal class WhatIfProcessor
         this.logger.LogError("Delta: {sign}{cost} USD", sign, alteredCost);
     }
 
-    private async Task<double> Calculate<TQuery, TCalculation>(WhatIfChange change, ResourceIdentifier id) 
+    private async Task<double> Calculate<TQuery, TCalculation>(WhatIfChange change, ResourceIdentifier id)
         where TQuery : BaseRetailQuery, IRetailQuery
         where TCalculation : BaseEstimation, IEstimationCalculation
     {
@@ -103,13 +109,20 @@ internal class WhatIfProcessor
             return 0;
         }
 
-        if(change.after == null && change.before == null)
+        if (change.after == null && change.before == null)
         {
             this.logger.LogError("No data available for WhatIf operation.");
             return 0;
         }
 
-        if (Activator.CreateInstance(typeof(TCalculation), new object[] { data.Items, change.after }) is not TCalculation estimation)
+        var desiredState = change.after ?? change.before;
+        if(desiredState == null)
+        {
+            this.logger.LogError("No data available for WhatIf operation.");
+            return 0;
+        }
+
+        if (Activator.CreateInstance(typeof(TCalculation), new object[] { data.Items, desiredState }) is not TCalculation estimation)
         {
             this.logger.LogError("Couldn't create an instance of {type}.", typeof(TCalculation));
             return 0;
@@ -123,14 +136,35 @@ internal class WhatIfProcessor
 
     private async Task<RetailAPIResponse?> GetAPIResponse<T>(WhatIfChange change, ResourceIdentifier id) where T : BaseRetailQuery, IRetailQuery
     {
-        if (Activator.CreateInstance(typeof(T), new object[] { change, logger }) is not T saQuery)
+        var desiredState = change.after ?? change.before;
+        if(desiredState == null || change.resourceId == null)
+        {
+            this.logger.LogError("Couldn't determine desired state for {type}.", typeof(T));
+            return null;
+        }
+
+        if (desiredState.location != null)
+        {
+            parentResourceToLocation.Add(change.resourceId, desiredState.location);
+        }
+
+        if (Activator.CreateInstance(typeof(T), new object[] { change, id, logger }) is not T query)
         {
             this.logger.LogError("Couldn't create an instance of {type}.", typeof(T));
             return null;
         }
 
-        var url = saQuery.GetQueryUrl();
-        if(url == null)
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+        var location = desiredState.location ?? parentResourceToLocation[id.Parent.ToString()];
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+        if (location == null)
+        {
+            this.logger.LogError("Resources without location are not supported.");
+            return null;
+        }
+
+        var url = query.GetQueryUrl(location);
+        if (url == null)
         {
             this.logger.LogError("URL generated for {type} is null.", typeof(T));
             return null;
@@ -167,7 +201,7 @@ internal class WhatIfProcessor
         this.logger.LogInformation("Aggregated metrics:");
         this.logger.LogInformation("");
 
-        if(items.Any())
+        if (items.Any())
         {
             foreach (var item in items)
             {

@@ -1,4 +1,4 @@
 ﻿internal interface IQueryFilter
 {
-    string? GetFiltersBasedOnDesiredState();
+    string? GetFiltersBasedOnDesiredState(string location);
 }

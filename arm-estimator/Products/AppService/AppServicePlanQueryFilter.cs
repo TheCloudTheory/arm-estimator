@@ -11,9 +11,8 @@ internal class AppServicePlanQueryFilter : IQueryFilter
         this.logger = logger;
     }
 
-    public string? GetFiltersBasedOnDesiredState()
+    public string? GetFiltersBasedOnDesiredState(string location)
     {
-        var location = this.afterState.location;
         var sku = this.afterState.sku?.name;
         if (sku == null)
         {

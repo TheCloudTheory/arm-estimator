@@ -1,13 +1,14 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Azure.Core;
+using Microsoft.Extensions.Logging;
 
 internal class ContainerRegistryRetailQuery : BaseRetailQuery, IRetailQuery
 {
-    public ContainerRegistryRetailQuery(WhatIfChange change, ILogger logger)
-        : base(change, logger)
+    public ContainerRegistryRetailQuery(WhatIfChange change, ResourceIdentifier id, ILogger logger)
+        : base(change, id, logger)
     {
     }
 
-    public string? GetQueryUrl()
+    public string? GetQueryUrl(string location)
     {
         if (this.change.after == null && this.change.before == null)
         {
@@ -22,7 +23,7 @@ internal class ContainerRegistryRetailQuery : BaseRetailQuery, IRetailQuery
             return null;
         }
 
-        var filter = new ContainerRegistryQueryFilter(change, this.logger).GetFiltersBasedOnDesiredState();
+        var filter = new ContainerRegistryQueryFilter(change, this.logger).GetFiltersBasedOnDesiredState(location);
         return $"https://prices.azure.com/api/retail/prices?{filter}";
     }
 }

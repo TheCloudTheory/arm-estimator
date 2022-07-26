@@ -4,21 +4,21 @@ internal class Program
 {
     private static async Task<int> Main(string[] args)
     {
-        if(File.Exists("sql.csv"))
+        if(File.Exists("westeurope.csv"))
         {
-            File.Delete("sql.csv");
+            File.Delete("westeurope.csv");
         }
 
-        File.AppendAllText("sql.csv", "type;serviceId;serviceName;skuId;skuName;productId;productName;meterId;meterName" + Environment.NewLine);
+        File.AppendAllText("westeurope.csv", "type;serviceId;serviceName;skuId;skuName;productId;productName;meterId;meterName" + Environment.NewLine);
 
         var client = new HttpClient();
-        var request = new HttpRequestMessage(HttpMethod.Get, $"https://prices.azure.com/api/retail/prices?$filter=serviceName eq 'SQL Database' and armRegionName eq 'westeurope'");
+        var request = new HttpRequestMessage(HttpMethod.Get, $"https://prices.azure.com/api/retail/prices?$filter=armRegionName eq 'westeurope'");
         var response = await client.SendAsync(request);
         var data = JsonSerializer.Deserialize<RetailAPIResponse>(await response.Content.ReadAsStreamAsync());
 
         foreach(var item in data.Items)
         {
-            File.AppendAllText("sql.csv", $"{item.type};{item.serviceId};{item.serviceName};{item.skuId};{item.skuName};{item.productId};{item.productName};{item.meterId};{item.meterName}" + Environment.NewLine);
+            File.AppendAllText("westeurope.csv", $"{item.type};{item.serviceId};{item.serviceName};{item.skuId};{item.skuName};{item.productId};{item.productName};{item.meterId};{item.meterName}" + Environment.NewLine);
         }
 
         var nextLink = data.NextPageLink;
@@ -38,7 +38,7 @@ internal class Program
 
         foreach (var item in data.Items)
         {
-            File.AppendAllText("sql.csv", $"{item.type};{item.serviceId};{item.serviceName};{item.skuId};{item.skuName};{item.productId};{item.productName};{item.meterId};{item.meterName}" + Environment.NewLine);
+            File.AppendAllText("westeurope.csv", $"{item.type};{item.serviceId};{item.serviceName};{item.skuId};{item.skuName};{item.productId};{item.productName};{item.meterId};{item.meterName}" + Environment.NewLine);
         }
 
         return data.NextPageLink;

@@ -1,9 +1,9 @@
 ﻿using Azure.Core;
 using Microsoft.Extensions.Logging;
 
-internal class ContainerAppsRetailQuery : BaseRetailQuery, IRetailQuery
+internal class APIMRetailQuery : BaseRetailQuery, IRetailQuery
 {
-    public ContainerAppsRetailQuery(WhatIfChange change, ResourceIdentifier id, ILogger logger)
+    public APIMRetailQuery(WhatIfChange change, ResourceIdentifier id, ILogger logger)
         : base(change, id, logger)
     {
     }
@@ -16,14 +16,14 @@ internal class ContainerAppsRetailQuery : BaseRetailQuery, IRetailQuery
             return null;
         }
 
-        var change = this.change.after == null ? this.change.before : this.change.after;
-        if (change == null)
+        var change = this.change.after ?? this.change.before;
+        if(change == null)
         {
             this.logger.LogError("Couldn't determine after / before state.");
             return null;
         }
 
-        var filter = new ContainerAppsQueryFilter(change, this.logger).GetFiltersBasedOnDesiredState(location);
+        var filter = new APIMQueryFilter(change, this.logger).GetFiltersBasedOnDesiredState(location);
         return $"https://prices.azure.com/api/retail/prices?{filter}";
     }
 }

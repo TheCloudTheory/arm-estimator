@@ -49,6 +49,7 @@ internal class WhatIfAfterBeforeChange
     public WhatIfSku? sku { get; set; }
     public string? kind { get; set; }
     public IDictionary<string, object>? properties { get; set; }
+    public string? type { get; set; }
 
 }
 
@@ -56,4 +57,5 @@ internal class WhatIfSku
 {
     public string? name { get; set; }
     public string? tier { get; set; }
+    public int? capacity { get; set; }
 }
