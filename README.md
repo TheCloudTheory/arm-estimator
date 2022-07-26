@@ -30,7 +30,7 @@ dotnet arm-estimator <template-path>.json <subscription-id> <resource-group>
 * Displaying delta describing difference between your current estimated cost and after changes are applied
 
 ## Known limitations
-ARM Cost Estimator is currently in `alpha` phase development meaning there're no guarantees for stable interface and many features are still in development or planning phase. The main limitations as for now are:
+ARM Cost Estimator is currently in `alpha` development phase meaning there're no guarantees for stable interface and many features are still in design or planning phase. The main limitations as for now are:
 * You can use the project only with a resource group as deployment scope
 * Some services are in TBD state (see below for more information)
 * You cannot generate an output as artifact
