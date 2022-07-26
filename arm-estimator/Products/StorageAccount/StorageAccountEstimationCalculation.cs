@@ -1,6 +1,6 @@
 ﻿internal class StorageAccountEstimationCalculation : BaseEstimation, IEstimationCalculation
 {
-    public StorageAccountEstimationCalculation(RetailItem[] items, WhatIfAfterChange change)
+    public StorageAccountEstimationCalculation(RetailItem[] items, WhatIfAfterBeforeChange change)
         : base(items, change)
     {
     }

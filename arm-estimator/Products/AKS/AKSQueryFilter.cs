@@ -4,10 +4,10 @@ internal class AKSQueryFilter : IQueryFilter
 {
     private const string ServiceId = "DZH315HTQSK6";
 
-    private readonly WhatIfAfterChange afterState;
+    private readonly WhatIfAfterBeforeChange afterState;
     private readonly ILogger logger;
 
-    public AKSQueryFilter(WhatIfAfterChange afterState, ILogger logger)
+    public AKSQueryFilter(WhatIfAfterBeforeChange afterState, ILogger logger)
     {
         this.afterState = afterState;
         this.logger = logger;

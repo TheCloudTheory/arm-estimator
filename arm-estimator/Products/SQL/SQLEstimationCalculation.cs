@@ -1,6 +1,6 @@
 ﻿internal class SQLEstimationCalculation : BaseEstimation, IEstimationCalculation
 {
-    public SQLEstimationCalculation(RetailItem[] items, WhatIfAfterChange change)
+    public SQLEstimationCalculation(RetailItem[] items, WhatIfAfterBeforeChange change)
         : base(items, change)
     {
     }

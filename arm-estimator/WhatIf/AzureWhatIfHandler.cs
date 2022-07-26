@@ -1,5 +1,6 @@
 ﻿using Azure.Core;
 using Azure.Identity;
+using Microsoft.Extensions.Logging;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
@@ -10,9 +11,29 @@ internal class AzureWhatIfHandler
 {
     private static readonly Lazy<HttpClient> httpClient = new(() => new HttpClient());
 
-    public static async Task<WhatIfResponse?> GetResponseWithRetries(string subscriptionId, string resourceGroupName, string template)
+    private readonly string subscriptionId;
+    private readonly string resourceGroupName;
+    private readonly string template;
+    private readonly DeploymentMode deploymentMode;
+    private readonly ILogger logger;
+
+    public AzureWhatIfHandler(string subscriptionId,
+                              string resourceGroupName,
+                              string template,
+                              DeploymentMode deploymentMode,
+                              ILogger logger)
     {
-        var response = await SendInitialRequest(subscriptionId, resourceGroupName, template);
+        this.subscriptionId = subscriptionId;
+        this.resourceGroupName = resourceGroupName;
+        this.template = template;
+        this.deploymentMode = deploymentMode;
+        this.logger = logger;
+    }
+
+    public async Task<WhatIfResponse?> GetResponseWithRetries()
+    {
+        this.logger.LogInformation("What If operation will be performed using '{mode}' deployment mode.", this.deploymentMode);
+        var response = await SendInitialRequest();
 
         // API can return HTTP 202 if asynchronous processing is needed.
         // If so, we need to check Location header to get final information
@@ -25,7 +46,7 @@ internal class AzureWhatIfHandler
                 throw new Exception("Location header can't be null when awaiting response.");
             }
 
-            response = await SendAndWaitForResponse(subscriptionId, resourceGroupName, template, location);
+            response = await SendAndWaitForResponse(location);
         }
 
 #if DEBUG
@@ -36,11 +57,11 @@ internal class AzureWhatIfHandler
         return data;
     }
 
-    private static async Task<HttpResponseMessage> SendInitialRequest(string subscriptionId, string resourceGroupName, string template)
+    private async Task<HttpResponseMessage> SendInitialRequest()
     {
         var token = GetToken();
-        var request = new HttpRequestMessage(HttpMethod.Post, $"https://management.azure.com/subscriptions/{subscriptionId}/resourcegroups/{resourceGroupName}/providers/Microsoft.Resources/deployments/arm-estimator/whatIf?api-version=2021-04-01");
-        var templateContent = JsonSerializer.Serialize(new EstimatePayload(template), new JsonSerializerOptions()
+        var request = new HttpRequestMessage(HttpMethod.Post, $"https://management.azure.com/subscriptions/{this.subscriptionId}/resourcegroups/{this.resourceGroupName}/providers/Microsoft.Resources/deployments/arm-estimator/whatIf?api-version=2021-04-01");
+        var templateContent = JsonSerializer.Serialize(new EstimatePayload(this.template, this.deploymentMode), new JsonSerializerOptions()
         {
             Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
         });
@@ -53,7 +74,7 @@ internal class AzureWhatIfHandler
         return response;
     }
 
-    private static async Task<HttpResponseMessage> SendAndWaitForResponse(string subscriptionId, string resourceGroupName, string template, Uri location)
+    private static async Task<HttpResponseMessage> SendAndWaitForResponse(Uri location)
     {
         var token = GetToken();
         var request = new HttpRequestMessage(HttpMethod.Get, location);

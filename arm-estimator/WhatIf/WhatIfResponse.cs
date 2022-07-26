@@ -39,10 +39,11 @@ internal class WhatIfChange
 
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public WhatIfChangeType? changeType { get; set; }
-    public WhatIfAfterChange? after { get; set; }
+    public WhatIfAfterBeforeChange? after { get; set; }
+    public WhatIfAfterBeforeChange? before { get; set; }
 }
 
-internal class WhatIfAfterChange
+internal class WhatIfAfterBeforeChange
 {
     public string? location { get; set; }
     public WhatIfSku? sku { get; set; }

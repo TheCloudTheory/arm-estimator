@@ -11,18 +11,20 @@ internal class Program
         var templateFileArg = new Argument<FileInfo>("template-file", "Template file to analyze");
         var susbcriptionIdArg = new Argument<string>("subscription-id", "Susbcription ID");
         var resourceGroupArg = new Argument<string>("resource-group", "Resource group name");
+        var deploymentModeOption = new Option<DeploymentMode>("--mode", () => { return DeploymentMode.Incremental; }, "Deployment mode");
 
         var command = new RootCommand("Azure Resource Manager cost estimator.");
+        command.AddOption(deploymentModeOption);
         command.AddArgument(templateFileArg);
         command.AddArgument(susbcriptionIdArg);
         command.AddArgument(resourceGroupArg);
-        command.SetHandler(async (file, subscription, resourceGroup) =>
-            await Estimate(file, subscription, resourceGroup), templateFileArg, susbcriptionIdArg, resourceGroupArg);
+        command.SetHandler(async (file, subscription, resourceGroup, deploymentMode) =>
+            await Estimate(file, subscription, resourceGroup, deploymentMode), templateFileArg, susbcriptionIdArg, resourceGroupArg, deploymentModeOption);
 
         return await command.InvokeAsync(args);
     }
 
-    private static async Task Estimate(FileInfo file, string subscriptionId, string resourceGroupName)
+    private static async Task Estimate(FileInfo file, string subscriptionId, string resourceGroupName, DeploymentMode deploymentMode)
     {
         using (var loggerFactory = LoggerFactory.Create(builder =>
         {
@@ -32,7 +34,8 @@ internal class Program
         {
             var logger = loggerFactory.CreateLogger<Program>();
             var template = Regex.Replace(File.ReadAllText(file.FullName), @"\s+", string.Empty);  // Make JSON a single-line value
-            var whatIfData = await AzureWhatIfHandler.GetResponseWithRetries(subscriptionId, resourceGroupName, template);
+            var handler = new AzureWhatIfHandler(subscriptionId, resourceGroupName, template, deploymentMode, logger);
+            var whatIfData = await handler.GetResponseWithRetries();
 
             if(whatIfData != null && whatIfData.status == "Failed")
             {

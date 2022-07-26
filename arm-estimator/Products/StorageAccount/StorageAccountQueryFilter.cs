@@ -4,10 +4,10 @@ internal class StorageAccountQueryFilter : IQueryFilter
 {
     private const string ServiceId = "DZH317F1HKN0";
 
-    private readonly WhatIfAfterChange afterState;
+    private readonly WhatIfAfterBeforeChange afterState;
     private readonly ILogger logger;
 
-    public StorageAccountQueryFilter(WhatIfAfterChange afterState, ILogger logger)
+    public StorageAccountQueryFilter(WhatIfAfterBeforeChange afterState, ILogger logger)
     {
         this.afterState = afterState;
         this.logger = logger;
