@@ -47,6 +47,7 @@ Service|Support level|More information
 AKS|Partial|Estimates work for managed service (both Free / Paid), estimation doesn't include agent pools
 APIM|Full|-
 App Configuration|Full|-
+Application Gateway|Full|-
 Azure App Service|Partial|Supports Azure App Service Plans (without Isolated tiers) and Azure Functions (Consumption / Premium / App Service Plan)
 Container Apps|Full|-
 Container Registry|Full|-
