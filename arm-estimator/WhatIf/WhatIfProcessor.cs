@@ -70,6 +70,9 @@ internal class WhatIfProcessor
                 case "Microsoft.AppConfiguration/configurationStores":
                     currentChangeCost += await Calculate<AppConfigurationRetailQuery, AppConfigurationEstimationCalculation>(change, id);
                     break;
+                case "Microsoft.Network/applicationGateways":
+                    currentChangeCost += await Calculate<ApplicationGatewayRetailQuery, ApplicationGatewayEstimationCalculation>(change, id);
+                    break;
                 default:
                     logger.LogWarning("{resourceType} is not yet supported.", id?.ResourceType);
                     break;

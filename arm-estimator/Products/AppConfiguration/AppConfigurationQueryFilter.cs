@@ -16,8 +16,6 @@ internal class AppConfigurationQueryFilter : IQueryFilter
     public string? GetFiltersBasedOnDesiredState(string location)
     {
         var sku = this.afterState.sku?.name;
-        var type = this.afterState.type;
-
         if (sku == null)
         {
             this.logger.LogError("Can't create a filter for App Configuration when SKU is unavailable.");

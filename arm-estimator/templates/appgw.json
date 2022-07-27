@@ -1,0 +1,445 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.3.255.40792",
+      "templateHash": "12755114024721278974"
+    }
+  },
+  "functions": [],
+  "resources": [
+    {
+      "type": "Microsoft.Network/virtualNetworks",
+      "apiVersion": "2022-01-01",
+      "name": "vnet",
+      "location": "westeurope",
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "10.0.0.0/16"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "subnet",
+            "properties": {
+              "addressPrefix": "10.0.0.0/27"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Network/applicationGateways",
+      "apiVersion": "2022-01-01",
+      "name": "appgw1",
+      "location": "westeurope",
+      "properties": {
+        "sku": {
+          "name": "Standard_Small",
+          "capacity": 1
+        },
+        "gatewayIPConfigurations": [
+          {
+            "name": "ipconfiguration",
+            "properties": {
+              "subnet": {
+                "id": "[reference(resourceId('Microsoft.Network/virtualNetworks', 'vnet')).subnets[0].id]"
+              }
+            }
+          }
+        ],
+        "frontendIPConfigurations": [
+          {
+            "name": "fip",
+            "properties": {}
+          }
+        ],
+        "frontendPorts": [
+          {
+            "name": "port",
+            "properties": {
+              "port": 80
+            }
+          }
+        ],
+        "backendAddressPools": [
+          {
+            "name": "pool",
+            "properties": {}
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/virtualNetworks', 'vnet')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Network/applicationGateways",
+      "apiVersion": "2022-01-01",
+      "name": "appgw11",
+      "location": "westeurope",
+      "properties": {
+        "sku": {
+          "name": "Standard_Small",
+          "capacity": 2
+        },
+        "gatewayIPConfigurations": [
+          {
+            "name": "ipconfiguration",
+            "properties": {
+              "subnet": {
+                "id": "[reference(resourceId('Microsoft.Network/virtualNetworks', 'vnet')).subnets[0].id]"
+              }
+            }
+          }
+        ],
+        "frontendIPConfigurations": [
+          {
+            "name": "fip",
+            "properties": {}
+          }
+        ],
+        "frontendPorts": [
+          {
+            "name": "port",
+            "properties": {
+              "port": 80
+            }
+          }
+        ],
+        "backendAddressPools": [
+          {
+            "name": "pool",
+            "properties": {}
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/virtualNetworks', 'vnet')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Network/applicationGateways",
+      "apiVersion": "2022-01-01",
+      "name": "appgw2",
+      "location": "westeurope",
+      "properties": {
+        "sku": {
+          "name": "Standard_Medium",
+          "capacity": 1
+        },
+        "gatewayIPConfigurations": [
+          {
+            "name": "ipconfiguration",
+            "properties": {
+              "subnet": {
+                "id": "[reference(resourceId('Microsoft.Network/virtualNetworks', 'vnet')).subnets[0].id]"
+              }
+            }
+          }
+        ],
+        "frontendIPConfigurations": [
+          {
+            "name": "fip",
+            "properties": {}
+          }
+        ],
+        "frontendPorts": [
+          {
+            "name": "port",
+            "properties": {
+              "port": 80
+            }
+          }
+        ],
+        "backendAddressPools": [
+          {
+            "name": "pool",
+            "properties": {}
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/virtualNetworks', 'vnet')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Network/applicationGateways",
+      "apiVersion": "2022-01-01",
+      "name": "appgw3",
+      "location": "westeurope",
+      "properties": {
+        "sku": {
+          "name": "Standard_Large",
+          "capacity": 1
+        },
+        "gatewayIPConfigurations": [
+          {
+            "name": "ipconfiguration",
+            "properties": {
+              "subnet": {
+                "id": "[reference(resourceId('Microsoft.Network/virtualNetworks', 'vnet')).subnets[0].id]"
+              }
+            }
+          }
+        ],
+        "frontendIPConfigurations": [
+          {
+            "name": "fip",
+            "properties": {}
+          }
+        ],
+        "frontendPorts": [
+          {
+            "name": "port",
+            "properties": {
+              "port": 80
+            }
+          }
+        ],
+        "backendAddressPools": [
+          {
+            "name": "pool",
+            "properties": {}
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/virtualNetworks', 'vnet')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Network/applicationGateways",
+      "apiVersion": "2022-01-01",
+      "name": "appgw4",
+      "location": "westeurope",
+      "properties": {
+        "sku": {
+          "name": "Standard_v2",
+          "capacity": 1,
+          "tier": "Standard_v2"
+        },
+        "gatewayIPConfigurations": [
+          {
+            "name": "ipconfiguration",
+            "properties": {
+              "subnet": {
+                "id": "[reference(resourceId('Microsoft.Network/virtualNetworks', 'vnet')).subnets[0].id]"
+              }
+            }
+          }
+        ],
+        "frontendIPConfigurations": [
+          {
+            "name": "fip",
+            "properties": {}
+          }
+        ],
+        "frontendPorts": [
+          {
+            "name": "port",
+            "properties": {
+              "port": 80
+            }
+          }
+        ],
+        "backendAddressPools": [
+          {
+            "name": "pool",
+            "properties": {}
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/virtualNetworks', 'vnet')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Network/applicationGateways",
+      "apiVersion": "2022-01-01",
+      "name": "appgw44",
+      "location": "westeurope",
+      "properties": {
+        "sku": {
+          "name": "Standard_v2",
+          "capacity": 2,
+          "tier": "Standard_v2"
+        },
+        "gatewayIPConfigurations": [
+          {
+            "name": "ipconfiguration",
+            "properties": {
+              "subnet": {
+                "id": "[reference(resourceId('Microsoft.Network/virtualNetworks', 'vnet')).subnets[0].id]"
+              }
+            }
+          }
+        ],
+        "frontendIPConfigurations": [
+          {
+            "name": "fip",
+            "properties": {}
+          }
+        ],
+        "frontendPorts": [
+          {
+            "name": "port",
+            "properties": {
+              "port": 80
+            }
+          }
+        ],
+        "backendAddressPools": [
+          {
+            "name": "pool",
+            "properties": {}
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/virtualNetworks', 'vnet')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Network/applicationGateways",
+      "apiVersion": "2022-01-01",
+      "name": "appgw5",
+      "location": "westeurope",
+      "properties": {
+        "sku": {
+          "name": "WAF_Medium",
+          "capacity": 1,
+          "tier": "WAF"
+        },
+        "gatewayIPConfigurations": [
+          {
+            "name": "ipconfiguration",
+            "properties": {
+              "subnet": {
+                "id": "[reference(resourceId('Microsoft.Network/virtualNetworks', 'vnet')).subnets[0].id]"
+              }
+            }
+          }
+        ],
+        "frontendIPConfigurations": [
+          {
+            "name": "fip",
+            "properties": {}
+          }
+        ],
+        "frontendPorts": [
+          {
+            "name": "port",
+            "properties": {
+              "port": 80
+            }
+          }
+        ],
+        "backendAddressPools": [
+          {
+            "name": "pool",
+            "properties": {}
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/virtualNetworks', 'vnet')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Network/applicationGateways",
+      "apiVersion": "2022-01-01",
+      "name": "appgw6",
+      "location": "westeurope",
+      "properties": {
+        "sku": {
+          "name": "WAF_Large",
+          "capacity": 1,
+          "tier": "WAF"
+        },
+        "gatewayIPConfigurations": [
+          {
+            "name": "ipconfiguration",
+            "properties": {
+              "subnet": {
+                "id": "[reference(resourceId('Microsoft.Network/virtualNetworks', 'vnet')).subnets[0].id]"
+              }
+            }
+          }
+        ],
+        "frontendIPConfigurations": [
+          {
+            "name": "fip",
+            "properties": {}
+          }
+        ],
+        "frontendPorts": [
+          {
+            "name": "port",
+            "properties": {
+              "port": 80
+            }
+          }
+        ],
+        "backendAddressPools": [
+          {
+            "name": "pool",
+            "properties": {}
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/virtualNetworks', 'vnet')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Network/applicationGateways",
+      "apiVersion": "2022-01-01",
+      "name": "appgw7",
+      "location": "westeurope",
+      "properties": {
+        "sku": {
+          "name": "WAF_v2",
+          "capacity": 1,
+          "tier": "WAF_v2"
+        },
+        "gatewayIPConfigurations": [
+          {
+            "name": "ipconfiguration",
+            "properties": {
+              "subnet": {
+                "id": "[reference(resourceId('Microsoft.Network/virtualNetworks', 'vnet')).subnets[0].id]"
+              }
+            }
+          }
+        ],
+        "frontendIPConfigurations": [
+          {
+            "name": "fip",
+            "properties": {}
+          }
+        ],
+        "frontendPorts": [
+          {
+            "name": "port",
+            "properties": {
+              "port": 80
+            }
+          }
+        ],
+        "backendAddressPools": [
+          {
+            "name": "pool",
+            "properties": {}
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/virtualNetworks', 'vnet')]"
+      ]
+    }
+  ]
+}
