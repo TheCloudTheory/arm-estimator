@@ -22,6 +22,9 @@
     <None Update="templates\acr.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="templates\analysisservices.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="templates\apim.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
