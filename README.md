@@ -51,11 +51,16 @@ Those limitations will be removed in the future releases of the project.
 Services not listed are considered TBD.
 Service|Support level|More information
 ----|----|----
+Advanced Data Security|Not Supported|-
+Advanced Threat Protection|Not Supported|-
 AKS|Partial|Estimates work for managed service (both Free / Paid), estimation doesn't include agent pools
 APIM|Full|-
 App Configuration|Full|-
 Application Gateway|Full|-
 Application Insights|Partial|Supports classic mode, doesn't support Enteprise Nodes and Multi-step Web Test
+Active Directory B2C|Not Supported|-
+Active Directory Domain Services|Not Supported|-
+Analysis Services|Full|-
 Azure App Service|Partial|Supports Azure App Service Plans (without Isolated tiers) and Azure Functions (Consumption / Premium / App Service Plan)
 Container Apps|Full|-
 Container Registry|Full|-
