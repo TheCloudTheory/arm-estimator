@@ -1,0 +1,86 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.3.255.40792",
+      "templateHash": "8422983072053788027"
+    }
+  },
+  "functions": [],
+  "resources": [
+    {
+      "type": "Microsoft.AnalysisServices/servers",
+      "apiVersion": "2017-08-01",
+      "name": "as1",
+      "location": "westeurope",
+      "sku": {
+        "name": "B1",
+        "tier": "Basic",
+        "capacity": 1
+      },
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.AnalysisServices/servers",
+      "apiVersion": "2017-08-01",
+      "name": "as2",
+      "location": "westeurope",
+      "sku": {
+        "name": "B2",
+        "tier": "Basic",
+        "capacity": 1
+      },
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.AnalysisServices/servers",
+      "apiVersion": "2017-08-01",
+      "name": "as11",
+      "location": "westeurope",
+      "sku": {
+        "name": "B1",
+        "tier": "Basic",
+        "capacity": 2
+      },
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.AnalysisServices/servers",
+      "apiVersion": "2017-08-01",
+      "name": "as3",
+      "location": "westeurope",
+      "sku": {
+        "name": "Developer",
+        "tier": "Development",
+        "capacity": 1
+      },
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.AnalysisServices/servers",
+      "apiVersion": "2017-08-01",
+      "name": "as4",
+      "location": "westeurope",
+      "sku": {
+        "name": "S0",
+        "tier": "Standard",
+        "capacity": 1
+      },
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.AnalysisServices/servers",
+      "apiVersion": "2017-08-01",
+      "name": "as5",
+      "location": "westeurope",
+      "sku": {
+        "name": "S1",
+        "tier": "Standard",
+        "capacity": 1
+      },
+      "properties": {}
+    }
+  ]
+}
