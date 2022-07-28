@@ -55,6 +55,7 @@ AKS|Partial|Estimates work for managed service (both Free / Paid), estimation do
 APIM|Full|-
 App Configuration|Full|-
 Application Gateway|Full|-
+Application Insights|Partial|Supports classic mode, doesn't support Enteprise Nodes and Multi-step Web Test
 Azure App Service|Partial|Supports Azure App Service Plans (without Isolated tiers) and Azure Functions (Consumption / Premium / App Service Plan)
 Container Apps|Full|-
 Container Registry|Full|-
