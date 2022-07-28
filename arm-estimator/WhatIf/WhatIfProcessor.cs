@@ -73,6 +73,9 @@ internal class WhatIfProcessor
                 case "Microsoft.Network/applicationGateways":
                     currentChangeCost += await Calculate<ApplicationGatewayRetailQuery, ApplicationGatewayEstimationCalculation>(change, id);
                     break;
+                case "Microsoft.Insights/components":
+                    currentChangeCost += await Calculate<ApplicationInsightsRetailQuery, ApplicationInsightsEstimationCalculation>(change, id);
+                    break;
                 default:
                     logger.LogWarning("{resourceType} is not yet supported.", id?.ResourceType);
                     break;
