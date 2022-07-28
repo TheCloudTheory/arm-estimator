@@ -1,6 +1,13 @@
 # ARM Cost Estimator
 Automated cost estimation of your Azure infrastructure made easy.
 
+## Philosophy
+As adoption of cloud services progresses, understanding how cloud billing works becomes more and more critical for keeping everything under control. Most of the time initial infrastructure cost estimation is done only during design phase and gets neglected as development progresses. Many development teams don't have enough understanding how to calculate impact of their changes and find difficult to get an immediate feedback whether they're still withing acceptable level of money spent for their services.
+
+Infrastructure-as-Code (IaC) makes things even more difficult - it solves the problem of cloud infrastructure treated as a separate development stream, but doesn't give you control over cost of components under your control.
+
+ARM Cost Estimator follows a concept of [_running cost as architecture fitness function_](https://www.thoughtworks.com/radar/techniques/run-cost-as-architecture-fitness-function).
+
 ## Installation
 ARM Cost Estimator can be download as ZIP package containing a single executable file. Check releases to find the most recent version download URL.
 
