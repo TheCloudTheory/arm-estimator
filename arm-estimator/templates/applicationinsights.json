@@ -1,0 +1,24 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.3.255.40792",
+      "templateHash": "7904052685054216138"
+    }
+  },
+  "functions": [],
+  "resources": [
+    {
+      "type": "Microsoft.Insights/components",
+      "apiVersion": "2020-02-02",
+      "name": "aiestimator",
+      "location": "westeurope",
+      "kind": "other",
+      "properties": {
+        "Application_Type": "other"
+      }
+    }
+  ]
+}

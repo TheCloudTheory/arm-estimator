@@ -2,7 +2,7 @@
 
 internal class AppConfigurationQueryFilter : IQueryFilter
 {
-    private const string ServiceId = "DZH319K8RFPB";
+    private const string ServiceId = "DZH3158N0PHZ";
 
     private readonly WhatIfAfterBeforeChange afterState;
     private readonly ILogger logger;
