@@ -6,7 +6,7 @@ As adoption of cloud services progresses, understanding how cloud billing works 
 
 Infrastructure-as-Code (IaC) makes things even more difficult - it solves the problem of cloud infrastructure treated as a separate development stream, but doesn't give you control over cost of components under your control.
 
-ARM Cost Estimator follows a concept of [_running cost as architecture fitness function_](https://www.thoughtworks.com/radar/techniques/run-cost-as-architecture-fitness-function).
+ARM Cost Estimator follows a concept of [_running cost as architecture fitness function_](https://www.thoughtworks.com/radar/techniques/run-cost-as-architecture-fitness-function). You can make it an integral part of your CICD pipeline and quickly gather information of how much you're going to spend.
 
 ## Installation
 ARM Cost Estimator can be download as ZIP package containing a single executable file. Check releases to find the most recent version download URL.
