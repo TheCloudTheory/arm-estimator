@@ -9,7 +9,7 @@ internal class Program
     private static async Task<int> Main(string[] args)
     {
         var templateFileArg = new Argument<FileInfo>("template-file", "Template file to analyze");
-        var susbcriptionIdArg = new Argument<string>("subscription-id", "Susbcription ID");
+        var susbcriptionIdArg = new Argument<string>("subscription-id", "Subscription ID");
         var resourceGroupArg = new Argument<string>("resource-group", "Resource group name");
         var deploymentModeOption = new Option<DeploymentMode>("--mode", () => { return DeploymentMode.Incremental; }, "Deployment mode");
 
