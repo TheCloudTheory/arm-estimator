@@ -46,6 +46,9 @@
     <None Update="templates\botservice.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="templates\chaos.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="templates\complex.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
