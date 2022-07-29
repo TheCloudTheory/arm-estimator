@@ -1,5 +1,5 @@
 # ARM Cost Estimator
-Automated cost estimation of your Azure infrastructure made easy.
+Automated cost estimation of your Azure infrastructure made easy. Works with ARM Templates and Bicep.
 
 ## Philosophy
 As adoption of cloud services progresses, understanding how cloud billing works becomes more and more critical for keeping everything under control. Most of the time initial infrastructure cost estimation is done only during design phase and gets neglected as development progresses. Many development teams don't have enough understanding how to calculate impact of their changes and find difficult to get an immediate feedback whether they're still withing acceptable level of money spent for their services.
