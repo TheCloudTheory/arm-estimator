@@ -94,6 +94,9 @@ internal class WhatIfProcessor
                 case "Microsoft.Search/searchServices":
                     currentChangeCost += await Calculate<CognitiveSearchRetailQuery, CognitiveSearchEstimationCalculation>(change, id);
                     break;
+                case "Microsoft.ConfidentialLedger/ledgers":
+                    currentChangeCost += await Calculate<ConfidentialLedgerRetailQuery, ConfidentialLedgerEstimationCalculation>(change, id);
+                    break;
                 default:
                     logger.LogWarning("{resourceType} is not yet supported.", id?.ResourceType);
                     break;
