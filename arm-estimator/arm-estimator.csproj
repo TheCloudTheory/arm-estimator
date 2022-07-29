@@ -43,6 +43,9 @@
     <None Update="templates\bastion.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="templates\botservice.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="templates\complex.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
