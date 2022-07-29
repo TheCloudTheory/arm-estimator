@@ -64,6 +64,7 @@ Analysis Services|Full|-
 Azure App Service|Partial|Supports Azure App Service Plans (without Isolated tiers) and Azure Functions (Consumption / Premium / App Service Plan)
 Bastion|Full|-
 Bot Service|Full|-
+Chaos Studio|Full|-
 Container Apps|Full|-
 Container Registry|Full|-
 Health Bot|Full|-
