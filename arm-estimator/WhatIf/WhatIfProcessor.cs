@@ -82,6 +82,12 @@ internal class WhatIfProcessor
                 case "Microsoft.Network/bastionHosts":
                     currentChangeCost += await Calculate<BastionRetailQuery, BastionEstimationCalculation>(change, id);
                     break;
+                //case "Microsoft.BotService/botServices":
+                //    currentChangeCost += await Calculate<BotServiceRetailQuery, BotServiceEstimationCalculation>(change, id);
+                //    break;
+                case "Microsoft.HealthBot/healthBots":
+                    currentChangeCost += await Calculate<HealthBotServiceRetailQuery, HealthBotServiceEstimationCalculation>(change, id);
+                    break;
                 default:
                     logger.LogWarning("{resourceType} is not yet supported.", id?.ResourceType);
                     break;

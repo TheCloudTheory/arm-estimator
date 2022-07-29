@@ -1,0 +1,62 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.3.255.40792",
+      "templateHash": "12900437444133043930"
+    }
+  },
+  "functions": [],
+  "resources": [
+    {
+      "type": "Microsoft.BotService/botServices",
+      "apiVersion": "2021-05-01-preview",
+      "name": "bs1",
+      "location": "westeurope",
+      "sku": {
+        "name": "F0"
+      },
+      "properties": {
+        "endpoint": "",
+        "displayName": "some-name",
+        "msaAppId": ""
+      }
+    },
+    {
+      "type": "Microsoft.BotService/botServices",
+      "apiVersion": "2021-05-01-preview",
+      "name": "bs2",
+      "location": "westeurope",
+      "sku": {
+        "name": "S1"
+      },
+      "properties": {
+        "endpoint": "",
+        "displayName": "some-name",
+        "msaAppId": ""
+      }
+    },
+    {
+      "type": "Microsoft.HealthBot/healthBots",
+      "apiVersion": "2021-08-24",
+      "name": "hb1",
+      "location": "westeurope",
+      "sku": {
+        "name": "F0"
+      },
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.HealthBot/healthBots",
+      "apiVersion": "2021-08-24",
+      "name": "hb2",
+      "location": "westeurope",
+      "sku": {
+        "name": "S1"
+      },
+      "properties": {}
+    }
+  ]
+}
