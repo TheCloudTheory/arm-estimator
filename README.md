@@ -65,6 +65,7 @@ Azure App Service|Partial|Supports Azure App Service Plans (without Isolated tie
 Bastion|Full|-
 Bot Service|Full|-
 Chaos Studio|Full|-
+Cognitive Search|Partial|Doesn't support Document Cracking / Semantic Search / Custom Entity Skills Text Records
 Container Apps|Full|-
 Container Registry|Full|-
 Health Bot|Full|-
