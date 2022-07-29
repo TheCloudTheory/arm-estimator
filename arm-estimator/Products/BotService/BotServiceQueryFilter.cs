@@ -1,13 +1,13 @@
 ﻿using Microsoft.Extensions.Logging;
 
-internal class HealthBotServiceQueryFilter : IQueryFilter
+internal class BotServiceQueryFilter : IQueryFilter
 {
-    private const string ServiceId = "DZH318J9W0D1";
+    private const string ServiceId = "BOTSERVICE";
 
     private readonly WhatIfAfterBeforeChange afterState;
     private readonly ILogger logger;
 
-    public HealthBotServiceQueryFilter(WhatIfAfterBeforeChange afterState, ILogger logger)
+    public BotServiceQueryFilter(WhatIfAfterBeforeChange afterState, ILogger logger)
     {
         this.afterState = afterState;
         this.logger = logger;
@@ -18,11 +18,11 @@ internal class HealthBotServiceQueryFilter : IQueryFilter
         var sku = this.afterState.sku?.name;
         if (sku == null)
         {
-            this.logger.LogError("Can't create a filter for Health Bot when SKU is unavailable.");
+            this.logger.LogError("Can't create a filter for Bot Service when SKU is unavailable.");
             return null;
         }
 
-        var skuIds = HealthBotServiceSupportedData.SkuToSkuIdMap[sku];
+        var skuIds = BotServiceSupportedData.SkuToSkuIdMap[sku];
         var skuIdsFilter = string.Join(" or ", skuIds.Select(_ => $"skuId eq '{_}'"));
 
         return $"$filter=serviceId eq '{ServiceId}' and armRegionName eq '{location}' and ({skuIdsFilter})";
