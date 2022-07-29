@@ -55,6 +55,9 @@
     <None Update="templates\complex.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="templates\confidentialledger.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="templates\functions.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
