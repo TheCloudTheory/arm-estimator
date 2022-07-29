@@ -69,6 +69,7 @@ Bastion|Full|-
 Bot Service|Full|-
 Chaos Studio|Full|-
 Cognitive Search|Partial|Doesn't support Document Cracking / Semantic Search / Custom Entity Skills Text Records
+Confidential Ledger|Full|Official pricing will be available September 2022
 Container Apps|Full|-
 Container Registry|Full|-
 Health Bot|Full|-
