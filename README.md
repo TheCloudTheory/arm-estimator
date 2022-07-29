@@ -63,9 +63,11 @@ Active Directory Domain Services|Not Supported|-
 Analysis Services|Full|-
 Azure App Service|Partial|Supports Azure App Service Plans (without Isolated tiers) and Azure Functions (Consumption / Premium / App Service Plan)
 Bastion|Full|-
+Bot Service|Full|-
 Container Apps|Full|-
 Container Registry|Full|-
-Azure SQL|Partial|Supports only Databases (DTU model - Basic & Standard)
+Health Bot|Full|-
+SQL Database|Partial|Supports only Databases (DTU model - Basic & Standard)
 Storage Account|Partial|Supports only StorageV2 (without File Service)
 
 ## Deployment mode
