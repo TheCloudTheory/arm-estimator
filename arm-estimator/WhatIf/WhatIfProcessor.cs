@@ -91,6 +91,9 @@ internal class WhatIfProcessor
                 case "Microsoft.Chaos/experiments":
                     currentChangeCost += await Calculate<ChaosRetailQuery, ChaosEstimationCalculation>(change, id);
                     break;
+                case "Microsoft.Search/searchServices":
+                    currentChangeCost += await Calculate<CognitiveSearchRetailQuery, CognitiveSearchEstimationCalculation>(change, id);
+                    break;
                 default:
                     logger.LogWarning("{resourceType} is not yet supported.", id?.ResourceType);
                     break;
