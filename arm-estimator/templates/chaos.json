@@ -1,0 +1,51 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.3.255.40792",
+      "templateHash": "2800056056891903460"
+    }
+  },
+  "functions": [],
+  "resources": [
+    {
+      "type": "Microsoft.Chaos/experiments",
+      "apiVersion": "2021-09-15-preview",
+      "name": "chaos",
+      "location": "westeurope",
+      "properties": {
+        "selectors": [
+          {
+            "type": "List",
+            "targets": [
+              {
+                "type": "ChaosTarget",
+                "id": ""
+              }
+            ],
+            "id": ""
+          }
+        ],
+        "steps": [
+          {
+            "name": "",
+            "branches": [
+              {
+                "name": "",
+                "actions": [
+                  {
+                    "type": "delay",
+                    "name": "delay",
+                    "duration": ""
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
