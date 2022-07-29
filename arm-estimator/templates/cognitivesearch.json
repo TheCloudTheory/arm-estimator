@@ -1,0 +1,84 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.3.255.40792",
+      "templateHash": "14507792163332976167"
+    }
+  },
+  "functions": [],
+  "resources": [
+    {
+      "type": "Microsoft.Search/searchServices",
+      "apiVersion": "2021-04-01-preview",
+      "name": "cg1",
+      "location": "westeurope",
+      "sku": {
+        "name": "free"
+      },
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.Search/searchServices",
+      "apiVersion": "2021-04-01-preview",
+      "name": "cg2",
+      "location": "westeurope",
+      "sku": {
+        "name": "basic"
+      },
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.Search/searchServices",
+      "apiVersion": "2021-04-01-preview",
+      "name": "cg3",
+      "location": "westeurope",
+      "sku": {
+        "name": "standard"
+      },
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.Search/searchServices",
+      "apiVersion": "2021-04-01-preview",
+      "name": "cg4",
+      "location": "westeurope",
+      "sku": {
+        "name": "standard2"
+      },
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.Search/searchServices",
+      "apiVersion": "2021-04-01-preview",
+      "name": "cg5",
+      "location": "westeurope",
+      "sku": {
+        "name": "standard3"
+      },
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.Search/searchServices",
+      "apiVersion": "2021-04-01-preview",
+      "name": "cg6",
+      "location": "westeurope",
+      "sku": {
+        "name": "storage_optimized_l1"
+      },
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.Search/searchServices",
+      "apiVersion": "2021-04-01-preview",
+      "name": "cg7",
+      "location": "westeurope",
+      "sku": {
+        "name": "storage_optimized_l2"
+      },
+      "properties": {}
+    }
+  ]
+}
