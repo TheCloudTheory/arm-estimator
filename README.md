@@ -62,6 +62,7 @@ Active Directory B2C|Not Supported|-
 Active Directory Domain Services|Not Supported|-
 Analysis Services|Full|-
 Azure App Service|Partial|Supports Azure App Service Plans (without Isolated tiers) and Azure Functions (Consumption / Premium / App Service Plan)
+Bastion|Full|-
 Container Apps|Full|-
 Container Registry|Full|-
 Azure SQL|Partial|Supports only Databases (DTU model - Basic & Standard)
