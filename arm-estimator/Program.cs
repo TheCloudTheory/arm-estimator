@@ -12,19 +12,31 @@ internal class Program
         var susbcriptionIdArg = new Argument<string>("subscription-id", "Subscription ID");
         var resourceGroupArg = new Argument<string>("resource-group", "Resource group name");
         var deploymentModeOption = new Option<DeploymentMode>("--mode", () => { return DeploymentMode.Incremental; }, "Deployment mode");
+        var thresholdOption = new Option<int>("--threshold", () => { return -1; }, "Estimation threshold");
 
         var command = new RootCommand("Azure Resource Manager cost estimator.");
         command.AddOption(deploymentModeOption);
+        command.AddOption(thresholdOption);
         command.AddArgument(templateFileArg);
         command.AddArgument(susbcriptionIdArg);
         command.AddArgument(resourceGroupArg);
-        command.SetHandler(async (file, subscription, resourceGroup, deploymentMode) =>
-            await Estimate(file, subscription, resourceGroup, deploymentMode), templateFileArg, susbcriptionIdArg, resourceGroupArg, deploymentModeOption);
+        command.SetHandler(async (file, subscription, resourceGroup, deploymentMode, threshold) =>
+            await Estimate(file, subscription, resourceGroup, deploymentMode, threshold), 
+            templateFileArg, 
+            susbcriptionIdArg, 
+            resourceGroupArg, 
+            deploymentModeOption,
+            thresholdOption);
 
         return await command.InvokeAsync(args);
     }
 
-    private static async Task Estimate(FileInfo file, string subscriptionId, string resourceGroupName, DeploymentMode deploymentMode)
+    private static async Task Estimate(
+        FileInfo file, 
+        string subscriptionId, 
+        string resourceGroupName, 
+        DeploymentMode deploymentMode,
+        int threshold)
     {
         using (var loggerFactory = LoggerFactory.Create(builder =>
         {
@@ -69,7 +81,12 @@ internal class Program
             logger.LogInformation("-------------------------------");
             logger.LogInformation("");
 
-            await new WhatIfProcessor(logger).Process(whatIfData.properties.changes);
+            var totalCost = await new WhatIfProcessor(logger).Process(whatIfData.properties.changes);
+            if(totalCost > threshold)
+            {
+                logger.LogError("Estimated cost [{totalCost} USD] exceeds configured threshold [{threshold} USD].", totalCost, threshold);
+                Environment.Exit(1);
+            }
         }
     }
 

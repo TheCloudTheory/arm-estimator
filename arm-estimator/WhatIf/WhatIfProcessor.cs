@@ -14,7 +14,7 @@ internal class WhatIfProcessor
         this.logger = logger;
     }
 
-    public async Task Process(WhatIfChange[] changes)
+    public async Task<double> Process(WhatIfChange[] changes)
     {
         double totalCost = 0;
         double alteredCost = 0;
@@ -135,6 +135,8 @@ internal class WhatIfProcessor
 
         this.logger.LogError("Total cost: {cost} USD", totalCost);
         this.logger.LogError("Delta: {sign}{cost} USD", sign, alteredCost);
+
+        return totalCost;
     }
 
     private async Task<double> Calculate<TQuery, TCalculation>(WhatIfChange change, ResourceIdentifier id)
