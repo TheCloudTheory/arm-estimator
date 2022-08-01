@@ -93,5 +93,8 @@ arm-estimator <template-path>.json <subscription-id> <resource-group> --threshol
 ```
 
 By using `--threshold` option, you can set an upper limit for infrastructure cost and make sure, that you can re-evaluate changes before they reach cloud environment and affect your billing.
+> If estimation exceeds configured threshold, ARM Cost Estimator exits with status code 1. Make sure you check against returned status code and handle that scenario properly. 
+
+Configuring threshold is optional - if you omit it, your CICD process will continue ignoring estimation value.
 ## Contributions
 Contributions are more than welcome!
