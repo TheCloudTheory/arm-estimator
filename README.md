@@ -38,6 +38,7 @@ dotnet arm-estimator <template-path>.json <subscription-id> <resource-group>
 * Allows you to validate your deployment before it happens - if the template you used is invalid, an error with detailed information is returned
 * Support for both Incremental / Complete deployment modes (see below for details)
 * Displaying delta describing difference between your current estimated cost and after changes are applied
+* An option to stop CICD process if estimations exceeds given limit (see below for details)
 
 ## Known limitations
 ARM Cost Estimator is currently in `alpha` development phase meaning there're no guarantees for stable interface and many features are still in design or planning phase. The main limitations as for now are:
@@ -85,5 +86,12 @@ arm-estimator <template-path>.json <subscription-id> <resource-group> --mode Inc
 
 When parameter is not passed, `Incremental` mode is selected. Selecting `Complete` changes the way estimations work - if there're existing resources in a resource group, they will be considered as up for removal. It'll be noted by ARM Cost Estimator and deducted from the final estimation.
 
+## Threshold
+With ARM Cost Estimator it's possible to stop your CICD process is projected estimation exceeds your assumptions:
+```
+arm-estimator <template-path>.json <subscription-id> <resource-group> --threshold <int>
+```
+
+By using `--threshold` option, you can set an upper limit for infrastructure cost and make sure, that you can re-evaluate changes before they reach cloud environment and affect your billing.
 ## Contributions
 Contributions are more than welcome!
