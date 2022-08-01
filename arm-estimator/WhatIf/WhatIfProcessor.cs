@@ -97,6 +97,15 @@ internal class WhatIfProcessor
                 case "Microsoft.ConfidentialLedger/ledgers":
                     currentChangeCost += await Calculate<ConfidentialLedgerRetailQuery, ConfidentialLedgerEstimationCalculation>(change, id);
                     break;
+                case "Microsoft.DocumentDB/databaseAccounts":
+                    currentChangeCost += await Calculate<CosmosDBRetailQuery, CosmosDBEstimationCalculation>(change, id);
+                    break;
+                case "Microsoft.DocumentDB/databaseAccounts/sqlDatabases":
+                    currentChangeCost += await Calculate<CosmosDBRetailQuery, CosmosDBEstimationCalculation>(change, id);
+                    break;
+                case "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers":
+                    currentChangeCost += await Calculate<CosmosDBRetailQuery, CosmosDBEstimationCalculation>(change, id);
+                    break;
                 default:
                     logger.LogWarning("{resourceType} is not yet supported.", id?.ResourceType);
                     break;
@@ -184,9 +193,7 @@ internal class WhatIfProcessor
             return null;
         }
 
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
-        var location = desiredState.location ?? parentResourceToLocation[id.Parent.ToString()];
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
+        var location = desiredState.location ?? parentResourceToLocation[FindParentId(id)];
         if (location == null)
         {
             this.logger.LogError("Resources without location are not supported.");
@@ -210,6 +217,25 @@ internal class WhatIfProcessor
         }
 
         return data;
+    }
+
+    private string FindParentId(ResourceIdentifier id)
+    {
+        var currentParent = id.Parent;
+        var parentType = currentParent?.Parent?.ResourceType;
+
+        while(parentType != "Microsoft.Resources/resourceGroups")
+        {
+            currentParent = currentParent?.Parent;
+            parentType = currentParent?.Parent?.ResourceType;
+        }
+
+        if(currentParent?.Name == null)
+        {
+            throw new Exception("Couldn't find resource parent.");
+        }
+
+        return currentParent.ToString();
     }
 
     private async Task<HttpResponseMessage> GetRetailDataResponse(string url)

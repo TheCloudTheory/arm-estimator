@@ -1,0 +1,108 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.3.255.40792",
+      "templateHash": "8413487229226610852"
+    }
+  },
+  "functions": [],
+  "resources": [
+    {
+      "type": "Microsoft.DocumentDB/databaseAccounts",
+      "apiVersion": "2022-05-15",
+      "name": "cosmos1",
+      "location": "westeurope",
+      "kind": "GlobalDocumentDB",
+      "properties": {
+        "databaseAccountOfferType": "Standard",
+        "locations": [
+          {
+            "failoverPriority": 0,
+            "isZoneRedundant": false,
+            "locationName": "westeurope"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases",
+      "apiVersion": "2021-10-15",
+      "name": "[format('{0}/{1}', 'cosmos1', 'armestimator')]",
+      "properties": {
+        "resource": {
+          "id": "armestimator"
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.DocumentDB/databaseAccounts', 'cosmos1')]"
+      ]
+    },
+    {
+      "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers",
+      "apiVersion": "2021-10-15",
+      "name": "[format('{0}/{1}/{2}', 'cosmos1', 'armestimator', 'container1')]",
+      "properties": {
+        "resource": {
+          "id": "container1"
+        },
+        "options": {
+          "throughput": 400
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.DocumentDB/databaseAccounts', 'cosmos1')]",
+        "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases', 'cosmos1', 'armestimator')]"
+      ]
+    },
+    {
+      "type": "Microsoft.DocumentDB/databaseAccounts",
+      "apiVersion": "2022-05-15",
+      "name": "cosmos2",
+      "location": "westeurope",
+      "kind": "GlobalDocumentDB",
+      "properties": {
+        "databaseAccountOfferType": "Standard",
+        "locations": [
+          {
+            "failoverPriority": 0,
+            "isZoneRedundant": false,
+            "locationName": "westeurope"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases",
+      "apiVersion": "2021-10-15",
+      "name": "[format('{0}/{1}', 'cosmos2', 'armestimator')]",
+      "properties": {
+        "resource": {
+          "id": "armestimator"
+        },
+        "options": {
+          "throughput": 1000
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.DocumentDB/databaseAccounts', 'cosmos2')]"
+      ]
+    },
+    {
+      "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers",
+      "apiVersion": "2021-10-15",
+      "name": "[format('{0}/{1}/{2}', 'cosmos2', 'armestimator', 'container2')]",
+      "properties": {
+        "resource": {
+          "id": "container2"
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.DocumentDB/databaseAccounts', 'cosmos2')]",
+        "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases', 'cosmos2', 'armestimator')]"
+      ]
+    }
+  ]
+}
