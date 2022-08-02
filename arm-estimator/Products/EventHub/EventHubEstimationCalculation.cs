@@ -1,7 +1,9 @@
-﻿internal class EventHubEstimationCalculation : BaseEstimation, IEstimationCalculation
+﻿using Azure.Core;
+
+internal class EventHubEstimationCalculation : BaseEstimation, IEstimationCalculation
 {
-    public EventHubEstimationCalculation(RetailItem[] items, WhatIfAfterBeforeChange change)
-        : base(items, change)
+    public EventHubEstimationCalculation(RetailItem[] items, ResourceIdentifier id, WhatIfAfterBeforeChange change)
+        : base(items, id, change)
     {
     }
 
@@ -12,7 +14,7 @@
         return this.items.Where(_ => _.type != "Reservation").OrderByDescending(_ => _.retailPrice);
     }
 
-    public double GetTotalCost()
+    public double GetTotalCost(WhatIfChange[] changes)
     {
         double? estimatedCost = 0;
         var items = GetItems();
@@ -36,8 +38,13 @@
                 estimatedCost += item.retailPrice * HoursInMonth * capacity;
             }
             // Capture
-            else if (item.meterId == "36085934-4216-4d15-a257-9670b5eb12dc")
+            else if (item.meterId == "36085934-4216-4d15-a257-9670b5eb12dc" && this.change.type == "Microsoft.EventHub/namespaces/eventhubs")
             {
+                var parentId = this.id.Parent?.ToString();
+                var parent = changes.Single(_ => _.resourceId == parentId);
+                var parentDesiredState = parent.after ?? parent.before;
+
+                capacity = parentDesiredState?.sku?.capacity;
                 estimatedCost += item.retailPrice * HoursInMonth * capacity;
             }
             // Dedicated Capacity Unit

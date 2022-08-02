@@ -8,18 +8,20 @@ internal class WhatIfProcessor
     private static readonly Dictionary<string, string> parentResourceToLocation = new();
 
     private readonly ILogger logger;
+    private readonly WhatIfChange[] changes;
 
-    public WhatIfProcessor(ILogger logger)
+    public WhatIfProcessor(ILogger logger, WhatIfChange[] changes)
     {
         this.logger = logger;
+        this.changes = changes;
     }
 
-    public async Task<double> Process(WhatIfChange[] changes)
+    public async Task<double> Process()
     {
         double totalCost = 0;
         double alteredCost = 0;
 
-        foreach (WhatIfChange change in changes)
+        foreach (WhatIfChange change in this.changes)
         {
             if (change.resourceId == null)
             {
@@ -159,7 +161,7 @@ internal class WhatIfProcessor
             return 0;
         }
 
-        if (change.after == null && change.before == null)
+        if (change.resourceId == null || (change.after == null && change.before == null))
         {
             this.logger.LogError("No data available for WhatIf operation.");
             return 0;
@@ -172,13 +174,13 @@ internal class WhatIfProcessor
             return 0;
         }
 
-        if (Activator.CreateInstance(typeof(TCalculation), new object[] { data.Items, desiredState }) is not TCalculation estimation)
+        if (Activator.CreateInstance(typeof(TCalculation), new object[] { data.Items, id, desiredState }) is not TCalculation estimation)
         {
             this.logger.LogError("Couldn't create an instance of {type}.", typeof(TCalculation));
             return 0;
         }
 
-        var totalCost = estimation.GetTotalCost();
+        var totalCost = estimation.GetTotalCost(this.changes);
         ReportEstimationToConsole(id, estimation.GetItems(), totalCost);
 
         return totalCost;

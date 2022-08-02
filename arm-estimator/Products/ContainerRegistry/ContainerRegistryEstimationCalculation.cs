@@ -1,7 +1,9 @@
-﻿internal class ContainerRegistryEstimationCalculation : BaseEstimation, IEstimationCalculation
+﻿using Azure.Core;
+
+internal class ContainerRegistryEstimationCalculation : BaseEstimation, IEstimationCalculation
 {
-    public ContainerRegistryEstimationCalculation(RetailItem[] items, WhatIfAfterBeforeChange change)
-        : base(items, change)
+    public ContainerRegistryEstimationCalculation(RetailItem[] items, ResourceIdentifier id, WhatIfAfterBeforeChange change)
+        : base(items, id, change)
     {
     }
 
@@ -12,7 +14,7 @@
         return this.items.Where(_ => _.type != "Reservation").OrderByDescending(_ => _.retailPrice);
     }
 
-    public double GetTotalCost()
+    public double GetTotalCost(WhatIfChange[] changes)
     {
         double? estimatedCost;
         var items = GetItems();
