@@ -74,6 +74,7 @@ Confidential Ledger|Full|Official pricing will be available September 2022
 Container Apps|Full|-
 Container Registry|Full|-
 Cosmos DB|Partial|Supports only single-region writes with manual throughput provisioning
+Event Hub|Full|-
 Health Bot|Full|-
 SQL Database|Partial|Supports only Databases (DTU model - Basic & Standard)
 Storage Account|Partial|Supports only StorageV2 (without File Service)
