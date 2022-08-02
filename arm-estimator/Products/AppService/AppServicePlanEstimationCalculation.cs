@@ -1,7 +1,9 @@
-﻿internal class AppServicePlanEstimationCalculation : BaseEstimation, IEstimationCalculation
+﻿using Azure.Core;
+
+internal class AppServicePlanEstimationCalculation : BaseEstimation, IEstimationCalculation
 {
-    public AppServicePlanEstimationCalculation(RetailItem[] items, WhatIfAfterBeforeChange change)
-        : base(items, change)
+    public AppServicePlanEstimationCalculation(RetailItem[] items, ResourceIdentifier id, WhatIfAfterBeforeChange change)
+        : base(items, id, change)
     {
     }
 
@@ -12,7 +14,7 @@
     }
 
     // TODO: Functions Premium plan calculation should include multiplication if used EP2 / EP3
-    public double GetTotalCost()
+    public double GetTotalCost(WhatIfChange[] changes)
     {
         double? estimatedCost = 0;
         var items = GetItems();

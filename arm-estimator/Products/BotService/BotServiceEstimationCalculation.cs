@@ -1,7 +1,9 @@
-﻿internal class BotServiceEstimationCalculation : BaseEstimation, IEstimationCalculation
+﻿using Azure.Core;
+
+internal class BotServiceEstimationCalculation : BaseEstimation, IEstimationCalculation
 {
-    public BotServiceEstimationCalculation(RetailItem[] items, WhatIfAfterBeforeChange change)
-        : base(items, change)
+    public BotServiceEstimationCalculation(RetailItem[] items, ResourceIdentifier id, WhatIfAfterBeforeChange change)
+        : base(items, id, change)
     {
     }
 
@@ -12,7 +14,7 @@
         return this.items.Where(_ => _.type != "Reservation").OrderByDescending(_ => _.retailPrice);
     }
 
-    public double GetTotalCost()
+    public double GetTotalCost(WhatIfChange[] changes)
     {
         return 0;
     }

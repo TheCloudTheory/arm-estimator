@@ -81,7 +81,7 @@ internal class Program
             logger.LogInformation("-------------------------------");
             logger.LogInformation("");
 
-            var totalCost = await new WhatIfProcessor(logger).Process(whatIfData.properties.changes);
+            var totalCost = await new WhatIfProcessor(logger, whatIfData.properties.changes).Process();
             if(threshold != -1 && totalCost > threshold)
             {
                 logger.LogError("Estimated cost [{totalCost} USD] exceeds configured threshold [{threshold} USD].", totalCost, threshold);

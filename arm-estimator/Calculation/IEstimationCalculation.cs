@@ -1,5 +1,5 @@
 ﻿internal interface IEstimationCalculation
 {
-    double GetTotalCost();
+    double GetTotalCost(WhatIfChange[] changes);
     IOrderedEnumerable<RetailItem> GetItems();
 }

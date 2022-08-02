@@ -1,7 +1,9 @@
-﻿internal class ApplicationInsightsEstimationCalculation : BaseEstimation, IEstimationCalculation
+﻿using Azure.Core;
+
+internal class ApplicationInsightsEstimationCalculation : BaseEstimation, IEstimationCalculation
 {
-    public ApplicationInsightsEstimationCalculation(RetailItem[] items, WhatIfAfterBeforeChange change)
-        : base(items, change)
+    public ApplicationInsightsEstimationCalculation(RetailItem[] items, ResourceIdentifier id, WhatIfAfterBeforeChange change)
+        : base(items, id, change)
     {
     }
 
@@ -16,7 +18,7 @@
             .OrderByDescending(_ => _.retailPrice);
     }
 
-    public double GetTotalCost()
+    public double GetTotalCost(WhatIfChange[] changes)
     {
         double? estimatedCost = 0;
         var items = GetItems();

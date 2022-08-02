@@ -1,9 +1,10 @@
-﻿using System.Text.Json;
+﻿using Azure.Core;
+using System.Text.Json;
 
 internal class ApplicationGatewayEstimationCalculation : BaseEstimation, IEstimationCalculation
 {
-    public ApplicationGatewayEstimationCalculation(RetailItem[] items, WhatIfAfterBeforeChange change)
-        : base(items, change)
+    public ApplicationGatewayEstimationCalculation(RetailItem[] items, ResourceIdentifier id, WhatIfAfterBeforeChange change)
+        : base(items, id, change)
     {
     }
 
@@ -14,7 +15,7 @@ internal class ApplicationGatewayEstimationCalculation : BaseEstimation, IEstima
         return this.items.Where(_ => _.type != "Reservation").OrderByDescending(_ => _.retailPrice);
     }
 
-    public double GetTotalCost()
+    public double GetTotalCost(WhatIfChange[] changes)
     {
         double? estimatedCost = 0;
         var items = GetItems();
