@@ -1,0 +1,70 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.3.255.40792",
+      "templateHash": "12887745455894678729"
+    }
+  },
+  "functions": [],
+  "resources": [
+    {
+      "type": "Microsoft.EventHub/namespaces",
+      "apiVersion": "2022-01-01-preview",
+      "name": "eh1",
+      "location": "westeurope",
+      "sku": {
+        "name": "Basic",
+        "capacity": 5
+      },
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.EventHub/namespaces",
+      "apiVersion": "2022-01-01-preview",
+      "name": "eh2",
+      "location": "westeurope",
+      "sku": {
+        "name": "Standard",
+        "capacity": 10
+      },
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.EventHub/namespaces/eventhubs",
+      "apiVersion": "2022-01-01-preview",
+      "name": "[format('{0}/{1}', 'eh2', 'capture1')]",
+      "properties": {
+        "captureDescription": {
+          "enabled": true
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.EventHub/namespaces', 'eh2')]"
+      ]
+    },
+    {
+      "type": "Microsoft.EventHub/namespaces",
+      "apiVersion": "2022-01-01-preview",
+      "name": "eh3",
+      "location": "westeurope",
+      "sku": {
+        "name": "Premium",
+        "capacity": 4
+      },
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.EventHub/clusters",
+      "apiVersion": "2022-01-01-preview",
+      "name": "eh4",
+      "location": "westeurope",
+      "sku": {
+        "name": "Dedicated"
+      },
+      "properties": {}
+    }
+  ]
+}

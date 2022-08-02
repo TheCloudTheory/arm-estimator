@@ -106,6 +106,15 @@ internal class WhatIfProcessor
                 case "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers":
                     currentChangeCost += await Calculate<CosmosDBRetailQuery, CosmosDBEstimationCalculation>(change, id);
                     break;
+                case "Microsoft.EventHub/namespaces":
+                    currentChangeCost += await Calculate<EventHubRetailQuery, EventHubEstimationCalculation>(change, id);
+                    break;
+                case "Microsoft.EventHub/namespaces/eventhubs":
+                    currentChangeCost += await Calculate<EventHubRetailQuery, EventHubEstimationCalculation>(change, id);
+                    break;
+                case "Microsoft.EventHub/clusters":
+                    currentChangeCost += await Calculate<EventHubRetailQuery, EventHubEstimationCalculation>(change, id);
+                    break;
                 default:
                     logger.LogWarning("{resourceType} is not yet supported.", id?.ResourceType);
                     break;
