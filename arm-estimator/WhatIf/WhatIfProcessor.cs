@@ -117,6 +117,12 @@ internal class WhatIfProcessor
                 case "Microsoft.EventHub/clusters":
                     currentChangeCost += await Calculate<EventHubRetailQuery, EventHubEstimationCalculation>(change, id);
                     break;
+                case "Microsoft.StreamAnalytics/clusters":
+                    currentChangeCost += await Calculate<StreamAnalyticsRetailQuery, StreamAnalyticsEstimationCalculation>(change, id);
+                    break;
+                case "Microsoft.StreamAnalytics/streamingjobs":
+                    currentChangeCost += await Calculate<StreamAnalyticsRetailQuery, StreamAnalyticsEstimationCalculation>(change, id);
+                    break;
                 default:
                     logger.LogWarning("{resourceType} is not yet supported.", id?.ResourceType);
                     break;

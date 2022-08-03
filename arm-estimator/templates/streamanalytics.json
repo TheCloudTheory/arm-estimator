@@ -1,0 +1,53 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.3.255.40792",
+      "templateHash": "17966899090179091017"
+    }
+  },
+  "functions": [],
+  "resources": [
+    {
+      "type": "Microsoft.StreamAnalytics/clusters",
+      "apiVersion": "2020-03-01",
+      "name": "sa1",
+      "location": "westeurope",
+      "sku": {
+        "name": "Default",
+        "capacity": 36
+      },
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.StreamAnalytics/streamingjobs",
+      "apiVersion": "2021-10-01-preview",
+      "name": "sa2",
+      "location": "westeurope",
+      "properties": {
+        "sku": {
+          "name": "Standard"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.StreamAnalytics/streamingjobs",
+      "apiVersion": "2021-10-01-preview",
+      "name": "sa3",
+      "location": "westeurope",
+      "properties": {
+        "sku": {
+          "name": "Standard"
+        },
+        "transformation": {
+          "name": "sa3",
+          "properties": {
+            "streamingUnits": 10
+          }
+        }
+      }
+    }
+  ]
+}
