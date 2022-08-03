@@ -78,6 +78,7 @@ Event Hub|Full|-
 Health Bot|Full|-
 SQL Database|Partial|Supports only Databases (DTU model - Basic & Standard)
 Storage Account|Partial|Supports only StorageV2 (without File Service)
+Stream Analytics|Full|Stream Analytics on Edge requires separate estimation
 
 ## Deployment mode
 When performing resource group level deployment there's an option to select a deployment mode. ARM Cost Estimator also supports that option by providing desired value as parameter:
