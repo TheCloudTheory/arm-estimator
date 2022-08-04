@@ -25,6 +25,6 @@ internal class AppConfigurationQueryFilter : IQueryFilter
         var skuIds = AppConfigurationSupportedData.SkuToSkuIdMap[sku];
         var skuIdsFilter = string.Join(" or ", skuIds.Select(_ => $"skuId eq '{_}'"));
 
-        return $"$filter=serviceId eq '{ServiceId}' and armRegionName eq '{location}' and ({skuIdsFilter})";
+        return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and ({skuIdsFilter})";
     }
 }

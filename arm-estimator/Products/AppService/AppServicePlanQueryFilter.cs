@@ -36,7 +36,7 @@ internal class AppServicePlanQueryFilter : IQueryFilter
 
         var skuIdsFilter = string.Join(" or ", skuIds.Select(_ => $"skuId eq '{_}'"));
 
-        return $"$filter=serviceId eq '{serviceId}' and armRegionName eq '{location}' and ({skuIdsFilter})";
+        return $"serviceId eq '{serviceId}' and armRegionName eq '{location}' and ({skuIdsFilter})";
     }
 
     private bool IsLinuxPlan()

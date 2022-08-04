@@ -24,6 +24,6 @@ internal class SQLRetailQuery : BaseRetailQuery, IRetailQuery
         }
 
         var filter = new SQLQueryFilter(change, this.logger).GetFiltersBasedOnDesiredState(location);
-        return $"https://prices.azure.com/api/retail/prices?{filter}";
+        return $"{BaseQuery}{filter}";
     }
 }

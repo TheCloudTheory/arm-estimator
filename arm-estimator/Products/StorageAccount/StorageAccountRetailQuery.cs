@@ -24,6 +24,6 @@ internal class StorageAccountRetailQuery : BaseRetailQuery, IRetailQuery
         }
 
         var filter = new StorageAccountQueryFilter(change, this.logger).GetFiltersBasedOnDesiredState(location);
-        return $"https://prices.azure.com/api/retail/prices?{filter}";
+        return $"{BaseQuery}{filter}";
     }
 }

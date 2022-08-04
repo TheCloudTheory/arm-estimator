@@ -24,6 +24,6 @@ internal class AppServicePlanRetailQuery : BaseRetailQuery, IRetailQuery
         }
 
         var filter = new AppServicePlanQueryFilter(change, this.logger).GetFiltersBasedOnDesiredState(location);
-        return $"https://prices.azure.com/api/retail/prices?{filter}";
+        return $"{BaseQuery}{filter}";
     }
 }

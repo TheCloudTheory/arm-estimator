@@ -24,6 +24,6 @@ internal class BastionRetailQuery : BaseRetailQuery, IRetailQuery
         }
 
         var filter = new BastionQueryFilter(change, this.logger).GetFiltersBasedOnDesiredState(location);
-        return $"https://prices.azure.com/api/retail/prices?{filter}";
+        return $"{BaseQuery}{filter}";
     }
 }

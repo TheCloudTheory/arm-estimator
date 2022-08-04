@@ -52,9 +52,9 @@ internal class EventHubQueryFilter : IQueryFilter
 
         if (sku == "Capture")
         {
-            return $"$filter=serviceId eq '{ServiceId}' and armRegionName eq '{location}' and ({skuIdsFilter}) and meterId eq '36085934-4216-4d15-a257-9670b5eb12dc'";
+            return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and ({skuIdsFilter}) and meterId eq '36085934-4216-4d15-a257-9670b5eb12dc'";
         }
 
-        return $"$filter=serviceId eq '{ServiceId}' and armRegionName eq '{location}' and ({skuIdsFilter})";
+        return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and ({skuIdsFilter})";
     }
 }

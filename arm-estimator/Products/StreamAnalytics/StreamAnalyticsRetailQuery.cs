@@ -24,6 +24,6 @@ internal class StreamAnalyticsRetailQuery : BaseRetailQuery, IRetailQuery
         }
 
         var filter = new StreamAnalyticsQueryFilter(change, this.logger).GetFiltersBasedOnDesiredState(location);
-        return $"https://prices.azure.com/api/retail/prices?{filter}";
+        return $"{BaseQuery}{filter}";
     }
 }
