@@ -57,6 +57,6 @@ internal class ApplicationGatewayQueryFilter : IQueryFilter
         var skuIds = ApplicationGatewaySupportedData.SkuToSkuIdMap[skuName];
         var skuIdsFilter = string.Join(" or ", skuIds.Select(_ => $"skuId eq '{_}'"));
 
-        return $"$filter=serviceId eq '{ServiceId}' and armRegionName eq '{location}' and ({skuIdsFilter})";
+        return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and ({skuIdsFilter})";
     }
 }

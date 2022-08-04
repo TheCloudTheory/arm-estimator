@@ -38,6 +38,6 @@ internal class StreamAnalyticsQueryFilter : IQueryFilter
         var skuIds = StreamAnalyticsSupportedData.SkuToSkuIdMap[sku];
         var skuIdsFilter = string.Join(" or ", skuIds.Select(_ => $"skuId eq '{_}'"));
 
-        return $"$filter=serviceId eq '{ServiceId}' and armRegionName eq '{location}' and ({skuIdsFilter})";
+        return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and ({skuIdsFilter})";
     }
 }

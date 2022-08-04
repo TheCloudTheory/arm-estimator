@@ -13,6 +13,6 @@ internal class ContainerAppsQueryFilter : IQueryFilter
 
     public string? GetFiltersBasedOnDesiredState(string location)
     {
-        return $"$filter=serviceId eq '{ServiceId}' and armRegionName eq '{location}' and skuId eq 'DZH318Z0B0NC/0001'";
+        return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and skuId eq 'DZH318Z0B0NC/0001'";
     }
 }

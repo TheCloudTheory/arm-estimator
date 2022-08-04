@@ -9,8 +9,7 @@ internal class AppServicePlanEstimationCalculation : BaseEstimation, IEstimation
 
     public IOrderedEnumerable<RetailItem> GetItems()
     {
-        return this.items.Where(_ => _.type != "Reservation" && _.type != "DevTestConsumption")
-            .OrderByDescending(_ => _.retailPrice);
+        return this.items.OrderByDescending(_ => _.retailPrice);
     }
 
     // TODO: Functions Premium plan calculation should include multiplication if used EP2 / EP3

@@ -25,6 +25,6 @@ internal class AnalysisServicesQueryFilter : IQueryFilter
         var skuIds = AnalysisServicesSupportedData.SkuToSkuIdMap[sku];
         var skuIdsFilter = string.Join(" or ", skuIds.Select(_ => $"skuId eq '{_}'"));
 
-        return $"$filter=serviceId eq '{ServiceId}' and armRegionName eq '{location}' and ({skuIdsFilter})";
+        return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and ({skuIdsFilter})";
     }
 }

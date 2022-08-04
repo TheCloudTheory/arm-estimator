@@ -9,9 +9,7 @@ internal class StorageAccountEstimationCalculation : BaseEstimation, IEstimation
 
     public IOrderedEnumerable<RetailItem> GetItems()
     {
-        var consumptionMetrics = this.items.Where(_ => _.type != "Reservation");
-
-        return this.items.Where(_ => _.type != "Reservation").OrderByDescending(_ => _.retailPrice);
+        return this.items.OrderByDescending(_ => _.retailPrice);
     }
 
     public double GetTotalCost(WhatIfChange[] changes)
@@ -19,9 +17,7 @@ internal class StorageAccountEstimationCalculation : BaseEstimation, IEstimation
         double? estimatedCost;
         var items = GetItems();
         
-
         estimatedCost = items.Select(_ => _.retailPrice).Sum();
-
         return estimatedCost == null ? 0 : (double)estimatedCost;
     }
 }

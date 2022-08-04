@@ -13,6 +13,6 @@ internal class ConfidentialLedgerQueryFilter : IQueryFilter
         var skuIds = ConfidentialLedgerSupportedData.SkuToSkuIdMap["Ledger"];
         var skuIdsFilter = string.Join(" or ", skuIds.Select(_ => $"skuId eq '{_}'"));
 
-        return $"$filter=serviceId eq '{ServiceId}' and armRegionName eq '{location}' and ({skuIdsFilter})";
+        return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and ({skuIdsFilter})";
     }
 }

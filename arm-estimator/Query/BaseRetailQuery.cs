@@ -7,6 +7,8 @@ internal abstract class BaseRetailQuery
     protected readonly ResourceIdentifier id;
     protected readonly ILogger logger;
 
+    protected static string BaseQuery => "https://prices.azure.com/api/retail/prices?$filter=priceType eq 'Consumption' and ";
+
     public BaseRetailQuery(WhatIfChange change, ResourceIdentifier id, ILogger logger)
     {
         this.change = change;

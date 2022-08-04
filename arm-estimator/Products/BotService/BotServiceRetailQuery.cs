@@ -24,6 +24,6 @@ internal class BotServiceRetailQuery : BaseRetailQuery, IRetailQuery
         }
 
         var filter = new BotServiceQueryFilter(change, this.logger).GetFiltersBasedOnDesiredState(location);
-        return $"https://prices.azure.com/api/retail/prices?{filter}";
+        return $"{BaseQuery}{filter}";
     }
 }

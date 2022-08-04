@@ -14,6 +14,6 @@ internal class ApplicationInsightsQueryFilter : IQueryFilter
         var skuIds = ApplicationInsightsSupportedData.SkuToSkuIdMap["classic"];
         var skuIdsFilter = string.Join(" or ", skuIds.Select(_ => $"skuId eq '{_}'"));
 
-        return $"$filter=(serviceId eq '{ServiceId}' or serviceId eq '{LogAnalyticsServiceId}') and armRegionName eq '{location}' and ({skuIdsFilter})";
+        return $"(serviceId eq '{ServiceId}' or serviceId eq '{LogAnalyticsServiceId}') and armRegionName eq '{location}' and ({skuIdsFilter})";
     }
 }
