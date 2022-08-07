@@ -1,11 +1,13 @@
 ﻿using Azure.Core;
 using Microsoft.Extensions.Logging;
+using System.Text;
 using System.Text.Json;
 
 internal class WhatIfProcessor
 {
     private static readonly Lazy<HttpClient> httpClient = new(() => new HttpClient());
     private static readonly Dictionary<string, string> parentResourceToLocation = new();
+    private static readonly Dictionary<string, RetailAPIResponse> cachedResults = new();
 
     private readonly ILogger logger;
     private readonly WhatIfChange[] changes;
@@ -195,7 +197,7 @@ internal class WhatIfProcessor
     private async Task<RetailAPIResponse?> GetAPIResponse<T>(WhatIfChange change, ResourceIdentifier id) where T : BaseRetailQuery, IRetailQuery
     {
         var desiredState = change.after ?? change.before;
-        if(desiredState == null || change.resourceId == null)
+        if (desiredState == null || change.resourceId == null)
         {
             this.logger.LogError("Couldn't determine desired state for {type}.", typeof(T));
             return null;
@@ -226,13 +228,34 @@ internal class WhatIfProcessor
             return null;
         }
 
-        var response = await GetRetailDataResponse(url);
-        var data = JsonSerializer.Deserialize<RetailAPIResponse>(await response.Content.ReadAsStreamAsync());
-
+        var data = await TryGetCachedResultForUrl(url);
         if (data == null || data.Items == null)
         {
             this.logger.LogWarning("Data for {resourceType} is not available.", id.ResourceType);
             return null;
+        }
+
+        return data;
+    }
+
+    private async Task<RetailAPIResponse?> TryGetCachedResultForUrl(string url)
+    {
+        RetailAPIResponse? data;
+        var urlHash = Convert.ToBase64String(Encoding.UTF8.GetBytes(url));
+        if (cachedResults.TryGetValue(urlHash, out var previousResponse))
+        {
+            this.logger.LogDebug("Getting Retail API data for {url} from cache.", url);
+            data = previousResponse;
+        }
+        else
+        {
+            var response = await GetRetailDataResponse(url);
+            data = JsonSerializer.Deserialize<RetailAPIResponse>(await response.Content.ReadAsStreamAsync());
+
+            if (data != null)
+            {
+                cachedResults.Add(urlHash, data);
+            }
         }
 
         return data;
