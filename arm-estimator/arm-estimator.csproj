@@ -67,6 +67,9 @@
     <None Update="templates\functions.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="templates\keyvault.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="templates\sa.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

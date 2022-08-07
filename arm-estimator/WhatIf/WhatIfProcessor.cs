@@ -125,6 +125,12 @@ internal class WhatIfProcessor
                 case "Microsoft.StreamAnalytics/streamingjobs":
                     currentChangeCost += await Calculate<StreamAnalyticsRetailQuery, StreamAnalyticsEstimationCalculation>(change, id);
                     break;
+                case "Microsoft.KeyVault/vaults":
+                    currentChangeCost += await Calculate<KeyVaultRetailQuery, KeyVaultEstimationCalculation>(change, id);
+                    break;
+                case "Microsoft.KeyVault/managedHSMs":
+                    currentChangeCost += await Calculate<KeyVaultRetailQuery, KeyVaultEstimationCalculation>(change, id);
+                    break;
                 default:
                     logger.LogWarning("{resourceType} is not yet supported.", id?.ResourceType);
                     break;
