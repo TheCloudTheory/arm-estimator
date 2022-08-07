@@ -45,7 +45,6 @@ ARM Cost Estimator is currently in `alpha` development phase meaning there're no
 * You can use the project only with a resource group as deployment scope
 * Some services are in TBD state (see below for more information)
 * You cannot generate an output as artifact
-* Retail API responses are not cached meaning sometimes getting an output takes more than normally
 * There's no possibility to define custom usage patterns so some metrics (mainly those described as price per second / hour / day) are projected for full month
 * Nested resources are not supported yet - however, you can define them as separated entities to mitigate that issue
 
