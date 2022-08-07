@@ -47,6 +47,7 @@ ARM Cost Estimator is currently in `alpha` development phase meaning there're no
 * You cannot generate an output as artifact
 * There's no possibility to define custom usage patterns so some metrics (mainly those described as price per second / hour / day) are projected for full month
 * Nested resources are not supported yet - however, you can define them as separated entities to mitigate that issue
+* You cannot pass parameters for your estimated template
 
 Those limitations will be removed in the future releases of the project.
 
@@ -75,6 +76,7 @@ Container Registry|Full|-
 Cosmos DB|Partial|Supports only single-region writes with manual throughput provisioning
 Event Hub|Full|-
 Health Bot|Full|-
+Key Vault|Full|Doesn't support Azure Dedicated HSM
 SQL Database|Partial|Supports only Databases (DTU model - Basic & Standard)
 Storage Account|Partial|Supports only StorageV2 (without File Service)
 Stream Analytics|Full|Stream Analytics on Edge requires separate estimation
