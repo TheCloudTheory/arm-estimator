@@ -1,0 +1,56 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.3.255.40792",
+      "templateHash": "17958306182458853441"
+    }
+  },
+  "functions": [],
+  "resources": [
+    {
+      "type": "Microsoft.KeyVault/vaults",
+      "apiVersion": "2022-07-01",
+      "name": "kv1",
+      "location": "westeurope",
+      "properties": {
+        "sku": {
+          "family": "A",
+          "name": "standard"
+        },
+        "tenantId": "00000000-0000-0000-0000-000000000000"
+      }
+    },
+    {
+      "type": "Microsoft.KeyVault/vaults",
+      "apiVersion": "2022-07-01",
+      "name": "kv2",
+      "location": "westeurope",
+      "properties": {
+        "sku": {
+          "family": "A",
+          "name": "premium"
+        },
+        "tenantId": "00000000-0000-0000-0000-000000000000"
+      }
+    },
+    {
+      "type": "Microsoft.KeyVault/managedHSMs",
+      "apiVersion": "2022-07-01",
+      "name": "kv3",
+      "location": "westeurope",
+      "sku": {
+        "name": "Standard_B1",
+        "family": "B"
+      },
+      "properties": {
+        "tenantId": "11c43ee8-b9d3-4e51-b73f-bd9dda66e29c",
+        "initialAdminObjectIds": [
+          "11c43ee8-b9d3-4e51-b73f-bd9dda66e29c"
+        ]
+      }
+    }
+  ]
+}
