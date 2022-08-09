@@ -131,6 +131,9 @@ internal class WhatIfProcessor
                 case "Microsoft.KeyVault/managedHSMs":
                     currentChangeCost += await Calculate<KeyVaultRetailQuery, KeyVaultEstimationCalculation>(change, id);
                     break;
+                case "Microsoft.Network/virtualNetworkGateways":
+                    currentChangeCost += await Calculate<VPNGatewayRetailQuery, VPNGatewayEstimationCalculation>(change, id);
+                    break;
                 default:
                     logger.LogWarning("{resourceType} is not yet supported.", id?.ResourceType);
                     break;

@@ -1,0 +1,223 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.3.255.40792",
+      "templateHash": "11354417045172755277"
+    }
+  },
+  "functions": [],
+  "resources": [
+    {
+      "type": "Microsoft.Network/virtualNetworkGateways",
+      "apiVersion": "2022-01-01",
+      "name": "vpn1",
+      "location": "westeurope",
+      "properties": {
+        "sku": {
+          "name": "Basic"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Network/virtualNetworkGateways",
+      "apiVersion": "2022-01-01",
+      "name": "vpn2",
+      "location": "westeurope",
+      "properties": {
+        "gatewayType": "Vpn",
+        "vpnGatewayGeneration": "Generation2",
+        "sku": {
+          "name": "VpnGw1",
+          "tier": "VpnGw1"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Network/virtualNetworkGateways",
+      "apiVersion": "2022-01-01",
+      "name": "vpn3",
+      "location": "westeurope",
+      "properties": {
+        "gatewayType": "Vpn",
+        "sku": {
+          "name": "VpnGw1AZ",
+          "tier": "VpnGw1AZ"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Network/virtualNetworkGateways",
+      "apiVersion": "2022-01-01",
+      "name": "vpn4",
+      "location": "westeurope",
+      "properties": {
+        "sku": {
+          "name": "VpnGw2",
+          "tier": "VpnGw2"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Network/virtualNetworkGateways",
+      "apiVersion": "2022-01-01",
+      "name": "vpn5",
+      "location": "westeurope",
+      "properties": {
+        "sku": {
+          "name": "VpnGw2AZ",
+          "tier": "VpnGw2AZ"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Network/virtualNetworkGateways",
+      "apiVersion": "2022-01-01",
+      "name": "vpn6",
+      "location": "westeurope",
+      "properties": {
+        "sku": {
+          "name": "VpnGw3",
+          "tier": "VpnGw3"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Network/virtualNetworkGateways",
+      "apiVersion": "2022-01-01",
+      "name": "vpn7",
+      "location": "westeurope",
+      "properties": {
+        "sku": {
+          "name": "VpnGw3AZ",
+          "tier": "VpnGw3AZ"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Network/virtualNetworkGateways",
+      "apiVersion": "2022-01-01",
+      "name": "vpn8",
+      "location": "westeurope",
+      "properties": {
+        "sku": {
+          "name": "VpnGw4",
+          "tier": "VpnGw4"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Network/virtualNetworkGateways",
+      "apiVersion": "2022-01-01",
+      "name": "vpn9",
+      "location": "westeurope",
+      "properties": {
+        "sku": {
+          "name": "VpnGw4AZ",
+          "tier": "VpnGw4AZ"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Network/virtualNetworkGateways",
+      "apiVersion": "2022-01-01",
+      "name": "vpn10",
+      "location": "westeurope",
+      "properties": {
+        "sku": {
+          "name": "VpnGw5",
+          "tier": "VpnGw5"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Network/virtualNetworkGateways",
+      "apiVersion": "2022-01-01",
+      "name": "vpn11",
+      "location": "westeurope",
+      "properties": {
+        "sku": {
+          "name": "VpnGw5AZ",
+          "tier": "VpnGw5AZ"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Network/virtualNetworkGateways",
+      "apiVersion": "2022-01-01",
+      "name": "vpn12",
+      "location": "westeurope",
+      "properties": {
+        "sku": {
+          "name": "Standard",
+          "tier": "Standard"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Network/virtualNetworkGateways",
+      "apiVersion": "2022-01-01",
+      "name": "vpn13",
+      "location": "westeurope",
+      "properties": {
+        "sku": {
+          "name": "ErGw1AZ",
+          "tier": "ErGw1AZ"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Network/virtualNetworkGateways",
+      "apiVersion": "2022-01-01",
+      "name": "vpn14",
+      "location": "westeurope",
+      "properties": {
+        "sku": {
+          "name": "ErGw2AZ",
+          "tier": "ErGw2AZ"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Network/virtualNetworkGateways",
+      "apiVersion": "2022-01-01",
+      "name": "vpn15",
+      "location": "westeurope",
+      "properties": {
+        "vpnGatewayGeneration": "Generation2",
+        "sku": {
+          "name": "ErGw3AZ",
+          "tier": "ErGw3AZ"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Network/virtualNetworkGateways",
+      "apiVersion": "2022-01-01",
+      "name": "vpn16",
+      "location": "westeurope",
+      "properties": {
+        "vpnGatewayGeneration": "Generation2",
+        "sku": {
+          "name": "HighPerformance",
+          "tier": "HighPerformance"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Network/virtualNetworkGateways",
+      "apiVersion": "2022-01-01",
+      "name": "vpn17",
+      "location": "westeurope",
+      "properties": {
+        "vpnGatewayGeneration": "Generation2",
+        "sku": {
+          "name": "UltraPerformance",
+          "tier": "UltraPerformance"
+        }
+      }
+    }
+  ]
+}
