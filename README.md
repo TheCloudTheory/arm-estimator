@@ -95,6 +95,7 @@ Cosmos DB|Partial|Supports only single-region writes with manual throughput prov
 Event Hub|Full|-
 Health Bot|Full|-
 Key Vault|Full|Doesn't support Azure Dedicated HSM
+SignalR|Full|-
 SQL Database|Partial|Supports only Databases (DTU model - Basic & Standard)
 Storage Account|Partial|Supports only StorageV2 (without File Service)
 Stream Analytics|Full|Stream Analytics on Edge requires separate estimation
