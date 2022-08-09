@@ -28,6 +28,24 @@ arm-estimator.exe <template-path>.json <subscription-id> <resource-group>
 ```
 dotnet arm-estimator <template-path>.json <subscription-id> <resource-group>
 ```
+### Deployment mode
+When performing resource group level deployment there's an option to select a deployment mode. ARM Cost Estimator also supports that option by providing desired value as parameter:
+```
+arm-estimator <template-path>.json <subscription-id> <resource-group> --mode Incremental|Complete
+```
+
+When parameter is not passed, `Incremental` mode is selected. Selecting `Complete` changes the way estimations work - if there're existing resources in a resource group, they will be considered as up for removal. It'll be noted by ARM Cost Estimator and deducted from the final estimation.
+
+### Threshold
+With ARM Cost Estimator it's possible to stop your CICD process is projected estimation exceeds your assumptions:
+```
+arm-estimator <template-path>.json <subscription-id> <resource-group> --threshold <int>
+```
+
+By using `--threshold` option, you can set an upper limit for infrastructure cost and make sure, that you can re-evaluate changes before they reach cloud environment and affect your billing.
+> If estimation exceeds configured threshold, ARM Cost Estimator exits with status code 1. Make sure you check against returned status code and handle that scenario properly. 
+
+Configuring threshold is optional - if you omit it, your CICD process will continue ignoring estimation value.
 
 ## Main features
 * Detailed output containing information about cost of your infrastructure and metrics used for calculation
@@ -36,9 +54,9 @@ dotnet arm-estimator <template-path>.json <subscription-id> <resource-group>
 * Native tool experience - no third-party services / proxies, everything relies on componenets delivered and used by Microsoft
 * Multi-option authentication based on `Azure.Identity` package - project automatically uses cached credentials from the running environment (supports Azure CLI / Environment credentials / Managed Identity and more)
 * Allows you to validate your deployment before it happens - if the template you used is invalid, an error with detailed information is returned
-* Support for both Incremental / Complete deployment modes (see below for details)
+* Support for both Incremental / Complete deployment modes (see `Usage` section)
 * Displaying delta describing difference between your current estimated cost and after changes are applied
-* An option to stop CICD process if estimations exceeds given limit (see below for details)
+* An option to stop CICD process if estimations exceeds given limit (see `Usage` section)
 
 ## Known limitations
 ARM Cost Estimator is currently in `alpha` development phase meaning there're no guarantees for stable interface and many features are still in design or planning phase. The main limitations as for now are:
@@ -80,24 +98,7 @@ Key Vault|Full|Doesn't support Azure Dedicated HSM
 SQL Database|Partial|Supports only Databases (DTU model - Basic & Standard)
 Storage Account|Partial|Supports only StorageV2 (without File Service)
 Stream Analytics|Full|Stream Analytics on Edge requires separate estimation
+VPN Gateway|Full|-
 
-## Deployment mode
-When performing resource group level deployment there's an option to select a deployment mode. ARM Cost Estimator also supports that option by providing desired value as parameter:
-```
-arm-estimator <template-path>.json <subscription-id> <resource-group> --mode Incremental|Complete
-```
-
-When parameter is not passed, `Incremental` mode is selected. Selecting `Complete` changes the way estimations work - if there're existing resources in a resource group, they will be considered as up for removal. It'll be noted by ARM Cost Estimator and deducted from the final estimation.
-
-## Threshold
-With ARM Cost Estimator it's possible to stop your CICD process is projected estimation exceeds your assumptions:
-```
-arm-estimator <template-path>.json <subscription-id> <resource-group> --threshold <int>
-```
-
-By using `--threshold` option, you can set an upper limit for infrastructure cost and make sure, that you can re-evaluate changes before they reach cloud environment and affect your billing.
-> If estimation exceeds configured threshold, ARM Cost Estimator exits with status code 1. Make sure you check against returned status code and handle that scenario properly. 
-
-Configuring threshold is optional - if you omit it, your CICD process will continue ignoring estimation value.
 ## Contributions
 Contributions are more than welcome!
