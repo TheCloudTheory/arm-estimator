@@ -1,0 +1,56 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.3.255.40792",
+      "templateHash": "17399470239452142129"
+    }
+  },
+  "functions": [],
+  "resources": [
+    {
+      "type": "Microsoft.SignalRService/signalR",
+      "apiVersion": "2022-02-01",
+      "name": "signalr1arm",
+      "location": "westeurope",
+      "sku": {
+        "name": "Free_F1"
+      },
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.SignalRService/signalR",
+      "apiVersion": "2022-02-01",
+      "name": "signalr2arm",
+      "location": "westeurope",
+      "sku": {
+        "name": "Standard_S1"
+      },
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.SignalRService/signalR",
+      "apiVersion": "2022-02-01",
+      "name": "signalr22arm",
+      "location": "westeurope",
+      "sku": {
+        "name": "Standard_S1",
+        "capacity": 2,
+        "tier": "Standard"
+      },
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.SignalRService/signalR",
+      "apiVersion": "2022-02-01",
+      "name": "signalr3arm",
+      "location": "westeurope",
+      "sku": {
+        "name": "Premium_P1"
+      },
+      "properties": {}
+    }
+  ]
+}

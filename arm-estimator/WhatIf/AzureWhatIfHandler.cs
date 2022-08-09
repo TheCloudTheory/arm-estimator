@@ -33,20 +33,28 @@ internal class AzureWhatIfHandler
     public async Task<WhatIfResponse?> GetResponseWithRetries()
     {
         this.logger.LogInformation("What If operation will be performed using '{mode}' deployment mode.", this.deploymentMode);
+        
         var response = await SendInitialRequest();
-
-        // API can return HTTP 202 if asynchronous processing is needed.
-        // If so, we need to check Location header to get final information
-        // TODO: Respect 'Retry-after' header
-        if (response.StatusCode == HttpStatusCode.Accepted)
+        var maxRetries = 5;
+        var currentRetry = 1;
+        
+        while (response.StatusCode == HttpStatusCode.Accepted && currentRetry < maxRetries)
         {
+            var retryAfterHeader = response.Headers.RetryAfter;
+            var retryAfter = retryAfterHeader == null ? TimeSpan.FromSeconds(15) : retryAfterHeader.Delta;
+
+            this.logger.LogInformation("Waiting for response from What If API.");
+            await Task.Delay(retryAfter.HasValue ? retryAfter.Value.Seconds * 1000 : 15000);
+
             var location = response.Headers.Location;
+
             if(location == null)
             {
                 throw new Exception("Location header can't be null when awaiting response.");
             }
 
             response = await SendAndWaitForResponse(location);
+            currentRetry++;
         }
 
 #if DEBUG
