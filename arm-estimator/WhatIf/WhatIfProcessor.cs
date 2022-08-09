@@ -134,6 +134,9 @@ internal class WhatIfProcessor
                 case "Microsoft.Network/virtualNetworkGateways":
                     currentChangeCost += await Calculate<VPNGatewayRetailQuery, VPNGatewayEstimationCalculation>(change, id);
                     break;
+                case "Microsoft.SignalRService/signalR":
+                    currentChangeCost += await Calculate<SignalRRetailQuery, SignalREstimationCalculation>(change, id);
+                    break;
                 default:
                     logger.LogWarning("{resourceType} is not yet supported.", id?.ResourceType);
                     break;

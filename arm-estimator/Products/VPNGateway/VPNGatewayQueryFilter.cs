@@ -29,7 +29,7 @@ internal class VPNGatewayQueryFilter : IQueryFilter
 
         if (sku == null)
         {
-            this.logger.LogError("Can't create a filter for App Configuration when SKU is unavailable.");
+            this.logger.LogError("Can't create a filter for VPN Gateway when SKU is unavailable.");
             return null;
         }
 
