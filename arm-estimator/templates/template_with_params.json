@@ -1,0 +1,44 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.3.255.40792",
+      "templateHash": "10584831041209086967"
+    }
+  },
+  "parameters": {
+    "dbName": {
+      "type": "string"
+    },
+    "location": {
+      "type": "string"
+    },
+    "sku": {
+      "type": "string"
+    }
+  },
+  "functions": [],
+  "resources": [
+    {
+      "type": "Microsoft.Sql/servers",
+      "apiVersion": "2021-11-01-preview",
+      "name": "sqlserver",
+      "location": "[parameters('location')]",
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.Sql/servers/databases",
+      "apiVersion": "2021-11-01-preview",
+      "name": "[format('{0}/{1}', 'sqlserver', parameters('dbName'))]",
+      "location": "westeurope",
+      "sku": {
+        "name": "[parameters('sku')]"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Sql/servers', 'sqlserver')]"
+      ]
+    }
+  ]
+}

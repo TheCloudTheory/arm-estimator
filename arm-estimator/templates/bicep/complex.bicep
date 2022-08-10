@@ -26,7 +26,6 @@ resource dbserver 'Microsoft.Sql/servers@2021-11-01-preview' = {
   name: 'sqlserver'
   location: 'westeurope'
   properties: {
-    
   }
 }
 
