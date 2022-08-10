@@ -47,6 +47,13 @@ By using `--threshold` option, you can set an upper limit for infrastructure cos
 
 Configuring threshold is optional - if you omit it, your CICD process will continue ignoring estimation value.
 
+### Parameters
+Very often templates contain parameters, which have different values depending on the selected environment. Sometimes you just need to pass a value, which is generated outside your template. ARM Cost Estimator supports parameters in the same way as you'd normally develop them and pass for deployment:
+```
+arm-estimator <template-path>.json <subscription-id> <resource-group> --parameters <path-to-your-parameters-file>.json
+```
+Both ARM Templates and Bicep use parameters defined as JSON files. ARM Cost Estimator expects parameters file to be passed without changes, even though Azure What If API expects sending parameters with slightly different schema than parameters file itself.
+
 ## Main features
 * Detailed output containing information about cost of your infrastructure and metrics used for calculation
 * Seamless integration with ARM Templates and Bicep (with a little help of Bicep CLI)
@@ -57,6 +64,7 @@ Configuring threshold is optional - if you omit it, your CICD process will conti
 * Support for both Incremental / Complete deployment modes (see `Usage` section)
 * Displaying delta describing difference between your current estimated cost and after changes are applied
 * An option to stop CICD process if estimations exceeds given limit (see `Usage` section)
+* Supports passing parameters along with your template
 
 ## Known limitations
 ARM Cost Estimator is currently in `alpha` development phase meaning there're no guarantees for stable interface and many features are still in design or planning phase. The main limitations as for now are:
@@ -65,7 +73,6 @@ ARM Cost Estimator is currently in `alpha` development phase meaning there're no
 * You cannot generate an output as artifact
 * There's no possibility to define custom usage patterns so some metrics (mainly those described as price per second / hour / day) are projected for full month
 * Nested resources are not supported yet - however, you can define them as separated entities to mitigate that issue
-* You cannot pass parameters for your estimated template
 
 Those limitations will be removed in the future releases of the project.
 
