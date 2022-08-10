@@ -15,18 +15,21 @@ internal class AzureWhatIfHandler
     private readonly string resourceGroupName;
     private readonly string template;
     private readonly DeploymentMode deploymentMode;
+    private readonly string parameters;
     private readonly ILogger logger;
 
     public AzureWhatIfHandler(string subscriptionId,
                               string resourceGroupName,
                               string template,
                               DeploymentMode deploymentMode,
+                              string parameters,
                               ILogger logger)
     {
         this.subscriptionId = subscriptionId;
         this.resourceGroupName = resourceGroupName;
         this.template = template;
         this.deploymentMode = deploymentMode;
+        this.parameters = parameters;
         this.logger = logger;
     }
 
@@ -69,7 +72,7 @@ internal class AzureWhatIfHandler
     {
         var token = GetToken();
         var request = new HttpRequestMessage(HttpMethod.Post, $"https://management.azure.com/subscriptions/{this.subscriptionId}/resourcegroups/{this.resourceGroupName}/providers/Microsoft.Resources/deployments/arm-estimator/whatIf?api-version=2021-04-01");
-        var templateContent = JsonSerializer.Serialize(new EstimatePayload(this.template, this.deploymentMode), new JsonSerializerOptions()
+        var templateContent = JsonSerializer.Serialize(new EstimatePayload(this.template, this.deploymentMode, this.parameters), new JsonSerializerOptions()
         {
             Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
         });
