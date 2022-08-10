@@ -13,20 +13,23 @@ internal class Program
         var resourceGroupArg = new Argument<string>("resource-group", "Resource group name");
         var deploymentModeOption = new Option<DeploymentMode>("--mode", () => { return DeploymentMode.Incremental; }, "Deployment mode");
         var thresholdOption = new Option<int>("--threshold", () => { return -1; }, "Estimation threshold");
+        var parametersOption = new Option<FileInfo?>("--parameters", () => { return null; }, "Path to a file containing values of template parameters");
 
         var command = new RootCommand("Azure Resource Manager cost estimator.");
         command.AddOption(deploymentModeOption);
         command.AddOption(thresholdOption);
+        command.AddOption(parametersOption);
         command.AddArgument(templateFileArg);
         command.AddArgument(susbcriptionIdArg);
         command.AddArgument(resourceGroupArg);
-        command.SetHandler(async (file, subscription, resourceGroup, deploymentMode, threshold) =>
-            await Estimate(file, subscription, resourceGroup, deploymentMode, threshold), 
+        command.SetHandler(async (file, subscription, resourceGroup, deploymentMode, threshold, parametersFilePath) =>
+            await Estimate(file, subscription, resourceGroup, deploymentMode, threshold, parametersFilePath), 
             templateFileArg, 
             susbcriptionIdArg, 
             resourceGroupArg, 
             deploymentModeOption,
-            thresholdOption);
+            thresholdOption,
+            parametersOption);
 
         return await command.InvokeAsync(args);
     }
@@ -36,7 +39,8 @@ internal class Program
         string subscriptionId, 
         string resourceGroupName, 
         DeploymentMode deploymentMode,
-        int threshold)
+        int threshold,
+        FileInfo? parametersFile)
     {
         using (var loggerFactory = LoggerFactory.Create(builder =>
         {
@@ -46,7 +50,14 @@ internal class Program
         {
             var logger = loggerFactory.CreateLogger<Program>();
             var template = Regex.Replace(File.ReadAllText(file.FullName), @"\s+", string.Empty);  // Make JSON a single-line value
-            var handler = new AzureWhatIfHandler(subscriptionId, resourceGroupName, template, deploymentMode, logger);
+            var parameters = "{}";
+
+            if(parametersFile != null)
+            {
+                parameters = Regex.Replace(File.ReadAllText(parametersFile.FullName), @"\s+", string.Empty);
+            }
+
+            var handler = new AzureWhatIfHandler(subscriptionId, resourceGroupName, template, deploymentMode, parameters, logger);
             var whatIfData = await handler.GetResponseWithRetries();
 
             if(whatIfData != null && whatIfData.status == "Failed")
