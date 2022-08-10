@@ -1,3 +1,4 @@
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 internal class EstimatePayload
@@ -20,10 +21,21 @@ internal class EstimatePayloadProperties
 
     public EstimatePayloadProperties(string template, DeploymentMode deploymentMode, string parameters)
     {
+        var templateParametersObject = JsonSerializer.Deserialize<TemplateParameters>(parameters);
+
         this.template = template;
-        this.parameters = parameters;
+        this.parameters = JsonSerializer.Serialize(templateParametersObject?.parameters);
         this.mode = deploymentMode.ToString();
     }
 
     public string mode { get; }
+}
+
+internal class TemplateParameters
+{
+    [JsonPropertyName("$schema")]
+    public string? schema { get; set; }
+
+    public string? contentVersion { get; set; }
+    public Dictionary<string, object>? parameters { get; set; }
 }

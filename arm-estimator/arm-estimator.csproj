@@ -79,6 +79,12 @@
     <None Update="templates\streamanalytics.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="templates\template_with_params.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="templates\template_with_params.parameters.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="templates\timeseries.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
