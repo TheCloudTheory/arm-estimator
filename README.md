@@ -99,6 +99,7 @@ SignalR|Full|-
 SQL Database|Partial|Supports only Databases (DTU model - Basic & Standard)
 Storage Account|Partial|Supports only StorageV2 (without File Service)
 Stream Analytics|Full|Stream Analytics on Edge requires separate estimation
+Time Series|Full|-
 VPN Gateway|Full|-
 
 ## Contributions
