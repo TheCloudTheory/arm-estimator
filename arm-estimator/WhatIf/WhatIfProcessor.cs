@@ -137,6 +137,9 @@ internal class WhatIfProcessor
                 case "Microsoft.SignalRService/signalR":
                     currentChangeCost += await Calculate<SignalRRetailQuery, SignalREstimationCalculation>(change, id);
                     break;
+                case "Microsoft.TimeSeriesInsights/environments":
+                    currentChangeCost += await Calculate<TimeSeriesRetailQuery, TimeSeriesEstimationCalculation>(change, id);
+                    break;
                 default:
                     logger.LogWarning("{resourceType} is not yet supported.", id?.ResourceType);
                     break;

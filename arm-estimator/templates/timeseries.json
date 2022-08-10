@@ -1,0 +1,68 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.3.255.40792",
+      "templateHash": "9065700812585374745"
+    }
+  },
+  "functions": [],
+  "resources": [
+    {
+      "type": "Microsoft.TimeSeriesInsights/environments",
+      "apiVersion": "2021-06-30-preview",
+      "name": "ts1",
+      "location": "westeurope",
+      "sku": {
+        "capacity": 1,
+        "name": "S1"
+      },
+      "kind": "Gen2",
+      "properties": {
+        "storageConfiguration": {
+          "managementKey": "",
+          "accountName": ""
+        },
+        "timeSeriesIdProperties": []
+      }
+    },
+    {
+      "type": "Microsoft.TimeSeriesInsights/environments",
+      "apiVersion": "2021-06-30-preview",
+      "name": "ts11",
+      "location": "westeurope",
+      "sku": {
+        "capacity": 2,
+        "name": "S1"
+      },
+      "kind": "Gen2",
+      "properties": {
+        "storageConfiguration": {
+          "managementKey": "",
+          "accountName": ""
+        },
+        "timeSeriesIdProperties": []
+      }
+    },
+    {
+      "type": "Microsoft.TimeSeriesInsights/environments",
+      "apiVersion": "2021-06-30-preview",
+      "name": "ts2",
+      "location": "westeurope",
+      "sku": {
+        "capacity": 1,
+        "name": "S2"
+      },
+      "kind": "Gen2",
+      "properties": {
+        "storageConfiguration": {
+          "managementKey": "",
+          "accountName": ""
+        },
+        "timeSeriesIdProperties": []
+      }
+    }
+  ]
+}
