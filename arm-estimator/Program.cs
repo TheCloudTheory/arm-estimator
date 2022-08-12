@@ -1,11 +1,15 @@
 ﻿using Azure.Core;
 using Microsoft.Extensions.Logging;
 using System.CommandLine;
+using System.Diagnostics;
+using System.Reflection;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 
 internal class Program
 {
+    public static string? GetInformationalVersion() => Assembly.GetEntryAssembly()?.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
+
     private static async Task<int> Main(string[] args)
     {
         var templateFileArg = new Argument<FileInfo>("template-file", "Template file to analyze");
@@ -49,10 +53,12 @@ internal class Program
         }))
         {
             var logger = loggerFactory.CreateLogger<Program>();
+            DisplayWelcomeScreen(logger);
+
             var template = Regex.Replace(File.ReadAllText(file.FullName), @"\s+", string.Empty);  // Make JSON a single-line value
             var parameters = "{}";
 
-            if(parametersFile != null)
+            if (parametersFile != null)
             {
                 parameters = Regex.Replace(File.ReadAllText(parametersFile.FullName), @"\s+", string.Empty);
             }
@@ -60,11 +66,11 @@ internal class Program
             var handler = new AzureWhatIfHandler(subscriptionId, resourceGroupName, template, deploymentMode, parameters, logger);
             var whatIfData = await handler.GetResponseWithRetries();
 
-            if(whatIfData != null && whatIfData.status == "Failed")
+            if (whatIfData != null && whatIfData.status == "Failed")
             {
                 logger.LogError("An error happened when performing WhatIf operation.");
 
-                if(whatIfData.error != null)
+                if (whatIfData.error != null)
                 {
                     var errorDetails = JsonSerializer.Serialize(whatIfData.error, typeof(WhatIfError), new JsonSerializerOptions()
                     {
@@ -93,12 +99,24 @@ internal class Program
             logger.LogInformation("");
 
             var totalCost = await new WhatIfProcessor(logger, whatIfData.properties.changes).Process();
-            if(threshold != -1 && totalCost > threshold)
+            if (threshold != -1 && totalCost > threshold)
             {
                 logger.LogError("Estimated cost [{totalCost} USD] exceeds configured threshold [{threshold} USD].", totalCost, threshold);
                 Environment.Exit(1);
             }
         }
+    }
+
+    private static void DisplayWelcomeScreen(ILogger<Program> logger)
+    {
+        logger.LogInformation("ARM Cost Estimator [{version}]", GetInformationalVersion());
+        logger.LogInformation("------------------------------");
+        logger.LogInformation("");
+        logger.LogInformation("General help: https://github.com/TheCloudTheory/arm-estimator/discussions");
+        logger.LogInformation("Bugs & issues: https://github.com/TheCloudTheory/arm-estimator/issues");
+        logger.LogInformation("");
+        logger.LogInformation("------------------------------");
+        logger.LogInformation("");
     }
 
     private static void ReportChangesToConsole(WhatIfChange[] changes, ILogger logger)
