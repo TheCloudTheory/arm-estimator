@@ -54,6 +54,7 @@ internal class Program
         {
             var logger = loggerFactory.CreateLogger<Program>();
             DisplayWelcomeScreen(logger);
+            DisplayUsedSettings(logger, file, subscriptionId, resourceGroupName, deploymentMode, threshold, parametersFile);
 
             var template = Regex.Replace(File.ReadAllText(file.FullName), @"\s+", string.Empty);  // Make JSON a single-line value
             var parameters = "{}";
@@ -85,12 +86,11 @@ internal class Program
 
             if (whatIfData == null || whatIfData.properties == null || whatIfData.properties.changes == null || whatIfData.properties.changes.Length == 0)
             {
-                logger.LogInformation("No changes detected.");
+                logger.AddEstimatorMessage("No changes detected.");
                 return;
             }
 
-            logger.LogInformation("Detected {noOfChanges} changes.", whatIfData.properties.changes.Length);
-            logger.LogInformation("-------------------------------");
+            logger.AddEstimatorMessage("Detected {0} changes.", whatIfData.properties.changes.Length);
 
             ReportChangesToConsole(whatIfData.properties.changes, logger);
 
@@ -119,6 +119,21 @@ internal class Program
         logger.LogInformation("");
     }
 
+    private static void DisplayUsedSettings(ILogger<Program> logger, FileInfo templateFile, string subscriptionId, string resourceGroupName, DeploymentMode deploymentMode, int threshold, FileInfo? parametersFile)
+    {
+        logger.LogInformation("Run configuration:");
+        logger.LogInformation("");
+        logger.AddEstimatorMessage("SubscriptionId: {0}", subscriptionId);
+        logger.AddEstimatorMessage("Resource group: {0}", resourceGroupName);
+        logger.AddEstimatorMessage("Template file: {0}", templateFile);
+        logger.AddEstimatorMessage("Deployment mode: {0}", deploymentMode);
+        logger.AddEstimatorMessage("Threshold: {0}", threshold == -1 ? "Not Set" : threshold.ToString());
+        logger.AddEstimatorMessage("Parameters file: {0}", parametersFile?.Name ?? "Not Set");
+        logger.LogInformation("");
+        logger.LogInformation("------------------------------");
+        logger.LogInformation("");
+    }
+
     private static void ReportChangesToConsole(WhatIfChange[] changes, ILogger logger)
     {
         foreach (var change in changes)
@@ -138,8 +153,7 @@ internal class Program
             }
 
             var id = new ResourceIdentifier(change.resourceId);
-            var formattedChangeType = change.changeType?.ToString().ToUpperInvariant();
-            logger.LogInformation("{change} - {name} [{type}]", formattedChangeType, id.Name, id.ResourceType);
+            logger.AddEstimatorMessageSensibleToChange(change.changeType, "{0} [{1}]", id.Name, id.ResourceType);
         }
     }
 }

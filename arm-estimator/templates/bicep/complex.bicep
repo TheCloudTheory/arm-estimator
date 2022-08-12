@@ -1,20 +1,3 @@
-resource aksuptime 'Microsoft.ContainerService/managedClusters@2022-05-02-preview' = {
-  name: 'aksuptime'
-  location: 'westeurope'
-  sku: {
-    name: 'Basic'
-    tier: 'Paid'
-  }
-}
-
-resource aks 'Microsoft.ContainerService/managedClusters@2022-05-02-preview' = {
-  name: 'aks'
-  location: 'westeurope'
-  sku: {
-    name: 'Basic'
-  }
-}
-
 resource containerapp 'Microsoft.App/containerApps@2022-03-01' = {
   name: 'containerapp'
   location: 'westeurope'
@@ -80,5 +63,17 @@ resource dbstandard4 'Microsoft.Sql/servers/databases@2021-11-01-preview' = {
   location: 'westeurope'
   sku: {
     name: 'S4'
+  }
+}
+
+resource sa2 'Microsoft.Storage/storageAccounts@2021-09-01' = {
+  name: 'armestimatorsa2'
+  location: 'westeurope'
+  sku: {
+    name: 'Standard_GRS'
+  }
+  kind: 'StorageV2'
+  properties: {
+    accessTier: 'Cool'
   }
 }
