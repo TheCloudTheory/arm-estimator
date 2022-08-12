@@ -1,0 +1,38 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.3.255.40792",
+      "templateHash": "2220617002894355211"
+    }
+  },
+  "functions": [],
+  "resources": [
+    {
+      "type": "Microsoft.EventGrid/systemTopics",
+      "apiVersion": "2022-06-15",
+      "name": "eg1",
+      "location": "westeurope",
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.EventGrid/topics",
+      "apiVersion": "2022-06-15",
+      "name": "eg2",
+      "location": "westeurope",
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.EventGrid/eventSubscriptions",
+      "apiVersion": "2022-06-15",
+      "scope": "[format('Microsoft.EventGrid/topics/{0}', 'eg2')]",
+      "name": "eg3",
+      "properties": {},
+      "dependsOn": [
+        "[resourceId('Microsoft.EventGrid/topics', 'eg2')]"
+      ]
+    }
+  ]
+}
