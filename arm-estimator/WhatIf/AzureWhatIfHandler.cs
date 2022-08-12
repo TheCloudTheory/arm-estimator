@@ -35,7 +35,8 @@ internal class AzureWhatIfHandler
 
     public async Task<WhatIfResponse?> GetResponseWithRetries()
     {
-        this.logger.LogInformation("What If operation will be performed using '{mode}' deployment mode.", this.deploymentMode);
+        this.logger.LogInformation("What If status:");
+        this.logger.LogInformation("");
         
         var response = await SendInitialRequest();
         var maxRetries = 5;
@@ -46,7 +47,7 @@ internal class AzureWhatIfHandler
             var retryAfterHeader = response.Headers.RetryAfter;
             var retryAfter = retryAfterHeader == null ? TimeSpan.FromSeconds(15) : retryAfterHeader.Delta;
 
-            this.logger.LogInformation("Waiting for response from What If API.");
+            this.logger.AddEstimatorMessage("Waiting for response from What If API.");
             await Task.Delay(retryAfter.HasValue ? retryAfter.Value.Seconds * 1000 : 15000);
 
             var location = response.Headers.Location;

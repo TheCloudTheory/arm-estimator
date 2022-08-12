@@ -6,5 +6,6 @@
     Ignore,
     Modify,
     NoChange,
-    Unsupported
+    Unsupported,
+    Unknown
 }

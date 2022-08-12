@@ -5,30 +5,11 @@
     "_generator": {
       "name": "bicep",
       "version": "0.3.255.40792",
-      "templateHash": "1139297868522658401"
+      "templateHash": "169839135879480587"
     }
   },
   "functions": [],
   "resources": [
-    {
-      "type": "Microsoft.ContainerService/managedClusters",
-      "apiVersion": "2022-05-02-preview",
-      "name": "aksuptime",
-      "location": "westeurope",
-      "sku": {
-        "name": "Basic",
-        "tier": "Paid"
-      }
-    },
-    {
-      "type": "Microsoft.ContainerService/managedClusters",
-      "apiVersion": "2022-05-02-preview",
-      "name": "aks",
-      "location": "westeurope",
-      "sku": {
-        "name": "Basic"
-      }
-    },
     {
       "type": "Microsoft.App/containerApps",
       "apiVersion": "2022-03-01",
@@ -114,6 +95,19 @@
       "dependsOn": [
         "[resourceId('Microsoft.Sql/servers', 'sqlserver')]"
       ]
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2021-09-01",
+      "name": "armestimatorsa2",
+      "location": "westeurope",
+      "sku": {
+        "name": "Standard_GRS"
+      },
+      "kind": "StorageV2",
+      "properties": {
+        "accessTier": "Cool"
+      }
     }
   ]
 }
