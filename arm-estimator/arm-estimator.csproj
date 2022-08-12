@@ -8,6 +8,8 @@
     <Nullable>enable</Nullable>
 	<PublishSingleFile>true</PublishSingleFile>
 	<Version>1.0.0-alpha3</Version>
+	<AssemblyVersion>1.0.0-alpha3</AssemblyVersion>
+	<FileVersion>1.0.0-alpha3</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
