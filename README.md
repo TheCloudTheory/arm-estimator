@@ -54,6 +54,27 @@ arm-estimator <template-path>.json <subscription-id> <resource-group> --paramete
 ```
 Both ARM Templates and Bicep use parameters defined as JSON files. ARM Cost Estimator expects parameters file to be passed without changes, even though Azure What If API expects sending parameters with slightly different schema than parameters file itself.
 
+When using ARM Cost Estimator, you parameters file should look like this:
+```
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "dbName": {
+      "value": "db"
+    },
+    "location": {
+      "value": "westeurope"
+    },
+    "sku": {
+      "value": "Basic"
+    }
+  }
+}
+```
+
+Do not transform it to the schema expected by What If API (which expects value of the `parameters` parameter only).
+
 ## Main features
 * Detailed output containing information about cost of your infrastructure and metrics used for calculation
 * Seamless integration with ARM Templates and Bicep (with a little help of Bicep CLI)
