@@ -65,6 +65,7 @@ Both ARM Templates and Bicep use parameters defined as JSON files. ARM Cost Esti
 * Displaying delta describing difference between your current estimated cost and after changes are applied
 * An option to stop CICD process if estimations exceeds given limit (see `Usage` section)
 * Supports passing parameters along with your template
+* Handles extension resources as long as they're correctly configured (i.e. define `scope` parameter)
 
 ## Known limitations
 ARM Cost Estimator is currently in `alpha` development phase meaning there're no guarantees for stable interface and many features are still in design or planning phase. The main limitations as for now are:
@@ -100,6 +101,7 @@ Container Apps|Full|-
 Container Registry|Full|-
 Cosmos DB|Partial|Supports only single-region writes with manual throughput provisioning
 Event Hub|Full|-
+Event Grid|Full|-
 Health Bot|Full|-
 Key Vault|Full|Doesn't support Azure Dedicated HSM
 Logic Apps|Partial|Doesn't support ISE scale units
