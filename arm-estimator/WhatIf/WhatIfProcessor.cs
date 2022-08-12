@@ -23,6 +23,9 @@ internal class WhatIfProcessor
         double totalCost = 0;
         double alteredCost = 0;
 
+        this.logger.LogInformation("Estimations:");
+        this.logger.LogInformation("");
+
         foreach (WhatIfChange change in this.changes)
         {
             if (change.resourceId == null)
@@ -182,8 +185,12 @@ internal class WhatIfProcessor
             sign = "";
         }
 
-        this.logger.LogError("Total cost: {cost} USD", totalCost);
-        this.logger.LogError("Delta: {sign}{cost} USD", sign, alteredCost);
+        this.logger.LogInformation("-------------------------------");
+        this.logger.LogInformation("");
+        this.logger.LogInformation("Summary:");
+        this.logger.LogInformation("");
+        this.logger.AddEstimatorMessage("Total cost: {0} USD", totalCost.ToString("N2"));
+        this.logger.AddEstimatorMessage("Delta: {0}{1} USD", sign, alteredCost.ToString("N2"));
 
         return totalCost;
     }
@@ -219,8 +226,22 @@ internal class WhatIfProcessor
         }
 
         var totalCost = estimation.GetTotalCost(this.changes);
-        ReportEstimationToConsole(id, estimation.GetItems(), totalCost);
 
+        double? delta = null;
+        if(change.before != null)
+        {
+            if (Activator.CreateInstance(typeof(TCalculation), new object[] { data.Items, id, desiredState }) is not TCalculation previousStateEstimation)
+            {
+                this.logger.LogError("Couldn't create an instance of {type}.", typeof(TCalculation));
+            }
+            else
+            {
+                var previousCost = previousStateEstimation.GetTotalCost(this.changes);
+                delta = totalCost - previousCost;
+            }
+        }
+
+        ReportEstimationToConsole(id, estimation.GetItems(), totalCost, change.changeType, delta);
         return totalCost;
     }
 
@@ -319,12 +340,12 @@ internal class WhatIfProcessor
         return response;
     }
 
-    private void ReportEstimationToConsole(ResourceIdentifier id, IOrderedEnumerable<RetailItem> items, double? totalCost)
+    private void ReportEstimationToConsole(ResourceIdentifier id, IOrderedEnumerable<RetailItem> items, double? totalCost, WhatIfChangeType? changeType, double? delta)
     {
-        this.logger.LogInformation("Price for {name} [{resourceType}] will be {totalCost} USD.", id.Name, id.ResourceType, totalCost);
-        this.logger.LogInformation("");
-        this.logger.LogInformation("-> Instance: {name}", id.Name);
-        this.logger.LogInformation("-> Type: {type}", id.ResourceType);
+        var deltaSign = delta == null ? "+" : delta == 0 ? "" : "-";
+        delta = delta == null ? totalCost : 0;
+
+        this.logger.AddEstimatorMessageSensibleToChange(changeType, "{0} ({1}) [Total cost: {2} USD | Delta: {3} USD]", id.Name, id.ResourceType, totalCost?.ToString("N2"), $"{deltaSign}{delta.GetValueOrDefault().ToString("N2")}");
         this.logger.LogInformation("");
         this.logger.LogInformation("Aggregated metrics:");
         this.logger.LogInformation("");
@@ -341,8 +362,6 @@ internal class WhatIfProcessor
             this.logger.LogInformation("No metrics available.");
         }
 
-        this.logger.LogInformation("");
-        this.logger.LogInformation("-------------------------------");
         this.logger.LogInformation("");
     }
 }
