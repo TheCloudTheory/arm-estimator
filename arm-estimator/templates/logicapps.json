@@ -1,0 +1,81 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.3.255.40792",
+      "templateHash": "12664076982723927521"
+    }
+  },
+  "functions": [],
+  "resources": [
+    {
+      "type": "Microsoft.Logic/workflows",
+      "apiVersion": "2019-05-01",
+      "name": "la1",
+      "location": "westeurope",
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2022-03-01",
+      "name": "logicapp",
+      "location": "westeurope",
+      "sku": {
+        "name": "WS1",
+        "tier": "WorkflowStandard"
+      },
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2022-03-01",
+      "name": "logicapp22",
+      "location": "westeurope",
+      "sku": {
+        "name": "WS2",
+        "tier": "WorkflowStandard"
+      },
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2022-03-01",
+      "name": "logicapp222",
+      "location": "westeurope",
+      "sku": {
+        "name": "WS3",
+        "tier": "WorkflowStandard"
+      },
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.Logic/integrationAccounts",
+      "apiVersion": "2019-05-01",
+      "name": "la3",
+      "location": "westeurope",
+      "sku": {
+        "name": "Free"
+      }
+    },
+    {
+      "type": "Microsoft.Logic/integrationAccounts",
+      "apiVersion": "2019-05-01",
+      "name": "la4",
+      "location": "westeurope",
+      "sku": {
+        "name": "Basic"
+      }
+    },
+    {
+      "type": "Microsoft.Logic/integrationAccounts",
+      "apiVersion": "2019-05-01",
+      "name": "la5",
+      "location": "westeurope",
+      "sku": {
+        "name": "Standard"
+      }
+    }
+  ]
+}

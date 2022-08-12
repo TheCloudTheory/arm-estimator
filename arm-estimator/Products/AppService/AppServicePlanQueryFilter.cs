@@ -28,6 +28,10 @@ internal class AppServicePlanQueryFilter : IQueryFilter
             skuIds = AppServicePlanSupportedData.SkuToSkuIdMap[sku]
                 .Where(_ => AppServicePlanSupportedData.LinuxSkuIds.Contains(_)).ToArray();
         }
+        else if(IsLogicApp(sku))
+        {
+            skuIds = AppServicePlanSupportedData.SkuToSkuIdMap[sku];
+        }
         else
         {
             skuIds = AppServicePlanSupportedData.SkuToSkuIdMap[sku]
@@ -52,5 +56,10 @@ internal class AppServicePlanQueryFilter : IQueryFilter
         }
 
         return isLinuxPlan;
+    }
+
+    private bool IsLogicApp(string sku)
+    {
+        return sku.StartsWith("WS");
     }
 }

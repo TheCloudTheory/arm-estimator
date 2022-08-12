@@ -12,23 +12,37 @@ internal class AppServicePlanEstimationCalculation : BaseEstimation, IEstimation
         return this.items.OrderByDescending(_ => _.retailPrice);
     }
 
-    // TODO: Functions Premium plan calculation should include multiplication if used EP2 / EP3
     public double GetTotalCost(WhatIfChange[] changes)
     {
         double? estimatedCost = 0;
         var items = GetItems();
+        var sku = this.change.sku?.name;
+        var capacity = 1;
+
+        if(sku != null)
+        {
+            if(sku.EndsWith("2"))
+            {
+                capacity = 2;
+            }
+
+            if(sku.EndsWith("3"))
+            {
+                capacity = 3;
+            }
+        }
 
         foreach(var item in items)
         {
-            // vCPU Duration
+            // vCPU Duration (Functions)
             if (item.meterId == "2099ccfe-9c25-4ae2-9e35-6500db3b8e74")
             {
-                estimatedCost += item.retailPrice * HoursInMonth;
+                estimatedCost += item.retailPrice * HoursInMonth * capacity;
             }
-            // Memory Duration
+            // Memory Duration (Functions)
             else if (item.meterId == "8fca9dc0-1307-4b8c-986c-d58505cf1e4b")
             {
-                estimatedCost += item.retailPrice * HoursInMonth;
+                estimatedCost += item.retailPrice * HoursInMonth * capacity;
             }
             // D1
             else if (item.meterId == "0c3885bd-351d-4c28-830a-446d7bb4295c")
@@ -169,6 +183,16 @@ internal class AppServicePlanEstimationCalculation : BaseEstimation, IEstimation
             else if (item.meterId == "6fb105a4-26ad-554e-8205-81b103701705")
             {
                 estimatedCost += item.retailPrice * HoursInMonth;
+            }
+            // vCPU Duration (LogicApps)
+            if (item.meterId == "031d9d87-a8d3-546a-8a57-9afe80dbb478")
+            {
+                estimatedCost += item.retailPrice * HoursInMonth * capacity;
+            }
+            // Memory Duration  (LogicApps)
+            else if (item.meterId == "7824092a-b733-5933-9b38-c06ff544977f")
+            {
+                estimatedCost += item.retailPrice * HoursInMonth * capacity;
             }
             else
             {
