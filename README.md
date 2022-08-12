@@ -63,7 +63,7 @@ Both ARM Templates and Bicep use parameters defined as JSON files. ARM Cost Esti
 * Allows you to validate your deployment before it happens - if the template you used is invalid, an error with detailed information is returned
 * Support for both Incremental / Complete deployment modes (see `Usage` section)
 * Displaying delta describing difference between your current estimated cost and after changes are applied
-* An option to stop CICD process if estimations exceeds given limit (see `Usage` section)
+* An option to stop CICD process if estimations exceed given limit (see `Usage` section)
 * Supports passing parameters along with your template
 * Handles extension resources as long as they're correctly configured (i.e. define `scope` parameter)
 
