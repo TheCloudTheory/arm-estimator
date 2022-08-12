@@ -140,6 +140,12 @@ internal class WhatIfProcessor
                 case "Microsoft.TimeSeriesInsights/environments":
                     currentChangeCost += await Calculate<TimeSeriesRetailQuery, TimeSeriesEstimationCalculation>(change, id);
                     break;
+                case "Microsoft.Logic/workflows":
+                    currentChangeCost += await Calculate<LogicAppsRetailQuery, LogicAppsEstimationCalculation>(change, id);
+                    break;
+                case "Microsoft.Logic/integrationAccounts":
+                    currentChangeCost += await Calculate<LogicAppsRetailQuery, LogicAppsEstimationCalculation>(change, id);
+                    break;
                 default:
                     logger.LogWarning("{resourceType} is not yet supported.", id?.ResourceType);
                     break;

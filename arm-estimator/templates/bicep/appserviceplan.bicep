@@ -5,7 +5,6 @@ resource asp1 'Microsoft.Web/serverfarms@2022-03-01' = {
     name: 'F1'
   }
   properties: {
-    
   }
 }
 
@@ -16,7 +15,6 @@ resource asp2 'Microsoft.Web/serverfarms@2022-03-01' = {
     name: 'D1'
   }
   properties: {
-    
   }
 }
 

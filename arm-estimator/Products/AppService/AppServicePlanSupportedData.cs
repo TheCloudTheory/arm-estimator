@@ -22,7 +22,10 @@
         { "P3V2", "DZH317GT8G5N" },
         { "P1V3", "DZH317GT8G5N" },
         { "P2V3", "DZH317GT8G5N" },
-        { "P3V3", "DZH317GT8G5N" }
+        { "P3V3", "DZH317GT8G5N" },
+        { "WS1", "DZH319T30TWX" },
+        { "WS2", "DZH319T30TWX" },
+        { "WS3", "DZH319T30TWX" }
     };
 
     public static readonly IReadOnlyDictionary<string, string[]> SkuToSkuIdMap = new Dictionary<string, string[]>()
@@ -128,6 +131,18 @@
             "DZH318Z0DCR6/0003"
             }
         },
+        { "WS1", new[] {
+            "DZH318Z0BQN4/0039"
+            }
+        },
+        { "WS2", new[] {
+            "DZH318Z0BQN4/0039"
+            }
+        },
+        { "WS3", new[] {
+            "DZH318Z0BQN4/0039"
+            }
+        }
     };
 
     public static readonly IReadOnlyDictionary<string, string[]> SkuIdToProductIdMap = new Dictionary<string, string[]>()
