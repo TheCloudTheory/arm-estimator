@@ -146,6 +146,15 @@ internal class WhatIfProcessor
                 case "Microsoft.Logic/integrationAccounts":
                     currentChangeCost += await Calculate<LogicAppsRetailQuery, LogicAppsEstimationCalculation>(change, id);
                     break;
+                case "Microsoft.EventGrid/systemTopics":
+                    currentChangeCost += await Calculate<EventGridRetailQuery, EventGridEstimationCalculation>(change, id);
+                    break;
+                case "Microsoft.EventGrid/topics":
+                    currentChangeCost += await Calculate<EventGridRetailQuery, EventGridEstimationCalculation>(change, id);
+                    break;
+                case "Microsoft.EventGrid/eventSubscriptions":
+                    currentChangeCost += await Calculate<EventGridRetailQuery, EventGridEstimationCalculation>(change, id);
+                    break;
                 default:
                     logger.LogWarning("{resourceType} is not yet supported.", id?.ResourceType);
                     break;
@@ -287,7 +296,7 @@ internal class WhatIfProcessor
         var currentParent = id.Parent;
         var parentType = currentParent?.Parent?.ResourceType;
 
-        while(parentType != "Microsoft.Resources/resourceGroups")
+        while(parentType != "Microsoft.Resources/resourceGroups" && parentType != "Microsoft.Resources/subscriptions")
         {
             currentParent = currentParent?.Parent;
             parentType = currentParent?.Parent?.ResourceType;
