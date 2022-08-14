@@ -72,6 +72,12 @@
     <None Update="templates\functions.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="templates\issue-45.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="templates\issue-44.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="templates\issue-42.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

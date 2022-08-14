@@ -18,21 +18,40 @@ internal class AppServicePlanEstimationCalculation : BaseEstimation, IEstimation
         var items = GetItems();
         var sku = this.change.sku?.name;
         var capacity = 1;
+        var vCpuCapacity = 1;
+        var memoryCapacity = 3.5;
 
         if(sku != null)
         {
-            if(sku.EndsWith("2"))
+            if (IsSkuOfLogicApp(sku))
             {
-                capacity = 2;
-            }
+                if (sku.EndsWith("2"))
+                {
+                    vCpuCapacity = 2;
+                    memoryCapacity = 7;
+                }
 
-            if(sku.EndsWith("3"))
+                if (sku.EndsWith("3"))
+                {
+                    vCpuCapacity = 4;
+                    memoryCapacity = 14;
+                }
+            }
+            else
             {
-                capacity = 3;
+                if (sku.EndsWith("2"))
+                {
+                    capacity = 2;
+                }
+
+                if (sku.EndsWith("3"))
+                {
+                    capacity = 4;
+                }
             }
         }
 
-        foreach(var item in items)
+        foreach (var item in items)
         {
             // vCPU Duration (Functions)
             if (item.meterId == "2099ccfe-9c25-4ae2-9e35-6500db3b8e74")
@@ -187,12 +206,12 @@ internal class AppServicePlanEstimationCalculation : BaseEstimation, IEstimation
             // vCPU Duration (LogicApps)
             if (item.meterId == "031d9d87-a8d3-546a-8a57-9afe80dbb478")
             {
-                estimatedCost += item.retailPrice * HoursInMonth * capacity;
+                estimatedCost += item.retailPrice * HoursInMonth * vCpuCapacity;
             }
             // Memory Duration  (LogicApps)
             else if (item.meterId == "7824092a-b733-5933-9b38-c06ff544977f")
             {
-                estimatedCost += item.retailPrice * HoursInMonth * capacity;
+                estimatedCost += item.retailPrice * HoursInMonth * memoryCapacity;
             }
             else
             {
@@ -201,5 +220,10 @@ internal class AppServicePlanEstimationCalculation : BaseEstimation, IEstimation
         }
 
         return estimatedCost == null ? 0 : (double)estimatedCost;
+    }
+
+    private static bool IsSkuOfLogicApp(string sku)
+    {
+        return sku.StartsWith("WS");
     }
 }
