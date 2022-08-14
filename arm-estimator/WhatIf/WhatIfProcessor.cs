@@ -158,6 +158,9 @@ internal class WhatIfProcessor
                 case "Microsoft.EventGrid/eventSubscriptions":
                     currentChangeCost += await Calculate<EventGridRetailQuery, EventGridEstimationCalculation>(change, id);
                     break;
+                case "Microsoft.Compute/virtualMachines":
+                    currentChangeCost += await Calculate<VirtualMachineRetailQuery, VirtualMachineEstimationCalculation>(change, id);
+                    break;
                 default:
                     logger.LogWarning("{resourceType} is not yet supported.", id?.ResourceType);
                     break;

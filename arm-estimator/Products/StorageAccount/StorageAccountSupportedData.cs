@@ -10,6 +10,10 @@
         { "Standard_GRS", new[] {
             "DZH318Z0BNZH/004T"
             }
+        },
+        { "Standard_RAGRS", new[] {
+            ""
+            }
         }
     };
 
