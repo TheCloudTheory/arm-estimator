@@ -1,0 +1,60 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.3.255.40792",
+      "templateHash": "13762385928361747780"
+    }
+  },
+  "functions": [],
+  "resources": [
+    {
+      "type": "Microsoft.Compute/virtualMachines",
+      "apiVersion": "2022-03-01",
+      "name": "vm1",
+      "location": "westeurope",
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "Basic_A0"
+        },
+        "osProfile": {
+          "adminPassword": "123454567",
+          "adminUsername": "armestimator"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "offer": "WindowsServer",
+            "publisher": "MicrosoftWindowsServer",
+            "sku": "2012-R2-Datacenter",
+            "version": "latest"
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines",
+      "apiVersion": "2022-03-01",
+      "name": "vm5",
+      "location": "westeurope",
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "Basic_A4"
+        },
+        "osProfile": {
+          "adminPassword": "123454567",
+          "adminUsername": "armestimator"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "offer": "WindowsServer",
+            "publisher": "MicrosoftWindowsServer",
+            "sku": "2012-R2-Datacenter",
+            "version": "latest"
+          }
+        }
+      }
+    }
+  ]
+}
