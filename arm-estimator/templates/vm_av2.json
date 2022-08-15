@@ -1,0 +1,567 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.9.1.41621",
+      "templateHash": "12141340783197511086"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Network/networkSecurityGroups",
+      "apiVersion": "2020-06-01",
+      "name": "ace-nsg",
+      "location": "westeurope",
+      "properties": {
+        "securityRules": [
+          {
+            "name": "default-allow-ssh",
+            "properties": {
+              "priority": 1000,
+              "access": "Allow",
+              "direction": "Inbound",
+              "destinationPortRange": "22",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "sourceAddressPrefix": "*",
+              "destinationAddressPrefix": "*"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Network/virtualNetworks",
+      "apiVersion": "2020-06-01",
+      "name": "ace-vnet",
+      "location": "westeurope",
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "172.16.0.0/21"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "devSubnet",
+            "properties": {
+              "addressPrefix": "172.16.0.0/24",
+              "networkSecurityGroup": {
+                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'ace-nsg')]"
+              }
+            }
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/networkSecurityGroups', 'ace-nsg')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Network/publicIPAddresses",
+      "apiVersion": "2020-06-01",
+      "name": "ace-pip-01",
+      "location": "westeurope",
+      "properties": {
+        "publicIPAllocationMethod": "Dynamic"
+      }
+    },
+    {
+      "type": "Microsoft.Network/networkInterfaces",
+      "apiVersion": "2020-06-01",
+      "name": "ace-nic-01",
+      "location": "westeurope",
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', 'ace-pip-01')]"
+              },
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'ace-vnet', 'devSubnet')]"
+              }
+            }
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/publicIPAddresses', 'ace-pip-01')]",
+        "[resourceId('Microsoft.Network/virtualNetworks', 'ace-vnet')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines",
+      "apiVersion": "2020-06-01",
+      "name": "ace-vm-01",
+      "location": "westeurope",
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "Standard_A1_v2"
+        },
+        "osProfile": {
+          "computerName": "acedevtest01",
+          "adminUsername": "DemoUser",
+          "adminPassword": "AzureTest@54321"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "Canonical",
+            "offer": "UbuntuServer",
+            "sku": "18.04-LTS",
+            "version": "latest"
+          },
+          "osDisk": {
+            "createOption": "FromImage"
+          }
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', 'ace-nic-01')]"
+            }
+          ]
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/networkInterfaces', 'ace-nic-01')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Network/publicIPAddresses",
+      "apiVersion": "2020-06-01",
+      "name": "ace-pip-02",
+      "location": "westeurope",
+      "properties": {
+        "publicIPAllocationMethod": "Dynamic"
+      }
+    },
+    {
+      "type": "Microsoft.Network/networkInterfaces",
+      "apiVersion": "2020-06-01",
+      "name": "ace-nic-02",
+      "location": "westeurope",
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig2",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', 'ace-pip-02')]"
+              },
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'ace-vnet', 'devSubnet')]"
+              }
+            }
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/publicIPAddresses', 'ace-pip-02')]",
+        "[resourceId('Microsoft.Network/virtualNetworks', 'ace-vnet')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines",
+      "apiVersion": "2020-06-01",
+      "name": "ace-vm-02",
+      "location": "westeurope",
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "Standard_A2_v2"
+        },
+        "osProfile": {
+          "computerName": "acedevtest01",
+          "adminUsername": "DemoUser",
+          "adminPassword": "AzureTest@54321"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "Canonical",
+            "offer": "UbuntuServer",
+            "sku": "18.04-LTS",
+            "version": "latest"
+          },
+          "osDisk": {
+            "createOption": "FromImage"
+          }
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', 'ace-nic-02')]"
+            }
+          ]
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/networkInterfaces', 'ace-nic-02')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Network/publicIPAddresses",
+      "apiVersion": "2020-06-01",
+      "name": "ace-pip-03",
+      "location": "westeurope",
+      "properties": {
+        "publicIPAllocationMethod": "Dynamic"
+      }
+    },
+    {
+      "type": "Microsoft.Network/networkInterfaces",
+      "apiVersion": "2020-06-01",
+      "name": "ace-nic-03",
+      "location": "westeurope",
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig3",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', 'ace-pip-03')]"
+              },
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'ace-vnet', 'devSubnet')]"
+              }
+            }
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/publicIPAddresses', 'ace-pip-03')]",
+        "[resourceId('Microsoft.Network/virtualNetworks', 'ace-vnet')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines",
+      "apiVersion": "2020-06-01",
+      "name": "ace-vm-03",
+      "location": "westeurope",
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "Standard_A4_v2"
+        },
+        "osProfile": {
+          "computerName": "acedevtest01",
+          "adminUsername": "DemoUser",
+          "adminPassword": "AzureTest@54321"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "Canonical",
+            "offer": "UbuntuServer",
+            "sku": "18.04-LTS",
+            "version": "latest"
+          },
+          "osDisk": {
+            "createOption": "FromImage"
+          }
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', 'ace-nic-03')]"
+            }
+          ]
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/networkInterfaces', 'ace-nic-03')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Network/publicIPAddresses",
+      "apiVersion": "2020-06-01",
+      "name": "ace-pip-04",
+      "location": "westeurope",
+      "properties": {
+        "publicIPAllocationMethod": "Dynamic"
+      }
+    },
+    {
+      "type": "Microsoft.Network/networkInterfaces",
+      "apiVersion": "2020-06-01",
+      "name": "ace-nic-04",
+      "location": "westeurope",
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig4",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', 'ace-pip-04')]"
+              },
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'ace-vnet', 'devSubnet')]"
+              }
+            }
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/publicIPAddresses', 'ace-pip-04')]",
+        "[resourceId('Microsoft.Network/virtualNetworks', 'ace-vnet')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines",
+      "apiVersion": "2020-06-01",
+      "name": "ace-vm-04",
+      "location": "westeurope",
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "Standard_A8_v2"
+        },
+        "osProfile": {
+          "computerName": "acedevtest01",
+          "adminUsername": "DemoUser",
+          "adminPassword": "AzureTest@54321"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "Canonical",
+            "offer": "UbuntuServer",
+            "sku": "18.04-LTS",
+            "version": "latest"
+          },
+          "osDisk": {
+            "createOption": "FromImage"
+          }
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', 'ace-nic-04')]"
+            }
+          ]
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/networkInterfaces', 'ace-nic-04')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Network/publicIPAddresses",
+      "apiVersion": "2020-06-01",
+      "name": "ace-pip-05",
+      "location": "westeurope",
+      "properties": {
+        "publicIPAllocationMethod": "Dynamic"
+      }
+    },
+    {
+      "type": "Microsoft.Network/networkInterfaces",
+      "apiVersion": "2020-06-01",
+      "name": "ace-nic-05",
+      "location": "westeurope",
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig5",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', 'ace-pip-05')]"
+              },
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'ace-vnet', 'devSubnet')]"
+              }
+            }
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/publicIPAddresses', 'ace-pip-05')]",
+        "[resourceId('Microsoft.Network/virtualNetworks', 'ace-vnet')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines",
+      "apiVersion": "2020-06-01",
+      "name": "ace-vm-05",
+      "location": "westeurope",
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "Standard_A2m_v2"
+        },
+        "osProfile": {
+          "computerName": "acedevtest01",
+          "adminUsername": "DemoUser",
+          "adminPassword": "AzureTest@54321"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "Canonical",
+            "offer": "UbuntuServer",
+            "sku": "18.04-LTS",
+            "version": "latest"
+          },
+          "osDisk": {
+            "createOption": "FromImage"
+          }
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', 'ace-nic-05')]"
+            }
+          ]
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/networkInterfaces', 'ace-nic-05')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Network/publicIPAddresses",
+      "apiVersion": "2020-06-01",
+      "name": "ace-pip-06",
+      "location": "westeurope",
+      "properties": {
+        "publicIPAllocationMethod": "Dynamic"
+      }
+    },
+    {
+      "type": "Microsoft.Network/networkInterfaces",
+      "apiVersion": "2020-06-01",
+      "name": "ace-nic-06",
+      "location": "westeurope",
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig6",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', 'ace-pip-06')]"
+              },
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'ace-vnet', 'devSubnet')]"
+              }
+            }
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/publicIPAddresses', 'ace-pip-06')]",
+        "[resourceId('Microsoft.Network/virtualNetworks', 'ace-vnet')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines",
+      "apiVersion": "2020-06-01",
+      "name": "ace-vm-06",
+      "location": "westeurope",
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "Standard_A4m_v2"
+        },
+        "osProfile": {
+          "computerName": "acedevtest01",
+          "adminUsername": "DemoUser",
+          "adminPassword": "AzureTest@54321"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "Canonical",
+            "offer": "UbuntuServer",
+            "sku": "18.04-LTS",
+            "version": "latest"
+          },
+          "osDisk": {
+            "createOption": "FromImage"
+          }
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', 'ace-nic-06')]"
+            }
+          ]
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/networkInterfaces', 'ace-nic-06')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Network/publicIPAddresses",
+      "apiVersion": "2020-06-01",
+      "name": "ace-pip-07",
+      "location": "westeurope",
+      "properties": {
+        "publicIPAllocationMethod": "Dynamic"
+      }
+    },
+    {
+      "type": "Microsoft.Network/networkInterfaces",
+      "apiVersion": "2020-06-01",
+      "name": "ace-nic-07",
+      "location": "westeurope",
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig7",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', 'ace-pip-07')]"
+              },
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'ace-vnet', 'devSubnet')]"
+              }
+            }
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/publicIPAddresses', 'ace-pip-07')]",
+        "[resourceId('Microsoft.Network/virtualNetworks', 'ace-vnet')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines",
+      "apiVersion": "2020-06-01",
+      "name": "ace-vm-07",
+      "location": "westeurope",
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "Standard_A8m_v2"
+        },
+        "osProfile": {
+          "computerName": "acedevtest01",
+          "adminUsername": "DemoUser",
+          "adminPassword": "AzureTest@54321"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "Canonical",
+            "offer": "UbuntuServer",
+            "sku": "18.04-LTS",
+            "version": "latest"
+          },
+          "osDisk": {
+            "createOption": "FromImage"
+          }
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', 'ace-nic-07')]"
+            }
+          ]
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/networkInterfaces', 'ace-nic-07')]"
+      ]
+    }
+  ]
+}
