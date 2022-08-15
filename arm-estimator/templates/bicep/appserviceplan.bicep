@@ -50,3 +50,56 @@ resource asp5 'Microsoft.Web/serverfarms@2022-03-01' = {
     
   }
 }
+
+resource asp6 'Microsoft.Web/serverfarms@2022-03-01' = {
+  name: 'asp6'
+  location: 'eastus2'
+  sku: {
+    name: 'P1V2'
+  }
+  properties: {
+  }
+}
+
+resource asp7 'Microsoft.Web/serverfarms@2022-03-01' = {
+  name: 'asp7'
+  location: 'northeurope'
+  sku: {
+    name: 'P2V3'
+  }
+  properties: {
+  }
+}
+
+resource asp8 'Microsoft.Web/serverfarms@2022-03-01' = {
+  name: 'asp8'
+  location: 'westeurope'
+  sku: {
+    name: 'B1'
+  }
+  properties: {
+    reserved: true
+  }
+}
+
+resource asp9 'Microsoft.Web/serverfarms@2022-03-01' = {
+  name: 'asp9'
+  location: 'westeurope'
+  sku: {
+    name: 'P1V2'
+  }
+  properties: {
+    
+  }
+}
+
+resource asp10 'Microsoft.Web/serverfarms@2022-03-01' = {
+  name: 'asp10'
+  location: 'uksouth'
+  sku: {
+    name: 'S2'
+  }
+  properties: {
+    reserved: true
+  }
+}
