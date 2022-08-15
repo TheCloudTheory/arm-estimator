@@ -31,7 +31,19 @@ internal class EstimatorLogger : ILogger
             }
             else
             {
-                Console.WriteLine(formatter(state, exception));
+                if(logLevel == LogLevel.Warning)
+                {
+                    Console.Write("[");
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.Write("Warning");
+                    Console.ResetColor();
+                    Console.Write("] ");
+                    Console.Write($"{formatter(state, exception)}{Environment.NewLine}");
+                }
+                else
+                {
+                    Console.WriteLine(formatter(state, exception));
+                }         
             }
         }
     }

@@ -19,28 +19,27 @@ internal class AppServicePlanQueryFilter : IQueryFilter
             this.logger.LogError("Can't create a filter for App Service Plan when SKU is unavailable.");
             return null;
         }
-           
-        var serviceId = AppServicePlanSupportedData.SkuToServiceId[sku];
-        string[] skuIds;
 
-        if(IsLinuxPlan())
+        var skuName = AppServicePlanSupportedData.SkuToSkuNameMap[sku];
+        var serviceId = AppServicePlanSupportedData.SkuToServiceId[sku];
+        string[] productNames;
+
+        if (IsLinuxPlan())
         {
-            skuIds = AppServicePlanSupportedData.SkuToSkuIdMap[sku]
-                .Where(_ => AppServicePlanSupportedData.LinuxSkuIds.Contains(_)).ToArray();
+            productNames = AppServicePlanSupportedData.SkuToProductNameLinuxMap[sku];
         }
-        else if(IsLogicApp(sku))
+        else if (IsLogicApp(sku))
         {
-            skuIds = AppServicePlanSupportedData.SkuToSkuIdMap[sku];
+            productNames = AppServicePlanSupportedData.SkuToProductNameLinuxMap[sku];
         }
         else
         {
-            skuIds = AppServicePlanSupportedData.SkuToSkuIdMap[sku]
-                .Where(_ => AppServicePlanSupportedData.LinuxSkuIds.Contains(_) == false).ToArray();
+            productNames = AppServicePlanSupportedData.SkuToProductNameWindowsMap[sku];
         }
 
-        var skuIdsFilter = string.Join(" or ", skuIds.Select(_ => $"skuId eq '{_}'"));
+        var skuIdsFilter = string.Join(" or ", productNames.Select(_ => $"productName eq '{_}'"));
 
-        return $"serviceId eq '{serviceId}' and armRegionName eq '{location}' and ({skuIdsFilter})";
+        return $"serviceId eq '{serviceId}' and armRegionName eq '{location}' and skuName eq '{skuName}' and ({skuIdsFilter})";
     }
 
     private bool IsLinuxPlan()

@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.3.255.40792",
-      "templateHash": "10914543274513836754"
+      "templateHash": "1164215361447774458"
     }
   },
   "functions": [],
@@ -61,6 +61,60 @@
         "name": "B3"
       },
       "properties": {}
+    },
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2022-03-01",
+      "name": "asp6",
+      "location": "eastus2",
+      "sku": {
+        "name": "P1V2"
+      },
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2022-03-01",
+      "name": "asp7",
+      "location": "northeurope",
+      "sku": {
+        "name": "P2V3"
+      },
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2022-03-01",
+      "name": "asp8",
+      "location": "westeurope",
+      "sku": {
+        "name": "B1"
+      },
+      "properties": {
+        "reserved": true
+      }
+    },
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2022-03-01",
+      "name": "asp9",
+      "location": "westeurope",
+      "sku": {
+        "name": "P1V2"
+      },
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2022-03-01",
+      "name": "asp10",
+      "location": "uksouth",
+      "sku": {
+        "name": "S2"
+      },
+      "properties": {
+        "reserved": true
+      }
     }
   ]
 }

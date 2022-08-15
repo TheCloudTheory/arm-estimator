@@ -206,6 +206,7 @@ internal class WhatIfProcessor
         if (data == null || data.Items == null)
         {
             this.logger.LogWarning("Got no records for {type} from Retail API", id.ResourceType);
+            this.logger.LogInformation("");
             return 0;
         }
 
@@ -275,12 +276,22 @@ internal class WhatIfProcessor
             return null;
         }
 
-        var url = query.GetQueryUrl(location);
-        if (url == null)
+        string? url;
+        try
         {
-            this.logger.LogError("URL generated for {type} is null.", typeof(T));
+            url = query.GetQueryUrl(location);
+            if (url == null)
+            {
+                this.logger.LogError("URL generated for {type} is null.", typeof(T));
+                return null;
+            }
+        }
+        catch(KeyNotFoundException)
+        {
+            this.logger.LogWarning("{name} ({type}) [SKU is not yet supported - {sku}]", id.Name, id.ResourceType, desiredState.sku?.name);
             return null;
         }
+
 
         var data = await TryGetCachedResultForUrl(url);
         if (data == null || data.Items == null)
