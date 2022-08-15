@@ -2,7 +2,7 @@
 
 internal abstract class BaseEstimation
 {
-    internal static readonly int HoursInMonth = 720;
+    internal static readonly int HoursInMonth = 730;
     internal readonly RetailItem[] items;
     internal readonly ResourceIdentifier id;
     internal readonly WhatIfAfterBeforeChange change;
