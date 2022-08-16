@@ -1,0 +1,46 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.9.1.41621",
+      "templateHash": "8472372701339364291"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Network/publicIPPrefixes",
+      "apiVersion": "2021-02-01",
+      "name": "ace-pip-prefix",
+      "location": "westeurope",
+      "sku": {
+        "name": "Standard",
+        "tier": "Regional"
+      },
+      "properties": {
+        "prefixLength": "29",
+        "publicIPAddressVersion": "IPv4"
+      }
+    },
+    {
+      "type": "Microsoft.Network/publicIPAddresses",
+      "apiVersion": "2021-02-01",
+      "name": "ace-static-pip",
+      "location": "westeurope",
+      "sku": {
+        "name": "Standard",
+        "tier": "Regional"
+      },
+      "properties": {
+        "publicIPAllocationMethod": "Static",
+        "publicIPPrefix": {
+          "id": "[resourceId('Microsoft.Network/publicIPPrefixes', 'ace-pip-prefix')]"
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/publicIPPrefixes', 'ace-pip-prefix')]"
+      ]
+    }
+  ]
+}
