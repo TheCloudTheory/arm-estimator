@@ -69,3 +69,15 @@ resource as5 'Microsoft.AnalysisServices/servers@2017-08-01' = {
   properties: {
   }
 }
+
+resource asstandard2 'Microsoft.AnalysisServices/servers@2017-08-01' = {
+  name: 'asstandard2'
+  location: 'uksouth'
+  sku: {
+    name: 'S2'
+    tier: 'Standard'
+    capacity: 2
+  }
+  properties: {
+  }
+}

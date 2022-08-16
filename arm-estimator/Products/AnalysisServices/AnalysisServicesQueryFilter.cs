@@ -22,9 +22,12 @@ internal class AnalysisServicesQueryFilter : IQueryFilter
             return null;
         }
 
-        var skuIds = AnalysisServicesSupportedData.SkuToSkuIdMap[sku];
-        var skuIdsFilter = string.Join(" or ", skuIds.Select(_ => $"skuId eq '{_}'"));
+        if (this.afterState.sku?.capacity != null && this.afterState.sku?.capacity >= 1)
+        {
+            var scaleOutSku = $"{sku} Scale-Out";
+            return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and (skuName eq '{sku}' or skuName eq '{scaleOutSku}')";
+        }
 
-        return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and ({skuIdsFilter})";
+        return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and skuName eq '{sku}'";
     }
 }
