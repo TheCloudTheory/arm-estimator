@@ -24,6 +24,6 @@ internal class APIMRetailQuery : BaseRetailQuery, IRetailQuery
         }
 
         var filter = new APIMQueryFilter(change, this.logger).GetFiltersBasedOnDesiredState(location);
-        return $"h{BaseQuery}{filter}";
+        return $"{BaseQuery}{filter}";
     }
 }

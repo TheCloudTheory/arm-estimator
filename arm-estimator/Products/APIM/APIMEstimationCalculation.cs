@@ -20,36 +20,30 @@ internal class APIMEstimationCalculation : BaseEstimation, IEstimationCalculatio
 
         foreach (var item in items)
         {
-            // Basic Units
-            if(item.meterId == "24add188-4886-4ae1-a78c-49a974027be0")
+            if(item.meterName == "Basic Units")
             {
                 estimatedCost += item.retailPrice * HoursInMonth * capacity;
             }
-            // Standard Units
-            else if (item.meterId == "2e99cfc3-341a-4699-8f9a-38498d008def")
+            else if (item.meterName == "Standard Units")
             {
                 estimatedCost += item.retailPrice * HoursInMonth * capacity;
             }
-            // Developer Units
-            else if (item.meterId == "17c7c650-0e4a-4a4f-99d8-412d1ebcb892")
+            else if (item.meterName == "Developer Units")
             {
                 estimatedCost += item.retailPrice * HoursInMonth * capacity;
             }
-            // Premium Units
-            else if (item.meterId == "15ebd8a7-aeb0-4623-ac0f-d434504f9474")
+            else if (item.meterName == "Premium Units")
             {
                 estimatedCost += item.retailPrice * HoursInMonth;
             }
-            // Secondary Units
-            else if (item.meterId == "ad75eb29-e062-5b73-a26a-47b97891cc24")
+            else if (item.meterName == "Secondary Units")
             {
-                if(capacity > 1)
+                if(capacity >= 1)
                 {
                     estimatedCost += item.retailPrice * HoursInMonth;
                 }
             }
-            // Gateway Units
-            else if (item.meterId == "d42b8719-acfb-4de6-88c7-6fcf83338722")
+            else if (item.meterName == "Gateway Units")
             {
                 estimatedCost += item.retailPrice * HoursInMonth;
             }
