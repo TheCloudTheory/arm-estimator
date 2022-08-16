@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [ "main" ]
 
+defaults:
+ run:
+  working-directory: ./arm-estimator
+
 jobs:
   build:
 
@@ -20,4 +24,19 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build --no-restore --configuration=Release
+    - name: Publish Windows
+      run: dotnet publish -p:PublishProfile=win-x64
+    - name: Publish Linux
+      run: dotnet publish -p:PublishProfile=linux-x64
+    - name: Upload Windows artifact
+      uses: actions/upload-artifact@v3.1.0
+      with:
+        name: win-64
+        path: bin/Release/net6.0/publish/win-64
+    - name: Upload Linux artifact
+      uses: actions/upload-artifact@v3.1.0
+      with:
+        name: linux-64
+        path: bin/Release/net6.0/publish/linux-64
+      
