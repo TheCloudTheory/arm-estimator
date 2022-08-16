@@ -31,10 +31,8 @@ jobs:
       run: dotnet publish -p:PublishProfile=linux-x64
     - name: Debug
       run: |
+        cd bin/Release/ et6.0/publish
         ls -la
-        cd bin/Release
-        ls -la
-        cd net6.0/publish
     - name: Upload Windows artifact
       uses: actions/upload-artifact@v3.1.0
       with:
