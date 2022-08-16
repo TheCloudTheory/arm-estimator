@@ -1,18 +1,14 @@
 ﻿internal class HealthBotServiceSupportedData
 {
-    public static readonly IReadOnlyDictionary<string, string[]> SkuToSkuIdMap = new Dictionary<string, string[]>()
+    public static readonly IReadOnlyDictionary<string, string> SkuToSkuIdMap = new Dictionary<string, string>()
     {
         {
-            "F0", new[] 
-            {
-                "DZH318Z08KBV/0004"
-            }
+            "F0",
+                "Free"
         },
         {
-            "S1", new[]
-            {
-                "DZH318Z08KBV/0006"
-            }
+            "S1",
+                "Standard"
         }
     };
 }

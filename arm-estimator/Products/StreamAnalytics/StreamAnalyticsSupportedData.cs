@@ -1,18 +1,14 @@
 ﻿internal class StreamAnalyticsSupportedData
 {
-    public static readonly IReadOnlyDictionary<string, string[]> SkuToSkuIdMap = new Dictionary<string, string[]>()
+    public static readonly IReadOnlyDictionary<string, string> SkuToSkuNameMap = new Dictionary<string, string>()
     {
         {
-            "Default", new[] 
-            {
-                "DZH318Z0BQNN/0039"
-            }
+            "Default", 
+                "Dedicated"
         },
         {
-            "Standard", new[]
-            {
-                "DZH318Z0BQNN/000H"
-            }
+            "Standard", 
+                "Standard"
         }
     };
 }

@@ -19,8 +19,7 @@ internal class KeyVaultEstimationCalculation : BaseEstimation, IEstimationCalcul
 
         foreach (var item in items)
         {
-            // Standard B1 Instance
-            if (item.meterId == "d4a3d8b9-a5c1-5a86-8706-3e26a9b12e5a")
+            if (item.meterName == "Standard B1 Instance")
             {
                 estimatedCost += item.retailPrice * HoursInMonth;
             }

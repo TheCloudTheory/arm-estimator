@@ -19,23 +19,19 @@ internal class ContainerAppsEstimationCalculation : BaseEstimation, IEstimationC
         
         foreach(var item in items)
         {
-            // vCPU active usage
-            if(item.meterId == "0426badc-b719-5201-b141-b2d5c4943b7d")
+            if(item.meterId == "vCPU Active Usage")
             {
                 estimatedCost += item.retailPrice * HoursInMonth / 2 * 3600;
             }
-            // Memory active usage
-            else if (item.meterId == "3ba64b1c-cb46-5ee0-b086-a68736392ac0")
+            else if (item.meterId == "Memory Active Usage")
             {
                 estimatedCost += item.retailPrice * HoursInMonth / 2 * 3600;
             }
-            // vCPU idle usage
-            else if (item.meterId == "7b7747f8-2c0b-5b6b-a6d9-d998e92f6bcc")
+            else if (item.meterId == "vCPU Idle Usage")
             {
                 estimatedCost += item.retailPrice * HoursInMonth / 2 * 3600;
             }
-            // Memory idle usage
-            else if (item.meterId == "cea8b5c0-c6fe-59cf-baa7-123dbc4c6bb8")
+            else if (item.meterId == "Memory Idle Usage")
             {
                 estimatedCost += item.retailPrice * HoursInMonth / 2 * 3600;
             }

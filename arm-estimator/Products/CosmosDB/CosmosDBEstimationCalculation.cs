@@ -38,8 +38,7 @@ internal class CosmosDBEstimationCalculation : BaseEstimation, IEstimationCalcul
 
         foreach (var item in items)
         {
-            // 100 RU/s
-            if (item.meterId == "a55b03b5-3098-4141-ae72-d6f5643c6171")
+            if (item.meterName == "100 RU/s")
             {
                 estimatedCost += item.retailPrice * HoursInMonth * rus;
             }

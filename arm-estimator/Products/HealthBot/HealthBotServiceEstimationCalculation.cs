@@ -19,8 +19,7 @@ internal class HealthBotServiceEstimationCalculation : BaseEstimation, IEstimati
 
         foreach (var item in items)
         {
-            // Standard Unit
-            if (item.meterId == "1faf3518-3945-58e9-8782-80f95cd3903a")
+            if (item.meterName == "Standard Unit")
             {
                 estimatedCost += item.retailPrice * 30;
             }

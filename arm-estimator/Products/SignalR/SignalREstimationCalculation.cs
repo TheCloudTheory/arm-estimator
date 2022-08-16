@@ -25,13 +25,7 @@ internal class SignalREstimationCalculation : BaseEstimation, IEstimationCalcula
 
         foreach (var item in items)
         {
-            // Units - Standard
-            if (item.meterId == "629ccd49-5991-5138-b87d-a800120c44f1")
-            {
-                estimatedCost += item.retailPrice * 30 * capacity;
-            }
-            // Units - Premium
-            else if (item.meterId == "9706e6a9-3463-4a29-bcd2-7cb69683bff2")
+            if (item.meterName == "Units")
             {
                 estimatedCost += item.retailPrice * 30 * capacity;
             }

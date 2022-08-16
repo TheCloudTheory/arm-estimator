@@ -22,9 +22,9 @@ internal class HealthBotServiceQueryFilter : IQueryFilter
             return null;
         }
 
-        var skuIds = HealthBotServiceSupportedData.SkuToSkuIdMap[sku];
-        var skuIdsFilter = string.Join(" or ", skuIds.Select(_ => $"skuId eq '{_}'"));
+        var skuName = HealthBotServiceSupportedData.SkuToSkuIdMap[sku];
+        var skuNameFilter = string.Join(" or ", skuName.Select(_ => $"skuName eq '{_}'"));
 
-        return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and ({skuIdsFilter})";
+        return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and ({skuNameFilter})";
     }
 }

@@ -21,9 +21,9 @@ internal class LogicAppsQueryFilter : IQueryFilter
             sku = "Consumption";
         }
 
-        var skuIds = LogicAppsSupportedData.SkuToSkuIdMap[sku];
-        var skuIdsFilter = string.Join(" or ", skuIds.Select(_ => $"skuId eq '{_}'"));
+        var skuName = LogicAppsSupportedData.SkuToSkuNameMap[sku];
+        var productName = LogicAppsSupportedData.SkuToProductNameMap[sku];
 
-        return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and ({skuIdsFilter})";
+        return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and skuName eq '{skuName}' and productName eq '{productName}'";
     }
 }

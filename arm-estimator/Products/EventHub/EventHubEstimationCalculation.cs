@@ -20,23 +20,19 @@ internal class EventHubEstimationCalculation : BaseEstimation, IEstimationCalcul
 
         foreach (var item in items)
         {
-            // Basic TU
-            if (item.meterId == "177ee643-5434-4c04-ae11-9e01672ed87e")
+            if (item.meterName == "Basic Throughput Unit")
             {
                 estimatedCost += item.retailPrice * HoursInMonth * capacity;
             }
-            // Standard TU
-            else if (item.meterId == "62d94a65-9300-48a6-8c15-0e70fc41eb44")
+            else if (item.meterName == "Standard Throughput Unit")
             {
                 estimatedCost += item.retailPrice * HoursInMonth * capacity;
             }
-            // Processing Unit
-            else if (item.meterId == "49f32255-3f62-545f-92fe-ea7d3cb35088")
+            else if (item.meterName == "Processing Unit")
             {
                 estimatedCost += item.retailPrice * HoursInMonth * capacity;
             }
-            // Capture
-            else if (item.meterId == "36085934-4216-4d15-a257-9670b5eb12dc" && this.change.type == "Microsoft.EventHub/namespaces/eventhubs")
+            else if (item.meterName == "Capture" && this.change.type == "Microsoft.EventHub/namespaces/eventhubs")
             {
                 var parentId = this.id.Parent?.ToString();
                 var parent = changes.Single(_ => _.resourceId == parentId);
@@ -45,8 +41,7 @@ internal class EventHubEstimationCalculation : BaseEstimation, IEstimationCalcul
                 capacity = parentDesiredState?.sku?.capacity;
                 estimatedCost += item.retailPrice * HoursInMonth * capacity;
             }
-            // Dedicated Capacity Unit
-            else if (item.meterId == "61e1c624-5f16-4db3-9da2-991e72892d67")
+            else if (item.meterName == "Dedicated Capacity Unit")
             {
                 estimatedCost += item.retailPrice * HoursInMonth;
             }

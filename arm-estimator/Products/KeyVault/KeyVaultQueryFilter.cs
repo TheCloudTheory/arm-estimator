@@ -35,9 +35,9 @@ internal class KeyVaultQueryFilter : IQueryFilter
             return null;
         }
 
-        var skuIds = KeyVaultSupportedData.SkuToSkuIdMap[sku];
-        var skuIdsFilter = string.Join(" or ", skuIds.Select(_ => $"skuId eq '{_}'"));
+        var skuName = KeyVaultSupportedData.SkuToSkuNameMap[sku];
+        var productName = KeyVaultSupportedData.SkuToProductNameMap[sku];
 
-        return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and ({skuIdsFilter})";
+        return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and skuName eq '{skuName}' and productName eq '{productName}'";
     }
 }

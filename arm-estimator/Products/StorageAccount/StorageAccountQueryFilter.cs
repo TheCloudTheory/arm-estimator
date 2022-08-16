@@ -30,28 +30,7 @@ internal class StorageAccountQueryFilter : IQueryFilter
             return null;
         }
 
-        var skuParts = sku.Split("_");
-        var accountTier = skuParts[0];
-        var replicationType = skuParts[1];
-        var blobAccessTier = "Hot";
-
-        if(this.afterState.properties != null && this.afterState.properties.ContainsKey("accessTier"))
-        {
-            blobAccessTier = this.afterState.properties["accessTier"].ToString();
-        }
-
-        var skuIds = StorageAccountSupportedData.CommonSkuToSkuIdMap[sku].ToList();
-        if (blobAccessTier == "Cool")
-        {
-            skuIds.AddRange(StorageAccountSupportedData.CoolTierSkuIds); 
-        }
-        else
-        {
-            skuIds.AddRange(StorageAccountSupportedData.HotTierSkuIds);
-        }
-
-        var skuIdsFilter = string.Join(" or ", skuIds.Select(_ => $"skuId eq '{_}'"));
-
-        return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and ({skuIdsFilter})";
+        var skuName = StorageAccountSupportedData.CommonSkuToSkuIdMap[sku];
+        return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and skuName eq '{skuName}'";
     }
 }
