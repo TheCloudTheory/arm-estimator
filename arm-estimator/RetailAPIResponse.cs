@@ -14,4 +14,5 @@ internal class RetailItem
     public string? meterId { get; set; }
     public string? meterName { get; set; }
     public string? unitOfMeasure { get; set; }
+    public string? location { get; set; }
 }

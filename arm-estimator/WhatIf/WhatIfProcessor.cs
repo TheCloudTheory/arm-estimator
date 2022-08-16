@@ -245,7 +245,7 @@ internal class WhatIfProcessor
             }
         }
 
-        ReportEstimationToConsole(id, estimation.GetItems(), totalCost, change.changeType, delta);
+        ReportEstimationToConsole(id, estimation.GetItems(), totalCost, change.changeType, delta, data.Items?.FirstOrDefault()?.location);
         return totalCost;
     }
 
@@ -354,12 +354,12 @@ internal class WhatIfProcessor
         return response;
     }
 
-    private void ReportEstimationToConsole(ResourceIdentifier id, IOrderedEnumerable<RetailItem> items, double? totalCost, WhatIfChangeType? changeType, double? delta)
+    private void ReportEstimationToConsole(ResourceIdentifier id, IOrderedEnumerable<RetailItem> items, double? totalCost, WhatIfChangeType? changeType, double? delta, string? location)
     {
         var deltaSign = delta == null ? "+" : delta == 0 ? "" : "-";
         delta = delta == null ? totalCost : 0;
 
-        this.logger.AddEstimatorMessageSensibleToChange(changeType, "{0} ({1}) [Total cost: {2} USD | Delta: {3} USD]", id.Name, id.ResourceType, totalCost?.ToString("N2"), $"{deltaSign}{delta.GetValueOrDefault().ToString("N2")}");
+        this.logger.AddEstimatorMessageSensibleToChange(changeType, "{0} ({1}|{2}) [Total cost: {3} USD | Delta: {4} USD]", id.Name, id.ResourceType, location, totalCost?.ToString("N2"), $"{deltaSign}{delta.GetValueOrDefault().ToString("N2")}");
         this.logger.LogInformation("");
         this.logger.LogInformation("Aggregated metrics:");
         this.logger.LogInformation("");

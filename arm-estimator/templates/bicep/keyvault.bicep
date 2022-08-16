@@ -37,6 +37,45 @@ resource kv3 'Microsoft.KeyVault/managedHSMs@2022-07-01' = {
   }
 }
 
+resource kv4 'Microsoft.KeyVault/vaults@2022-07-01' = {
+  name: 'kv4'
+  location: 'uksouth'
+  properties: {
+    sku: {
+      family: 'A'
+      name: 'standard'
+    }
+    tenantId: '00000000-0000-0000-0000-000000000000'
+  }
+}
+
+resource kv5 'Microsoft.KeyVault/vaults@2022-07-01' = {
+  name: 'kv5'
+  location: 'uksouth'
+  properties: {
+    sku: {
+      family: 'A'
+      name: 'premium'
+    }
+    tenantId: '00000000-0000-0000-0000-000000000000'
+  }
+}
+
+resource kv6 'Microsoft.KeyVault/managedHSMs@2022-07-01' = {
+  name: 'kv6'
+  location: 'uksouth'
+  sku: {
+    name: 'Standard_B1'
+    family: 'B'
+  }
+  properties: {
+    tenantId: '11c43ee8-b9d3-4e51-b73f-bd9dda66e29c'
+    initialAdminObjectIds: [
+      '11c43ee8-b9d3-4e51-b73f-bd9dda66e29c'
+    ]
+  }
+}
+
 // resource kv4 'Microsoft.KeyVault/managedHSMs@2022-07-01' = {
 //   name: 'kv4'
 //   location: 'westeurope'

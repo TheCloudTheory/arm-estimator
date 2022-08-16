@@ -30,7 +30,7 @@ internal class AppServicePlanQueryFilter : IQueryFilter
         }
         else if (IsLogicApp(sku))
         {
-            productNames = AppServicePlanSupportedData.SkuToProductNameLinuxMap[sku];
+            productNames = new[] { "Logic Apps" }; 
         }
         else
         {

@@ -22,6 +22,6 @@ internal class BastionQueryFilter : IQueryFilter
             return null;
         }
 
-        return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and skuName eq '{sku}";
+        return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and skuName eq '{sku}'";
     }
 }

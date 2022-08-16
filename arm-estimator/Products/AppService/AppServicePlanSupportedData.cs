@@ -31,18 +31,16 @@
     public static readonly IReadOnlyDictionary<string, string> SkuToSkuNameMap = new Dictionary<string, string>()
     {
         { "Y1",
-            "DZH318Z0BNWB/000M"
+            "Standard"
         },
         { "EP1",
-            "DZH318Z0BXVK/0007"
-
+            "Premium"
         },
         { "EP2",
-            "DZH318Z0BXVK/0007"
-
+            "Premium"
         },
         { "EP3",
-            "DZH318Z0BXVK/0007"
+            "Premium"
         },
         { "F1",
             "F1"
@@ -99,13 +97,13 @@
             "P3 v3"
         },
         { "WS1",
-            "DZH318Z0BQN4/0039"
+            "Standard"
         },
         { "WS2",
-            "DZH318Z0BQN4/0039"
+            "Standard"
         },
         { "WS3",
-            "DZH318Z0BQN4/0039"
+            "Standard"
         }
     };
 
@@ -212,6 +210,30 @@
             {
                 "Azure App Service Premium v3 Plan"
             }
+        },
+        {
+            "Y1", new[]
+            {
+                "Functions"
+            }
+        },
+        {
+            "EP1", new[]
+            {
+                "Premium Functions"
+            }
+        },
+        {
+            "EP2", new[]
+            {
+                "Premium Functions"
+            }
+        },
+        {
+            "EP3", new[]
+            {
+                "Premium Functions"
+            }
         }
     };
 
@@ -311,6 +333,30 @@
             "P3V3", new[]
             {
                 "Azure App Service Premium v3 Plan - Linux"
+            }
+        },
+        {
+            "Y1", new[]
+            {
+                "Functions"
+            }
+        },
+        {
+            "EP1", new[]
+            {
+                "Premium Functions"
+            }
+        },
+        {
+            "EP2", new[]
+            {
+                "Premium Functions"
+            }
+        },
+        {
+            "EP3", new[]
+            {
+                "Premium Functions"
             }
         }
     };
