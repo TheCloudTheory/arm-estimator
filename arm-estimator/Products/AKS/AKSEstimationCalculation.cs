@@ -19,8 +19,7 @@ internal class AKSEstimationCalculation : BaseEstimation, IEstimationCalculation
         
         foreach(var item in items)
         {
-            // Uptime SLA
-            if(item.meterId == "251a08e1-40d6-48e6-8368-4c3e5ee3bbff")
+            if(item.meterName == "Uptime SLA")
             {
                 estimatedCost += item.retailPrice * HoursInMonth;
             }

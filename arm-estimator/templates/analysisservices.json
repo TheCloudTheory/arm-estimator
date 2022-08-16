@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.3.255.40792",
-      "templateHash": "8422983072053788027"
+      "templateHash": "9899976246111040401"
     }
   },
   "functions": [],
@@ -79,6 +79,18 @@
         "name": "S1",
         "tier": "Standard",
         "capacity": 1
+      },
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.AnalysisServices/servers",
+      "apiVersion": "2017-08-01",
+      "name": "asstandard2",
+      "location": "uksouth",
+      "sku": {
+        "name": "S2",
+        "tier": "Standard",
+        "capacity": 2
       },
       "properties": {}
     }

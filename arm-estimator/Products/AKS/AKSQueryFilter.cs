@@ -28,8 +28,8 @@ internal class AKSQueryFilter : IQueryFilter
             tier = "Free";
         }
 
-        var skuIds = AKSSupportedData.TierToSkuIdMap[tier];
-        var skuIdsFilter = string.Join(" or ", skuIds.Select(_ => $"skuId eq '{_}'"));
+        var skuIds = AKSSupportedData.TierToSkuNameMap[tier];
+        var skuIdsFilter = string.Join(" or ", skuIds.Select(_ => $"skuName eq '{_}'"));
 
         return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and ({skuIdsFilter})";
     }
