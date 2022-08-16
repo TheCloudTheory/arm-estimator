@@ -54,9 +54,10 @@ internal class ApplicationGatewayQueryFilter : IQueryFilter
             return null;
         }
 
-        var skuIds = ApplicationGatewaySupportedData.SkuToSkuIdMap[skuName];
-        var skuIdsFilter = string.Join(" or ", skuIds.Select(_ => $"skuId eq '{_}'"));
+        var skuNameForFilter = ApplicationGatewaySupportedData.SkuToSkuNameMap[skuName];
+        var productNames = ApplicationGatewaySupportedData.SkuToProductNameMap[skuName];
+        var productNamesFilter = string.Join(" or ", productNames.Select(_ => $"productName eq '{_}'"));
 
-        return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and ({skuIdsFilter})";
+        return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and skuName eq '{skuNameForFilter}' and ({productNamesFilter})";
     }
 }

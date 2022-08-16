@@ -19,8 +19,7 @@ internal class AppConfigurationEstimationCalculation : BaseEstimation, IEstimati
 
         foreach (var item in items)
         {
-            // Standard Instances
-            if (item.meterId == "d1c90653-fe4f-4f50-9222-7032c35623b1")
+            if (item.meterName == "Standard Instances")
             {
                 estimatedCost += item.retailPrice * 30;
             }

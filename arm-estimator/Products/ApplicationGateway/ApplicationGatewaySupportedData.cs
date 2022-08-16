@@ -1,47 +1,79 @@
 ﻿internal class ApplicationGatewaySupportedData
 {
-    public static readonly IReadOnlyDictionary<string, string[]> SkuToSkuIdMap = new Dictionary<string, string[]>()
+    public static readonly IReadOnlyDictionary<string, string> SkuToSkuNameMap = new Dictionary<string, string>()
     {
         {
-            "Standard_Small", new[] 
+            "Standard_Small",
+                "Small"
+        },
+        {
+            "Standard_Medium",
+                "Medium"
+        },
+        {
+            "Standard_Large",
+                "Large"
+        },
+        {
+            "Standard_v2",
+                "Standard"
+        },
+        {
+            "WAF_Medium",
+                "Medium"
+        },
+        {
+            "WAF_Large",
+                "Large"
+        },
+        {
+            "WAF_v2",
+                "Standard"
+        }
+    };
+
+    public static readonly IReadOnlyDictionary<string, string[]> SkuToProductNameMap = new Dictionary<string, string[]>()
+    {
+        {
+            "Standard_Small", new[]
             {
-                "DZH318Z0BNXC/0037"
+                "Basic Application Gateway"
             }
         },
         {
             "Standard_Medium", new[]
             {
-                "DZH318Z0BNXC/002R"
+                "Basic Application Gateway"
             }
         },
         {
             "Standard_Large", new[]
             {
-                "DZH318Z0BNXC/000K"
+                "Basic Application Gateway"
             }
         },
         {
             "Standard_v2", new[]
             {
-                "DZH318Z0BSD1/0004"
+                "Application Gateway Standard v2"
             }
         },
         {
             "WAF_Medium", new[]
             {
-                "DZH318Z0BNVT/000V"
+                "WAF Application Gateway"
             }
         },
         {
             "WAF_Large", new[]
             {
-                "DZH318Z0BNVT/0007"
+                "WAF Application Gateway"
             }
         },
         {
             "WAF_v2", new[]
             {
-                "DZH318Z0BSD0/000B"
+                "Application Gateway WAF v2"
             }
         }
     };
