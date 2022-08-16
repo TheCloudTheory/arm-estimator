@@ -1,0 +1,43 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.9.1.41621",
+      "templateHash": "14178405042936441922"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.OperationalInsights/workspaces",
+      "apiVersion": "2020-08-01",
+      "name": "ace-sentinel-wksp",
+      "location": "westeurope",
+      "properties": {
+        "sku": {
+          "name": "PerGB2018"
+        },
+        "retentionInDays": "90"
+      }
+    },
+    {
+      "type": "Microsoft.OperationsManagement/solutions",
+      "apiVersion": "2015-11-01-preview",
+      "name": "SecurityInsights(ace-sentinel-wksp)",
+      "location": "westeurope",
+      "properties": {
+        "workspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', 'ace-sentinel-wksp')]"
+      },
+      "plan": {
+        "name": "SecurityInsights(ace-sentinel-wksp)",
+        "publisher": "Microsoft",
+        "product": "OMSGallery/SecurityInsights",
+        "promotionCode": ""
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.OperationalInsights/workspaces', 'ace-sentinel-wksp')]"
+      ]
+    }
+  ]
+}
