@@ -29,9 +29,9 @@ internal class APIMQueryFilter : IQueryFilter
             return null;
         }
 
-        var skuIds = APIMSupportedData.SkuToSkuIdMap[sku];
-        var skuIdsFilter = string.Join(" or ", skuIds.Select(_ => $"skuId eq '{_}'"));
+        var skuNames = APIMSupportedData.SkuToSkuNameMap[sku];
+        var skuNamesFilter = string.Join(" or ", skuNames.Select(_ => $"skuName eq '{_}'"));
 
-        return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and ({skuIdsFilter})";
+        return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and ({skuNamesFilter})";
     }
 }
