@@ -33,10 +33,10 @@ jobs:
       uses: actions/upload-artifact@v3.1.0
       with:
         name: win-64
-        path: bin/Release/net6.0/publish/win-64
+        path: $GITHUB_WORKSPACE/arm-estimator/bin/Release/net6.0/publish/win-64
     - name: Upload Linux artifact
       uses: actions/upload-artifact@v3.1.0
       with:
         name: linux-64
-        path: bin/Release/net6.0/publish/linux-64
+        path: $GITHUB_WORKSPACE/arm-estimator/bin/Release/net6.0/publish/linux-64
       
