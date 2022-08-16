@@ -28,6 +28,23 @@ arm-estimator.exe <template-path>.json <subscription-id> <resource-group>
 ```
 dotnet arm-estimator <template-path>.json <subscription-id> <resource-group>
 ```
+
+### Parameters
+When using ARM Cost Estimator, you must use the following three required parameters:
+Name|Default value|Example|Description
+---|---|---|---
+template-file|N/A|`some_path/some_file.json`|Path to the template file (must be in JSON format)
+subscription-id|N/A|`11c43ee8-b9d3-4e51-b73f-bd9dda66e29c`|Identifier (GUID) of your subscription
+resource-group|N/A|`mygroup-rg`|Name of the resource group
+
+### Options
+Options are non-mandatory parameters, which provide extended functionality for the project. Detailed information how they work can be found below
+Name|Default value|Example|Description
+---|---|---|---
+--mode|`--mode=Incremental`|`Complete`|Deployment mode used for calculation. Supports `Incremenetal` and `Complete` deployments
+--threshold|`-1`|`--threshold=3000`|Max acceptable estimated cost. Exceeding threshold causes a non-zero exit code to be reported
+--parameters|`null`|`--parameters=some_path/params.parameters.json`|Path to the parameters file (must be in JSON format)
+
 ### Deployment mode
 When performing resource group level deployment there's an option to select a deployment mode. ARM Cost Estimator also supports that option by providing desired value as parameter:
 ```
