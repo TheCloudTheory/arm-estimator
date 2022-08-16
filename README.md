@@ -41,9 +41,9 @@ resource-group|N/A|`mygroup-rg`|Name of the resource group
 Options are non-mandatory parameters, which provide extended functionality for the project. Detailed information how they work can be found below
 Name|Default value|Example|Description
 ---|---|---|---
---mode|`--mode=Incremental`|`Complete`|Deployment mode used for calculation. Supports `Incremenetal` and `Complete` deployments
---threshold|`-1`|`--threshold=3000`|Max acceptable estimated cost. Exceeding threshold causes a non-zero exit code to be reported
---parameters|`null`|`--parameters=some_path/params.parameters.json`|Path to the parameters file (must be in JSON format)
+--mode|`--mode Incremental`|`Complete`|Deployment mode used for calculation. Supports `Incremenetal` and `Complete` deployments
+--threshold|`-1`|`--threshold 3000`|Max acceptable estimated cost. Exceeding threshold causes a non-zero exit code to be reported
+--parameters|`null`|`--parameters some_path/params.parameters.json`|Path to the parameters file (must be in JSON format)
 
 ### Deployment mode
 When performing resource group level deployment there's an option to select a deployment mode. ARM Cost Estimator also supports that option by providing desired value as parameter:
