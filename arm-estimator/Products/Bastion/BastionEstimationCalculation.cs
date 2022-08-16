@@ -29,18 +29,15 @@ internal class BastionEstimationCalculation : BaseEstimation, IEstimationCalcula
 
         foreach (var item in items)
         {
-            // Basic Gateway
-            if (item.meterId == "c6d29001-2ec1-43ce-8ec8-8c753399ff6c")
+            if (item.meterName == "Basic Gateway")
             {
                 estimatedCost += item.retailPrice * HoursInMonth;
             }
-            // Standard Gateway
-            else if (item.meterId == "4836590f-078a-5184-b23a-63ad1c7979cc")
+            else if (item.meterName == "Standard Gateway")
             {
                 estimatedCost += item.retailPrice * HoursInMonth;
             }
-            // Standard Additional Gateway
-            else if (item.meterId == "bd08452f-cf67-539c-baa1-1ef7d6fb13d0")
+            else if (item.meterName == "Standard Additional Gateway")
             {
                 estimatedCost += item.retailPrice * HoursInMonth * scaleUnits;
             }
