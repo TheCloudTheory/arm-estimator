@@ -1,29 +1,25 @@
 ﻿internal class StorageAccountSupportedData
 {
-    public static readonly IReadOnlyDictionary<string, string[]> CommonSkuToSkuIdMap = new Dictionary<string, string[]>()
+    public static readonly IReadOnlyDictionary<string, string> CommonSkuToSkuIdMap = new Dictionary<string, string>()
     {
-        { "Standard_LRS", new[] {
-            "DZH318Z0BNZ5/0056",
-            "DZH318Z0BNZ4/003N"
-            }
+        { "Standard_LRS", 
+            "Standard LRS"
         },
-        { "Standard_GRS", new[] {
-            "DZH318Z0BNZH/004T"
-            }
+        { "Standard_ZRS",
+            "Standard LRS"
         },
-        { "Standard_RAGRS", new[] {
-            ""
-            }
+        { "Standard_GRS",
+            "Standard LRS"
+        },
+        { "Standard_GZRS",
+            "Standard GRS"
+        },
+        { "Standard_RAGRS",
+            "Standard RAGRS"
+        },
+        { "Standard_RAGZRS",
+            "Standard RAGZRS"
         }
     };
 
-    public static readonly string[] HotTierSkuIds = new[]
-    {
-        "DZH318Z0BNZH/004V"
-    };
-
-    public static readonly string[] CoolTierSkuIds = new[]
-    {
-        "DZH318Z0BPH7/00BZ"
-    };
 }

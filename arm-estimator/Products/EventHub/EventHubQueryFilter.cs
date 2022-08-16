@@ -47,14 +47,14 @@ internal class EventHubQueryFilter : IQueryFilter
             return null;
         }
 
-        var skuIds = EventHubSupportedData.SkuToSkuIdMap[sku];
-        var skuIdsFilter = string.Join(" or ", skuIds.Select(_ => $"skuId eq '{_}'"));
+        var skuName = EventHubSupportedData.SkuToSkuNameMap[sku];
+        var skuNameFilter = string.Join(" or ", skuName.Select(_ => $"skuName eq '{_}'"));
 
         if (sku == "Capture")
         {
-            return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and ({skuIdsFilter}) and meterId eq '36085934-4216-4d15-a257-9670b5eb12dc'";
+            return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and ({skuNameFilter}) and meterName eq 'Capture'";
         }
 
-        return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and ({skuIdsFilter})";
+        return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and ({skuNameFilter})";
     }
 }

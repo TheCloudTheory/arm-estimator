@@ -10,9 +10,6 @@ internal class ChaosQueryFilter : IQueryFilter
 
     public string? GetFiltersBasedOnDesiredState(string location)
     {
-        var skuIds = ChaosSupportedData.SkuToSkuIdMap["Basic"];
-        var skuIdsFilter = string.Join(" or ", skuIds.Select(_ => $"skuId eq '{_}'"));
-
-        return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and ({skuIdsFilter})";
+        return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and skuName eq 'Basic'";
     }
 }

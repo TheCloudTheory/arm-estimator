@@ -1,24 +1,18 @@
 ﻿internal class SignalRSupportedData
 {
-    public static readonly IReadOnlyDictionary<string, string[]> SkuToSkuIdMap = new Dictionary<string, string[]>()
+    public static readonly IReadOnlyDictionary<string, string> SkuToSkuNameMap = new Dictionary<string, string>()
     {
         {
-            "Free_F1", new[] 
-            {
-                "DZH318Z0BP4V/0002"
-            }
+            "Free_F1",
+                "Standard"
         },
         {
-            "Standard_S1", new[]
-            {
-                "DZH318Z0BP4V/0002"
-            }
+            "Standard_S1",
+                "Standard"
         },
         {
-            "Premium_P1", new[]
-            {
-                "DZH318Z0BP4V/0023"
-            }
+            "Premium_P1", 
+                "Premium"
         }
     };
 }

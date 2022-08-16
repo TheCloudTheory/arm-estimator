@@ -1,42 +1,30 @@
 ﻿internal class EventHubSupportedData
 {
-    public static readonly IReadOnlyDictionary<string, string[]> SkuToSkuIdMap = new Dictionary<string, string[]>()
+    public static readonly IReadOnlyDictionary<string, string> SkuToSkuNameMap = new Dictionary<string, string>()
     {
         {
-            "Basic", new[] 
-            {
-                "DZH318Z0BQFF/003M"
-            }
+            "Basic",
+                "Basic"
         },
         {
-            "Standard", new[]
-            {
-                "DZH318Z0BQFF/003N"
-            }
+            "Standard",
+                "Standard"
         },
         {
-            "Premium", new[]
-            {
-                "DZH318Z0BQFF/009V"
-            }
+            "Premium",
+                "Premium"
         },
         {
-            "Dedicated", new[]
-            {
-                "DZH318Z0BQFF/003P"
-            }
+            "Dedicated",
+                "Dedicated"
         },
         {
-            "Capture", new[]
-            {
-                "DZH318Z0BQFF/003N"
-            }
+            "Capture",
+                "Capture"
         },
         {
-            "Empty", new[]
-            {
+            "Empty",
                 ""
-            }
         }
     };
 }

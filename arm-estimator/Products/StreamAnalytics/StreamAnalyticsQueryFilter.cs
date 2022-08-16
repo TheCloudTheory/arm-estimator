@@ -35,9 +35,7 @@ internal class StreamAnalyticsQueryFilter : IQueryFilter
             return null;
         }
 
-        var skuIds = StreamAnalyticsSupportedData.SkuToSkuIdMap[sku];
-        var skuIdsFilter = string.Join(" or ", skuIds.Select(_ => $"skuId eq '{_}'"));
-
-        return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and ({skuIdsFilter})";
+        var skuName = StreamAnalyticsSupportedData.SkuToSkuNameMap[sku];
+        return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and skuName eq '{skuName}'";
     }
 }

@@ -24,12 +24,10 @@ internal class SignalRQueryFilter : IQueryFilter
 
         if(sku == "Free_F1")
         {
-            return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and meterId eq '799e5620-1547-45f2-96fe-8df86291fd7c'";
+            return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and meterName eq 'Units - Free'";
         }
 
-        var skuIds = SignalRSupportedData.SkuToSkuIdMap[sku];
-        var skuIdsFilter = string.Join(" or ", skuIds.Select(_ => $"skuId eq '{_}'"));
-
-        return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and ({skuIdsFilter})";
+        var skuName = SignalRSupportedData.SkuToSkuNameMap[sku];
+        return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and skuName eq '{skuName}'";
     }
 }

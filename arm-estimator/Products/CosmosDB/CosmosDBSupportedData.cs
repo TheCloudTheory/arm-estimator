@@ -1,23 +1,23 @@
 ﻿internal class CosmosDBSupportedData
 {
-    public static readonly IReadOnlyDictionary<string, string[]> SkuToSkuIdMap = new Dictionary<string, string[]>()
+    public static readonly IReadOnlyDictionary<string, string[]> SkuToSkuNameMap = new Dictionary<string, string[]>()
     {
         {
             "Account", new[] 
             {
-                "DZH318Z0BPJH/0028"
+                "RUs"
             }
         },
         {
             "Database", new[]
             {
-                "DZH318Z0BPJH/0028"
+                "RUs"
             }
         },
         {
             "Container", new[]
             {
-                "DZH318Z0BPJH/0028"
+                "RUs"
             }
         }
     };

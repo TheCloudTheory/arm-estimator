@@ -19,8 +19,7 @@ internal class ConfidentialLedgerEstimationCalculation : BaseEstimation, IEstima
 
         foreach (var item in items)
         {
-            // Ledger P1 Instance
-            if (item.meterId == "db454beb-e666-5669-94bc-5683d7e5b602")
+            if (item.meterName == "Ledger P1 Instance")
             {
                 estimatedCost += item.retailPrice * HoursInMonth;
             }

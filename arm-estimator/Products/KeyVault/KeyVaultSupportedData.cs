@@ -1,30 +1,34 @@
-﻿internal class KeyVaultSupportedData
+﻿    internal class KeyVaultSupportedData
 {
-    public static readonly IReadOnlyDictionary<string, string[]> SkuToSkuIdMap = new Dictionary<string, string[]>()
+    public static readonly IReadOnlyDictionary<string, string> SkuToSkuNameMap = new Dictionary<string, string>()
     {
         {
-            "standard", new[] 
-            {
-                "DZH318Z0BQG0/003C"
-            }
+            "standard",
+                "Standard"
         },
         {
-            "premium", new[]
-            {
-                "DZH318Z0BQG0/001Z"
-            }
+            "premium",
+                "Premium"
         },
         {
-            "Standard_B1", new[]
-            {
-                "DZH318Z0DHT9/000Z"
-            }
+            "Standard_B1",
+                "Standard B1"
+        }
+    };
+
+    public static readonly IReadOnlyDictionary<string, string> SkuToProductNameMap = new Dictionary<string, string>()
+    {
+        {
+            "standard",
+                "Key Vault"
         },
         {
-            "DZH318Z0BQF5/0004", new[]
-            {
-                "DZH318Z0CHL0/0005"
-            }
+            "premium",
+                "Key Vault"
+        },
+        {
+            "Standard_B1",
+                "Key Vault HSM Pool"
         }
     };
 }

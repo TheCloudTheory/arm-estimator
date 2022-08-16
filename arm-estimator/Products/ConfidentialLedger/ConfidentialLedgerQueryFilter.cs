@@ -10,9 +10,9 @@ internal class ConfidentialLedgerQueryFilter : IQueryFilter
 
     public string? GetFiltersBasedOnDesiredState(string location)
     {
-        var skuIds = ConfidentialLedgerSupportedData.SkuToSkuIdMap["Ledger"];
-        var skuIdsFilter = string.Join(" or ", skuIds.Select(_ => $"skuId eq '{_}'"));
+        var skuNames = ConfidentialLedgerSupportedData.SkuToSkuNameMap["Ledger"];
+        var skuNamesFilter = string.Join(" or ", skuNames.Select(_ => $"skuName eq '{_}'"));
 
-        return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and ({skuIdsFilter})";
+        return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and ({skuNamesFilter})";
     }
 }

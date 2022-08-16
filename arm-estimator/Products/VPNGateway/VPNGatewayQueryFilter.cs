@@ -39,9 +39,6 @@ internal class VPNGatewayQueryFilter : IQueryFilter
             serviceId = ExpressRouteServiceId;
         }
 
-        var skuIds = VPNGatewaySupportedData.SkuToSkuIdMap[sku];
-        var skuIdsFilter = string.Join(" or ", skuIds.Select(_ => $"skuId eq '{_}'"));
-
-        return $"serviceId eq '{serviceId}' and armRegionName eq '{location}' and ({skuIdsFilter})";
+        return $"serviceId eq '{serviceId}' and armRegionName eq '{location}' and skuName eq '{sku}'";
     }
 }
