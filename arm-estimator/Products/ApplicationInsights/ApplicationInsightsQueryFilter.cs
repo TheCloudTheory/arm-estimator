@@ -11,9 +11,9 @@ internal class ApplicationInsightsQueryFilter : IQueryFilter
 
     public string? GetFiltersBasedOnDesiredState(string location)
     {
-        var skuIds = ApplicationInsightsSupportedData.SkuToSkuIdMap["classic"];
-        var skuIdsFilter = string.Join(" or ", skuIds.Select(_ => $"skuId eq '{_}'"));
+        var skuIds = ApplicationInsightsSupportedData.SkuToSkuNameMap["classic"];
+        var skuNamesFilter = string.Join(" or ", skuIds.Select(_ => $"skuName eq '{_}'"));
 
-        return $"(serviceId eq '{ServiceId}' or serviceId eq '{LogAnalyticsServiceId}') and armRegionName eq '{location}' and ({skuIdsFilter})";
+        return $"armRegionName eq '{location}' and ((serviceId eq '{ServiceId}' and ({skuNamesFilter})) or (serviceId eq '{LogAnalyticsServiceId}' and ({skuNamesFilter})))";
     }
 }
