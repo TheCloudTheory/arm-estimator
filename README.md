@@ -104,34 +104,34 @@ Service|Support level|More information
 ----|----|----
 Advanced Data Security|Not Supported|-
 Advanced Threat Protection|Not Supported|-
-AKS|Partial|Estimates work for managed service (both Free / Paid), estimation doesn't include agent pools
-APIM|Full|-
-App Configuration|Full|-
-Application Gateway|Full|-
-Application Insights|Partial|Supports classic mode, doesn't support Enteprise Nodes and Multi-step Web Test
+AKS|In development|Estimates work for managed service (both Free / Paid), estimation doesn't include agent pools
+APIM|Stable|-
+App Configuration|Stable|-
+Application Gateway|Stable|-
+Application Insights|In development|Supports classic mode, doesn't support Enteprise Nodes and Multi-step Web Test
 Active Directory B2C|Not Supported|-
 Active Directory Domain Services|Not Supported|-
-Analysis Services|Full|-
-Azure App Service|Partial|Supports Azure App Service Plans (without Isolated tiers) and Azure Functions (Consumption / Premium / App Service Plan)
-Bastion|Full|-
-Bot Service|Full|-
-Chaos Studio|Full|-
-Cognitive Search|Partial|Doesn't support Document Cracking / Semantic Search / Custom Entity Skills Text Records
-Confidential Ledger|Full|Official pricing will be available September 2022
-Container Apps|Full|-
-Container Registry|Full|-
-Cosmos DB|Partial|Supports only single-region writes with manual throughput provisioning
-Event Hub|Full|-
-Event Grid|Full|-
-Health Bot|Full|-
-Key Vault|Full|Doesn't support Azure Dedicated HSM
-Logic Apps|Partial|Doesn't support ISE scale units
-SignalR|Full|-
-SQL Database|Partial|Supports only Databases (DTU model - Basic & Standard)
-Storage Account|Partial|Supports only StorageV2 (without File Service)
-Stream Analytics|Full|Stream Analytics on Edge requires separate estimation
-Time Series|Full|-
-VPN Gateway|Full|-
+Analysis Services|Stable|-
+Azure App Service|In development|Supports Azure App Service Plans (without Isolated tiers) and Azure Functions (Consumption / Premium / App Service Plan)
+Bastion|Stable|-
+Bot Service|Stable|-
+Chaos Studio|Stable|-
+Cognitive Search|In development|Doesn't support Document Cracking / Semantic Search / Custom Entity Skills Text Records
+Confidential Ledger|Stable|Official pricing will be available September 2022
+Container Apps|Stable|-
+Container Registry|Stable|-
+Cosmos DB|In development|Supports only single-region writes with manual throughput provisioning
+Event Hub|Stable|-
+Event Grid|Stable|-
+Health Bot|Stable|-
+Key Vault|Stable|Doesn't support Azure Dedicated HSM
+Logic Apps|In development|Doesn't support ISE scale units
+SignalR|Stable|-
+SQL Database|In development|Supports only Databases (DTU model - Basic & Standard)
+Storage Account|In development|Supports only StorageV2 (without File Service)
+Stream Analytics|Stable|Stream Analytics on Edge requires separate estimation
+Time Series|Stable|-
+VPN Gateway|Stable|-
 
 ## Contributions
 Contributions are more than welcome!
