@@ -53,13 +53,11 @@ internal class AppServicePlanEstimationCalculation : BaseEstimation, IEstimation
 
         foreach (var item in items)
         {
-            // vCPU Duration (Functions)
-            if (item.meterName == "2099ccfe-9c25-4ae2-9e35-6500db3b8e74")
+            if (item.meterName == "vCPU Duration" && item.productName != "Logic Apps")
             {
                 estimatedCost += item.retailPrice * HoursInMonth * capacity;
             }
-            // Memory Duration (Functions)
-            else if (item.meterName == "8fca9dc0-1307-4b8c-986c-d58505cf1e4b")
+            else if (item.meterName == "Memory Duration" && item.productName != "Logic Apps")
             {
                 estimatedCost += item.retailPrice * HoursInMonth * capacity;
             }
@@ -127,13 +125,11 @@ internal class AppServicePlanEstimationCalculation : BaseEstimation, IEstimation
             {
                 estimatedCost += item.retailPrice * HoursInMonth;
             }
-            // vCPU Duration (LogicApps)
-            if (item.meterName == "031d9d87-a8d3-546a-8a57-9afe80dbb478")
+            else if (item.meterName == "vCPU Duration" && item.productName == "Logic Apps")
             {
                 estimatedCost += item.retailPrice * HoursInMonth * vCpuCapacity;
             }
-            // Memory Duration  (LogicApps)
-            else if (item.meterName == "7824092a-b733-5933-9b38-c06ff544977f")
+            else if (item.meterName == "Memory Duration" && item.productName == "Logic Apps")
             {
                 estimatedCost += item.retailPrice * HoursInMonth * memoryCapacity;
             }
