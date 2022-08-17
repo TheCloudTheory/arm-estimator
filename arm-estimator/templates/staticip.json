@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.3.255.40792",
-      "templateHash": "6822955875993792529"
+      "templateHash": "9480419954107150723"
     }
   },
   "functions": [],
@@ -79,10 +79,10 @@
     {
       "type": "Microsoft.Network/publicIPPrefixes",
       "apiVersion": "2021-02-01",
-      "name": "ace-pip-basic-prefix",
+      "name": "ace-pip-standard-prefix",
       "location": "westeurope",
       "sku": {
-        "name": "Basic",
+        "name": "Standard",
         "tier": "Regional"
       },
       "properties": {
@@ -102,11 +102,11 @@
       "properties": {
         "publicIPAllocationMethod": "Static",
         "publicIPPrefix": {
-          "id": "[resourceId('Microsoft.Network/publicIPPrefixes', 'ace-pip-basic-prefix')]"
+          "id": "[resourceId('Microsoft.Network/publicIPPrefixes', 'ace-pip-standard-prefix')]"
         }
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Network/publicIPPrefixes', 'ace-pip-basic-prefix')]"
+        "[resourceId('Microsoft.Network/publicIPPrefixes', 'ace-pip-standard-prefix')]"
       ]
     }
   ]
