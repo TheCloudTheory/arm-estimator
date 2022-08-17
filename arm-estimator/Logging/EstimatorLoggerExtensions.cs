@@ -20,6 +20,12 @@ internal static class EstimatorLoggerExtensions
         logger.LogInformation("-> {message}", formattedMessage);
     }
 
+    public static void AddEstimatorMessageSubsection(this ILogger logger, string message, params object?[] args)
+    {
+        var formattedMessage = string.Format(message, args);
+        logger.LogInformation("   \\--- {message}", formattedMessage);
+    }
+
     public static void AddEstimatorMessageSensibleToChange(this ILogger logger, WhatIfChangeType? changeType, string message, params object?[] args)
     {
         var formattedMessage = string.Format(message, args);

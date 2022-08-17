@@ -22,7 +22,7 @@ internal class EstimatorLogger : ILogger
             {
                 if (state is ChangeMessage message)
                 {
-                    Console.Write("-> [");
+                    Console.Write("[");
                     Console.ForegroundColor = GetConsoleColorBasedOnChange(message.ChangeType);
                     Console.Write(message.ChangeType);
                     Console.ResetColor();

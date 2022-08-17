@@ -366,7 +366,11 @@ internal class WhatIfProcessor
         var deltaSign = delta == null ? "+" : delta == 0 ? "" : "-";
         delta = delta == null ? totalCost : 0;
 
-        this.logger.AddEstimatorMessageSensibleToChange(changeType, "{0} ({1}|{2}) [Total cost: {3} USD | Delta: {4} USD]", id.Name, id.ResourceType, location, totalCost?.ToString("N2"), $"{deltaSign}{delta.GetValueOrDefault().ToString("N2")}");
+        this.logger.AddEstimatorMessageSensibleToChange(changeType, "{0}", id.Name);
+        this.logger.AddEstimatorMessageSubsection("Type: {0}", id.ResourceType);
+        this.logger.AddEstimatorMessageSubsection("Location: {0}", location);
+        this.logger.AddEstimatorMessageSubsection("Total cost: {0} USD", totalCost?.ToString("N2"));
+        this.logger.AddEstimatorMessageSubsection("Delta: {0} USD", $"{deltaSign}{delta.GetValueOrDefault().ToString("N2")}");
         this.logger.LogInformation("");
         this.logger.LogInformation("Aggregated metrics:");
         this.logger.LogInformation("");
@@ -383,6 +387,8 @@ internal class WhatIfProcessor
             this.logger.LogInformation("No metrics available.");
         }
 
+        this.logger.LogInformation("");
+        this.logger.LogInformation("-------------------------------");
         this.logger.LogInformation("");
     }
 
