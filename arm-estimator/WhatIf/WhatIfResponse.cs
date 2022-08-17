@@ -50,7 +50,13 @@ internal class WhatIfAfterBeforeChange
     public string? kind { get; set; }
     public IDictionary<string, object>? properties { get; set; }
     public string? type { get; set; }
+    public OmsPlan? plan { get; set; }
 
+}
+
+internal class OmsPlan
+{
+    public string? product { get; set; }
 }
 
 internal class WhatIfSku

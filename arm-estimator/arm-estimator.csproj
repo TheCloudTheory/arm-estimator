@@ -90,6 +90,9 @@
     <None Update="templates\sa.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="templates\sentinel.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="templates\signalr.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

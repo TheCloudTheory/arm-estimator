@@ -142,9 +142,11 @@ Event Hub|Stable|-
 Event Grid|Stable|-
 Health Bot|Stable|-
 Key Vault|Stable|Doesn't support Azure Dedicated HSM
+Log Analytics|In development|Estimations doesn't include commitment tiers & logs retention
 Logic Apps|In development|Doesn't support ISE scale units
 Public IP Address|Stable|-
 Public IP Address Prefixes|Stable|-
+Sentinel|In progress|Estimations doesn't include commitment tiers
 SignalR|Stable|-
 SQL Database|In development|Supports only Databases (DTU model - Basic & Standard)
 Storage Account|In development|Supports only StorageV2 (without File Service)
