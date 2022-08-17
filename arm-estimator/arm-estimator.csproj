@@ -93,6 +93,9 @@
     <None Update="templates\signalr.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="templates\staticip.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="templates\streamanalytics.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -55,6 +55,7 @@ internal class WhatIfProcessor
                     break;
                 case "Microsoft.Web/sites":
                     currentChangeCost += 0;
+                    ReportResourceWithoutCost(id, change.changeType);
                     break;
                 case "Microsoft.ContainerService/managedClusters":
                     currentChangeCost += await Calculate<AKSRetailQuery, AKSEstimationCalculation>(change, id);
@@ -64,6 +65,7 @@ internal class WhatIfProcessor
                     break;
                 case "Microsoft.Sql/servers":
                     currentChangeCost += 0;
+                    ReportResourceWithoutCost(id, change.changeType);
                     break;
                 case "Microsoft.Sql/servers/databases":
                     currentChangeCost += await Calculate<SQLRetailQuery, SQLEstimationCalculation>(change, id);
@@ -161,11 +163,17 @@ internal class WhatIfProcessor
                 case "Microsoft.Compute/virtualMachines":
                     currentChangeCost += await Calculate<VirtualMachineRetailQuery, VirtualMachineEstimationCalculation>(change, id);
                     break;
+                case "Microsoft.Network/publicIPPrefixes":
+                    currentChangeCost += 0;
+                    ReportResourceWithoutCost(id, change.changeType);
+                    break;
+                case "Microsoft.Network/publicIPAddresses":
+                    currentChangeCost += await Calculate<PublicIPRetailQuery, PublicIPEstimationCalculation>(change, id);
+                    break;
                 default:
                     logger.LogWarning("{resourceType} is not yet supported.", id?.ResourceType);
                     break;
             }
-
 
             if (change.changeType != WhatIfChangeType.Delete)
             {
@@ -377,5 +385,10 @@ internal class WhatIfProcessor
         }
 
         this.logger.LogInformation("");
+    }
+
+    private void ReportResourceWithoutCost(ResourceIdentifier id, WhatIfChangeType? changeType)
+    {
+        this.logger.AddEstimatorMessageSensibleToChange(changeType, "{0} ({1}) [This resource has not cost associated]", id.Name, id.ResourceType);
     }
 }
