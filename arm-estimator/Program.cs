@@ -90,7 +90,8 @@ internal class Program
                 return;
             }
 
-            logger.AddEstimatorMessage("Detected {0} changes.", whatIfData.properties.changes.Length);
+            logger.AddEstimatorMessage("Detected {0} resources.", whatIfData.properties.changes.Length);
+            logger.LogInformation("");
 
             ReportChangesToConsole(whatIfData.properties.changes, logger);
 

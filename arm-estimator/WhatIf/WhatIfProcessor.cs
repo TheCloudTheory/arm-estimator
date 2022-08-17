@@ -169,6 +169,12 @@ internal class WhatIfProcessor
                 case "Microsoft.Network/publicIPAddresses":
                     currentChangeCost += await Calculate<PublicIPRetailQuery, PublicIPEstimationCalculation>(change, id);
                     break;
+                case "Microsoft.OperationalInsights/workspaces":
+                    currentChangeCost += await Calculate<LogAnalyticsRetailQuery, LogAnalyticsEstimationCalculation>(change, id);
+                    break;
+                case "Microsoft.OperationsManagement/solutions":
+                    currentChangeCost += await Calculate<LogAnalyticsRetailQuery, LogAnalyticsEstimationCalculation>(change, id);
+                    break;
                 default:
                     logger.LogWarning("{resourceType} is not yet supported.", id?.ResourceType);
                     break;
@@ -195,8 +201,6 @@ internal class WhatIfProcessor
             sign = "";
         }
 
-        this.logger.LogInformation("-------------------------------");
-        this.logger.LogInformation("");
         this.logger.LogInformation("Summary:");
         this.logger.LogInformation("");
         this.logger.AddEstimatorMessage("Total cost: {0} USD", totalCost.ToString("N2"));
