@@ -143,6 +143,8 @@ Event Grid|Stable|-
 Health Bot|Stable|-
 Key Vault|Stable|Doesn't support Azure Dedicated HSM
 Logic Apps|In development|Doesn't support ISE scale units
+Public IP Address|Stable|-
+Public IP Address Prefixes|Stable|-
 SignalR|Stable|-
 SQL Database|In development|Supports only Databases (DTU model - Basic & Standard)
 Storage Account|In development|Supports only StorageV2 (without File Service)
