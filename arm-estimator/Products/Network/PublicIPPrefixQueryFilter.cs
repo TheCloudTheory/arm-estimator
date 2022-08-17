@@ -1,14 +1,13 @@
 ﻿using Microsoft.Extensions.Logging;
-using System.Text.Json;
 
-internal class PublicIPQueryFilter : IQueryFilter
+internal class PublicIPPrefixQueryFilter : IQueryFilter
 {
     private const string ServiceId = "DZH314HC0WV9";
 
     private readonly WhatIfAfterBeforeChange afterState;
     private readonly ILogger logger;
 
-    public PublicIPQueryFilter(WhatIfAfterBeforeChange afterState, ILogger logger)
+    public PublicIPPrefixQueryFilter(WhatIfAfterBeforeChange afterState, ILogger logger)
     {
         this.afterState = afterState;
         this.logger = logger;
@@ -35,26 +34,14 @@ internal class PublicIPQueryFilter : IQueryFilter
             sku = "Global";
         }
 
-        var properties = JsonSerializer.Deserialize<PublicIPProperties>(JsonSerializer.Serialize(this.afterState.properties));
         string? metricName;
-        if (sku == "Basic")
+        if (sku == "Standard")
         {
-            if (properties?.publicIPAllocationMethod == "Static")
-            {
-                metricName = "Static Public IP";
-            }
-            else
-            {
-                metricName = "Dynamic Public IP";
-            }
-        }
-        else if (sku == "Standard")
-        {
-            metricName = "Standard IPv4 Static Public IP";
+            metricName = "Standard Static IP Addresses";
         }
         else
         {
-            metricName = "Global IPv4";
+            metricName = "Global Static Public IP";
         }
 
         return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and skuName eq '{sku}' and meterName eq '{metricName}'";

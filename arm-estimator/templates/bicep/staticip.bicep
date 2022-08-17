@@ -54,11 +54,11 @@ resource publicIPAddressGlobal 'Microsoft.Network/publicIPAddresses@2021-02-01' 
   }
 }
 
-resource publicIPPrefixBasic 'Microsoft.Network/publicIPPrefixes@2021-02-01' = {
-  name: 'ace-pip-basic-prefix'
+resource publicIPPrefixStandard 'Microsoft.Network/publicIPPrefixes@2021-02-01' = {
+  name: 'ace-pip-standard-prefix'
   location: 'westeurope'
   sku: {
-    name: 'Basic'
+    name: 'Standard'
     tier: 'Regional'
   }
   properties: {
@@ -77,7 +77,7 @@ resource publicIPAddressBasic 'Microsoft.Network/publicIPAddresses@2021-02-01' =
   properties: {
     publicIPAllocationMethod: 'Static'
     publicIPPrefix: {
-      id: publicIPPrefixBasic.id
+      id: publicIPPrefixStandard.id
     }
   }
 }

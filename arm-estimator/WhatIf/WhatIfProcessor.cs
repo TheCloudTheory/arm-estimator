@@ -164,8 +164,7 @@ internal class WhatIfProcessor
                     currentChangeCost += await Calculate<VirtualMachineRetailQuery, VirtualMachineEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.Network/publicIPPrefixes":
-                    currentChangeCost += 0;
-                    ReportResourceWithoutCost(id, change.changeType);
+                    currentChangeCost += await Calculate<PublicIPPrefixRetailQuery, PublicIPPrefixEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.Network/publicIPAddresses":
                     currentChangeCost += await Calculate<PublicIPRetailQuery, PublicIPEstimationCalculation>(change, id);
