@@ -3,8 +3,8 @@ using Microsoft.Extensions.Logging;
 
 internal class AppConfigurationRetailQuery : BaseRetailQuery, IRetailQuery
 {
-    public AppConfigurationRetailQuery(WhatIfChange change, ResourceIdentifier id, ILogger logger)
-        : base(change, id, logger)
+    public AppConfigurationRetailQuery(WhatIfChange change, ResourceIdentifier id, ILogger logger, CurrencyCode currency)
+        : base(change, id, logger, currency)
     {
     }
 
@@ -24,6 +24,6 @@ internal class AppConfigurationRetailQuery : BaseRetailQuery, IRetailQuery
         }
 
         var filter = new AppConfigurationQueryFilter(change, this.logger).GetFiltersBasedOnDesiredState(location);
-        return $"{BaseQuery}{filter}";
+        return $"{baseQuery}{filter}";
     }
 }

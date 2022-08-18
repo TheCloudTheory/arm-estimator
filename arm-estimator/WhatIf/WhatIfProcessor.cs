@@ -11,11 +11,13 @@ internal class WhatIfProcessor
 
     private readonly ILogger logger;
     private readonly WhatIfChange[] changes;
+    private readonly CurrencyCode currency;
 
-    public WhatIfProcessor(ILogger logger, WhatIfChange[] changes)
+    public WhatIfProcessor(ILogger logger, WhatIfChange[] changes, CurrencyCode currency)
     {
         this.logger = logger;
         this.changes = changes;
+        this.currency = currency;
     }
 
     public async Task<double> Process()
@@ -203,8 +205,8 @@ internal class WhatIfProcessor
 
         this.logger.LogInformation("Summary:");
         this.logger.LogInformation("");
-        this.logger.AddEstimatorMessage("Total cost: {0} USD", totalCost.ToString("N2"));
-        this.logger.AddEstimatorMessage("Delta: {0}{1} USD", sign, alteredCost.ToString("N2"));
+        this.logger.AddEstimatorMessage("Total cost: {0} {1}", totalCost.ToString("N2"), this.currency);
+        this.logger.AddEstimatorMessage("Delta: {0}{1} {2}", sign, alteredCost.ToString("N2"), this.currency);
 
         return totalCost;
     }
@@ -213,7 +215,7 @@ internal class WhatIfProcessor
         where TQuery : BaseRetailQuery, IRetailQuery
         where TCalculation : BaseEstimation, IEstimationCalculation
     {
-        var data = await GetAPIResponse<TQuery>(change, id);
+        var data = await GetRetailAPIResponse<TQuery>(change, id);
         if (data == null || data.Items == null)
         {
             this.logger.LogWarning("Got no records for {type} from Retail API", id.ResourceType);
@@ -260,7 +262,7 @@ internal class WhatIfProcessor
         return totalCost;
     }
 
-    private async Task<RetailAPIResponse?> GetAPIResponse<T>(WhatIfChange change, ResourceIdentifier id) where T : BaseRetailQuery, IRetailQuery
+    private async Task<RetailAPIResponse?> GetRetailAPIResponse<T>(WhatIfChange change, ResourceIdentifier id) where T : BaseRetailQuery, IRetailQuery
     {
         var desiredState = change.after ?? change.before;
         if (desiredState == null || change.resourceId == null)
@@ -274,7 +276,7 @@ internal class WhatIfProcessor
             parentResourceToLocation.Add(change.resourceId, desiredState.location);
         }
 
-        if (Activator.CreateInstance(typeof(T), new object[] { change, id, logger }) is not T query)
+        if (Activator.CreateInstance(typeof(T), new object[] { change, id, logger, this.currency }) is not T query)
         {
             this.logger.LogError("Couldn't create an instance of {type}.", typeof(T));
             return null;
@@ -373,8 +375,8 @@ internal class WhatIfProcessor
         this.logger.AddEstimatorMessageSensibleToChange(changeType, "{0}", id.Name);
         this.logger.AddEstimatorMessageSubsection("Type: {0}", id.ResourceType);
         this.logger.AddEstimatorMessageSubsection("Location: {0}", location);
-        this.logger.AddEstimatorMessageSubsection("Total cost: {0} USD", totalCost?.ToString("N2"));
-        this.logger.AddEstimatorMessageSubsection("Delta: {0} USD", $"{deltaSign}{delta.GetValueOrDefault().ToString("N2")}");
+        this.logger.AddEstimatorMessageSubsection("Total cost: {0} {1}", totalCost?.ToString("N2"), this.currency);
+        this.logger.AddEstimatorMessageSubsection("Delta: {0} {1}", $"{deltaSign}{delta.GetValueOrDefault().ToString("N2")}", this.currency);
         this.logger.LogInformation("");
         this.logger.LogInformation("Aggregated metrics:");
         this.logger.LogInformation("");

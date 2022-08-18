@@ -3,8 +3,8 @@ using Microsoft.Extensions.Logging;
 
 internal class TimeSeriesRetailQuery : BaseRetailQuery, IRetailQuery
 {
-    public TimeSeriesRetailQuery(WhatIfChange change, ResourceIdentifier id, ILogger logger)
-        : base(change, id, logger)
+    public TimeSeriesRetailQuery(WhatIfChange change, ResourceIdentifier id, ILogger logger, CurrencyCode currency)
+        : base(change, id, logger, currency)
     {
     }
 
@@ -24,6 +24,6 @@ internal class TimeSeriesRetailQuery : BaseRetailQuery, IRetailQuery
         }
 
         var filter = new TimeSeriesQueryFilter(change, this.logger).GetFiltersBasedOnDesiredState(location);
-        return $"{BaseQuery}{filter}";
+        return $"{baseQuery}{filter}";
     }
 }

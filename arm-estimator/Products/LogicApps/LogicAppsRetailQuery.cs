@@ -3,8 +3,8 @@ using Microsoft.Extensions.Logging;
 
 internal class LogicAppsRetailQuery : BaseRetailQuery, IRetailQuery
 {
-    public LogicAppsRetailQuery(WhatIfChange change, ResourceIdentifier id, ILogger logger)
-        : base(change, id, logger)
+    public LogicAppsRetailQuery(WhatIfChange change, ResourceIdentifier id, ILogger logger, CurrencyCode currency)
+        : base(change, id, logger, currency)
     {
     }
 
@@ -24,6 +24,6 @@ internal class LogicAppsRetailQuery : BaseRetailQuery, IRetailQuery
         }
 
         var filter = new LogicAppsQueryFilter(change, this.logger).GetFiltersBasedOnDesiredState(location);
-        return $"{BaseQuery}{filter}";
+        return $"{baseQuery}{filter}";
     }
 }

@@ -3,8 +3,8 @@ using Microsoft.Extensions.Logging;
 
 internal class SignalRRetailQuery : BaseRetailQuery, IRetailQuery
 {
-    public SignalRRetailQuery(WhatIfChange change, ResourceIdentifier id, ILogger logger)
-        : base(change, id, logger)
+    public SignalRRetailQuery(WhatIfChange change, ResourceIdentifier id, ILogger logger, CurrencyCode currency)
+        : base(change, id, logger, currency)
     {
     }
 
@@ -24,6 +24,6 @@ internal class SignalRRetailQuery : BaseRetailQuery, IRetailQuery
         }
 
         var filter = new SignalRQueryFilter(change, this.logger).GetFiltersBasedOnDesiredState(location);
-        return $"{BaseQuery}{filter}";
+        return $"{baseQuery}{filter}";
     }
 }

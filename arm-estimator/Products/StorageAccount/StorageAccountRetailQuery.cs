@@ -3,8 +3,8 @@ using Microsoft.Extensions.Logging;
 
 internal class StorageAccountRetailQuery : BaseRetailQuery, IRetailQuery
 {
-    public StorageAccountRetailQuery(WhatIfChange change, ResourceIdentifier id, ILogger logger)
-        : base(change, id, logger)
+    public StorageAccountRetailQuery(WhatIfChange change, ResourceIdentifier id, ILogger logger, CurrencyCode currency)
+        : base(change, id, logger, currency)
     {
     }
 
@@ -24,6 +24,6 @@ internal class StorageAccountRetailQuery : BaseRetailQuery, IRetailQuery
         }
 
         var filter = new StorageAccountQueryFilter(change, this.logger).GetFiltersBasedOnDesiredState(location);
-        return $"{BaseQuery}{filter}";
+        return $"{baseQuery}{filter}";
     }
 }

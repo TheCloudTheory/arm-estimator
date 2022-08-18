@@ -3,8 +3,8 @@ using Microsoft.Extensions.Logging;
 
 internal class CosmosDBRetailQuery : BaseRetailQuery, IRetailQuery
 {
-    public CosmosDBRetailQuery(WhatIfChange change, ResourceIdentifier id, ILogger logger)
-        : base(change, id, logger)
+    public CosmosDBRetailQuery(WhatIfChange change, ResourceIdentifier id, ILogger logger, CurrencyCode currency)
+        : base(change, id, logger, currency)
     {
     }
 
@@ -24,6 +24,6 @@ internal class CosmosDBRetailQuery : BaseRetailQuery, IRetailQuery
         }
 
         var filter = new CosmosDBQueryFilter(change, this.logger).GetFiltersBasedOnDesiredState(location);
-        return $"{BaseQuery}{filter}";
+        return $"{baseQuery}{filter}";
     }
 }

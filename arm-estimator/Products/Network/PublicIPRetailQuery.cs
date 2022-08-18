@@ -3,8 +3,8 @@ using Microsoft.Extensions.Logging;
 
 internal class PublicIPRetailQuery : BaseRetailQuery, IRetailQuery
 {
-    public PublicIPRetailQuery(WhatIfChange change, ResourceIdentifier id, ILogger logger)
-        : base(change, id, logger)
+    public PublicIPRetailQuery(WhatIfChange change, ResourceIdentifier id, ILogger logger, CurrencyCode currency)
+        : base(change, id, logger, currency)
     {
     }
 
@@ -24,6 +24,6 @@ internal class PublicIPRetailQuery : BaseRetailQuery, IRetailQuery
         }
 
         var filter = new PublicIPQueryFilter(change, this.logger).GetFiltersBasedOnDesiredState(location);
-        return $"{BaseQuery}{filter}";
+        return $"{baseQuery}{filter}";
     }
 }

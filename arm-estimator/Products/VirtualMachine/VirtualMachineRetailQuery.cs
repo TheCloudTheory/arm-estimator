@@ -3,8 +3,8 @@ using Microsoft.Extensions.Logging;
 
 internal class VirtualMachineRetailQuery : BaseRetailQuery, IRetailQuery
 {
-    public VirtualMachineRetailQuery(WhatIfChange change, ResourceIdentifier id, ILogger logger)
-        : base(change, id, logger)
+    public VirtualMachineRetailQuery(WhatIfChange change, ResourceIdentifier id, ILogger logger, CurrencyCode currency)
+        : base(change, id, logger, currency)
     {
     }
 
@@ -24,6 +24,6 @@ internal class VirtualMachineRetailQuery : BaseRetailQuery, IRetailQuery
         }
 
         var filter = new VirtualMachineQueryFilter(change, this.logger).GetFiltersBasedOnDesiredState(location);
-        return $"{BaseQuery}{filter}";
+        return $"{baseQuery}{filter}";
     }
 }
