@@ -398,38 +398,38 @@ resource nInter06 'Microsoft.Network/networkInterfaces@2020-06-01' = {
   }
 }
 
-resource VM06 'Microsoft.Compute/virtualMachines@2020-06-01' = {
-  name: 'ace-vm-06'
-  location: 'westeurope'
-  properties: {
-    hardwareProfile: {
-      vmSize: 'Standard_A4m_v2'
-    }
-    osProfile: {
-      computerName: 'acedevtest01'
-      adminUsername: 'DemoUser'
-      adminPassword: 'AzureTest@54321'
-    }
-    storageProfile: {
-      imageReference: {
-        publisher: 'Canonical'
-        offer: 'UbuntuServer'
-        sku: '18.04-LTS'
-        version: 'latest'
-      }
-      osDisk: {
-        createOption: 'FromImage'
-      }
-    }
-    networkProfile: {
-      networkInterfaces: [
-        {
-          id: nInter06.id
-        }
-      ]
-    }
-  }
-}
+// resource VM06 'Microsoft.Compute/virtualMachines@2020-06-01' = {
+//   name: 'ace-vm-06'
+//   location: 'westeurope'
+//   properties: {
+//     hardwareProfile: {
+//       vmSize: 'Standard_A4m_v2'
+//     }
+//     osProfile: {
+//       computerName: 'acedevtest01'
+//       adminUsername: 'DemoUser'
+//       adminPassword: 'AzureTest@54321'
+//     }
+//     storageProfile: {
+//       imageReference: {
+//         publisher: 'Canonical'
+//         offer: 'UbuntuServer'
+//         sku: '18.04-LTS'
+//         version: 'latest'
+//       }
+//       osDisk: {
+//         createOption: 'FromImage'
+//       }
+//     }
+//     networkProfile: {
+//       networkInterfaces: [
+//         {
+//           id: nInter06.id
+//         }
+//       ]
+//     }
+//   }
+// }
 
 // ------------- End of Section ---------------------
 
@@ -463,37 +463,37 @@ resource nInter07 'Microsoft.Network/networkInterfaces@2020-06-01' = {
   }
 }
 
-resource VM07 'Microsoft.Compute/virtualMachines@2020-06-01' = {
-  name: 'ace-vm-07'
-  location: 'westeurope'
-  properties: {
-    hardwareProfile: {
-      vmSize: 'Standard_A8m_v2'
-    }
-    osProfile: {
-      computerName: 'acedevtest01'
-      adminUsername: 'DemoUser'
-      adminPassword: 'AzureTest@54321'
-    }
-    storageProfile: {
-      imageReference: {
-        publisher: 'Canonical'
-        offer: 'UbuntuServer'
-        sku: '18.04-LTS'
-        version: 'latest'
-      }
-      osDisk: {
-        createOption: 'FromImage'
-      }
-    }
-    networkProfile: {
-      networkInterfaces: [
-        {
-          id: nInter07.id
-        }
-      ]
-    }
-  }
-}
+// resource VM07 'Microsoft.Compute/virtualMachines@2020-06-01' = {
+//   name: 'ace-vm-07'
+//   location: 'westeurope'
+//   properties: {
+//     hardwareProfile: {
+//       vmSize: 'Standard_A8m_v2'
+//     }
+//     osProfile: {
+//       computerName: 'acedevtest01'
+//       adminUsername: 'DemoUser'
+//       adminPassword: 'AzureTest@54321'
+//     }
+//     storageProfile: {
+//       imageReference: {
+//         publisher: 'Canonical'
+//         offer: 'UbuntuServer'
+//         sku: '18.04-LTS'
+//         version: 'latest'
+//       }
+//       osDisk: {
+//         createOption: 'FromImage'
+//       }
+//     }
+//     networkProfile: {
+//       networkInterfaces: [
+//         {
+//           id: nInter07.id
+//         }
+//       ]
+//     }
+//   }
+// }
 
 // ------------- End of Section ---------------------

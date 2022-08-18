@@ -4,10 +4,11 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.9.1.41621",
-      "templateHash": "12141340783197511086"
+      "version": "0.3.255.40792",
+      "templateHash": "1886734178280483114"
     }
   },
+  "functions": [],
   "resources": [
     {
       "type": "Microsoft.Network/networkSecurityGroups",
@@ -455,43 +456,6 @@
       ]
     },
     {
-      "type": "Microsoft.Compute/virtualMachines",
-      "apiVersion": "2020-06-01",
-      "name": "ace-vm-06",
-      "location": "westeurope",
-      "properties": {
-        "hardwareProfile": {
-          "vmSize": "Standard_A4m_v2"
-        },
-        "osProfile": {
-          "computerName": "acedevtest01",
-          "adminUsername": "DemoUser",
-          "adminPassword": "AzureTest@54321"
-        },
-        "storageProfile": {
-          "imageReference": {
-            "publisher": "Canonical",
-            "offer": "UbuntuServer",
-            "sku": "18.04-LTS",
-            "version": "latest"
-          },
-          "osDisk": {
-            "createOption": "FromImage"
-          }
-        },
-        "networkProfile": {
-          "networkInterfaces": [
-            {
-              "id": "[resourceId('Microsoft.Network/networkInterfaces', 'ace-nic-06')]"
-            }
-          ]
-        }
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.Network/networkInterfaces', 'ace-nic-06')]"
-      ]
-    },
-    {
       "type": "Microsoft.Network/publicIPAddresses",
       "apiVersion": "2020-06-01",
       "name": "ace-pip-07",
@@ -524,43 +488,6 @@
       "dependsOn": [
         "[resourceId('Microsoft.Network/publicIPAddresses', 'ace-pip-07')]",
         "[resourceId('Microsoft.Network/virtualNetworks', 'ace-vnet')]"
-      ]
-    },
-    {
-      "type": "Microsoft.Compute/virtualMachines",
-      "apiVersion": "2020-06-01",
-      "name": "ace-vm-07",
-      "location": "westeurope",
-      "properties": {
-        "hardwareProfile": {
-          "vmSize": "Standard_A8m_v2"
-        },
-        "osProfile": {
-          "computerName": "acedevtest01",
-          "adminUsername": "DemoUser",
-          "adminPassword": "AzureTest@54321"
-        },
-        "storageProfile": {
-          "imageReference": {
-            "publisher": "Canonical",
-            "offer": "UbuntuServer",
-            "sku": "18.04-LTS",
-            "version": "latest"
-          },
-          "osDisk": {
-            "createOption": "FromImage"
-          }
-        },
-        "networkProfile": {
-          "networkInterfaces": [
-            {
-              "id": "[resourceId('Microsoft.Network/networkInterfaces', 'ace-nic-07')]"
-            }
-          ]
-        }
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.Network/networkInterfaces', 'ace-nic-07')]"
       ]
     }
   ]
