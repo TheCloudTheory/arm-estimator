@@ -177,6 +177,10 @@ internal class WhatIfProcessor
                 case "Microsoft.OperationsManagement/solutions":
                     currentChangeCost += await Calculate<LogAnalyticsRetailQuery, LogAnalyticsEstimationCalculation>(change, id);
                     break;
+                case "Microsoft.Network/networkInterfaces":
+                    currentChangeCost += 0;
+                    ReportResourceWithoutCost(id, change.changeType);
+                    break;
                 default:
                     logger.LogWarning("{resourceType} is not yet supported.", id?.ResourceType);
                     break;
@@ -400,6 +404,11 @@ internal class WhatIfProcessor
 
     private void ReportResourceWithoutCost(ResourceIdentifier id, WhatIfChangeType? changeType)
     {
-        this.logger.AddEstimatorMessageSensibleToChange(changeType, "{0} ({1}) [This resource has not cost associated]", id.Name, id.ResourceType);
+        this.logger.AddEstimatorMessageSensibleToChange(changeType, "{0}", id.Name);
+        this.logger.AddEstimatorMessageSubsection("Type: {0}", id.ResourceType);
+        this.logger.AddEstimatorMessageSubsection("Total cost: Free");
+        this.logger.LogInformation("");
+        this.logger.LogInformation("-------------------------------");
+        this.logger.LogInformation("");
     }
 }
