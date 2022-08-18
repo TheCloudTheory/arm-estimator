@@ -18,10 +18,15 @@ internal class PublicIPQueryFilter : IQueryFilter
     {
         var sku = this.afterState.sku?.name;
         var tier = this.afterState.sku?.tier;
-        if (sku == null || tier == null)
+
+        if (sku == null)
         {
-            this.logger.LogError("Can't create a filter for Public IP Address when SKU is unavailable.");
-            return null;
+            sku = "Basic";
+        }
+
+        if(tier == null)
+        {
+            tier = "Regional";
         }
 
         if (this.afterState.properties == null)
