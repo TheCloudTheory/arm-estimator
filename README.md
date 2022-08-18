@@ -47,6 +47,7 @@ Name|Default value|Example|Description
 --currency|`USD`|`--currency EUR`|Currency code to use for estimations
 
 ### Deployment mode
+##### Available from: alpha2
 When performing resource group level deployment there's an option to select a deployment mode. ARM Cost Estimator also supports that option by providing desired value as parameter:
 ```
 arm-estimator <template-path>.json <subscription-id> <resource-group> --mode Incremental|Complete
@@ -55,6 +56,7 @@ arm-estimator <template-path>.json <subscription-id> <resource-group> --mode Inc
 When parameter is not passed, `Incremental` mode is selected. Selecting `Complete` changes the way estimations work - if there're existing resources in a resource group, they will be considered as up for removal. It'll be noted by ARM Cost Estimator and deducted from the final estimation.
 
 ### Threshold
+##### Available from: alpha3
 With ARM Cost Estimator it's possible to stop your CICD process is projected estimation exceeds your assumptions:
 ```
 arm-estimator <template-path>.json <subscription-id> <resource-group> --threshold <int>
@@ -66,6 +68,7 @@ By using `--threshold` option, you can set an upper limit for infrastructure cos
 Configuring threshold is optional - if you omit it, your CICD process will continue ignoring estimation value.
 
 ### Parameters
+##### Available from: alpha4
 Very often templates contain parameters, which have different values depending on the selected environment. Sometimes you just need to pass a value, which is generated outside your template. ARM Cost Estimator supports parameters in the same way as you'd normally develop them and pass for deployment:
 ```
 arm-estimator <template-path>.json <subscription-id> <resource-group> --parameters <path-to-your-parameters-file>.json
@@ -94,6 +97,7 @@ When using ARM Cost Estimator, you parameters file should look like this:
 Do not transform it to the schema expected by What If API (which expects value of the `parameters` parameter only).
 
 ### Currency
+##### Available from: beta1
 It's possible to use one of the supported currencies to display estimation result in appropriate format:
 ```
 arm-estimator <template-path>.json <subscription-id> <resource-group> --currency EUR
@@ -102,22 +106,22 @@ For now, you can use one of the following currency codes:
 Code|Name
 ---|---
 USD|US dollar
-AUD​|Australian dollar​
-BRL​|Brazilian real​
-CAD|Canadian dollar​
-CHF​|Swiss franc​
-CNY​|Chinese yuan​
-DKK​|Danish krone​
-EUR​|Euro​
-GBP​|British pound​
-INR​|Indian rupee​
-JPY​|Japanese yen​
-KRW​|Korean won​
-NOK​|Norwegian krone​
-NZD​|New Zealand dollar​
-RUB​|Russian ruble​
-SEK​|Swedish krona​
-TWD​|Taiwan dollar​
+AUD|Australian dollar
+BRL|Brazilian real
+CAD|Canadian dollar
+CHF|Swiss franc
+CNY|Chinese yuan
+DKK|Danish krone
+EUR|Euro
+GBP|British pound
+INR|Indian rupee
+JPY|Japanese yen
+KRW|Korean won
+NOK|Norwegian krone
+NZD|New Zealand dollar
+RUB|Russian ruble
+SEK|Swedish krona
+TWD|Taiwan dollar
 
 Support for a given currency depends on capabilities of underlying Azure Retail API. 
 
