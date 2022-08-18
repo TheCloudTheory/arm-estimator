@@ -185,6 +185,10 @@ internal class WhatIfProcessor
                     currentChangeCost += 0;
                     ReportResourceWithoutCost(id, change.changeType);
                     break;
+                case "Microsoft.Network/virtualNetworks":
+                    currentChangeCost += 0;
+                    ReportResourceWithoutCost(id, change.changeType);
+                    break;
                 default:
                     logger.LogWarning("{resourceType} is not yet supported.", id?.ResourceType);
                     break;
