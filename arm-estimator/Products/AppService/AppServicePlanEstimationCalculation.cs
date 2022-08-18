@@ -17,7 +17,7 @@ internal class AppServicePlanEstimationCalculation : BaseEstimation, IEstimation
         double? estimatedCost = 0;
         var items = GetItems();
         var sku = this.change.sku?.name;
-        var capacity = 1;
+        var capacity = this.change.sku?.capacity ?? 1;
         var vCpuCapacity = 1;
         var memoryCapacity = 3.5;
 
@@ -37,7 +37,7 @@ internal class AppServicePlanEstimationCalculation : BaseEstimation, IEstimation
                     memoryCapacity = 14;
                 }
             }
-            else
+            else if (IsSkuOfPremiumFunctions(sku))
             {
                 if (sku.EndsWith("2"))
                 {
@@ -61,69 +61,25 @@ internal class AppServicePlanEstimationCalculation : BaseEstimation, IEstimation
             {
                 estimatedCost += item.retailPrice * HoursInMonth * capacity;
             }
-            else if (item.meterName == "Shared")
+            else if (item.meterName == "Shared"
+                || item.meterName == "B1"
+                || item.meterName == "B2"
+                || item.meterName == "B3"
+                || item.meterName == "S1"
+                || item.meterName == "S2"
+                || item.meterName == "S3"
+                || item.meterName == "P1"
+                || item.meterName == "P2"
+                || item.meterName == "P3"
+                || item.meterName == "P1 v2"
+                || item.meterName == "P2 v2"
+                || item.meterName == "P3 v2"
+                || item.meterName == "P1 v3"
+                || item.meterName == "P2 v3"
+                || item.meterName == "P3 v3"
+                )
             {
-                estimatedCost += item.retailPrice * HoursInMonth;
-            }
-            else if (item.meterName == "B1")
-            {
-                estimatedCost += item.retailPrice * HoursInMonth;
-            }
-            else if (item.meterName == "B2")
-            {
-                estimatedCost += item.retailPrice * HoursInMonth;
-            }
-            else if (item.meterName == "B3")
-            {
-                estimatedCost += item.retailPrice * HoursInMonth;
-            }
-            else if (item.meterName == "S1")
-            {
-                estimatedCost += item.retailPrice * HoursInMonth;
-            }
-            else if (item.meterName == "S2")
-            {
-                estimatedCost += item.retailPrice * HoursInMonth;
-            }
-            else if (item.meterName == "S3")
-            {
-                estimatedCost += item.retailPrice * HoursInMonth;
-            }
-            else if (item.meterName == "P1")
-            {
-                estimatedCost += item.retailPrice * HoursInMonth;
-            }
-            else if (item.meterName == "P2")
-            {
-                estimatedCost += item.retailPrice * HoursInMonth;
-            }
-            else if (item.meterName == "P3")
-            {
-                estimatedCost += item.retailPrice * HoursInMonth;
-            }
-            else if (item.meterName == "P1 v2")
-            {
-                estimatedCost += item.retailPrice * HoursInMonth;
-            }
-            else if (item.meterName == "P2 v2")
-            {
-                estimatedCost += item.retailPrice * HoursInMonth;
-            }
-            else if (item.meterName == "P3 v2")
-            {
-                estimatedCost += item.retailPrice * HoursInMonth;
-            }
-            else if (item.meterName == "P1 v3")
-            {
-                estimatedCost += item.retailPrice * HoursInMonth;
-            }
-            else if (item.meterName == "P2 v3")
-            {
-                estimatedCost += item.retailPrice * HoursInMonth;
-            }
-            else if (item.meterName == "P3 v3")
-            {
-                estimatedCost += item.retailPrice * HoursInMonth;
+                estimatedCost += item.retailPrice * HoursInMonth * capacity;
             }
             else if (item.meterName == "vCPU Duration" && item.productName == "Logic Apps")
             {
@@ -140,6 +96,11 @@ internal class AppServicePlanEstimationCalculation : BaseEstimation, IEstimation
         }
 
         return estimatedCost == null ? 0 : (double)estimatedCost;
+    }
+
+    private bool IsSkuOfPremiumFunctions(string sku)
+    {
+        return sku.StartsWith("EP");
     }
 
     private static bool IsSkuOfLogicApp(string sku)

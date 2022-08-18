@@ -103,3 +103,15 @@ resource asp10 'Microsoft.Web/serverfarms@2022-03-01' = {
     reserved: true
   }
 }
+
+resource basicwithcapacity 'Microsoft.Web/serverfarms@2022-03-01' = {
+  name: 'basic-with-capacity'
+  location: 'westeurope'
+  sku: {
+    name: 'B1'
+    capacity: 3
+  }
+  properties: {
+    reserved: true
+  }
+}
