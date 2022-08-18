@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.3.255.40792",
-      "templateHash": "1164215361447774458"
+      "templateHash": "805825862655191934"
     }
   },
   "functions": [],
@@ -111,6 +111,19 @@
       "location": "uksouth",
       "sku": {
         "name": "S2"
+      },
+      "properties": {
+        "reserved": true
+      }
+    },
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2022-03-01",
+      "name": "basic-with-capacity",
+      "location": "westeurope",
+      "sku": {
+        "name": "B1",
+        "capacity": 3
       },
       "properties": {
         "reserved": true
