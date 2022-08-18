@@ -44,6 +44,7 @@ Name|Default value|Example|Description
 --mode|`--mode Incremental`|`Complete`|Deployment mode used for calculation. Supports `Incremenetal` and `Complete` deployments
 --threshold|`-1`|`--threshold 3000`|Max acceptable estimated cost. Exceeding threshold causes a non-zero exit code to be reported
 --parameters|`null`|`--parameters some_path/params.parameters.json`|Path to the parameters file (must be in JSON format)
+--currency|`USD`|`--currency EUR`|Currency code to use for estimations
 
 ### Deployment mode
 When performing resource group level deployment there's an option to select a deployment mode. ARM Cost Estimator also supports that option by providing desired value as parameter:
@@ -92,6 +93,34 @@ When using ARM Cost Estimator, you parameters file should look like this:
 
 Do not transform it to the schema expected by What If API (which expects value of the `parameters` parameter only).
 
+### Currency
+It's possible to use one of the supported currencies to display estimation result in appropriate format:
+```
+arm-estimator <template-path>.json <subscription-id> <resource-group> --currency EUR
+```
+For now, you can use one of the following currency codes:
+Code|Name
+---|---
+USD|US dollar
+AUD​|Australian dollar​
+BRL​|Brazilian real​
+CAD|Canadian dollar​
+CHF​|Swiss franc​
+CNY​|Chinese yuan​
+DKK​|Danish krone​
+EUR​|Euro​
+GBP​|British pound​
+INR​|Indian rupee​
+JPY​|Japanese yen​
+KRW​|Korean won​
+NOK​|Norwegian krone​
+NZD​|New Zealand dollar​
+RUB​|Russian ruble​
+SEK​|Swedish krona​
+TWD​|Taiwan dollar​
+
+Support for a given currency depends on capabilities of underlying Azure Retail API. 
+
 ## Main features
 * Detailed output containing information about cost of your infrastructure and metrics used for calculation
 * Seamless integration with ARM Templates and Bicep (with a little help of Bicep CLI)
@@ -104,6 +133,7 @@ Do not transform it to the schema expected by What If API (which expects value o
 * An option to stop CICD process if estimations exceed given limit (see `Usage` section)
 * Supports passing parameters along with your template
 * Handles extension resources as long as they're correctly configured (i.e. define `scope` parameter)
+* Supports 17 different currencies
 
 ## Known limitations
 ARM Cost Estimator is currently in `alpha` development phase meaning there're no guarantees for stable interface and many features are still in design or planning phase. The main limitations as for now are:
