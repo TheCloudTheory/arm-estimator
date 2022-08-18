@@ -3,8 +3,8 @@ using Microsoft.Extensions.Logging;
 
 internal class APIMRetailQuery : BaseRetailQuery, IRetailQuery
 {
-    public APIMRetailQuery(WhatIfChange change, ResourceIdentifier id, ILogger logger)
-        : base(change, id, logger)
+    public APIMRetailQuery(WhatIfChange change, ResourceIdentifier id, ILogger logger, CurrencyCode currency)
+        : base(change, id, logger, currency)
     {
     }
 
@@ -24,6 +24,6 @@ internal class APIMRetailQuery : BaseRetailQuery, IRetailQuery
         }
 
         var filter = new APIMQueryFilter(change, this.logger).GetFiltersBasedOnDesiredState(location);
-        return $"{BaseQuery}{filter}";
+        return $"{baseQuery}{filter}";
     }
 }

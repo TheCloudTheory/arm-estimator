@@ -3,8 +3,8 @@ using Microsoft.Extensions.Logging;
 
 internal class EventGridRetailQuery : BaseRetailQuery, IRetailQuery
 {
-    public EventGridRetailQuery(WhatIfChange change, ResourceIdentifier id, ILogger logger)
-        : base(change, id, logger)
+    public EventGridRetailQuery(WhatIfChange change, ResourceIdentifier id, ILogger logger, CurrencyCode currency)
+        : base(change, id, logger, currency)
     {
     }
 
@@ -24,6 +24,6 @@ internal class EventGridRetailQuery : BaseRetailQuery, IRetailQuery
         }
 
         var filter = new EventGridQueryFilter(change, this.logger).GetFiltersBasedOnDesiredState(location);
-        return $"{BaseQuery}{filter}";
+        return $"{baseQuery}{filter}";
     }
 }

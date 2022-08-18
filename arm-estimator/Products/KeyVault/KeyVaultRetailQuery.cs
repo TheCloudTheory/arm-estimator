@@ -3,8 +3,8 @@ using Microsoft.Extensions.Logging;
 
 internal class KeyVaultRetailQuery : BaseRetailQuery, IRetailQuery
 {
-    public KeyVaultRetailQuery(WhatIfChange change, ResourceIdentifier id, ILogger logger)
-        : base(change, id, logger)
+    public KeyVaultRetailQuery(WhatIfChange change, ResourceIdentifier id, ILogger logger, CurrencyCode currency)
+        : base(change, id, logger, currency)
     {
     }
 
@@ -24,6 +24,6 @@ internal class KeyVaultRetailQuery : BaseRetailQuery, IRetailQuery
         }
 
         var filter = new KeyVaultQueryFilter(change, this.logger).GetFiltersBasedOnDesiredState(location);
-        return $"{BaseQuery}{filter}";
+        return $"{baseQuery}{filter}";
     }
 }

@@ -3,8 +3,8 @@ using Microsoft.Extensions.Logging;
 
 internal class ChaosRetailQuery : BaseRetailQuery, IRetailQuery
 {
-    public ChaosRetailQuery(WhatIfChange change, ResourceIdentifier id, ILogger logger)
-        : base(change, id, logger)
+    public ChaosRetailQuery(WhatIfChange change, ResourceIdentifier id, ILogger logger, CurrencyCode currency)
+        : base(change, id, logger, currency)
     {
     }
 
@@ -24,6 +24,6 @@ internal class ChaosRetailQuery : BaseRetailQuery, IRetailQuery
         }
 
         var filter = new ChaosQueryFilter(change, this.logger).GetFiltersBasedOnDesiredState(location);
-        return $"{BaseQuery}{filter}";
+        return $"{baseQuery}{filter}";
     }
 }

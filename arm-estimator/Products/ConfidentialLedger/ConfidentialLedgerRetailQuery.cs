@@ -3,8 +3,8 @@ using Microsoft.Extensions.Logging;
 
 internal class ConfidentialLedgerRetailQuery : BaseRetailQuery, IRetailQuery
 {
-    public ConfidentialLedgerRetailQuery(WhatIfChange change, ResourceIdentifier id, ILogger logger)
-        : base(change, id, logger)
+    public ConfidentialLedgerRetailQuery(WhatIfChange change, ResourceIdentifier id, ILogger logger, CurrencyCode currency)
+        : base(change, id, logger, currency)
     {
     }
 
@@ -24,6 +24,6 @@ internal class ConfidentialLedgerRetailQuery : BaseRetailQuery, IRetailQuery
         }
 
         var filter = new ConfidentialLedgerQueryFilter(change, this.logger).GetFiltersBasedOnDesiredState(location);
-        return $"{BaseQuery}{filter}";
+        return $"{baseQuery}{filter}";
     }
 }

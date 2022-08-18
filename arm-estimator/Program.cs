@@ -1,7 +1,6 @@
 ﻿using Azure.Core;
 using Microsoft.Extensions.Logging;
 using System.CommandLine;
-using System.Diagnostics;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.RegularExpressions;
@@ -18,22 +17,25 @@ internal class Program
         var deploymentModeOption = new Option<DeploymentMode>("--mode", () => { return DeploymentMode.Incremental; }, "Deployment mode");
         var thresholdOption = new Option<int>("--threshold", () => { return -1; }, "Estimation threshold");
         var parametersOption = new Option<FileInfo?>("--parameters", () => { return null; }, "Path to a file containing values of template parameters");
+        var currencyOption = new Option<CurrencyCode>("--currency", () => { return CurrencyCode.USD; }, "Currency code");
 
         var command = new RootCommand("Azure Resource Manager cost estimator.");
         command.AddOption(deploymentModeOption);
         command.AddOption(thresholdOption);
         command.AddOption(parametersOption);
+        command.AddOption(currencyOption);
         command.AddArgument(templateFileArg);
         command.AddArgument(susbcriptionIdArg);
         command.AddArgument(resourceGroupArg);
-        command.SetHandler(async (file, subscription, resourceGroup, deploymentMode, threshold, parametersFilePath) =>
-            await Estimate(file, subscription, resourceGroup, deploymentMode, threshold, parametersFilePath), 
+        command.SetHandler(async (file, subscription, resourceGroup, deploymentMode, threshold, parametersFilePath, currency) =>
+            await Estimate(file, subscription, resourceGroup, deploymentMode, threshold, parametersFilePath, currency), 
             templateFileArg, 
             susbcriptionIdArg, 
             resourceGroupArg, 
             deploymentModeOption,
             thresholdOption,
-            parametersOption);
+            parametersOption,
+            currencyOption);
 
         return await command.InvokeAsync(args);
     }
@@ -44,7 +46,8 @@ internal class Program
         string resourceGroupName, 
         DeploymentMode deploymentMode,
         int threshold,
-        FileInfo? parametersFile)
+        FileInfo? parametersFile,
+        CurrencyCode currency)
     {
         using (var loggerFactory = LoggerFactory.Create(builder =>
         {
@@ -54,7 +57,7 @@ internal class Program
         {
             var logger = loggerFactory.CreateLogger<Program>();
             DisplayWelcomeScreen(logger);
-            DisplayUsedSettings(logger, file, subscriptionId, resourceGroupName, deploymentMode, threshold, parametersFile);
+            DisplayUsedSettings(logger, file, subscriptionId, resourceGroupName, deploymentMode, threshold, parametersFile, currency);
 
             var template = Regex.Replace(File.ReadAllText(file.FullName), @"\s+", string.Empty);  // Make JSON a single-line value
             var parameters = "{}";
@@ -99,7 +102,7 @@ internal class Program
             logger.LogInformation("-------------------------------");
             logger.LogInformation("");
 
-            var totalCost = await new WhatIfProcessor(logger, whatIfData.properties.changes).Process();
+            var totalCost = await new WhatIfProcessor(logger, whatIfData.properties.changes, currency).Process();
             if (threshold != -1 && totalCost > threshold)
             {
                 logger.LogError("Estimated cost [{totalCost} USD] exceeds configured threshold [{threshold} USD].", totalCost, threshold);
@@ -120,7 +123,14 @@ internal class Program
         logger.LogInformation("");
     }
 
-    private static void DisplayUsedSettings(ILogger<Program> logger, FileInfo templateFile, string subscriptionId, string resourceGroupName, DeploymentMode deploymentMode, int threshold, FileInfo? parametersFile)
+    private static void DisplayUsedSettings(ILogger<Program> logger,
+                                            FileInfo templateFile,
+                                            string subscriptionId,
+                                            string resourceGroupName,
+                                            DeploymentMode deploymentMode,
+                                            int threshold,
+                                            FileInfo? parametersFile,
+                                            CurrencyCode currency)
     {
         logger.LogInformation("Run configuration:");
         logger.LogInformation("");
@@ -130,6 +140,7 @@ internal class Program
         logger.AddEstimatorMessage("Deployment mode: {0}", deploymentMode);
         logger.AddEstimatorMessage("Threshold: {0}", threshold == -1 ? "Not Set" : threshold.ToString());
         logger.AddEstimatorMessage("Parameters file: {0}", parametersFile?.Name ?? "Not Set");
+        logger.AddEstimatorMessage("Currency: {0}", currency);
         logger.LogInformation("");
         logger.LogInformation("------------------------------");
         logger.LogInformation("");

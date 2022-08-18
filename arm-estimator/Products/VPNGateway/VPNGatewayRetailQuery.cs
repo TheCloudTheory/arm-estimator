@@ -3,8 +3,8 @@ using Microsoft.Extensions.Logging;
 
 internal class VPNGatewayRetailQuery : BaseRetailQuery, IRetailQuery
 {
-    public VPNGatewayRetailQuery(WhatIfChange change, ResourceIdentifier id, ILogger logger)
-        : base(change, id, logger)
+    public VPNGatewayRetailQuery(WhatIfChange change, ResourceIdentifier id, ILogger logger, CurrencyCode currency)
+        : base(change, id, logger, currency)
     {
     }
 
@@ -24,6 +24,6 @@ internal class VPNGatewayRetailQuery : BaseRetailQuery, IRetailQuery
         }
 
         var filter = new VPNGatewayQueryFilter(change, this.logger).GetFiltersBasedOnDesiredState(location);
-        return $"{BaseQuery}{filter}";
+        return $"{baseQuery}{filter}";
     }
 }

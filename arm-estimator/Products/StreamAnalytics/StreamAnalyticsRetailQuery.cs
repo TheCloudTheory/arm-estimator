@@ -3,8 +3,8 @@ using Microsoft.Extensions.Logging;
 
 internal class StreamAnalyticsRetailQuery : BaseRetailQuery, IRetailQuery
 {
-    public StreamAnalyticsRetailQuery(WhatIfChange change, ResourceIdentifier id, ILogger logger)
-        : base(change, id, logger)
+    public StreamAnalyticsRetailQuery(WhatIfChange change, ResourceIdentifier id, ILogger logger, CurrencyCode currency)
+        : base(change, id, logger, currency)
     {
     }
 
@@ -24,6 +24,6 @@ internal class StreamAnalyticsRetailQuery : BaseRetailQuery, IRetailQuery
         }
 
         var filter = new StreamAnalyticsQueryFilter(change, this.logger).GetFiltersBasedOnDesiredState(location);
-        return $"{BaseQuery}{filter}";
+        return $"{baseQuery}{filter}";
     }
 }
