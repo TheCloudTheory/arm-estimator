@@ -1,5 +1,6 @@
 ﻿using Azure.Core;
 using Microsoft.Extensions.Logging;
+using System.Net;
 using System.Text;
 using System.Text.Json;
 
@@ -340,6 +341,11 @@ internal class WhatIfProcessor
         else
         {
             var response = await GetRetailDataResponse(url);
+            if(response.IsSuccessStatusCode == false)
+            {
+                return null;
+            }
+
             data = JsonSerializer.Deserialize<RetailAPIResponse>(await response.Content.ReadAsStreamAsync());
 
             if (data != null)
@@ -375,8 +381,15 @@ internal class WhatIfProcessor
         var request = new HttpRequestMessage(HttpMethod.Get, url);
         var response = await httpClient.Value.SendAsync(request);
 
-        response.EnsureSuccessStatusCode();
-        return response;
+        if (response.StatusCode == HttpStatusCode.BadRequest)
+        {
+            return response;
+        }
+        else
+        {
+            response.EnsureSuccessStatusCode();
+            return response;
+        }
     }
 
     private void ReportEstimationToConsole(ResourceIdentifier id, IOrderedEnumerable<RetailItem> items, double? totalCost, WhatIfChangeType? changeType, double? delta, string? location)
