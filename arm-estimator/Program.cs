@@ -18,36 +18,35 @@ internal class Program
         var thresholdOption = new Option<int>("--threshold", () => { return -1; }, "Estimation threshold");
         var parametersOption = new Option<FileInfo?>("--parameters", () => { return null; }, "Path to a file containing values of template parameters");
         var currencyOption = new Option<CurrencyCode>("--currency", () => { return CurrencyCode.USD; }, "Currency code");
+        var jsonOutputOption = new Option<bool>("--generateJsonOutput", () => { return false; }, "Should generate JSON output");
 
         var command = new RootCommand("Azure Resource Manager cost estimator.");
         command.AddOption(deploymentModeOption);
         command.AddOption(thresholdOption);
         command.AddOption(parametersOption);
         command.AddOption(currencyOption);
+        command.AddOption(jsonOutputOption);
         command.AddArgument(templateFileArg);
         command.AddArgument(susbcriptionIdArg);
         command.AddArgument(resourceGroupArg);
-        command.SetHandler(async (file, subscription, resourceGroup, deploymentMode, threshold, parametersFilePath, currency) =>
-            await Estimate(file, subscription, resourceGroup, deploymentMode, threshold, parametersFilePath, currency), 
-            templateFileArg, 
-            susbcriptionIdArg, 
-            resourceGroupArg, 
+        command.SetHandler(async (file, subscription, resourceGroup, deploymentMode, threshold, parametersFilePath, currency, shouldGenerateOutput) =>
+        {
+            var options = new EstimateOptions(file, subscription, resourceGroup, deploymentMode, threshold, parametersFilePath, currency, shouldGenerateOutput);
+            await Estimate(options);
+        },
+            templateFileArg,
+            susbcriptionIdArg,
+            resourceGroupArg,
             deploymentModeOption,
             thresholdOption,
             parametersOption,
-            currencyOption);
+            currencyOption,
+            jsonOutputOption);
 
         return await command.InvokeAsync(args);
     }
 
-    private static async Task Estimate(
-        FileInfo file, 
-        string subscriptionId, 
-        string resourceGroupName, 
-        DeploymentMode deploymentMode,
-        int threshold,
-        FileInfo? parametersFile,
-        CurrencyCode currency)
+    private static async Task Estimate(EstimateOptions options)
     {
         using (var loggerFactory = LoggerFactory.Create(builder =>
         {
@@ -57,17 +56,17 @@ internal class Program
         {
             var logger = loggerFactory.CreateLogger<Program>();
             DisplayWelcomeScreen(logger);
-            DisplayUsedSettings(logger, file, subscriptionId, resourceGroupName, deploymentMode, threshold, parametersFile, currency);
+            DisplayUsedSettings(logger, options);
 
-            var template = Regex.Replace(File.ReadAllText(file.FullName), @"\s+", string.Empty);  // Make JSON a single-line value
+            var template = Regex.Replace(File.ReadAllText(options.TemplateFile.FullName), @"\s+", string.Empty);  // Make JSON a single-line value
             var parameters = "{}";
 
-            if (parametersFile != null)
+            if (options.ParametersFile != null)
             {
-                parameters = Regex.Replace(File.ReadAllText(parametersFile.FullName), @"\s+", string.Empty);
+                parameters = Regex.Replace(File.ReadAllText(options.ParametersFile.FullName), @"\s+", string.Empty);
             }
 
-            var handler = new AzureWhatIfHandler(subscriptionId, resourceGroupName, template, deploymentMode, parameters, logger);
+            var handler = new AzureWhatIfHandler(options.SubscriptionId, options.ResourceGroupName, template, options.Mode, parameters, logger);
             var whatIfData = await handler.GetResponseWithRetries();
 
             if (whatIfData != null && whatIfData.status == "Failed")
@@ -102,10 +101,10 @@ internal class Program
             logger.LogInformation("-------------------------------");
             logger.LogInformation("");
 
-            var totalCost = await new WhatIfProcessor(logger, whatIfData.properties.changes, currency).Process();
-            if (threshold != -1 && totalCost > threshold)
+            var totalCost = await new WhatIfProcessor(logger, whatIfData.properties.changes, options.Currency).Process();
+            if (options.Threshold != -1 && totalCost > options.Threshold)
             {
-                logger.LogError("Estimated cost [{totalCost} USD] exceeds configured threshold [{threshold} USD].", totalCost, threshold);
+                logger.LogError("Estimated cost [{totalCost} USD] exceeds configured threshold [{threshold} USD].", totalCost, options.Threshold);
                 Environment.Exit(1);
             }
         }
@@ -123,24 +122,18 @@ internal class Program
         logger.LogInformation("");
     }
 
-    private static void DisplayUsedSettings(ILogger<Program> logger,
-                                            FileInfo templateFile,
-                                            string subscriptionId,
-                                            string resourceGroupName,
-                                            DeploymentMode deploymentMode,
-                                            int threshold,
-                                            FileInfo? parametersFile,
-                                            CurrencyCode currency)
+    private static void DisplayUsedSettings(ILogger<Program> logger, EstimateOptions options)
     {
         logger.LogInformation("Run configuration:");
         logger.LogInformation("");
-        logger.AddEstimatorMessage("SubscriptionId: {0}", subscriptionId);
-        logger.AddEstimatorMessage("Resource group: {0}", resourceGroupName);
-        logger.AddEstimatorMessage("Template file: {0}", templateFile);
-        logger.AddEstimatorMessage("Deployment mode: {0}", deploymentMode);
-        logger.AddEstimatorMessage("Threshold: {0}", threshold == -1 ? "Not Set" : threshold.ToString());
-        logger.AddEstimatorMessage("Parameters file: {0}", parametersFile?.Name ?? "Not Set");
-        logger.AddEstimatorMessage("Currency: {0}", currency);
+        logger.AddEstimatorMessage("SubscriptionId: {0}", options.SubscriptionId);
+        logger.AddEstimatorMessage("Resource group: {0}", options.ResourceGroupName);
+        logger.AddEstimatorMessage("Template file: {0}", options.TemplateFile);
+        logger.AddEstimatorMessage("Deployment mode: {0}", options.Mode);
+        logger.AddEstimatorMessage("Threshold: {0}", options.Threshold == -1 ? "Not Set" : options.Threshold.ToString());
+        logger.AddEstimatorMessage("Parameters file: {0}", options.ParametersFile?.Name ?? "Not Set");
+        logger.AddEstimatorMessage("Currency: {0}", options.Currency);
+        logger.AddEstimatorMessage("Generate JSON output?: {0}", options.ShouldGenerateOutput);
         logger.LogInformation("");
         logger.LogInformation("------------------------------");
         logger.LogInformation("");
@@ -152,7 +145,7 @@ internal class Program
         {
             if (change == null) continue;
 
-            if(change.resourceId == null)
+            if (change.resourceId == null)
             {
                 logger.LogWarning("Couldn't find resource ID.");
                 continue;
