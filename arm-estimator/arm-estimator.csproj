@@ -42,6 +42,9 @@
     <None Update="templates\appserviceplan.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="templates\backup.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="templates\bastion.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
