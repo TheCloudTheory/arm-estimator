@@ -190,6 +190,16 @@ internal class WhatIfProcessor
                     currentChangeCost += 0;
                     ReportResourceWithoutCost(id, change.changeType);
                     break;
+                case "Microsoft.RecoveryServices/vaults/backupPolicies":
+                    currentChangeCost += 0;
+                    ReportResourceWithoutCost(id, change.changeType);
+                    break;
+                case "Microsoft.RecoveryServices/vaults":
+                    currentChangeCost += await Calculate<RecoveryServicesRetailQuery, RecoveryServicesEstimationCalculation>(change, id);
+                    break;
+                case "Microsoft.RecoveryServices/vaults/backupFabrics/protectionContainers/protectedItems":
+                    currentChangeCost += await Calculate<RecoveryServicesProtectedItemRetailQuery, RecoveryServicesProtectedItemEstimationCalculation>(change, id);
+                    break;
                 default:
                     logger.LogWarning("{resourceType} is not yet supported.", id?.ResourceType);
                     break;
