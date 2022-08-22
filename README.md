@@ -175,7 +175,7 @@ If that option is set to `true`, once all data is obtained, a JSON file is creat
 Name of the file contains a UTC timestamp - `ace_estimation_yyyyMMddHHssmm.json` - but the file is overwritten if the same timestamp would be used twice.
 
 ## Known limitations
-ARM Cost Estimator is currently in `alpha` development phase meaning there're no guarantees for stable interface and many features are still in design or planning phase. The main limitations as for now are:
+ARM Cost Estimator is currently in `beta` development phase meaning there're no guarantees for stable interface and some features are still in design or planning phase. The main limitations as for now are:
 * You can use the project only with a resource group as deployment scope
 * Some services are in TBD state (see below for more information)
 * There's no possibility to define custom usage patterns so some metrics (mainly those described as price per second / hour / day) are projected for full month
