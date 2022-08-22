@@ -21,14 +21,15 @@ internal class WhatIfProcessor
         this.currency = currency;
     }
 
-    public async Task<double> Process()
+    public async Task<EstimationOutput> Process()
     {
         double totalCost = 0;
-        double alteredCost = 0;
+        double delta = 0;
 
         this.logger.LogInformation("Estimations:");
         this.logger.LogInformation("");
 
+        var resources = new List<EstimatedResourceData>();
         foreach (WhatIfChange change in this.changes)
         {
             if (change.resourceId == null)
@@ -44,184 +45,181 @@ internal class WhatIfProcessor
             }
 
             var id = new ResourceIdentifier(change.resourceId);
-            double currentChangeCost = 0;
+            EstimatedResourceData? resource = null;
             switch (id?.ResourceType)
             {
                 case "Microsoft.Storage/storageAccounts":
-                    currentChangeCost += await Calculate<StorageAccountRetailQuery, StorageAccountEstimationCalculation>(change, id);
+                    resource = await Calculate<StorageAccountRetailQuery, StorageAccountEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.ContainerRegistry/registries":
-                    currentChangeCost += await Calculate<ContainerRegistryRetailQuery, ContainerRegistryEstimationCalculation>(change, id);
+                    resource = await Calculate<ContainerRegistryRetailQuery, ContainerRegistryEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.Web/serverfarms":
-                    currentChangeCost += await Calculate<AppServicePlanRetailQuery, AppServicePlanEstimationCalculation>(change, id);
+                    resource = await Calculate<AppServicePlanRetailQuery, AppServicePlanEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.Web/sites":
-                    currentChangeCost += 0;
                     ReportResourceWithoutCost(id, change.changeType);
                     break;
                 case "Microsoft.ContainerService/managedClusters":
-                    currentChangeCost += await Calculate<AKSRetailQuery, AKSEstimationCalculation>(change, id);
+                    resource = await Calculate<AKSRetailQuery, AKSEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.App/containerApps":
-                    currentChangeCost += await Calculate<ContainerAppsRetailQuery, ContainerAppsEstimationCalculation>(change, id);
+                    resource = await Calculate<ContainerAppsRetailQuery, ContainerAppsEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.Sql/servers":
-                    currentChangeCost += 0;
                     ReportResourceWithoutCost(id, change.changeType);
                     break;
                 case "Microsoft.Sql/servers/databases":
-                    currentChangeCost += await Calculate<SQLRetailQuery, SQLEstimationCalculation>(change, id);
+                    resource = await Calculate<SQLRetailQuery, SQLEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.ApiManagement/service":
-                    currentChangeCost += await Calculate<APIMRetailQuery, APIMEstimationCalculation>(change, id);
+                    resource = await Calculate<APIMRetailQuery, APIMEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.ApiManagement/service/gateways":
-                    currentChangeCost += await Calculate<APIMRetailQuery, APIMEstimationCalculation>(change, id);
+                    resource = await Calculate<APIMRetailQuery, APIMEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.AppConfiguration/configurationStores":
-                    currentChangeCost += await Calculate<AppConfigurationRetailQuery, AppConfigurationEstimationCalculation>(change, id);
+                    resource = await Calculate<AppConfigurationRetailQuery, AppConfigurationEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.Network/applicationGateways":
-                    currentChangeCost += await Calculate<ApplicationGatewayRetailQuery, ApplicationGatewayEstimationCalculation>(change, id);
+                    resource = await Calculate<ApplicationGatewayRetailQuery, ApplicationGatewayEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.Insights/components":
-                    currentChangeCost += await Calculate<ApplicationInsightsRetailQuery, ApplicationInsightsEstimationCalculation>(change, id);
+                    resource = await Calculate<ApplicationInsightsRetailQuery, ApplicationInsightsEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.AnalysisServices/servers":
-                    currentChangeCost += await Calculate<AnalysisServicesRetailQuery, AnalysisServicesEstimationCalculation>(change, id);
+                    resource = await Calculate<AnalysisServicesRetailQuery, AnalysisServicesEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.Network/bastionHosts":
-                    currentChangeCost += await Calculate<BastionRetailQuery, BastionEstimationCalculation>(change, id);
+                    resource = await Calculate<BastionRetailQuery, BastionEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.BotService/botServices":
-                    currentChangeCost += await Calculate<BotServiceRetailQuery, BotServiceEstimationCalculation>(change, id);
+                    resource = await Calculate<BotServiceRetailQuery, BotServiceEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.HealthBot/healthBots":
-                    currentChangeCost += await Calculate<HealthBotServiceRetailQuery, HealthBotServiceEstimationCalculation>(change, id);
+                    resource = await Calculate<HealthBotServiceRetailQuery, HealthBotServiceEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.Chaos/experiments":
-                    currentChangeCost += await Calculate<ChaosRetailQuery, ChaosEstimationCalculation>(change, id);
+                    resource = await Calculate<ChaosRetailQuery, ChaosEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.Search/searchServices":
-                    currentChangeCost += await Calculate<CognitiveSearchRetailQuery, CognitiveSearchEstimationCalculation>(change, id);
+                    resource = await Calculate<CognitiveSearchRetailQuery, CognitiveSearchEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.ConfidentialLedger/ledgers":
-                    currentChangeCost += await Calculate<ConfidentialLedgerRetailQuery, ConfidentialLedgerEstimationCalculation>(change, id);
+                    resource = await Calculate<ConfidentialLedgerRetailQuery, ConfidentialLedgerEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.DocumentDB/databaseAccounts":
-                    currentChangeCost += await Calculate<CosmosDBRetailQuery, CosmosDBEstimationCalculation>(change, id);
+                    resource = await Calculate<CosmosDBRetailQuery, CosmosDBEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.DocumentDB/databaseAccounts/sqlDatabases":
-                    currentChangeCost += await Calculate<CosmosDBRetailQuery, CosmosDBEstimationCalculation>(change, id);
+                    resource = await Calculate<CosmosDBRetailQuery, CosmosDBEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers":
-                    currentChangeCost += await Calculate<CosmosDBRetailQuery, CosmosDBEstimationCalculation>(change, id);
+                    resource = await Calculate<CosmosDBRetailQuery, CosmosDBEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.EventHub/namespaces":
-                    currentChangeCost += await Calculate<EventHubRetailQuery, EventHubEstimationCalculation>(change, id);
+                    resource = await Calculate<EventHubRetailQuery, EventHubEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.EventHub/namespaces/eventhubs":
-                    currentChangeCost += await Calculate<EventHubRetailQuery, EventHubEstimationCalculation>(change, id);
+                    resource = await Calculate<EventHubRetailQuery, EventHubEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.EventHub/clusters":
-                    currentChangeCost += await Calculate<EventHubRetailQuery, EventHubEstimationCalculation>(change, id);
+                    resource = await Calculate<EventHubRetailQuery, EventHubEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.StreamAnalytics/clusters":
-                    currentChangeCost += await Calculate<StreamAnalyticsRetailQuery, StreamAnalyticsEstimationCalculation>(change, id);
+                    resource = await Calculate<StreamAnalyticsRetailQuery, StreamAnalyticsEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.StreamAnalytics/streamingjobs":
-                    currentChangeCost += await Calculate<StreamAnalyticsRetailQuery, StreamAnalyticsEstimationCalculation>(change, id);
+                    resource = await Calculate<StreamAnalyticsRetailQuery, StreamAnalyticsEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.KeyVault/vaults":
-                    currentChangeCost += await Calculate<KeyVaultRetailQuery, KeyVaultEstimationCalculation>(change, id);
+                    resource = await Calculate<KeyVaultRetailQuery, KeyVaultEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.KeyVault/managedHSMs":
-                    currentChangeCost += await Calculate<KeyVaultRetailQuery, KeyVaultEstimationCalculation>(change, id);
+                    resource = await Calculate<KeyVaultRetailQuery, KeyVaultEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.Network/virtualNetworkGateways":
-                    currentChangeCost += await Calculate<VPNGatewayRetailQuery, VPNGatewayEstimationCalculation>(change, id);
+                    resource = await Calculate<VPNGatewayRetailQuery, VPNGatewayEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.SignalRService/signalR":
-                    currentChangeCost += await Calculate<SignalRRetailQuery, SignalREstimationCalculation>(change, id);
+                    resource = await Calculate<SignalRRetailQuery, SignalREstimationCalculation>(change, id);
                     break;
                 case "Microsoft.TimeSeriesInsights/environments":
-                    currentChangeCost += await Calculate<TimeSeriesRetailQuery, TimeSeriesEstimationCalculation>(change, id);
+                    resource = await Calculate<TimeSeriesRetailQuery, TimeSeriesEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.Logic/workflows":
-                    currentChangeCost += await Calculate<LogicAppsRetailQuery, LogicAppsEstimationCalculation>(change, id);
+                    resource = await Calculate<LogicAppsRetailQuery, LogicAppsEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.Logic/integrationAccounts":
-                    currentChangeCost += await Calculate<LogicAppsRetailQuery, LogicAppsEstimationCalculation>(change, id);
+                    resource = await Calculate<LogicAppsRetailQuery, LogicAppsEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.EventGrid/systemTopics":
-                    currentChangeCost += await Calculate<EventGridRetailQuery, EventGridEstimationCalculation>(change, id);
+                    resource = await Calculate<EventGridRetailQuery, EventGridEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.EventGrid/topics":
-                    currentChangeCost += await Calculate<EventGridRetailQuery, EventGridEstimationCalculation>(change, id);
+                    resource = await Calculate<EventGridRetailQuery, EventGridEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.EventGrid/eventSubscriptions":
-                    currentChangeCost += await Calculate<EventGridRetailQuery, EventGridEstimationCalculation>(change, id);
+                    resource = await Calculate<EventGridRetailQuery, EventGridEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.Compute/virtualMachines":
-                    currentChangeCost += await Calculate<VirtualMachineRetailQuery, VirtualMachineEstimationCalculation>(change, id);
+                    resource = await Calculate<VirtualMachineRetailQuery, VirtualMachineEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.Network/publicIPPrefixes":
-                    currentChangeCost += await Calculate<PublicIPPrefixRetailQuery, PublicIPPrefixEstimationCalculation>(change, id);
+                    resource = await Calculate<PublicIPPrefixRetailQuery, PublicIPPrefixEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.Network/publicIPAddresses":
-                    currentChangeCost += await Calculate<PublicIPRetailQuery, PublicIPEstimationCalculation>(change, id);
+                    resource = await Calculate<PublicIPRetailQuery, PublicIPEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.OperationalInsights/workspaces":
-                    currentChangeCost += await Calculate<LogAnalyticsRetailQuery, LogAnalyticsEstimationCalculation>(change, id);
+                    resource = await Calculate<LogAnalyticsRetailQuery, LogAnalyticsEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.OperationsManagement/solutions":
-                    currentChangeCost += await Calculate<LogAnalyticsRetailQuery, LogAnalyticsEstimationCalculation>(change, id);
+                    resource = await Calculate<LogAnalyticsRetailQuery, LogAnalyticsEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.Network/networkInterfaces":
-                    currentChangeCost += 0;
                     ReportResourceWithoutCost(id, change.changeType);
                     break;
                 case "Microsoft.Network/networkSecurityGroups":
-                    currentChangeCost += 0;
                     ReportResourceWithoutCost(id, change.changeType);
                     break;
                 case "Microsoft.Network/virtualNetworks":
-                    currentChangeCost += 0;
                     ReportResourceWithoutCost(id, change.changeType);
                     break;
                 case "Microsoft.RecoveryServices/vaults/backupPolicies":
-                    currentChangeCost += 0;
                     ReportResourceWithoutCost(id, change.changeType);
                     break;
                 case "Microsoft.RecoveryServices/vaults":
-                    currentChangeCost += await Calculate<RecoveryServicesRetailQuery, RecoveryServicesEstimationCalculation>(change, id);
+                    resource = await Calculate<RecoveryServicesRetailQuery, RecoveryServicesEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.RecoveryServices/vaults/backupFabrics/protectionContainers/protectedItems":
-                    currentChangeCost += await Calculate<RecoveryServicesProtectedItemRetailQuery, RecoveryServicesProtectedItemEstimationCalculation>(change, id);
+                    resource = await Calculate<RecoveryServicesProtectedItemRetailQuery, RecoveryServicesProtectedItemEstimationCalculation>(change, id);
                     break;
                 default:
                     logger.LogWarning("{resourceType} is not yet supported.", id?.ResourceType);
                     break;
             }
 
+            if (resource == null) continue;
             if (change.changeType != WhatIfChangeType.Delete)
             {
-                totalCost += currentChangeCost;
+                totalCost += resource.TotalCost;
             }
 
             if (change.changeType == WhatIfChangeType.Create)
             {
-                alteredCost += currentChangeCost;
+                delta += resource.TotalCost;
             }
             else if (change.changeType == WhatIfChangeType.Delete)
             {
-                alteredCost -= currentChangeCost;
+                delta -= resource.TotalCost;
             }
+
+            resources.Add(resource);
         }
 
         var sign = "+";
-        if (alteredCost < 0)
+        if (delta < 0)
         {
             sign = "";
         }
@@ -229,12 +227,12 @@ internal class WhatIfProcessor
         this.logger.LogInformation("Summary:");
         this.logger.LogInformation("");
         this.logger.AddEstimatorMessage("Total cost: {0} {1}", totalCost.ToString("N2"), this.currency);
-        this.logger.AddEstimatorMessage("Delta: {0}{1} {2}", sign, alteredCost.ToString("N2"), this.currency);
+        this.logger.AddEstimatorMessage("Delta: {0}{1} {2}", sign, delta.ToString("N2"), this.currency);
 
-        return totalCost;
+        return new EstimationOutput(totalCost, delta, resources, currency);
     }
 
-    private async Task<double> Calculate<TQuery, TCalculation>(WhatIfChange change, ResourceIdentifier id)
+    private async Task<EstimatedResourceData?> Calculate<TQuery, TCalculation>(WhatIfChange change, ResourceIdentifier id)
         where TQuery : BaseRetailQuery, IRetailQuery
         where TCalculation : BaseEstimation, IEstimationCalculation
     {
@@ -243,26 +241,27 @@ internal class WhatIfProcessor
         {
             this.logger.LogWarning("Got no records for {type} from Retail API", id.ResourceType);
             this.logger.LogInformation("");
-            return 0;
+
+            return null;
         }
 
         if (change.resourceId == null || (change.after == null && change.before == null))
         {
             this.logger.LogError("No data available for WhatIf operation.");
-            return 0;
+            return null;
         }
 
         var desiredState = change.after ?? change.before;
         if(desiredState == null)
         {
             this.logger.LogError("No data available for WhatIf operation.");
-            return 0;
+            return null;
         }
 
         if (Activator.CreateInstance(typeof(TCalculation), new object[] { data.Items, id, desiredState }) is not TCalculation estimation)
         {
             this.logger.LogError("Couldn't create an instance of {type}.", typeof(TCalculation));
-            return 0;
+            return null;
         }
 
         var totalCost = estimation.GetTotalCost(this.changes);
@@ -282,7 +281,7 @@ internal class WhatIfProcessor
         }
 
         ReportEstimationToConsole(id, estimation.GetItems(), totalCost, change.changeType, delta, data.Items?.FirstOrDefault()?.location);
-        return totalCost;
+        return new EstimatedResourceData(totalCost, delta, id);
     }
 
     private async Task<RetailAPIResponse?> GetRetailAPIResponse<T>(WhatIfChange change, ResourceIdentifier id) where T : BaseRetailQuery, IRetailQuery

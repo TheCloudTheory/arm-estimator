@@ -101,10 +101,17 @@ internal class Program
             logger.LogInformation("-------------------------------");
             logger.LogInformation("");
 
-            var totalCost = await new WhatIfProcessor(logger, whatIfData.properties.changes, options.Currency).Process();
-            if (options.Threshold != -1 && totalCost > options.Threshold)
+            var output = await new WhatIfProcessor(logger, whatIfData.properties.changes, options.Currency).Process();
+
+            if(options.ShouldGenerateOutput)
             {
-                logger.LogError("Estimated cost [{totalCost} USD] exceeds configured threshold [{threshold} USD].", totalCost, options.Threshold);
+                var outputData = JsonSerializer.Serialize(output);
+                File.WriteAllText($"ace_estimation_{DateTime.UtcNow:yyyyMMddHHmmss}.json", outputData);
+            }
+
+            if (options.Threshold != -1 && output.TotalCost > options.Threshold)
+            {
+                logger.LogError("Estimated cost [{totalCost} USD] exceeds configured threshold [{threshold} USD].", output.TotalCost, options.Threshold);
                 Environment.Exit(1);
             }
         }
