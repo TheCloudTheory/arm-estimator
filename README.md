@@ -11,6 +11,21 @@ Infrastructure-as-Code (IaC) makes things even more difficult - it solves the pr
 
 ARM Cost Estimator follows a concept of [_running cost as architecture fitness function_](https://www.thoughtworks.com/radar/techniques/run-cost-as-architecture-fitness-function). You can make it an integral part of your CICD pipeline and quickly gather information of how much you're going to spend.
 
+## Main features
+* Detailed output containing information about cost of your infrastructure and metrics used for calculation
+* Seamless integration with ARM Templates and Bicep (with a little help of Bicep CLI)
+* Always fresh data thanks to direct calls to Azure Retail API
+* Native tool experience - no third-party services / proxies, everything relies on componenets delivered and used by Microsoft
+* Multi-option authentication based on `Azure.Identity` package - project automatically uses cached credentials from the running environment (supports Azure CLI / Environment credentials / Managed Identity and more)
+* Allows you to validate your deployment before it happens - if the template you used is invalid, an error with detailed information is returned
+* Support for both Incremental / Complete deployment modes (see `Usage` section)
+* Displaying delta describing difference between your current estimated cost and after changes are applied
+* An option to stop CICD process if estimations exceed given limit (see `Usage` section)
+* Supports passing parameters along with your template
+* Handles extension resources as long as they're correctly configured (i.e. define `scope` parameter)
+* Supports 17 different currencies
+* Allows for generating output as an artifact for further processing
+
 ## Installation
 ARM Cost Estimator can be download as ZIP package containing a single executable file. Check releases to find the most recent version download URL.
 
@@ -159,25 +174,10 @@ If that option is set to `true`, once all data is obtained, a JSON file is creat
 
 Name of the file contains a UTC timestamp - `ace_estimation_yyyyMMddHHssmm.json` - but the file is overwritten if the same timestamp would be used twice.
 
-## Main features
-* Detailed output containing information about cost of your infrastructure and metrics used for calculation
-* Seamless integration with ARM Templates and Bicep (with a little help of Bicep CLI)
-* Always fresh data thanks to direct calls to Azure Retail API
-* Native tool experience - no third-party services / proxies, everything relies on componenets delivered and used by Microsoft
-* Multi-option authentication based on `Azure.Identity` package - project automatically uses cached credentials from the running environment (supports Azure CLI / Environment credentials / Managed Identity and more)
-* Allows you to validate your deployment before it happens - if the template you used is invalid, an error with detailed information is returned
-* Support for both Incremental / Complete deployment modes (see `Usage` section)
-* Displaying delta describing difference between your current estimated cost and after changes are applied
-* An option to stop CICD process if estimations exceed given limit (see `Usage` section)
-* Supports passing parameters along with your template
-* Handles extension resources as long as they're correctly configured (i.e. define `scope` parameter)
-* Supports 17 different currencies
-
 ## Known limitations
 ARM Cost Estimator is currently in `alpha` development phase meaning there're no guarantees for stable interface and many features are still in design or planning phase. The main limitations as for now are:
 * You can use the project only with a resource group as deployment scope
 * Some services are in TBD state (see below for more information)
-* You cannot generate an output as artifact
 * There's no possibility to define custom usage patterns so some metrics (mainly those described as price per second / hour / day) are projected for full month
 * Nested resources are not supported yet - however, you can define them as separated entities to mitigate that issue
 
