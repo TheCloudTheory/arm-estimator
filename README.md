@@ -45,6 +45,7 @@ Name|Default value|Example|Description
 --threshold|`-1`|`--threshold 3000`|Max acceptable estimated cost. Exceeding threshold causes a non-zero exit code to be reported
 --parameters|`null`|`--parameters some_path/params.parameters.json`|Path to the parameters file (must be in JSON format)
 --currency|`USD`|`--currency EUR`|Currency code to use for estimations
+--generateJsonOutput|`false`|`--generateJsonOutput true`|Generates JSON file containing estimation result
 
 ### Deployment mode
 ##### Available from: alpha2
@@ -124,6 +125,39 @@ SEK|Swedish krona
 TWD|Taiwan dollar
 
 Support for a given currency depends on capabilities of underlying Azure Retail API. 
+
+### JSON output
+##### Available from: beta1
+If you want to use estimation for further automation, it's possible to generate a JSON file containing basic information about estimated resources using `--generateJsonOutput` option:
+```
+arm-estimator <template-path>.json <subscription-id> <resource-group> --generateJsonOutput true
+```
+
+If that option is set to `true`, once all data is obtained, a JSON file is created:
+```
+{
+    "TotalCost": 119.3248,
+    "Delta": 119.3248,
+    "Resources": [
+        {
+            "Id": "/subscriptions/.../Microsoft.Compute/virtualMachines/ace-vm-01",
+            "TotalCost": 29.93,
+            "Delta": 29.93
+        },
+        {
+            "Id": "/subscriptions/.../Microsoft.Compute/virtualMachines/ace-vm-02",
+            "TotalCost": 63.51,
+            "Delta": 63.51
+        },
+        {
+            ...
+        }
+    ],
+    "Currency": "USD"
+}
+```
+
+Name of the file contains a UTC timestamp - `ace_estimation_yyyyMMddHHssmm.json` - but the file is overwritten if the same timestamp would be used twice.
 
 ## Main features
 * Detailed output containing information about cost of your infrastructure and metrics used for calculation
