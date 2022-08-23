@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { execSync } from 'child_process';
 import { AzureCostEstimatorCodeLens } from './AzureCostEstimatorCodeLens';
 
 export class CodelensProvider implements vscode.CodeLensProvider {
@@ -16,6 +17,21 @@ export class CodelensProvider implements vscode.CodeLensProvider {
         this.codeLenses = [];
         const regex = new RegExp(this.regex);
         const text = document.getText();
+
+        let armTemplate = null;
+        vscode.window.setStatusBarMessage('ACE: Generating ARM Template...');
+
+        try {
+            let cmd = execSync(`bicep build ${document.fileName} --stdout`);
+            armTemplate = cmd.toString();
+            console.log(armTemplate);
+            vscode.window.setStatusBarMessage('ACE: Ready!');
+
+        } catch (err: any) {
+            vscode.window.showErrorMessage(err);
+            return [];
+        }
+
         let matches;
         while ((matches = regex.exec(text)) !== null) {
             const line = document.lineAt(document.positionAt(matches.index).line);
