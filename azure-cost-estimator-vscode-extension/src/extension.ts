@@ -3,16 +3,16 @@ import { CodelensProvider } from './CodeLensProvider';
 
 export function activate(context: vscode.ExtensionContext) {
 
-	console.log('Congratulations, your extension "azure-cost-estimator" is now active!');
-
-	let disposable = vscode.commands.registerCommand('azure-cost-estimator.helloWorld', () => {
-		vscode.window.showInformationMessage('Hello World from Azure Cost Estimator !');
-	});
-
-	context.subscriptions.push(disposable);
+	console.log('Azure Cost Estimator VS Code extension is active.');
 
 	const codelensProvider = new CodelensProvider();
 	vscode.languages.registerCodeLensProvider({ pattern: '**/*.bicep' }, codelensProvider);
+
+	let statusBar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
+	statusBar.text = 'ACE: Idle';
+	statusBar.show();
+	
+	context.subscriptions.push(statusBar);
 }
 
 export function deactivate() { }
