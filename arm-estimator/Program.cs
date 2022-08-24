@@ -111,17 +111,28 @@ internal class Program
             logger.LogInformation("");
 
             var output = await new WhatIfProcessor(logger, whatIfData.properties.changes, options.Currency).Process();
-
-            if(options.ShouldGenerateOutput)
-            {
-                var outputData = JsonSerializer.Serialize(output);
-                File.WriteAllText($"ace_estimation_{DateTime.UtcNow:yyyyMMddHHmmss}.json", outputData);
-            }
+            GenerateOutputIfNeeded(options, output, logger);
 
             if (options.Threshold != -1 && output.TotalCost > options.Threshold)
             {
                 logger.LogError("Estimated cost [{totalCost} USD] exceeds configured threshold [{threshold} USD].", output.TotalCost, options.Threshold);
                 Environment.Exit(1);
+            }
+        }
+    }
+
+    private static void GenerateOutputIfNeeded(EstimateOptions options, EstimationOutput output, ILogger<Program> logger)
+    {
+        if (options.ShouldGenerateOutput)
+        {
+            var outputData = JsonSerializer.Serialize(output);
+            if (options.Stdout)
+            {
+                logger.AddEstimatorNonSilentMessage(outputData);
+            }
+            else
+            {
+                File.WriteAllText($"ace_estimation_{DateTime.UtcNow:yyyyMMddHHmmss}.json", outputData);
             }
         }
     }

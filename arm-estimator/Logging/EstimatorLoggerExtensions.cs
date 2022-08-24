@@ -29,6 +29,11 @@ internal static class EstimatorLoggerExtensions
     public static void AddEstimatorMessageSensibleToChange(this ILogger logger, WhatIfChangeType? changeType, string message, params object?[] args)
     {
         var formattedMessage = string.Format(message, args);
-        logger.Log<ChangeMessage>(LogLevel.Information, new EventId(), new ChangeMessage(changeType ?? WhatIfChangeType.Unknown, formattedMessage), null, (val1, val2) => formattedMessage);
+        logger.Log(LogLevel.Information, new EventId(), new ChangeMessage(changeType ?? WhatIfChangeType.Unknown, formattedMessage), null, (val1, val2) => formattedMessage);
+    }
+
+    public static void AddEstimatorNonSilentMessage(this ILogger logger, string message, params object?[] args)
+    {
+        logger.Log(LogLevel.Information, new EventId(), new NonSilentMessage(message), null, (val1, val2) => message);
     }
 }
