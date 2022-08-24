@@ -20,6 +20,7 @@ internal class Program
         var currencyOption = new Option<CurrencyCode>("--currency", () => { return CurrencyCode.USD; }, "Currency code");
         var jsonOutputOption = new Option<bool>("--generateJsonOutput", () => { return false; }, "Should generate JSON output");
         var silentOption = new Option<bool>("--silent", () => { return false; }, "Mute all logs");
+        var stdoutOption = new Option<bool>("--stdout", () => { return false; }, "Redirects JSON output to stdout");
 
         var command = new RootCommand("Azure Resource Manager cost estimator.")
         {
@@ -28,7 +29,8 @@ internal class Program
             parametersOption,
             currencyOption,
             jsonOutputOption,
-            silentOption
+            silentOption,
+            stdoutOption
         };
 
         command.AddArgument(templateFileArg);
@@ -47,7 +49,8 @@ internal class Program
             parametersOption,
             currencyOption,
             jsonOutputOption,
-            silentOption));
+            silentOption,
+            stdoutOption));
 
         return await command.InvokeAsync(args);
     }
