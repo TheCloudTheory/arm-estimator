@@ -60,8 +60,9 @@ Name|Default value|Example|Description
 --threshold|`-1`|`--threshold 3000`|Max acceptable estimated cost. Exceeding threshold causes a non-zero exit code to be reported
 --parameters|`null`|`--parameters some_path/params.parameters.json`|Path to the parameters file (must be in JSON format)
 --currency|`USD`|`--currency EUR`|Currency code to use for estimations
---generateJsonOutput|`false`|`--generateJsonOutput true`|Generates JSON file containing estimation result
---silent|`false`|`--silent true`|Silences logs so no information is returned to console
+--generateJsonOutput|`false`|`--generateJsonOutput`|Generates JSON file containing estimation result
+--silent|`false`|`--silent`|Silences logs so no information is returned to console
+--stdout|`false`|`--stdout`|Redirects generated output to stdout instead of file
 
 ### Deployment mode
 ##### Available from: alpha2
@@ -179,10 +180,24 @@ Name of the file contains a UTC timestamp - `ace_estimation_yyyyMMddHHssmm.json`
 ##### Available from: beta2
 If you don't want any output to be visible in console, you can use `--silent` option for enabling silent mode:
 ```
-arm-estimator <template-path>.json <subscription-id> <resource-group> --silent true
+arm-estimator <template-path>.json <subscription-id> <resource-group> --silent
 ```
 
-Main use case of that option is leveraging automation tools / scripts, which can rely on stdout only and need estimation output only.
+Special use case of that option is using it with output redirection:
+```
+arm-estimator <template-path>.json <subscription-id> <resource-group> --generateJsonOutput --stdout --silent
+```
+
+As output redirected to stdout is always considered as non-silent, you can get e.g. estimation JSON without all the noise coming from the tool.
+
+### Output redirection
+##### Available from: beta2
+If you don't want an output file to be generated, you can use `--stdout` option to redirect generated output to stdout:
+```
+arm-estimator <template-path>.json <subscription-id> <resource-group> --generateJsonOutput --stdout 
+```
+
+This is especially useful when using estimation output as input for another command or process.
 
 ## Known limitations
 ARM Cost Estimator is currently in `beta` development phase meaning there're no guarantees for stable interface and some features are still in design or planning phase. The main limitations as for now are:
