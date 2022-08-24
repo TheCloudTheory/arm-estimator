@@ -5,11 +5,11 @@ using Microsoft.Extensions.Logging.Configuration;
 
 internal static class EstimatorLoggerExtensions
 {
-    public static ILoggingBuilder AddEstimatorLogger(this ILoggingBuilder builder)
+    public static ILoggingBuilder AddEstimatorLogger(this ILoggingBuilder builder, bool isSilent)
     {
         builder.AddConfiguration();
         builder.Services.TryAddEnumerable(
-            ServiceDescriptor.Singleton<ILoggerProvider, EstimatorLoggerProvider>());
+            ServiceDescriptor.Singleton<ILoggerProvider, EstimatorLoggerProvider>((provider) => new EstimatorLoggerProvider(isSilent)));
 
         return builder;
     }

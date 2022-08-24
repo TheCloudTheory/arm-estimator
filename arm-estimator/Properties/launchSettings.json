@@ -2,7 +2,7 @@
   "profiles": {
     "arm-estimator": {
       "commandName": "Project",
-      "commandLineArgs": "templates/backup.json f81e70a7-e819-49b2-a980-8e9c433743dd arm-estimator-uksouth-rg --generateJsonOutput true"
+      "commandLineArgs": "templates/backup.json f81e70a7-e819-49b2-a980-8e9c433743dd arm-estimator-uksouth-rg --silent true"
     }
   }
 }

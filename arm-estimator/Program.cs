@@ -19,46 +19,52 @@ internal class Program
         var parametersOption = new Option<FileInfo?>("--parameters", () => { return null; }, "Path to a file containing values of template parameters");
         var currencyOption = new Option<CurrencyCode>("--currency", () => { return CurrencyCode.USD; }, "Currency code");
         var jsonOutputOption = new Option<bool>("--generateJsonOutput", () => { return false; }, "Should generate JSON output");
+        var silentOption = new Option<bool>("--silent", () => { return false; }, "Mute all logs");
 
-        var command = new RootCommand("Azure Resource Manager cost estimator.");
-        command.AddOption(deploymentModeOption);
-        command.AddOption(thresholdOption);
-        command.AddOption(parametersOption);
-        command.AddOption(currencyOption);
-        command.AddOption(jsonOutputOption);
-        command.AddArgument(templateFileArg);
-        command.AddArgument(susbcriptionIdArg);
-        command.AddArgument(resourceGroupArg);
-        command.SetHandler(async (file, subscription, resourceGroup, deploymentMode, threshold, parametersFilePath, currency, shouldGenerateOutput) =>
+        var command = new RootCommand("Azure Resource Manager cost estimator.")
         {
-            var options = new EstimateOptions(file, subscription, resourceGroup, deploymentMode, threshold, parametersFilePath, currency, shouldGenerateOutput);
-            await Estimate(options);
-        },
-            templateFileArg,
-            susbcriptionIdArg,
-            resourceGroupArg,
             deploymentModeOption,
             thresholdOption,
             parametersOption,
             currencyOption,
-            jsonOutputOption);
+            jsonOutputOption,
+            silentOption
+        };
+
+        command.AddArgument(templateFileArg);
+        command.AddArgument(susbcriptionIdArg);
+        command.AddArgument(resourceGroupArg);
+        command.SetHandler(async (file, subscription, resourceGroup, options) =>
+        {
+            await Estimate(file, subscription, resourceGroup, options);
+        },
+            templateFileArg,
+            susbcriptionIdArg,
+            resourceGroupArg,
+            new EstimateOptionsBinder(
+            deploymentModeOption,
+            thresholdOption,
+            parametersOption,
+            currencyOption,
+            jsonOutputOption,
+            silentOption));
 
         return await command.InvokeAsync(args);
     }
 
-    private static async Task Estimate(EstimateOptions options)
+    private static async Task Estimate(FileInfo templateFile, string subscriptionId, string resourceGroupName, EstimateOptions options)
     {
         using (var loggerFactory = LoggerFactory.Create(builder =>
         {
             builder.ClearProviders();
-            builder.AddEstimatorLogger();
+            builder.AddEstimatorLogger(options.ShouldBeSilent);
         }))
         {
             var logger = loggerFactory.CreateLogger<Program>();
             DisplayWelcomeScreen(logger);
-            DisplayUsedSettings(logger, options);
+            DisplayUsedSettings(templateFile, subscriptionId, resourceGroupName, logger, options);
 
-            var template = Regex.Replace(File.ReadAllText(options.TemplateFile.FullName), @"\s+", string.Empty);  // Make JSON a single-line value
+            var template = Regex.Replace(File.ReadAllText(templateFile.FullName), @"\s+", string.Empty);  // Make JSON a single-line value
             var parameters = "{}";
 
             if (options.ParametersFile != null)
@@ -66,7 +72,7 @@ internal class Program
                 parameters = Regex.Replace(File.ReadAllText(options.ParametersFile.FullName), @"\s+", string.Empty);
             }
 
-            var handler = new AzureWhatIfHandler(options.SubscriptionId, options.ResourceGroupName, template, options.Mode, parameters, logger);
+            var handler = new AzureWhatIfHandler(subscriptionId, resourceGroupName, template, options.Mode, parameters, logger);
             var whatIfData = await handler.GetResponseWithRetries();
 
             if (whatIfData != null && whatIfData.status == "Failed")
@@ -129,13 +135,13 @@ internal class Program
         logger.LogInformation("");
     }
 
-    private static void DisplayUsedSettings(ILogger<Program> logger, EstimateOptions options)
+    private static void DisplayUsedSettings(FileInfo templateFile, string subscriptionId, string resourceGroupName, ILogger<Program> logger, EstimateOptions options)
     {
         logger.LogInformation("Run configuration:");
         logger.LogInformation("");
-        logger.AddEstimatorMessage("SubscriptionId: {0}", options.SubscriptionId);
-        logger.AddEstimatorMessage("Resource group: {0}", options.ResourceGroupName);
-        logger.AddEstimatorMessage("Template file: {0}", options.TemplateFile);
+        logger.AddEstimatorMessage("SubscriptionId: {0}", subscriptionId);
+        logger.AddEstimatorMessage("Resource group: {0}", resourceGroupName);
+        logger.AddEstimatorMessage("Template file: {0}", templateFile);
         logger.AddEstimatorMessage("Deployment mode: {0}", options.Mode);
         logger.AddEstimatorMessage("Threshold: {0}", options.Threshold == -1 ? "Not Set" : options.Threshold.ToString());
         logger.AddEstimatorMessage("Parameters file: {0}", options.ParametersFile?.Name ?? "Not Set");
