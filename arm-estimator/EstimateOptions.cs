@@ -5,7 +5,8 @@
                            FileInfo? parametersFile,
                            CurrencyCode currency,
                            bool shouldGenerateOutput,
-                           bool shouldBeSilent)
+                           bool shouldBeSilent,
+                           bool stdout)
     {
         Mode = mode;
         Threshold = threshold;
@@ -13,6 +14,7 @@
         Currency = currency;
         ShouldGenerateOutput = shouldGenerateOutput;
         ShouldBeSilent = shouldBeSilent;
+        Stdout = stdout;
     }
 
     public DeploymentMode Mode { get; }
@@ -21,4 +23,5 @@
     public CurrencyCode Currency { get; }
     public bool ShouldGenerateOutput { get; }
     public bool ShouldBeSilent { get; }
+    public bool Stdout { get; }
 }

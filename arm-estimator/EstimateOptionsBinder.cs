@@ -9,13 +9,15 @@ internal class EstimateOptionsBinder : BinderBase<EstimateOptions>
     private readonly Option<CurrencyCode> currency;
     private readonly Option<bool> generateJsonOutput;
     private readonly Option<bool> shouldBeSilent;
+    private readonly Option<bool> stdout;
 
     public EstimateOptionsBinder(Option<DeploymentMode> mode,
                                  Option<int> threshold,
                                  Option<FileInfo?> parameters,
                                  Option<CurrencyCode> currency,
                                  Option<bool> generateJsonOutput,
-                                 Option<bool> shouldBeSilent)
+                                 Option<bool> shouldBeSilent,
+                                 Option<bool> stdout)
     {
         this.mode = mode;
         this.threshold = threshold;
@@ -23,6 +25,7 @@ internal class EstimateOptionsBinder : BinderBase<EstimateOptions>
         this.currency = currency;
         this.generateJsonOutput = generateJsonOutput;
         this.shouldBeSilent = shouldBeSilent;
+        this.stdout = stdout;
     }
 
     protected override EstimateOptions GetBoundValue(BindingContext bindingContext)
@@ -33,7 +36,8 @@ internal class EstimateOptionsBinder : BinderBase<EstimateOptions>
             bindingContext.ParseResult.GetValueForOption(parameters),
             bindingContext.ParseResult.GetValueForOption(currency),
             bindingContext.ParseResult.GetValueForOption(generateJsonOutput),
-            bindingContext.ParseResult.GetValueForOption(shouldBeSilent)
+            bindingContext.ParseResult.GetValueForOption(shouldBeSilent),
+            bindingContext.ParseResult.GetValueForOption(stdout)
             );
     }
 }
