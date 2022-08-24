@@ -61,6 +61,7 @@ Name|Default value|Example|Description
 --parameters|`null`|`--parameters some_path/params.parameters.json`|Path to the parameters file (must be in JSON format)
 --currency|`USD`|`--currency EUR`|Currency code to use for estimations
 --generateJsonOutput|`false`|`--generateJsonOutput true`|Generates JSON file containing estimation result
+--silent|`false`|`--silent true`|Silences output so no information besides output is returned
 
 ### Deployment mode
 ##### Available from: alpha2
@@ -173,6 +174,15 @@ If that option is set to `true`, once all data is obtained, a JSON file is creat
 ```
 
 Name of the file contains a UTC timestamp - `ace_estimation_yyyyMMddHHssmm.json` - but the file is overwritten if the same timestamp would be used twice.
+
+### Silent mode
+##### Available from: beta2
+If you don't want any output to be visible in console, you can use `--silent` option for enabling silent mode:
+```
+arm-estimator <template-path>.json <subscription-id> <resource-group> --silent true
+```
+
+Main use case of that option is leveraging automation tools / scripts, which can rely on stdout only and need estimation output only.
 
 ## Known limitations
 ARM Cost Estimator is currently in `beta` development phase meaning there're no guarantees for stable interface and some features are still in design or planning phase. The main limitations as for now are:
