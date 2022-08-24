@@ -61,7 +61,7 @@ Name|Default value|Example|Description
 --parameters|`null`|`--parameters some_path/params.parameters.json`|Path to the parameters file (must be in JSON format)
 --currency|`USD`|`--currency EUR`|Currency code to use for estimations
 --generateJsonOutput|`false`|`--generateJsonOutput true`|Generates JSON file containing estimation result
---silent|`false`|`--silent true`|Silences output so no information besides output is returned
+--silent|`false`|`--silent true`|Silences logs so no information is returned to console
 
 ### Deployment mode
 ##### Available from: alpha2
