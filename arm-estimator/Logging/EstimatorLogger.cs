@@ -14,7 +14,7 @@ internal class EstimatorLogger : ILogger
 
     public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
     {
-        if (IsEnabled(logLevel) == false || isSilent) return;
+        if (IsEnabled(logLevel) == false) return;
 
         if(exception != null)
         {
@@ -24,6 +24,14 @@ internal class EstimatorLogger : ILogger
         }
         else
         {
+            if(typeof(TState) == typeof(NonSilentMessage))
+            {
+                Console.WriteLine(formatter(state, exception));
+                return;
+            }
+
+            if (this.isSilent) return;
+
             if(typeof(TState) == typeof(ChangeMessage))
             {
                 if (state is ChangeMessage message)
