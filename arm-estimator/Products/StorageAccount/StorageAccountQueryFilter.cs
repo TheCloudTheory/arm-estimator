@@ -16,7 +16,6 @@ internal class StorageAccountQueryFilter : IQueryFilter
     public string? GetFiltersBasedOnDesiredState(string location)
     { 
         var sku = this.afterState.sku?.name;
-        var kind = this.afterState.kind;
 
         if(sku == null)
         {
@@ -24,13 +23,17 @@ internal class StorageAccountQueryFilter : IQueryFilter
             return null;
         }
 
-        if(kind == null)
+        var skuName = StorageAccountSupportedData.CommonSkuToSkuIdMap[sku];
+        if(IsPremium(sku))
         {
-            this.logger.LogError("Can't create a filter for Storage Account when Kind is unavailable.");
-            return null;
+            return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and skuName eq '{skuName}' and productName eq 'Premium Block Blob'";
         }
 
-        var skuName = StorageAccountSupportedData.CommonSkuToSkuIdMap[sku];
-        return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and skuName eq '{skuName}'";
+        return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and skuName eq '{skuName}' and (productName eq 'Tables' or productName eq 'Queues v2' or productName eq 'Tables' or productName eq 'General Block Blob')";
+    }
+
+    private bool IsPremium(string sku)
+    {
+        return sku.StartsWith("Premium");
     }
 }
