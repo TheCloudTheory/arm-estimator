@@ -33,6 +33,7 @@ Infrastructure-as-Code (IaC) makes things even more difficult - it solves the pr
 ACE follows a concept of [_running cost as architecture fitness function_](https://www.thoughtworks.com/radar/techniques/run-cost-as-architecture-fitness-function). You can make it an integral part of your CICD pipeline and quickly gather information of how much you're going to spend.
 
 ## Main features
+* Native support for Bicep & ARM Templates
 * Detailed output containing information about cost of your infrastructure and metrics used for calculation
 * Seamless integration with ARM Templates and Bicep (with a little help of Bicep CLI)
 * Always fresh data thanks to direct calls to Azure Retail API
@@ -51,18 +52,22 @@ ACE follows a concept of [_running cost as architecture fitness function_](https
 ACE can be download as ZIP package containing a single executable file. Check releases to find the most recent version download URL.
 
 ## Usage
-You can use the project with both ARM Templates and (indirectly) with Bicep files. Due to limitation of Azure What If API, your Bicep definitions must be transformed to ARM Templates before you can use them with ARM Cost Estimator. This can be done with a simple command:
+You can use the project with both ARM Templates and with Bicep files. In general, ACE doesn't care if you want to use old-school ARM Template or Bicep, however if you face any issues, you can transform Bicep file to ARM Template with help of Bicep CLI:
 ```
 bicep build <your-bicep-file>.bicep
 ```
 This will create an ARM Template based on the Bicep file passed as argument.
+> Native Bicep support is available since `1.0.0-beta2` version.
+
+> If you want to use Bicep files and pass them directly to ACE, make sure you've installed Bicep CLI before. This is especially important for build agents, which may have limited capabilities and don't include Bicep by default. In case of any problems, fall back to ARM Templates.
+
 ### Windows
 ```
-arm-estimator.exe <template-path>.json <subscription-id> <resource-group>
+arm-estimator.exe <template-path>.json|.bicep <subscription-id> <resource-group>
 ```
 ### Linux
 ```
-dotnet arm-estimator <template-path>.json <subscription-id> <resource-group>
+dotnet arm-estimator <template-path>.json|.bicep <subscription-id> <resource-group>
 ```
 
 ### Parameters
@@ -86,7 +91,7 @@ Name|Default value|Example|Description
 --stdout|`false`|`--stdout`|Redirects generated output to stdout instead of file
 
 ### Deployment mode
-##### Available from: alpha2
+##### Available from: 1.0.0-alpha2
 When performing resource group level deployment there's an option to select a deployment mode. ACE also supports that option by providing desired value as parameter:
 ```
 arm-estimator <template-path>.json <subscription-id> <resource-group> --mode Incremental|Complete
@@ -95,7 +100,7 @@ arm-estimator <template-path>.json <subscription-id> <resource-group> --mode Inc
 When parameter is not passed, `Incremental` mode is selected. Selecting `Complete` changes the way estimations work - if there're existing resources in a resource group, they will be considered as up for removal. It'll be noted by ARM Cost Estimator and deducted from the final estimation.
 
 ### Threshold
-##### Available from: alpha3
+##### Available from: 1.0.0-alpha3
 With ACE it's possible to stop your CICD process is projected estimation exceeds your assumptions:
 ```
 arm-estimator <template-path>.json <subscription-id> <resource-group> --threshold <int>
@@ -107,7 +112,7 @@ By using `--threshold` option, you can set an upper limit for infrastructure cos
 Configuring threshold is optional - if you omit it, your CICD process will continue ignoring estimation value.
 
 ### Parameters
-##### Available from: alpha4
+##### Available from: 1.0.0-alpha4
 Very often templates contain parameters, which have different values depending on the selected environment. Sometimes you just need to pass a value, which is generated outside your template. ARM Cost Estimator supports parameters in the same way as you'd normally develop them and pass for deployment:
 ```
 arm-estimator <template-path>.json <subscription-id> <resource-group> --parameters <path-to-your-parameters-file>.json
@@ -136,7 +141,7 @@ When using ACE, you parameters file should look like this:
 Do not transform it to the schema expected by What If API (which expects value of the `parameters` parameter only).
 
 ### Currency
-##### Available from: beta1
+##### Available from: 1.0.0-beta1
 It's possible to use one of the supported currencies to display estimation result in appropriate format:
 ```
 arm-estimator <template-path>.json <subscription-id> <resource-group> --currency EUR
@@ -165,7 +170,7 @@ TWD|Taiwan dollar
 Support for a given currency depends on capabilities of underlying Azure Retail API. 
 
 ### JSON output
-##### Available from: beta1
+##### Available from: 1.0.0-beta1
 If you want to use estimation for further automation, it's possible to generate a JSON file containing basic information about estimated resources using `--generateJsonOutput` option:
 ```
 arm-estimator <template-path>.json <subscription-id> <resource-group> --generateJsonOutput true
@@ -198,7 +203,7 @@ If that option is set to `true`, once all data is obtained, a JSON file is creat
 Name of the file contains a UTC timestamp - `ace_estimation_yyyyMMddHHssmm.json` - but the file is overwritten if the same timestamp would be used twice.
 
 ### Silent mode
-##### Available from: beta2
+##### Available from: 1.0.0-beta2
 If you don't want any output to be visible in console, you can use `--silent` option for enabling silent mode:
 ```
 arm-estimator <template-path>.json <subscription-id> <resource-group> --silent
@@ -212,7 +217,7 @@ arm-estimator <template-path>.json <subscription-id> <resource-group> --generate
 As output redirected to stdout is always considered as non-silent, you can get e.g. estimation JSON without all the noise coming from the tool.
 
 ### Output redirection
-##### Available from: beta2
+##### Available from: 1.0.0-beta2
 If you don't want an output file to be generated, you can use `--stdout` option to redirect generated output to stdout:
 ```
 arm-estimator <template-path>.json <subscription-id> <resource-group> --generateJsonOutput --stdout 

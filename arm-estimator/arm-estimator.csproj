@@ -51,6 +51,9 @@
     <None Update="templates\bicep\acr.bicep">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="templates\bicep\vm_av2.bicep">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="templates\botservice.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
