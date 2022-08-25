@@ -4,6 +4,27 @@ Automated cost estimation of your Azure infrastructure made easy. Works with ARM
 ## Demo
 ![arm-estimator-demo](docs/arm-estimator.gif)
 
+## Table of contents
+* [Philosophy](#philosophy)
+* [Main features](#main-features)
+* [Installation](#installation)
+* [Usage](#usage)
+  + [Windows](#windows)
+  + [Linux](#linux)
+  + [Parameters](#parameters)
+  + [Options](#options)
+  + [Deployment mode](#deployment-mode)
+  + [Threshold](#threshold)
+  + [Parameters](#parameters-1)
+  + [Currency](#currency)
+  + [JSON output](#json-output)
+  + [Silent mode](#silent-mode)
+  + [Output redirection](#output-redirection)
+* [Known limitations](#known-limitations)
+* [Services support](#services-support)
+* [Contributions](#contributions)
+* [Acknowledgements](#acknowledgements)
+
 ## Philosophy
 As adoption of cloud services progresses, understanding how cloud billing works becomes more and more critical for keeping everything under control. Most of the time initial infrastructure cost estimation is done only during design phase and gets neglected as development progresses. Many development teams don't have enough understanding how to calculate impact of their changes and find difficult to get an immediate feedback whether they're still withing acceptable level of money spent for their services.
 
@@ -254,3 +275,6 @@ VPN Gateway|Stable|-
 
 ## Contributions
 Contributions are more than welcome!
+
+## Acknowledgements
+* TOC generator - https://ecotrust-canada.github.io/markdown-toc/
