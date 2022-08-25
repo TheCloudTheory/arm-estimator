@@ -1,4 +1,4 @@
-# ARM Cost Estimator
+# ACE (Azure Cost Estimator)
 Automated cost estimation of your Azure infrastructure made easy. Works with ARM Templates and Bicep.
 
 ## Demo
@@ -9,7 +9,7 @@ As adoption of cloud services progresses, understanding how cloud billing works 
 
 Infrastructure-as-Code (IaC) makes things even more difficult - it solves the problem of cloud infrastructure treated as a separate development stream, but doesn't give you control over cost of components under your control.
 
-ARM Cost Estimator follows a concept of [_running cost as architecture fitness function_](https://www.thoughtworks.com/radar/techniques/run-cost-as-architecture-fitness-function). You can make it an integral part of your CICD pipeline and quickly gather information of how much you're going to spend.
+ACE follows a concept of [_running cost as architecture fitness function_](https://www.thoughtworks.com/radar/techniques/run-cost-as-architecture-fitness-function). You can make it an integral part of your CICD pipeline and quickly gather information of how much you're going to spend.
 
 ## Main features
 * Detailed output containing information about cost of your infrastructure and metrics used for calculation
@@ -27,7 +27,7 @@ ARM Cost Estimator follows a concept of [_running cost as architecture fitness f
 * Allows for generating output as an artifact for further processing
 
 ## Installation
-ARM Cost Estimator can be download as ZIP package containing a single executable file. Check releases to find the most recent version download URL.
+ACE can be download as ZIP package containing a single executable file. Check releases to find the most recent version download URL.
 
 ## Usage
 You can use the project with both ARM Templates and (indirectly) with Bicep files. Due to limitation of Azure What If API, your Bicep definitions must be transformed to ARM Templates before you can use them with ARM Cost Estimator. This can be done with a simple command:
@@ -45,7 +45,7 @@ dotnet arm-estimator <template-path>.json <subscription-id> <resource-group>
 ```
 
 ### Parameters
-When using ARM Cost Estimator, you must use the following three required parameters:
+When using ACE, you must use the following three required parameters:
 Name|Default value|Example|Description
 ---|---|---|---
 template-file|N/A|`some_path/some_file.json`|Path to the template file (must be in JSON format)
@@ -66,7 +66,7 @@ Name|Default value|Example|Description
 
 ### Deployment mode
 ##### Available from: alpha2
-When performing resource group level deployment there's an option to select a deployment mode. ARM Cost Estimator also supports that option by providing desired value as parameter:
+When performing resource group level deployment there's an option to select a deployment mode. ACE also supports that option by providing desired value as parameter:
 ```
 arm-estimator <template-path>.json <subscription-id> <resource-group> --mode Incremental|Complete
 ```
@@ -75,7 +75,7 @@ When parameter is not passed, `Incremental` mode is selected. Selecting `Complet
 
 ### Threshold
 ##### Available from: alpha3
-With ARM Cost Estimator it's possible to stop your CICD process is projected estimation exceeds your assumptions:
+With ACE it's possible to stop your CICD process is projected estimation exceeds your assumptions:
 ```
 arm-estimator <template-path>.json <subscription-id> <resource-group> --threshold <int>
 ```
@@ -91,9 +91,9 @@ Very often templates contain parameters, which have different values depending o
 ```
 arm-estimator <template-path>.json <subscription-id> <resource-group> --parameters <path-to-your-parameters-file>.json
 ```
-Both ARM Templates and Bicep use parameters defined as JSON files. ARM Cost Estimator expects parameters file to be passed without changes, even though Azure What If API expects sending parameters with slightly different schema than parameters file itself.
+Both ARM Templates and Bicep use parameters defined as JSON files. ACE expects parameters file to be passed without changes, even though Azure What If API expects sending parameters with slightly different schema than parameters file itself.
 
-When using ARM Cost Estimator, you parameters file should look like this:
+When using ACE, you parameters file should look like this:
 ```
 {
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
@@ -200,7 +200,7 @@ arm-estimator <template-path>.json <subscription-id> <resource-group> --generate
 This is especially useful when using estimation output as input for another command or process.
 
 ## Known limitations
-ARM Cost Estimator is currently in `beta` development phase meaning there're no guarantees for stable interface and some features are still in design or planning phase. The main limitations as for now are:
+ACE is currently in `beta` development phase meaning there're no guarantees for stable interface and some features are still in design or planning phase. The main limitations as for now are:
 * You can use the project only with a resource group as deployment scope
 * Some services are in TBD state (see below for more information)
 * There's no possibility to define custom usage patterns so some metrics (mainly those described as price per second / hour / day) are projected for full month
