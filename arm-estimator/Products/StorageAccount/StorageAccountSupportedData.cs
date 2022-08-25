@@ -2,7 +2,7 @@
 {
     public static readonly IReadOnlyDictionary<string, string> CommonSkuToSkuIdMap = new Dictionary<string, string>()
     {
-        { "Standard_LRS", 
+        { "Standard_LRS",
             "Standard LRS"
         },
         { "Standard_ZRS",
@@ -15,10 +15,16 @@
             "Standard GRS"
         },
         { "Standard_RAGRS",
-            "Standard RAGRS"
+            "Standard RA-GRS"
         },
         { "Standard_RAGZRS",
-            "Standard RAGZRS"
+            "Standard RA-GZRS"
+        },
+        { "Premium_LRS",
+            "Premium LRS"
+        },
+        { "Premium_ZRS",
+            "Premium ZRS"
         }
     };
 
