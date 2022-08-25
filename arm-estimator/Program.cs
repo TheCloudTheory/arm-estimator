@@ -1,6 +1,7 @@
 ﻿using Azure.Core;
 using Microsoft.Extensions.Logging;
 using System.CommandLine;
+using System.Diagnostics;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.RegularExpressions;
@@ -67,9 +68,8 @@ internal class Program
             DisplayWelcomeScreen(logger);
             DisplayUsedSettings(templateFile, subscriptionId, resourceGroupName, logger, options);
 
-            var template = Regex.Replace(File.ReadAllText(templateFile.FullName), @"\s+", string.Empty);  // Make JSON a single-line value
+            var template = GetTemplate(templateFile);
             var parameters = "{}";
-
             if (options.ParametersFile != null)
             {
                 parameters = Regex.Replace(File.ReadAllText(options.ParametersFile.FullName), @"\s+", string.Empty);
@@ -121,6 +121,32 @@ internal class Program
         }
     }
 
+    private static string GetTemplate(FileInfo templateFile)
+    {
+        string? template = null;
+        if (templateFile.Extension == ".bicep")
+        {
+            using (var process = new Process())
+            {
+                process.StartInfo.FileName = "bicep";
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.CreateNoWindow = false;
+                process.StartInfo.Arguments = $"build {templateFile} --stdout";
+                process.StartInfo.RedirectStandardOutput = true;
+                process.StartInfo.RedirectStandardError = true;
+
+                process.Start();
+                template = process.StandardOutput.ReadToEnd();
+            }
+        }
+        else
+        {
+            template = Regex.Replace(File.ReadAllText(templateFile.FullName), @"\s+", string.Empty);  // Make JSON a single-line value
+        }
+
+        return template;
+    }
+
     private static void GenerateOutputIfNeeded(EstimateOptions options, EstimationOutput output, ILogger<Program> logger)
     {
         if (options.ShouldGenerateOutput)
@@ -160,7 +186,9 @@ internal class Program
         logger.AddEstimatorMessage("Threshold: {0}", options.Threshold == -1 ? "Not Set" : options.Threshold.ToString());
         logger.AddEstimatorMessage("Parameters file: {0}", options.ParametersFile?.Name ?? "Not Set");
         logger.AddEstimatorMessage("Currency: {0}", options.Currency);
-        logger.AddEstimatorMessage("Generate JSON output?: {0}", options.ShouldGenerateOutput);
+        logger.AddEstimatorMessage("Generate JSON output: {0}", options.ShouldGenerateOutput);
+        logger.AddEstimatorMessage("Silent mode: {0}", options.ShouldBeSilent);
+        logger.AddEstimatorMessage("Redirect stdout: {0}", options.Stdout);
         logger.LogInformation("");
         logger.LogInformation("------------------------------");
         logger.LogInformation("");
