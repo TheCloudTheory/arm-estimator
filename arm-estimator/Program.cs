@@ -23,7 +23,7 @@ internal class Program
         var silentOption = new Option<bool>("--silent", () => { return false; }, "Mute all logs");
         var stdoutOption = new Option<bool>("--stdout", () => { return false; }, "Redirects JSON output to stdout");
 
-        var command = new RootCommand("Azure Resource Manager cost estimator.")
+        var command = new RootCommand("ACE (Azure Cost Estimator)")
         {
             deploymentModeOption,
             thresholdOption,
@@ -68,7 +68,13 @@ internal class Program
             DisplayWelcomeScreen(logger);
             DisplayUsedSettings(templateFile, subscriptionId, resourceGroupName, logger, options);
 
-            var template = GetTemplate(templateFile);
+            var template = GetTemplate(templateFile, logger);
+            if(template == null)
+            {
+                logger.LogError("There was a problem with processing template.");
+                return;
+            }
+
             var parameters = "{}";
             if (options.ParametersFile != null)
             {
@@ -121,11 +127,12 @@ internal class Program
         }
     }
 
-    private static string GetTemplate(FileInfo templateFile)
+    private static string? GetTemplate(FileInfo templateFile, ILogger<Program> logger)
     {
         string? template = null;
         if (templateFile.Extension == ".bicep")
         {
+            logger.AddEstimatorMessage("Attempting to compile Bicep file.");
             using (var process = new Process())
             {
                 process.StartInfo.FileName = "bicep";
@@ -137,6 +144,27 @@ internal class Program
 
                 process.Start();
                 template = process.StandardOutput.ReadToEnd();
+
+                var error = process.StandardError.ReadToEnd();
+                if(string.IsNullOrWhiteSpace(template))
+                {
+                    logger.LogError("{error}", error);
+                    return null;
+                }
+                else
+                {
+                    if(string.IsNullOrWhiteSpace(error) == false)
+                    {
+                        // Bicep returns warnings as errors, so if a template is generated,
+                        // that most likely the case and we need to handle it
+                        logger.LogWarning("{warning}", error);
+                    }
+                }
+
+                logger.AddEstimatorMessage("Compilation completed!");
+                logger.LogInformation("");
+                logger.LogInformation("------------------------------");
+                logger.LogInformation("");
             }
         }
         else
@@ -165,7 +193,7 @@ internal class Program
 
     private static void DisplayWelcomeScreen(ILogger<Program> logger)
     {
-        logger.LogInformation("ARM Cost Estimator [{version}]", GetInformationalVersion());
+        logger.LogInformation("ACE (Azure Cost Estimator) [{version}]", GetInformationalVersion());
         logger.LogInformation("------------------------------");
         logger.LogInformation("");
         logger.LogInformation("General help: https://github.com/TheCloudTheory/arm-estimator/discussions");
