@@ -7,7 +7,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 	<PublishSingleFile>true</PublishSingleFile>
-	<Version>1.0.0-beta1</Version>
+	<Version>1.0.0-beta2</Version>
 	<AssemblyVersion></AssemblyVersion>
 	<FileVersion></FileVersion>
   </PropertyGroup>
