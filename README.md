@@ -10,7 +10,7 @@ Automated cost estimation of your Azure infrastructure made easy. Works with ARM
 * [Installation](#installation)
 * [Usage](#usage)
   + [Windows](#windows)
-  + [Linux](#linux)
+  + [Linux / OSX](#linux--osx)
   + [Parameters](#parameters)
   + [Options](#options)
   + [Deployment mode](#deployment-mode)
@@ -65,9 +65,9 @@ This will create an ARM Template based on the Bicep file passed as argument.
 ```
 arm-estimator.exe <template-path>.json|.bicep <subscription-id> <resource-group>
 ```
-### Linux
+### Linux / OSX
 ```
-dotnet arm-estimator <template-path>.json|.bicep <subscription-id> <resource-group>
+./arm-estimator <template-path>.json|.bicep <subscription-id> <resource-group>
 ```
 
 ### Parameters
