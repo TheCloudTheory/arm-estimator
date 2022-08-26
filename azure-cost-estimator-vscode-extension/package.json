@@ -15,6 +15,26 @@
   ],
   "main": "./dist/extension.js",
   "contributes": {
+    "configuration": {
+      "title": "Azure Cost Estimator",
+      "properties": {
+        "ace.location": {
+          "type": "string",
+          "default": "",
+          "description": "Full path to the location where Azure Cost Estimator is downloaded"
+        },
+        "ace.subscriptionId": {
+          "type": "string",
+          "default": "",
+          "description": "Subscription Id to use for estimations"
+        },
+        "ace.resourceGroupName": {
+          "type": "string",
+          "default": "",
+          "description": "Resource group to use for estimations"
+        }
+      }
+    },
     "viewsContainers": {
       "activitybar": [
         {

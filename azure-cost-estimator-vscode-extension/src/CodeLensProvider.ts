@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { execSync } from 'child_process';
+import { ChildProcess, exec } from 'child_process';
 import { AzureCostEstimatorCodeLens } from './AzureCostEstimatorCodeLens';
 
 export class CodelensProvider implements vscode.CodeLensProvider {
@@ -7,43 +7,54 @@ export class CodelensProvider implements vscode.CodeLensProvider {
     private codeLenses: vscode.CodeLens[] = [];
     private _onDidChangeCodeLenses: vscode.EventEmitter<void> = new vscode.EventEmitter<void>();
     private regex: RegExp;
+
     public readonly onDidChangeCodeLenses: vscode.Event<void> = this._onDidChangeCodeLenses.event;
 
     constructor() {
         this.regex = /resource .{1,} '.{1,}'/gm;
     }
 
-    provideCodeLenses(document: vscode.TextDocument, token: vscode.CancellationToken): vscode.ProviderResult<vscode.CodeLens[]> {
+    provideCodeLenses(document: vscode.TextDocument, token: vscode.CancellationToken): Promise<vscode.CodeLens[]> {
         this.codeLenses = [];
+
         const regex = new RegExp(this.regex);
         const text = document.getText();
+        const aceConfiguration = vscode.workspace.getConfiguration('azure-cost-estimator')
+        const aceLocation = aceConfiguration.get('ace.location');
+        const subscriptionId = aceConfiguration.get('ace.subscriptionId');
+        const resourceGroupName = aceConfiguration.get('ace.resourceGroupName');
 
-        let armTemplate = null;
-        vscode.window.setStatusBarMessage('ACE: Generating ARM Template...');
-
-        try {
-            let cmd = execSync(`bicep build ${document.fileName} --stdout`);
-            armTemplate = cmd.toString();
-            console.log(armTemplate);
-            vscode.window.setStatusBarMessage('ACE: Ready!');
-
-        } catch (err: any) {
-            vscode.window.showErrorMessage(err);
-            return [];
+        if(aceLocation == '' || subscriptionId == '' || resourceGroupName == '')
+        {
+            vscode.window.showWarningMessage("Azure Cost Estimator configuration is not complete.");
+            return new Promise(() => this.codeLenses);
         }
 
-        let matches;
-        while ((matches = regex.exec(text)) !== null) {
-            const line = document.lineAt(document.positionAt(matches.index).line);
-            const indexOf = line.text.indexOf(matches[0]);
-            const position = new vscode.Position(line.lineNumber, indexOf);
-            const range = document.getWordRangeAtPosition(position, new RegExp(this.regex));
+        const command = `${aceLocation} ${document.fileName} ${subscriptionId} ${resourceGroupName} --silent --generateJsonOutput --stdout`;
+        const process = exec(command);
 
-            if (range) {
-                this.codeLenses.push(new AzureCostEstimatorCodeLens(30.56, range));
+        process.stdout?.on('data', data => {
+            let matches;
+            while ((matches = regex.exec(text)) !== null) {
+                const line = document.lineAt(document.positionAt(matches.index).line);
+                const indexOf = line.text.indexOf(matches[0]);
+                const position = new vscode.Position(line.lineNumber, indexOf);
+                const range = document.getWordRangeAtPosition(position, new RegExp(this.regex));
+
+                if (range) {
+                    const codeLens = new AzureCostEstimatorCodeLens(30.56, range);
+                    this.codeLenses.push(codeLens);
+                }
             }
-        }
-        return this.codeLenses;
+        });
+
+        return this.createPromiseFromChildProcess(process).then(result => {
+            console.log("Successfully generated estimation.");
+            return this.codeLenses;
+        }, error => {
+            console.log("There was an error when generating estimation.");
+            return this.codeLenses;
+        });
     }
 
     resolveCodeLens(codeLens: vscode.CodeLens, token: vscode.CancellationToken) {
@@ -56,8 +67,21 @@ export class CodelensProvider implements vscode.CodeLensProvider {
             };
 
             return codeLens;
-        }
+        } else {
+            codeLens.command = {
+                title: `Estimating cost...`,
+                command: "codelens-sample.codelensAction",
+                arguments: [codeLens]
+            };
 
-        return null;
+            return codeLens;
+        }
+    }
+
+    private createPromiseFromChildProcess(process: ChildProcess) {
+        return new Promise((resolve, reject)  => {
+            process.addListener("error", reject);
+            process.addListener("exit", resolve);
+        });
     }
 }
