@@ -51,6 +51,9 @@ ACE follows a concept of [_running cost as architecture fitness function_](https
 ## Installation
 ACE can be download as ZIP package containing a single executable file. Check releases to find the most recent version download URL.
 
+### Docker
+ACE can be also download and used as containerized application. See below for more details how run it as container.
+
 ## Usage
 You can use the project with both ARM Templates and with Bicep files. In general, ACE doesn't care if you want to use old-school ARM Template or Bicep, however if you face any issues, you can transform Bicep file to ARM Template with help of Bicep CLI:
 ```
@@ -69,6 +72,28 @@ arm-estimator.exe <template-path>.json|.bicep <subscription-id> <resource-group>
 ```
 ./arm-estimator <template-path>.json|.bicep <subscription-id> <resource-group>
 ```
+### Docker
+Running ACE as Docker container has following benefits:
+* you can run it on any host supporting Docker
+* you don't need to manually download executable
+* there's no need to install Bicep CLI as it's bundled within running container
+
+However, when running a container with ACE, there're additional things to think about. Here's an example of starting ACE as container:
+```
+docker run -e AZURE_CLIENT_ID=<client-id> -e AZURE_TENANT_ID=<tenant-id> -e AZURE_CLIENT_SECRET=<client-secret> -v ./templates:/app azure-cost-estimator:latest templates/acr.json <subscription-id> arm-estimator-rg
+```
+Using above command, you can run ACE with default values for options. Once container runs, it'll log all estimation information to stdout. As opposite to running executable, when Docker container is used, you must configure two elements by yourself:
+* authentication to Azure
+* Docker volume which maps a directory with your template to `/app` directory within container
+
+> Under the hood, ACE uses `Azure.Identity` package for handling authentication. As containers run as isolated hosts, by default they don't have access to e.g. Managed Identity configured for you agent. The easiest way is to leverage `EnvironmentCredentials` as presented above, however if you somehow expose a running container to its host, you may use other ways of authentication.
+
+There're three ways of configuring `EnvironmentCredentials` within a running container:
+* setup variables AZURE_CLIENT_ID, AZURE_TENANT_ID and AZURE_CLIENT_SECRET
+* setup variables AZURE_CLIENT_ID, AZURE_TENANT_ID and AZURE_CLIENT_CERTIFICATE_PATH
+* setup variables AZURE_USERNAME and AZURE_PASSWORD
+
+Which method is used, is transparent to the estimation process.
 
 ### Parameters
 When using ACE, you must use the following three required parameters:
