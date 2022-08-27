@@ -2,9 +2,15 @@
 
 internal class EstimatorLogger : ILogger
 {
-    public IDisposable BeginScope<TState>(TState state) => default!;
+    private readonly bool isSilent;
 
+    public IDisposable BeginScope<TState>(TState state) => default!;
     public bool IsEnabled(LogLevel logLevel) => true;
+
+    public EstimatorLogger(bool isSilent)
+    {
+        this.isSilent = isSilent;
+    }
 
     public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
     {
@@ -18,6 +24,14 @@ internal class EstimatorLogger : ILogger
         }
         else
         {
+            if(typeof(TState) == typeof(NonSilentMessage))
+            {
+                Console.WriteLine(formatter(state, exception));
+                return;
+            }
+
+            if (this.isSilent) return;
+
             if(typeof(TState) == typeof(ChangeMessage))
             {
                 if (state is ChangeMessage message)

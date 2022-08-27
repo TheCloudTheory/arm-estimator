@@ -2,7 +2,10 @@
   "profiles": {
     "arm-estimator": {
       "commandName": "Project",
-      "commandLineArgs": "templates/vm_av2.json f81e70a7-e819-49b2-a980-8e9c433743dd arm-estimator-uksouth-rg"
+      "commandLineArgs": "templates/bicep/storage.bicep f81e70a7-e819-49b2-a980-8e9c433743dd arm-estimator-rg --generateJsonOutput"
+    },
+    "Docker": {
+      "commandName": "Docker"
     }
   }
 }
