@@ -1,0 +1,230 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.9.1.41621",
+      "templateHash": "9088576959757743978"
+    }
+  },
+  "variables": {
+    "existingVMs": [
+      {
+        "vmId": "[resourceId('Microsoft.Compute/virtualMachines', 'ace-vm-01')]",
+        "targetAvailabiltySetId": "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, 'azcost-dr'), 'Microsoft.Compute/availabilitySets', 'ace-avail-set')]",
+        "managedDisks": [
+          "[resourceId('Microsoft.Compute/disks', 'ace-vm-01_OsDisk_1_cf25b7b7d823420caa8598b4e001e11b')]"
+        ]
+      }
+    ]
+  },
+  "resources": [
+    {
+      "type": "Microsoft.RecoveryServices/vaults",
+      "apiVersion": "2020-02-02",
+      "name": "ace-vault",
+      "location": "northeurope",
+      "sku": {
+        "name": "RS0",
+        "tier": "Standard"
+      },
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.RecoveryServices/vaults/replicationFabrics",
+      "apiVersion": "2022-03-01",
+      "name": "ace-vault/westeurope-fabric",
+      "properties": {
+        "customDetails": {
+          "instanceType": "Azure",
+          "location": "westeurope"
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.RecoveryServices/vaults', 'ace-vault')]"
+      ]
+    },
+    {
+      "type": "Microsoft.RecoveryServices/vaults/replicationFabrics",
+      "apiVersion": "2022-03-01",
+      "name": "ace-vault/northeurope-fabric",
+      "properties": {
+        "customDetails": {
+          "instanceType": "Azure",
+          "location": "northeurope"
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.RecoveryServices/vaults', 'ace-vault')]"
+      ]
+    },
+    {
+      "type": "Microsoft.RecoveryServices/vaults/replicationPolicies",
+      "apiVersion": "2018-07-10",
+      "name": "ace-vault/ace-retentionpolicy",
+      "properties": {
+        "providerSpecificInput": {
+          "instanceType": "A2A",
+          "appConsistentFrequencyInMinutes": 240,
+          "crashConsistentFrequencyInMinutes": 5,
+          "recoveryPointHistory": 1440,
+          "multiVmSyncStatus": "Enable"
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.RecoveryServices/vaults', 'ace-vault')]"
+      ]
+    },
+    {
+      "type": "Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers",
+      "apiVersion": "2022-03-01",
+      "name": "ace-vault/westeurope-fabric/acewesteurope-container",
+      "properties": {
+        "providerSpecificInput": [
+          {
+            "instanceType": "A2A"
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.RecoveryServices/vaults/replicationFabrics', split('ace-vault/westeurope-fabric', '/')[0], split('ace-vault/westeurope-fabric', '/')[1])]"
+      ]
+    },
+    {
+      "type": "Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers",
+      "apiVersion": "2022-03-01",
+      "name": "ace-vault/northeurope-fabric/acenortheurope-container",
+      "properties": {
+        "providerSpecificInput": [
+          {
+            "instanceType": "A2A"
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.RecoveryServices/vaults/replicationFabrics', split('ace-vault/northeurope-fabric', '/')[0], split('ace-vault/northeurope-fabric', '/')[1])]"
+      ]
+    },
+    {
+      "type": "Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers/replicationProtectionContainerMappings",
+      "apiVersion": "2018-01-10",
+      "name": "ace-vault/westeurope-fabric/acewesteurope-container/ace-westeurope-northeurope-24-hour-retention-policy",
+      "properties": {
+        "policyId": "[resourceId('Microsoft.RecoveryServices/vaults/replicationPolicies/', 'ace-vault', 'ace-retentionpolicy')]",
+        "targetProtectionContainerId": "[resourceId('Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers', 'ace-vault', 'northeurope-fabric', 'acenortheurope-container')]",
+        "providerSpecificInput": {
+          "instanceType": "A2A"
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.RecoveryServices/vaults', 'ace-vault')]",
+        "[resourceId('Microsoft.RecoveryServices/vaults/replicationPolicies', split('ace-vault/ace-retentionpolicy', '/')[0], split('ace-vault/ace-retentionpolicy', '/')[1])]",
+        "[resourceId('Microsoft.RecoveryServices/vaults/replicationFabrics', split('ace-vault/westeurope-fabric', '/')[0], split('ace-vault/westeurope-fabric', '/')[1])]"
+      ]
+    },
+    {
+      "type": "Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers/replicationProtectionContainerMappings",
+      "apiVersion": "2018-01-10",
+      "name": "ace-vault/northeurope-fabric/acenortheurope-container/ace-northeurope-westeurope-24-hour-retention-policy",
+      "properties": {
+        "policyId": "[resourceId('Microsoft.RecoveryServices/vaults/replicationPolicies/', 'ace-vault', 'ace-retentionpolicy')]",
+        "targetProtectionContainerId": "[resourceId('Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers', 'ace-vault', 'westeurope-fabric', 'acewesteurope-container')]",
+        "providerSpecificInput": {
+          "instanceType": "A2A"
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.RecoveryServices/vaults', 'ace-vault')]",
+        "[resourceId('Microsoft.RecoveryServices/vaults/replicationPolicies', split('ace-vault/ace-retentionpolicy', '/')[0], split('ace-vault/ace-retentionpolicy', '/')[1])]",
+        "[resourceId('Microsoft.RecoveryServices/vaults/replicationFabrics', split('ace-vault/northeurope-fabric', '/')[0], split('ace-vault/northeurope-fabric', '/')[1])]"
+      ]
+    },
+    {
+      "type": "Microsoft.RecoveryServices/vaults/replicationFabrics/replicationNetworks/replicationNetworkMappings",
+      "apiVersion": "2021-07-01",
+      "name": "ace-vault/westeurope-fabric/azureNetwork/westeurope-northeurope-vnet-mapping",
+      "properties": {
+        "recoveryFabricName": "northeurope-fabric",
+        "recoveryNetworkId": "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, 'azcost-dr'), 'Microsoft.Network/virtualNetworks', 'ace-vnet-dr')]",
+        "fabricSpecificDetails": {
+          "instanceType": "AzureToAzure",
+          "primaryNetworkId": "[resourceId('Microsoft.Network/virtualNetworks', 'ace-vnet')]"
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.RecoveryServices/vaults', 'ace-vault')]",
+        "[resourceId('Microsoft.RecoveryServices/vaults/replicationFabrics', split('ace-vault/westeurope-fabric', '/')[0], split('ace-vault/westeurope-fabric', '/')[1])]"
+      ]
+    },
+    {
+      "type": "Microsoft.RecoveryServices/vaults/replicationFabrics/replicationNetworks/replicationNetworkMappings",
+      "apiVersion": "2021-07-01",
+      "name": "ace-vault/northeurope-fabric/azureNetwork/northeurope-westeurope-vnet-mapping",
+      "properties": {
+        "recoveryFabricName": "westeurope-fabric",
+        "recoveryNetworkId": "[resourceId('Microsoft.Network/virtualNetworks', 'ace-vnet')]",
+        "fabricSpecificDetails": {
+          "instanceType": "AzureToAzure",
+          "primaryNetworkId": "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, 'azcost-dr'), 'Microsoft.Network/virtualNetworks', 'ace-vnet-dr')]"
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.RecoveryServices/vaults', 'ace-vault')]",
+        "[resourceId('Microsoft.RecoveryServices/vaults/replicationFabrics', split('ace-vault/northeurope-fabric', '/')[0], split('ace-vault/northeurope-fabric', '/')[1])]"
+      ]
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2021-04-01",
+      "name": "acestg28271",
+      "location": "westeurope",
+      "sku": {
+        "name": "Standard_LRS"
+      },
+      "kind": "StorageV2"
+    },
+    {
+      "copy": {
+        "name": "sourceprotectionItemPrefix_vmloop",
+        "count": "[length(variables('existingVMs'))]"
+      },
+      "type": "Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers/replicationProtectedItems",
+      "apiVersion": "2018-01-10",
+      "name": "ace-vault/westeurope-fabric/acewesteurope-container/ace-protectedItems",
+      "properties": {
+        "policyId": "[resourceId('Microsoft.RecoveryServices/vaults/replicationPolicies/', 'ace-vault', 'ace-retentionpolicy')]",
+        "protectableItemId": "",
+        "providerSpecificDetails": {
+          "copy": [
+            {
+              "name": "vmManagedDisks",
+              "count": "[length(range(0, length(variables('existingVMs')[copyIndex()].managedDisks)))]",
+              "input": {
+                "diskId": "[variables('existingVMs')[copyIndex()].managedDisks[range(0, length(variables('existingVMs')[copyIndex()].managedDisks))[copyIndex('vmManagedDisks')]]]",
+                "primaryStagingAzureStorageAccountId": "[resourceId('Microsoft.Storage/storageAccounts', 'acestg28271')]",
+                "recoveryResourceGroupId": "[resourceGroup().id]",
+                "recoveryReplicaDiskAccountType": "Standard_LRS",
+                "recoveryTargetDiskAccountType": "Standard_LRS"
+              }
+            }
+          ],
+          "instanceType": "A2A",
+          "fabricObjectId": "[variables('existingVMs')[copyIndex()].vmId]",
+          "recoveryContainerId": "[resourceId('Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers', 'ace-vault', 'northeurope-fabric', 'acenortheurope-container')]",
+          "recoveryResourceGroupId": "[subscriptionResourceId('Microsoft.Resources/resourceGroups', 'azcost-dr')]",
+          "multiVmGroupName": "ace-multivmgroup-01",
+          "recoveryAvailabilitySetId": "[variables('existingVMs')[copyIndex()].targetAvailabiltySetId]"
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.RecoveryServices/vaults/replicationPolicies', split('ace-vault/ace-retentionpolicy', '/')[0], split('ace-vault/ace-retentionpolicy', '/')[1])]",
+        "[resourceId('Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers', split('ace-vault/westeurope-fabric/acewesteurope-container', '/')[0], split('ace-vault/westeurope-fabric/acewesteurope-container', '/')[1], split('ace-vault/westeurope-fabric/acewesteurope-container', '/')[2])]",
+        "[resourceId('Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers/replicationProtectionContainerMappings', split('ace-vault/westeurope-fabric/acewesteurope-container/ace-westeurope-northeurope-24-hour-retention-policy', '/')[0], split('ace-vault/westeurope-fabric/acewesteurope-container/ace-westeurope-northeurope-24-hour-retention-policy', '/')[1], split('ace-vault/westeurope-fabric/acewesteurope-container/ace-westeurope-northeurope-24-hour-retention-policy', '/')[2], split('ace-vault/westeurope-fabric/acewesteurope-container/ace-westeurope-northeurope-24-hour-retention-policy', '/')[3])]",
+        "[resourceId('Microsoft.Storage/storageAccounts', 'acestg28271')]",
+        "[resourceId('Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers', split('ace-vault/northeurope-fabric/acenortheurope-container', '/')[0], split('ace-vault/northeurope-fabric/acenortheurope-container', '/')[1], split('ace-vault/northeurope-fabric/acenortheurope-container', '/')[2])]",
+        "[resourceId('Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers/replicationProtectionContainerMappings', split('ace-vault/northeurope-fabric/acenortheurope-container/ace-northeurope-westeurope-24-hour-retention-policy', '/')[0], split('ace-vault/northeurope-fabric/acenortheurope-container/ace-northeurope-westeurope-24-hour-retention-policy', '/')[1], split('ace-vault/northeurope-fabric/acenortheurope-container/ace-northeurope-westeurope-24-hour-retention-policy', '/')[2], split('ace-vault/northeurope-fabric/acenortheurope-container/ace-northeurope-westeurope-24-hour-retention-policy', '/')[3])]"
+      ]
+    }
+  ]
+}
