@@ -1,0 +1,12 @@
+name: Build & Push Docker image
+
+on: [workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build the Docker image
+      run: docker build . --file ./arm-estimator/Dockerfile --tag thecloudtheory/azure-cost-estimator:1.0.0-beta2
+    
