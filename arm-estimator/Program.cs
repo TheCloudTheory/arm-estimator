@@ -177,7 +177,7 @@ internal class Program
 
     private static void GenerateOutputIfNeeded(EstimateOptions options, EstimationOutput output, ILogger<Program> logger)
     {
-        if (options.ShouldGenerateOutput)
+        if (options.ShouldGenerateJsonOutput)
         {
             var outputData = JsonSerializer.Serialize(output);
             if (options.Stdout)
@@ -186,7 +186,9 @@ internal class Program
             }
             else
             {
-                File.WriteAllText($"ace_estimation_{DateTime.UtcNow:yyyyMMddHHmmss}.json", outputData);
+                var fileName = $"ace_estimation_{DateTime.UtcNow:yyyyMMddHHmmss}.json";
+                logger.AddEstimatorMessage("Generating output file as {0}", fileName);
+                File.WriteAllText(fileName, outputData);
             }
         }
     }
@@ -214,7 +216,7 @@ internal class Program
         logger.AddEstimatorMessage("Threshold: {0}", options.Threshold == -1 ? "Not Set" : options.Threshold.ToString());
         logger.AddEstimatorMessage("Parameters file: {0}", options.ParametersFile?.Name ?? "Not Set");
         logger.AddEstimatorMessage("Currency: {0}", options.Currency);
-        logger.AddEstimatorMessage("Generate JSON output: {0}", options.ShouldGenerateOutput);
+        logger.AddEstimatorMessage("Generate JSON output: {0}", options.ShouldGenerateJsonOutput);
         logger.AddEstimatorMessage("Silent mode: {0}", options.ShouldBeSilent);
         logger.AddEstimatorMessage("Redirect stdout: {0}", options.Stdout);
         logger.LogInformation("");

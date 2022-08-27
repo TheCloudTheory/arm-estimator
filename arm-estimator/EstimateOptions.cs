@@ -12,7 +12,7 @@
         Threshold = threshold;
         ParametersFile = parametersFile;
         Currency = currency;
-        ShouldGenerateOutput = shouldGenerateOutput;
+        ShouldGenerateJsonOutput = shouldGenerateOutput;
         ShouldBeSilent = shouldBeSilent;
         Stdout = stdout;
     }
@@ -21,7 +21,7 @@
     public int Threshold { get; }
     public FileInfo? ParametersFile { get; }
     public CurrencyCode Currency { get; }
-    public bool ShouldGenerateOutput { get; }
+    public bool ShouldGenerateJsonOutput { get; }
     public bool ShouldBeSilent { get; }
     public bool Stdout { get; }
 }
