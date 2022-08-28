@@ -15,4 +15,8 @@ RUN dotnet publish "arm-estimator.csproj" -c Release -o /app/publish -p:PublishS
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+RUN apt-get update && apt-get install -y curl
+RUN curl -Lo bicep https://github.com/Azure/bicep/releases/latest/download/bicep-linux-x64
+RUN chmod +x ./bicep
+RUN mv ./bicep /usr/local/bin/bicep
 ENTRYPOINT ["dotnet", "arm-estimator.dll"]
