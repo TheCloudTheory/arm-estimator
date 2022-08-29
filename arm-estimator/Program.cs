@@ -143,9 +143,9 @@ internal class Program
                 process.StartInfo.RedirectStandardError = true;
 
                 process.Start();
-                template = process.StandardOutput.ReadToEnd();
-
                 var error = process.StandardError.ReadToEnd();
+                template = process.StandardOutput.ReadToEnd();
+               
                 if(string.IsNullOrWhiteSpace(template))
                 {
                     logger.LogError("{error}", error);

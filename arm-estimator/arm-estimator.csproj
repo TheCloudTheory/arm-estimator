@@ -53,6 +53,9 @@
     <None Update="templates\bicep\acr.bicep">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="templates\bicep\asr.bicep">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="templates\bicep\storage.bicep">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
