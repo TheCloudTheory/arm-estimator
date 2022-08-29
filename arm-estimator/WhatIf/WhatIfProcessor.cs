@@ -197,6 +197,7 @@ internal class WhatIfProcessor
                     break;
                 default:
                     logger.LogWarning("{resourceType} is not yet supported.", id?.ResourceType);
+                    logger.LogInformation("");
                     break;
             }
 

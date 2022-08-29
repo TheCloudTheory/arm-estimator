@@ -94,7 +94,9 @@ resource sourceMapping 'Microsoft.RecoveryServices/vaults/replicationFabrics/rep
     }
   }
   dependsOn: [ 
-    recoveryServicesVault, replicationPolicyName, sourceFabricName
+    recoveryServicesVault
+    replicationPolicyName
+    sourceFabricName
   ]
 }
 
@@ -108,7 +110,9 @@ resource targetMapping 'Microsoft.RecoveryServices/vaults/replicationFabrics/rep
     }
   }
   dependsOn: [
-    recoveryServicesVault, replicationPolicyName, targetFabricName
+    recoveryServicesVault
+    replicationPolicyName
+    targetFabricName
    ]
 }
 
@@ -132,7 +136,8 @@ resource sourceVNetMapping 'Microsoft.RecoveryServices/vaults/replicationFabrics
     }
   }
   dependsOn: [ 
-    recoveryServicesVault, sourceFabricName
+    recoveryServicesVault
+    sourceFabricName
   ]
 }
 
@@ -147,7 +152,8 @@ resource targetVNetMapping 'Microsoft.RecoveryServices/vaults/replicationFabrics
     }
   }
   dependsOn: [
-    recoveryServicesVault, targetFabricName
+    recoveryServicesVault
+    targetFabricName
    ]
 }
 
@@ -159,8 +165,6 @@ resource stagingStorage 'Microsoft.Storage/storageAccounts@2021-04-01' = {
   }
   kind: 'StorageV2'
 }
-
-@description('Retrieving all pre-requisites resources required for enabling Site Recovery')
 
 resource existVM 'Microsoft.Compute/virtualMachines@2020-06-01' existing = {
   name: 'ace-vm-01'
@@ -212,6 +216,10 @@ resource sourceprotectionItemPrefix_vmloop 'Microsoft.RecoveryServices/vaults/re
     }
   }
   dependsOn: [
-    stagingStorage, sourceContainerName, targetContainerName, replicationPolicyName, sourceMapping, targetMapping
+    sourceContainerName
+    targetContainerName
+    replicationPolicyName
+    sourceMapping
+    targetMapping
   ]
 }]

@@ -142,9 +142,13 @@ internal class Program
                 process.StartInfo.RedirectStandardOutput = true;
                 process.StartInfo.RedirectStandardError = true;
 
+                string? error = null;
+                process.ErrorDataReceived += new DataReceivedEventHandler((sender, e) => { error += e.Data; });
+
                 process.Start();
-                var error = process.StandardError.ReadToEnd();
+                process.BeginErrorReadLine();
                 template = process.StandardOutput.ReadToEnd();
+                process.WaitForExit();
                
                 if(string.IsNullOrWhiteSpace(template))
                 {
