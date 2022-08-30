@@ -262,9 +262,11 @@ ACE is currently in `beta` development phase meaning there're no guarantees for 
 Those limitations will be removed in the future releases of the project.
 
 ## Services support
-Services not listed are considered TBD.
+Services not listed are considered TBD. Below list represents the latest commit available, which isn't always aligned with the most recent release.
 Service|Support level|More information
 ----|----|----
+Active Directory B2C|Not Supported|-
+Active Directory Domain Services|Not Supported|-
 Advanced Data Security|Not Supported|-
 Advanced Threat Protection|Not Supported|-
 AKS|In development|Estimates work for managed service (both Free / Paid), estimation doesn't include agent pools
@@ -272,9 +274,8 @@ APIM|Stable|-
 App Configuration|Stable|-
 Application Gateway|Stable|-
 Application Insights|In development|Supports classic mode, doesn't support Enteprise Nodes and Multi-step Web Test
-Active Directory B2C|Not Supported|-
-Active Directory Domain Services|Not Supported|-
 Analysis Services|Stable|-
+ASR|In progress|Doesn't support recovery to customer-owned sites
 Azure App Service|In development|Supports Azure App Service Plans (without Isolated tiers) and Azure Functions (Consumption / Premium / App Service Plan)
 Backup|In Progress|Supports SQL Server in Azure VM, Azure VM, Azure Files, SAP HANA on Azure VM. Supports GRS backup replication only
 Bastion|Stable|-
