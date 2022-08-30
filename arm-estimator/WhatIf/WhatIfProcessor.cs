@@ -195,6 +195,24 @@ internal class WhatIfProcessor
                 case "Microsoft.RecoveryServices/vaults/backupFabrics/protectionContainers/protectedItems":
                     resource = await Calculate<RecoveryServicesProtectedItemRetailQuery, RecoveryServicesProtectedItemEstimationCalculation>(change, id);
                     break;
+                case "Microsoft.RecoveryServices/vaults/replicationFabrics":
+                    ReportResourceWithoutCost(id, change.changeType);
+                    break;
+                case "Microsoft.RecoveryServices/vaults/replicationFabrics/replicationNetworks/replicationNetworkMappings":
+                    ReportResourceWithoutCost(id, change.changeType);
+                    break;
+                case "Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers":
+                    ReportResourceWithoutCost(id, change.changeType);
+                    break;
+                case "Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers/replicationProtectionContainerMappings":
+                    ReportResourceWithoutCost(id, change.changeType);
+                    break;
+                case "Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers/replicationProtectedItems":
+                    resource = await Calculate<AzureSiteRecoveryRetailQuery, AzureSiteRecoveryEstimationCalculation>(change, id);
+                    break;
+                case "Microsoft.RecoveryServices/vaults/replicationPolicies":
+                    ReportResourceWithoutCost(id, change.changeType);
+                    break;
                 default:
                     logger.LogWarning("{resourceType} is not yet supported.", id?.ResourceType);
                     logger.LogInformation("");
