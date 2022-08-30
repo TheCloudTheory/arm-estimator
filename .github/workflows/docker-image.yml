@@ -2,6 +2,9 @@ name: Build & Push Docker image
 
 on: [workflow_dispatch]
 
+env:
+  TAG: 1.0.0-beta3
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -10,10 +13,10 @@ jobs:
     - name: Login to DockerHub
       run: docker login -u thecloudtheory -p ${{ secrets.DOCKER_HUB_KEY }}
     - name: Build the Docker image
-      run: docker build . --file ./arm-estimator/Dockerfile --tag thecloudtheory/azure-cost-estimator:1.0.0-beta2
+      run: docker build . --file ./arm-estimator/Dockerfile --tag thecloudtheory/azure-cost-estimator:$TAG
     - name: Tag latest
-      run: docker tag thecloudtheory/azure-cost-estimator:1.0.0-beta2 thecloudtheory/azure-cost-estimator:latest
+      run: docker tag thecloudtheory/azure-cost-estimator:$TAG thecloudtheory/azure-cost-estimator:latest
     - name: Push the Docker image
-      run: docker push thecloudtheory/azure-cost-estimator:1.0.0-beta2
+      run: docker push thecloudtheory/azure-cost-estimator:$TAG
     - name: Push the Docker image (latest)
       run: docker push thecloudtheory/azure-cost-estimator:latest
