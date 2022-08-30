@@ -22,6 +22,7 @@ internal class Program
         var jsonOutputOption = new Option<bool>("--generateJsonOutput", () => { return false; }, "Should generate JSON output");
         var silentOption = new Option<bool>("--silent", () => { return false; }, "Mute all logs");
         var stdoutOption = new Option<bool>("--stdout", () => { return false; }, "Redirects JSON output to stdout");
+        var disableDetailsOptions = new Option<bool>("--disableDetailedMetrics", () => { return false; }, "Disables reporting of detailed metrics");
 
         var command = new RootCommand("ACE (Azure Cost Estimator)")
         {
@@ -31,7 +32,8 @@ internal class Program
             currencyOption,
             jsonOutputOption,
             silentOption,
-            stdoutOption
+            stdoutOption,
+            disableDetailsOptions
         };
 
         command.AddArgument(templateFileArg);
@@ -45,13 +47,15 @@ internal class Program
             susbcriptionIdArg,
             resourceGroupArg,
             new EstimateOptionsBinder(
-            deploymentModeOption,
-            thresholdOption,
-            parametersOption,
-            currencyOption,
-            jsonOutputOption,
-            silentOption,
-            stdoutOption));
+                deploymentModeOption,
+                thresholdOption,
+                parametersOption,
+                currencyOption,
+                jsonOutputOption,
+                silentOption,
+                stdoutOption,
+                disableDetailsOptions
+            ));
 
         return await command.InvokeAsync(args);
     }
@@ -95,7 +99,7 @@ internal class Program
                         WriteIndented = true
                     });
 
-                    logger.LogError(errorDetails);
+                    logger.LogError("{error}", errorDetails);
                 }
 
                 return;
@@ -116,7 +120,7 @@ internal class Program
             logger.LogInformation("-------------------------------");
             logger.LogInformation("");
 
-            var output = await new WhatIfProcessor(logger, whatIfData.properties.changes, options.Currency).Process();
+            var output = await new WhatIfProcessor(logger, whatIfData.properties.changes, options.Currency, options.DisableDetailedMetrics).Process();
             GenerateOutputIfNeeded(options, output, logger);
 
             if (options.Threshold != -1 && output.TotalCost > options.Threshold)
@@ -223,6 +227,7 @@ internal class Program
         logger.AddEstimatorMessage("Generate JSON output: {0}", options.ShouldGenerateJsonOutput);
         logger.AddEstimatorMessage("Silent mode: {0}", options.ShouldBeSilent);
         logger.AddEstimatorMessage("Redirect stdout: {0}", options.Stdout);
+        logger.AddEstimatorMessage("Disabled detailed metrics: {0}", options.DisableDetailedMetrics);
         logger.LogInformation("");
         logger.LogInformation("------------------------------");
         logger.LogInformation("");

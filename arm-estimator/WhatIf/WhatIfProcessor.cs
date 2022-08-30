@@ -13,12 +13,14 @@ internal class WhatIfProcessor
     private readonly ILogger logger;
     private readonly WhatIfChange[] changes;
     private readonly CurrencyCode currency;
+    private readonly bool disableDetailedMetrics;
 
-    public WhatIfProcessor(ILogger logger, WhatIfChange[] changes, CurrencyCode currency)
+    public WhatIfProcessor(ILogger logger, WhatIfChange[] changes, CurrencyCode currency, bool disableDetailedMetrics)
     {
         this.logger = logger;
         this.changes = changes;
         this.currency = currency;
+        this.disableDetailedMetrics = disableDetailedMetrics;
     }
 
     public async Task<EstimationOutput> Process()
@@ -430,6 +432,19 @@ internal class WhatIfProcessor
         this.logger.AddEstimatorMessageSubsection("Location: {0}", location);
         this.logger.AddEstimatorMessageSubsection("Total cost: {0} {1}", totalCost?.ToString("N2"), this.currency);
         this.logger.AddEstimatorMessageSubsection("Delta: {0} {1}", $"{deltaSign}{delta.GetValueOrDefault().ToString("N2")}", this.currency);
+
+        if(this.disableDetailedMetrics == false)
+        {
+            ReportDetailedMetrics(items);
+        }
+
+        this.logger.LogInformation("");
+        this.logger.LogInformation("-------------------------------");
+        this.logger.LogInformation("");
+    }
+
+    private void ReportDetailedMetrics(IOrderedEnumerable<RetailItem> items)
+    {
         this.logger.LogInformation("");
         this.logger.LogInformation("Aggregated metrics:");
         this.logger.LogInformation("");
@@ -445,10 +460,6 @@ internal class WhatIfProcessor
         {
             this.logger.LogInformation("No metrics available.");
         }
-
-        this.logger.LogInformation("");
-        this.logger.LogInformation("-------------------------------");
-        this.logger.LogInformation("");
     }
 
     private void ReportResourceWithoutCost(ResourceIdentifier id, WhatIfChangeType? changeType)

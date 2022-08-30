@@ -6,7 +6,8 @@
                            CurrencyCode currency,
                            bool shouldGenerateOutput,
                            bool shouldBeSilent,
-                           bool stdout)
+                           bool stdout,
+                           bool disableDetailedMetrics)
     {
         Mode = mode;
         Threshold = threshold;
@@ -15,6 +16,7 @@
         ShouldGenerateJsonOutput = shouldGenerateOutput;
         ShouldBeSilent = shouldBeSilent;
         Stdout = stdout;
+        DisableDetailedMetrics = disableDetailedMetrics;
     }
 
     public DeploymentMode Mode { get; }
@@ -24,4 +26,5 @@
     public bool ShouldGenerateJsonOutput { get; }
     public bool ShouldBeSilent { get; }
     public bool Stdout { get; }
+    public bool DisableDetailedMetrics { get; }
 }
