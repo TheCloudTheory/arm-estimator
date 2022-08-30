@@ -116,6 +116,7 @@ Name|Default value|Example|Description
 --generateJsonOutput|`false`|`--generateJsonOutput`|Generates JSON file containing estimation result
 --silent|`false`|`--silent`|Silences logs so no information is returned to console
 --stdout|`false`|`--stdout`|Redirects generated output to stdout instead of file
+--disableDetailedMetrics|`false`|`--disableDetailedMetrics`|Disables detailed metrics of estimated resource cost
 
 ### Deployment mode
 ##### Available from: 1.0.0-alpha2
@@ -251,6 +252,39 @@ arm-estimator <template-path>.json <subscription-id> <resource-group> --generate
 ```
 
 This is especially useful when using estimation output as input for another command or process.
+
+### Disabling detailed metrics
+##### Available from: 1.0.0-beta3
+By default, ACE reports all aggregated metrics, so you can understand in details how cost was calculated. In scenarios, when you're interested in estimated price only, you can disable detailed metrics for smaller output using `--disableDetailedMetrics` option:
+```
+arm-estimator <template-path>.json <subscription-id> <resource-group> --disableDetailedMetrics 
+```
+When this option is enabled, the following output:
+```
+[Create] acestg28271
+   \--- Type: Microsoft.Storage/storageAccounts
+   \--- Location: EU West
+   \--- Total cost: 0.25 USD
+   \--- Delta: +0.25 USD
+
+Aggregated metrics:
+
+-> Standard LRS | Tables | LRS Data Stored | 0.045 for 1 GB/Month
+-> Standard LRS | Queues v2 | LRS Data Stored | 0.045 for 1 GB/Month
+-> Standard LRS | General Block Blob | LRS Data Stored | 0.024 for 1 GB/Month
+...
+-> Standard LRS | General Block Blob | LRS List and Create Container Operations | 0.00036 for 10K
+-> Standard LRS | General Block Blob | Read Operations - Free | 0 for 10K
+-> Standard LRS | General Block Blob | LRS Write Operations - Free | 0 for 10K
+```
+Will be replaced with:
+```
+[Create] acestg28271
+   \--- Type: Microsoft.Storage/storageAccounts
+   \--- Location: EU West
+   \--- Total cost: 0.25 USD
+   \--- Delta: +0.25 USD
+```
 
 ## Known limitations
 ACE is currently in `beta` development phase meaning there're no guarantees for stable interface and some features are still in design or planning phase. The main limitations as for now are:
