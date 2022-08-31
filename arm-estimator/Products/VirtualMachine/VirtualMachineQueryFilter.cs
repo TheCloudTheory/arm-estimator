@@ -101,7 +101,7 @@ internal class VirtualMachineQueryFilter : IQueryFilter
                 case "B12ms":
                 case "B16ms":
                 case "B20ms":
-                    familySku = "B";
+                    familySku = "BS";
                     skuName = vmSizeParts[1];
                     break;
                 case "D1":
@@ -135,6 +135,102 @@ internal class VirtualMachineQueryFilter : IQueryFilter
                 case "D14":
                     familySku = "D";
                     skuName = $"D14/DS14";
+                    break;
+                case "D1 v2":
+                    familySku = "Dv2";
+                    skuName = $"D1 v2/DS1 v2";
+                    break;
+                case "D2 v2":
+                    familySku = "Dv2";
+                    skuName = $"D2 v2/DS2 v2";
+                    break;
+                case "D3 v2":
+                    familySku = "Dv2";
+                    skuName = $"D3 v2/DS3 v2";
+                    break;
+                case "D4 v2":
+                    familySku = "Dv2";
+                    skuName = $"D4 v2/DS4 v2";
+                    break;
+                case "D5 v2":
+                    familySku = "Dv2";
+                    skuName = $"D5 v2/DS5 v2";
+                    break;
+                case "D11 v2":
+                    familySku = "Dv2";
+                    skuName = $"D11 v2/DS11 v2";
+                    break;
+                case "D12 v2":
+                    familySku = "Dv2";
+                    skuName = $"D12 v2/DS12 v2";
+                    break;
+                case "D13 v2":
+                    familySku = "Dv2";
+                    skuName = $"D13 v2/DS13 v2";
+                    break;
+                case "D14 v2":
+                    familySku = "Dv2";
+                    skuName = $"D14 v2/DS14 v2";
+                    break;
+                case "D15 v2":
+                    familySku = "Dv2";
+                    skuName = $"D15 v2/DS15 v2";
+                    break;
+                case "D15i v2":
+                    familySku = "Dv2";
+                    skuName = $"D15i v2/DS15i v2";
+                    break;
+                case "D2 v3":
+                    familySku = "Dv3";
+                    skuName = $"D2 v3/D2s v3";
+                    break;
+                case "D4 v3":
+                    familySku = "Dv3";
+                    skuName = $"D4 v3/D4s v3";
+                    break;
+                case "D8 v3":
+                    familySku = "Dv3";
+                    skuName = $"D8 v3/D8s v3";
+                    break;
+                case "D16 v3":
+                    familySku = "Dv3";
+                    skuName = $"D16 v3/D16s v3";
+                    break;
+                case "D32 v3":
+                    familySku = "Dv3";
+                    skuName = $"D32 v3/D32s v3";
+                    break;
+                case "D48 v3":
+                    familySku = "Dv3";
+                    skuName = $"D48 v3/D48s v3";
+                    break;
+                case "D64 v3":
+                    familySku = "Dv3";
+                    skuName = $"D64 v3/D64s v3";
+                    break;
+                case "D2 v4":
+                    familySku = "Dv4";
+                    skuName = $"D2 v4";
+                    break;
+                case "D4 v4":
+                    familySku = "Dv4";
+                    skuName = $"D4 v4";
+                    break;
+                case "D8 v4":
+                    familySku = "Dv4";
+                    skuName = $"D8 v4";
+                    break;
+                case "D32 v4":
+                    familySku = "Dv4";
+                    skuName = $"D32 v4";
+                    break;
+                case "D48 v4":
+                    familySku = "Dv4";
+                    skuName = $"D48 v4";
+                    break;
+                case "D64 v4":
+                    familySku = "Dv4";
+                    skuName = $"D64 v4";
                     break;
                 default:
                     this.logger.LogWarning("VM size {size} is not supported.", vmSize);
