@@ -7,7 +7,8 @@
                            bool shouldGenerateOutput,
                            bool shouldBeSilent,
                            bool stdout,
-                           bool disableDetailedMetrics)
+                           bool disableDetailedMetrics,
+                           string? jsonOutputFilename)
     {
         Mode = mode;
         Threshold = threshold;
@@ -17,6 +18,7 @@
         ShouldBeSilent = shouldBeSilent;
         Stdout = stdout;
         DisableDetailedMetrics = disableDetailedMetrics;
+        JsonOutputFilename = jsonOutputFilename;
     }
 
     public DeploymentMode Mode { get; }
@@ -27,4 +29,5 @@
     public bool ShouldBeSilent { get; }
     public bool Stdout { get; }
     public bool DisableDetailedMetrics { get; }
+    public string? JsonOutputFilename { get; }
 }
