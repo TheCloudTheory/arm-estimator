@@ -23,6 +23,7 @@ Automated cost estimation of your Azure infrastructure made easy. Works with ARM
   + [Silent mode](#silent-mode)
   + [Output redirection](#output-redirection)
   + [Disabling detailed metrics](#disabling-detailed-metrics)
+  + [JSON output filename](#json-output-filename)
 * [Known limitations](#known-limitations)
 * [Services support](#services-support)
 * [Contributions](#contributions)
@@ -118,6 +119,7 @@ Name|Default value|Example|Description
 --silent|`false`|`--silent`|Silences logs so no information is returned to console
 --stdout|`false`|`--stdout`|Redirects generated output to stdout instead of file
 --disableDetailedMetrics|`false`|`--disableDetailedMetrics`|Disables detailed metrics of estimated resource cost
+--jsonOutputFilename|`null`|`--jsonOutputFilename estimationOutput`|Sets a name of JSON output file created when `--generateJsonOutput` is enabled
 
 ### Deployment mode
 ##### Available from: 1.0.0-alpha2
@@ -286,6 +288,15 @@ Will be replaced with:
    \--- Total cost: 0.25 USD
    \--- Delta: +0.25 USD
 ```
+
+### JSON output filename
+##### Available from: 1.0.0-beta4
+If you want, you can change the default name of JSON output file created when `--generateJsonOutput` option is enabled:
+```
+arm-estimator <template-path>.json <subscription-id> <resource-group> --generateJsonOutput --jsonOutputFilename my_estimation_file 
+```
+
+When `--jsonOutputFilename` is set, ACE will use provided custom name as the filename of JSON output file. Custom file is automatically saved as JSON, however timestamp is not automatically appended to its name.
 
 ## Known limitations
 ACE is currently in `beta` development phase meaning there're no guarantees for stable interface and some features are still in design or planning phase. The main limitations as for now are:
