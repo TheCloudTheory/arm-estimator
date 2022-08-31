@@ -1,0 +1,86 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.9.1.41621",
+      "templateHash": "1270154393866479707"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Insights/metricAlerts",
+      "apiVersion": "2018-03-01",
+      "name": "cpuPercentageAbove80",
+      "location": "global",
+      "tags": {},
+      "properties": {
+        "description": "CPU is over 80%",
+        "severity": "3",
+        "enabled": true,
+        "scopes": [
+          "[resourceId('Microsoft.Compute/virtualMachines', 'ace-vm-01')]"
+        ],
+        "evaluationFrequency": "PT5M",
+        "windowSize": "PT5M",
+        "criteria": {
+          "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria",
+          "allOf": [
+            {
+              "name": "1st criterion",
+              "metricName": "Percentage CPU",
+              "dimensions": [],
+              "operator": "GreaterThan",
+              "threshold": "80",
+              "timeAggregation": "Average"
+            }
+          ]
+        },
+        "actions": [
+          {
+            "actionGroupId": "[resourceId('Microsoft.Insights/actionGroups', 'ace-ag-01')]"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Insights/scheduledQueryRules",
+      "apiVersion": "2018-04-16",
+      "name": "Disk usage alert above 90 Perc",
+      "location": "westeurope",
+      "properties": {
+        "description": "This alert will be triggered when there is less than 10 Percentage low storage remaining.",
+        "enabled": "true",
+        "source": {
+          "query": "InsightsMetrics | where Origin == \"vm.azm.ms\" | where Computer == \"acedevtest01\" | where Namespace == \"LogicalDisk\" and Name == \"FreeSpacePercentage\" | summarize AggregatedValue = avg(Val) by bin(TimeGenerated, 15m), Computer",
+          "dataSourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', 'ace-la-v1')]",
+          "queryType": "ResultCount"
+        },
+        "schedule": {
+          "frequencyInMinutes": 15,
+          "timeWindowInMinutes": 15
+        },
+        "action": {
+          "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.Microsoft.AppInsights.Nexus.DataContracts.Resources.ScheduledQueryRules.AlertingAction",
+          "severity": "4",
+          "aznsAction": {
+            "actionGroup": [
+              "[resourceId('Microsoft.Insights/actionGroups', 'ace-ag-01')]"
+            ]
+          },
+          "trigger": {
+            "thresholdOperator": "LessThan",
+            "threshold": 10,
+            "metricTrigger": {
+              "thresholdOperator": "Equal",
+              "threshold": "1",
+              "metricColumn": "Computer",
+              "metricTriggerType": "Consecutive"
+            }
+          }
+        }
+      }
+    }
+  ]
+}
