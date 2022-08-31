@@ -337,7 +337,7 @@ SQL Database|In development|Supports only Databases (DTU model - Basic & Standar
 Storage Account|In development|Supports only StorageV2 (without File Service & Data Lake Storage)
 Stream Analytics|Stable|Stream Analytics on Edge requires separate estimation
 Time Series|Stable|-
-Virtual Machine|In Progress|Support only A, B and D VM family, doesn't support low-priority / spot VMs
+Virtual Machine|In Progress|Supports A, BS, D, Dv2, Dv3, Dv4 VM families, doesn't support low-priority / spot VMs
 Virtual Network|In Progress|Doesn't support VNET peering
 VPN Gateway|Stable|-
 
