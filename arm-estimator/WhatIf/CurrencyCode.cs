@@ -1,4 +1,4 @@
-﻿internal enum CurrencyCode
+﻿public enum CurrencyCode
 {
     USD,
     AUD,

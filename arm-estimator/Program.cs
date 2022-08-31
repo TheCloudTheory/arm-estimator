@@ -197,7 +197,7 @@ public class Program
             }
             else
             {
-                var fileName = options.JsonOutputFilename != null ? options.JsonOutputFilename : $"ace_estimation_{DateTime.UtcNow:yyyyMMddHHmmss}.json";
+                var fileName = options.JsonOutputFilename != null ? $"{options.JsonOutputFilename}.json" : $"ace_estimation_{DateTime.UtcNow:yyyyMMddHHmmss}.json";
                 logger.AddEstimatorMessage("Generating output file as {0}", fileName);
                 File.WriteAllText(fileName, outputData);
             }

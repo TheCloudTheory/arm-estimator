@@ -202,7 +202,7 @@ Support for a given currency depends on capabilities of underlying Azure Retail 
 ##### Available from: 1.0.0-beta1
 If you want to use estimation for further automation, it's possible to generate a JSON file containing basic information about estimated resources using `--generateJsonOutput` option:
 ```
-arm-estimator <template-path>.json <subscription-id> <resource-group> --generateJsonOutput true
+arm-estimator <template-path>.json <subscription-id> <resource-group> --generateJsonOutput
 ```
 
 If that option is set to `true`, once all data is obtained, a JSON file is created:
