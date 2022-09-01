@@ -1,0 +1,55 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.9.1.41621",
+      "templateHash": "405050370261456052"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Network/trafficmanagerprofiles",
+      "apiVersion": "2018-08-01",
+      "name": "ACEExternalEndpoint",
+      "location": "global",
+      "properties": {
+        "profileStatus": "Enabled",
+        "trafficRoutingMethod": "Priority",
+        "trafficViewEnrollmentStatus": "Enabled",
+        "dnsConfig": {
+          "relativeName": "ace-dns-01",
+          "ttl": 30
+        },
+        "monitorConfig": {
+          "protocol": "HTTP",
+          "port": 80,
+          "path": "/"
+        },
+        "endpoints": [
+          {
+            "type": "Microsoft.Network/TrafficManagerProfiles/azureEndpoints",
+            "name": "AzureEndpoint",
+            "properties": {
+              "targetResourceId": "[resourceId('Microsoft.Network/publicIPAddresses', 'ace-pip-01')]",
+              "endpointStatus": "Enabled",
+              "endpointLocation": "westeurope",
+              "priority": 1
+            }
+          },
+          {
+            "type": "Microsoft.Network/TrafficManagerProfiles/ExternalEndpoints",
+            "name": "ExternalEndpoint",
+            "properties": {
+              "target": "www.microsoft.com",
+              "endpointStatus": "Enabled",
+              "endpointLocation": "northeurope",
+              "priority": 2
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
