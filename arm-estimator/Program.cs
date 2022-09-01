@@ -6,11 +6,11 @@ using System.Reflection;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 
-internal class Program
+public class Program
 {
-    public static string? GetInformationalVersion() => Assembly.GetEntryAssembly()?.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
+    private static string? GetInformationalVersion() => Assembly.GetEntryAssembly()?.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
 
-    private static async Task<int> Main(string[] args)
+    public static async Task<int> Main(string[] args)
     {
         var templateFileArg = new Argument<FileInfo>("template-file", "Template file to analyze");
         var susbcriptionIdArg = new Argument<string>("subscription-id", "Subscription ID");
@@ -22,7 +22,8 @@ internal class Program
         var jsonOutputOption = new Option<bool>("--generateJsonOutput", () => { return false; }, "Should generate JSON output");
         var silentOption = new Option<bool>("--silent", () => { return false; }, "Mute all logs");
         var stdoutOption = new Option<bool>("--stdout", () => { return false; }, "Redirects JSON output to stdout");
-        var disableDetailsOptions = new Option<bool>("--disableDetailedMetrics", () => { return false; }, "Disables reporting of detailed metrics");
+        var disableDetailsOption = new Option<bool>("--disableDetailedMetrics", () => { return false; }, "Disables reporting of detailed metrics");
+        var jsonOutputFilenameOption = new Option<string?>("--jsonOutputFilename", () => { return null; }, "Sets JSON output filename");
 
         var command = new RootCommand("ACE (Azure Cost Estimator)")
         {
@@ -33,7 +34,8 @@ internal class Program
             jsonOutputOption,
             silentOption,
             stdoutOption,
-            disableDetailsOptions
+            disableDetailsOption,
+            jsonOutputFilenameOption
         };
 
         command.AddArgument(templateFileArg);
@@ -54,7 +56,8 @@ internal class Program
                 jsonOutputOption,
                 silentOption,
                 stdoutOption,
-                disableDetailsOptions
+                disableDetailsOption,
+                jsonOutputFilenameOption
             ));
 
         return await command.InvokeAsync(args);
@@ -194,7 +197,7 @@ internal class Program
             }
             else
             {
-                var fileName = $"ace_estimation_{DateTime.UtcNow:yyyyMMddHHmmss}.json";
+                var fileName = options.JsonOutputFilename != null ? $"{options.JsonOutputFilename}.json" : $"ace_estimation_{DateTime.UtcNow:yyyyMMddHHmmss}.json";
                 logger.AddEstimatorMessage("Generating output file as {0}", fileName);
                 File.WriteAllText(fileName, outputData);
             }
