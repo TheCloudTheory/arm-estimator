@@ -1,0 +1,493 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.9.1.41621",
+      "templateHash": "18176358537408000907"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.DBforMariaDB/servers/virtualNetworkRules",
+      "apiVersion": "2018-06-01",
+      "name": "[format('{0}/{1}', 'ace-mdb-srv-03', 'ace-mdb-srv-rule-03')]",
+      "properties": {
+        "virtualNetworkSubnetId": "[format('{0}/subnets/devSubnet', resourceId('Microsoft.Network/virtualNetworks', 'ace-vnet'))]",
+        "ignoreMissingVnetServiceEndpoint": true
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.DBforMariaDB/servers', 'ace-mdb-srv-03')]"
+      ]
+    },
+    {
+      "type": "Microsoft.DBforMariaDB/servers/virtualNetworkRules",
+      "apiVersion": "2018-06-01",
+      "name": "[format('{0}/{1}', 'ace-mdb-srv-04', 'ace-mdb-srv-rule-04')]",
+      "properties": {
+        "virtualNetworkSubnetId": "[format('{0}/subnets/devSubnet', resourceId('Microsoft.Network/virtualNetworks', 'ace-vnet'))]",
+        "ignoreMissingVnetServiceEndpoint": true
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.DBforMariaDB/servers', 'ace-mdb-srv-04')]"
+      ]
+    },
+    {
+      "type": "Microsoft.DBforMariaDB/servers/virtualNetworkRules",
+      "apiVersion": "2018-06-01",
+      "name": "[format('{0}/{1}', 'ace-mdb-srv-05', 'ace-mdb-srv-rule-05')]",
+      "properties": {
+        "virtualNetworkSubnetId": "[format('{0}/subnets/devSubnet', resourceId('Microsoft.Network/virtualNetworks', 'ace-vnet'))]",
+        "ignoreMissingVnetServiceEndpoint": true
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.DBforMariaDB/servers', 'ace-mdb-srv-05')]"
+      ]
+    },
+    {
+      "type": "Microsoft.DBforMariaDB/servers/virtualNetworkRules",
+      "apiVersion": "2018-06-01",
+      "name": "[format('{0}/{1}', 'ace-mdb-srv-06', 'ace-mdb-srv-rule-06')]",
+      "properties": {
+        "virtualNetworkSubnetId": "[format('{0}/subnets/devSubnet', resourceId('Microsoft.Network/virtualNetworks', 'ace-vnet'))]",
+        "ignoreMissingVnetServiceEndpoint": true
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.DBforMariaDB/servers', 'ace-mdb-srv-06')]"
+      ]
+    },
+    {
+      "type": "Microsoft.DBforMariaDB/servers/virtualNetworkRules",
+      "apiVersion": "2018-06-01",
+      "name": "[format('{0}/{1}', 'ace-mdb-srv-07', 'ace-mdb-srv-rule-07')]",
+      "properties": {
+        "virtualNetworkSubnetId": "[format('{0}/subnets/devSubnet', resourceId('Microsoft.Network/virtualNetworks', 'ace-vnet'))]",
+        "ignoreMissingVnetServiceEndpoint": true
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.DBforMariaDB/servers', 'ace-mdb-srv-07')]"
+      ]
+    },
+    {
+      "type": "Microsoft.DBforMariaDB/servers/virtualNetworkRules",
+      "apiVersion": "2018-06-01",
+      "name": "[format('{0}/{1}', 'ace-mdb-srv-08', 'ace-mdb-srv-rule-08')]",
+      "properties": {
+        "virtualNetworkSubnetId": "[format('{0}/subnets/devSubnet', resourceId('Microsoft.Network/virtualNetworks', 'ace-vnet'))]",
+        "ignoreMissingVnetServiceEndpoint": true
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.DBforMariaDB/servers', 'ace-mdb-srv-08')]"
+      ]
+    },
+    {
+      "type": "Microsoft.DBforMariaDB/servers/virtualNetworkRules",
+      "apiVersion": "2018-06-01",
+      "name": "[format('{0}/{1}', 'ace-mdb-srv-09', 'ace-mdb-srv-rule-09')]",
+      "properties": {
+        "virtualNetworkSubnetId": "[format('{0}/subnets/devSubnet', resourceId('Microsoft.Network/virtualNetworks', 'ace-vnet'))]",
+        "ignoreMissingVnetServiceEndpoint": true
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.DBforMariaDB/servers', 'ace-mdb-srv-09')]"
+      ]
+    },
+    {
+      "type": "Microsoft.DBforMariaDB/servers/virtualNetworkRules",
+      "apiVersion": "2018-06-01",
+      "name": "[format('{0}/{1}', 'ace-mdb-srv-10', 'ace-mdb-srv-rule-10')]",
+      "properties": {
+        "virtualNetworkSubnetId": "[format('{0}/subnets/devSubnet', resourceId('Microsoft.Network/virtualNetworks', 'ace-vnet'))]",
+        "ignoreMissingVnetServiceEndpoint": true
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.DBforMariaDB/servers', 'ace-mdb-srv-10')]"
+      ]
+    },
+    {
+      "type": "Microsoft.DBforMariaDB/servers/virtualNetworkRules",
+      "apiVersion": "2018-06-01",
+      "name": "[format('{0}/{1}', 'ace-mdb-srv-11', 'ace-mdb-srv-rule-11')]",
+      "properties": {
+        "virtualNetworkSubnetId": "[format('{0}/subnets/devSubnet', resourceId('Microsoft.Network/virtualNetworks', 'ace-vnet'))]",
+        "ignoreMissingVnetServiceEndpoint": true
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.DBforMariaDB/servers', 'ace-mdb-srv-11')]"
+      ]
+    },
+    {
+      "type": "Microsoft.DBforMariaDB/servers/virtualNetworkRules",
+      "apiVersion": "2018-06-01",
+      "name": "[format('{0}/{1}', 'ace-mdb-srv-12', 'ace-mdb-srv-rule-12')]",
+      "properties": {
+        "virtualNetworkSubnetId": "[format('{0}/subnets/devSubnet', resourceId('Microsoft.Network/virtualNetworks', 'ace-vnet'))]",
+        "ignoreMissingVnetServiceEndpoint": true
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.DBforMariaDB/servers', 'ace-mdb-srv-12')]"
+      ]
+    },
+    {
+      "type": "Microsoft.DBforMariaDB/servers/virtualNetworkRules",
+      "apiVersion": "2018-06-01",
+      "name": "[format('{0}/{1}', 'ace-mdb-srv-13', 'ace-mdb-srv-rule-13')]",
+      "properties": {
+        "virtualNetworkSubnetId": "[format('{0}/subnets/devSubnet', resourceId('Microsoft.Network/virtualNetworks', 'ace-vnet'))]",
+        "ignoreMissingVnetServiceEndpoint": true
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.DBforMariaDB/servers', 'ace-mdb-srv-13')]"
+      ]
+    },
+    {
+      "type": "Microsoft.DBforMariaDB/servers/virtualNetworkRules",
+      "apiVersion": "2018-06-01",
+      "name": "[format('{0}/{1}', 'ace-mdb-srv-14', 'ace-mdb-srv-rule-14')]",
+      "properties": {
+        "virtualNetworkSubnetId": "[format('{0}/subnets/devSubnet', resourceId('Microsoft.Network/virtualNetworks', 'ace-vnet'))]",
+        "ignoreMissingVnetServiceEndpoint": true
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.DBforMariaDB/servers', 'ace-mdb-srv-14')]"
+      ]
+    },
+    {
+      "type": "Microsoft.DBforMariaDB/servers",
+      "apiVersion": "2018-06-01",
+      "name": "ace-mdb-srv-01",
+      "location": "westeurope",
+      "sku": {
+        "name": "B_Gen5_1",
+        "tier": "Basic",
+        "capacity": "1",
+        "size": "5120",
+        "family": "Gen5"
+      },
+      "properties": {
+        "createMode": "Default",
+        "version": "10.3",
+        "administratorLogin": "DemoUser",
+        "administratorLoginPassword": "AzureTest@54321",
+        "storageProfile": {
+          "storageMB": "5120",
+          "backupRetentionDays": "7",
+          "geoRedundantBackup": "Disabled"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.DBforMariaDB/servers",
+      "apiVersion": "2018-06-01",
+      "name": "ace-mdb-srv-02",
+      "location": "westeurope",
+      "sku": {
+        "name": "B_Gen5_2",
+        "tier": "Basic",
+        "capacity": "2",
+        "size": "5120",
+        "family": "Gen5"
+      },
+      "properties": {
+        "createMode": "Default",
+        "version": "10.3",
+        "administratorLogin": "DemoUser",
+        "administratorLoginPassword": "AzureTest@54321",
+        "storageProfile": {
+          "storageMB": "5120",
+          "backupRetentionDays": "7",
+          "geoRedundantBackup": "Disabled"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.DBforMariaDB/servers",
+      "apiVersion": "2018-06-01",
+      "name": "ace-mdb-srv-03",
+      "location": "westeurope",
+      "sku": {
+        "name": "GP_Gen5_2",
+        "tier": "GeneralPurpose",
+        "capacity": "2",
+        "size": "51200",
+        "family": "Gen5"
+      },
+      "properties": {
+        "createMode": "Default",
+        "version": "10.3",
+        "administratorLogin": "DemoUser",
+        "administratorLoginPassword": "AzureTest@54321",
+        "storageProfile": {
+          "storageMB": "51200",
+          "backupRetentionDays": "7",
+          "geoRedundantBackup": "Disabled"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.DBforMariaDB/servers",
+      "apiVersion": "2018-06-01",
+      "name": "ace-mdb-srv-04",
+      "location": "westeurope",
+      "sku": {
+        "name": "GP_Gen5_4",
+        "tier": "GeneralPurpose",
+        "capacity": "4",
+        "size": "51200",
+        "family": "Gen5"
+      },
+      "properties": {
+        "createMode": "Default",
+        "version": "10.3",
+        "administratorLogin": "DemoUser",
+        "administratorLoginPassword": "AzureTest@54321",
+        "storageProfile": {
+          "storageMB": "51200",
+          "backupRetentionDays": "7",
+          "geoRedundantBackup": "Disabled"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.DBforMariaDB/servers",
+      "apiVersion": "2018-06-01",
+      "name": "ace-mdb-srv-05",
+      "location": "westeurope",
+      "sku": {
+        "name": "GP_Gen5_8",
+        "tier": "GeneralPurpose",
+        "capacity": "8",
+        "size": "51200",
+        "family": "Gen5"
+      },
+      "properties": {
+        "createMode": "Default",
+        "version": "10.3",
+        "administratorLogin": "DemoUser",
+        "administratorLoginPassword": "AzureTest@54321",
+        "storageProfile": {
+          "storageMB": "51200",
+          "backupRetentionDays": "7",
+          "geoRedundantBackup": "Disabled"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.DBforMariaDB/servers",
+      "apiVersion": "2018-06-01",
+      "name": "ace-mdb-srv-06",
+      "location": "westeurope",
+      "sku": {
+        "name": "GP_Gen5_16",
+        "tier": "GeneralPurpose",
+        "capacity": "16",
+        "size": "51200",
+        "family": "Gen5"
+      },
+      "properties": {
+        "createMode": "Default",
+        "version": "10.3",
+        "administratorLogin": "DemoUser",
+        "administratorLoginPassword": "AzureTest@54321",
+        "storageProfile": {
+          "storageMB": "51200",
+          "backupRetentionDays": "7",
+          "geoRedundantBackup": "Disabled"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.DBforMariaDB/servers",
+      "apiVersion": "2018-06-01",
+      "name": "ace-mdb-srv-07",
+      "location": "westeurope",
+      "sku": {
+        "name": "GP_Gen5_32",
+        "tier": "GeneralPurpose",
+        "capacity": "32",
+        "size": "51200",
+        "family": "Gen5"
+      },
+      "properties": {
+        "createMode": "Default",
+        "version": "10.3",
+        "administratorLogin": "DemoUser",
+        "administratorLoginPassword": "AzureTest@54321",
+        "storageProfile": {
+          "storageMB": "51200",
+          "backupRetentionDays": "7",
+          "geoRedundantBackup": "Disabled"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.DBforMariaDB/servers",
+      "apiVersion": "2018-06-01",
+      "name": "ace-mdb-srv-08",
+      "location": "westeurope",
+      "sku": {
+        "name": "GP_Gen5_64",
+        "tier": "GeneralPurpose",
+        "capacity": "64",
+        "size": "51200",
+        "family": "Gen5"
+      },
+      "properties": {
+        "createMode": "Default",
+        "version": "10.3",
+        "administratorLogin": "DemoUser",
+        "administratorLoginPassword": "AzureTest@54321",
+        "storageProfile": {
+          "storageMB": "51200",
+          "backupRetentionDays": "7",
+          "geoRedundantBackup": "Disabled"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.DBforMariaDB/servers",
+      "apiVersion": "2018-06-01",
+      "name": "ace-mdb-srv-09",
+      "location": "westeurope",
+      "sku": {
+        "name": "MO_Gen5_2",
+        "tier": "MemoryOptimized",
+        "capacity": "2",
+        "size": "51200",
+        "family": "Gen5"
+      },
+      "properties": {
+        "createMode": "Default",
+        "version": "10.3",
+        "administratorLogin": "DemoUser",
+        "administratorLoginPassword": "AzureTest@54321",
+        "storageProfile": {
+          "storageMB": "51200",
+          "backupRetentionDays": "7",
+          "geoRedundantBackup": "Disabled"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.DBforMariaDB/servers",
+      "apiVersion": "2018-06-01",
+      "name": "ace-mdb-srv-10",
+      "location": "westeurope",
+      "sku": {
+        "name": "MO_Gen5_4",
+        "tier": "MemoryOptimized",
+        "capacity": "4",
+        "size": "51200",
+        "family": "Gen5"
+      },
+      "properties": {
+        "createMode": "Default",
+        "version": "10.3",
+        "administratorLogin": "DemoUser",
+        "administratorLoginPassword": "AzureTest@54321",
+        "storageProfile": {
+          "storageMB": "51200",
+          "backupRetentionDays": "7",
+          "geoRedundantBackup": "Disabled"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.DBforMariaDB/servers",
+      "apiVersion": "2018-06-01",
+      "name": "ace-mdb-srv-11",
+      "location": "westeurope",
+      "sku": {
+        "name": "MO_Gen5_8",
+        "tier": "MemoryOptimized",
+        "capacity": "8",
+        "size": "51200",
+        "family": "Gen5"
+      },
+      "properties": {
+        "createMode": "Default",
+        "version": "10.3",
+        "administratorLogin": "DemoUser",
+        "administratorLoginPassword": "AzureTest@54321",
+        "storageProfile": {
+          "storageMB": "51200",
+          "backupRetentionDays": "7",
+          "geoRedundantBackup": "Disabled"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.DBforMariaDB/servers",
+      "apiVersion": "2018-06-01",
+      "name": "ace-mdb-srv-12",
+      "location": "westeurope",
+      "sku": {
+        "name": "MO_Gen5_16",
+        "tier": "MemoryOptimized",
+        "capacity": "16",
+        "size": "51200",
+        "family": "Gen5"
+      },
+      "properties": {
+        "createMode": "Default",
+        "version": "10.3",
+        "administratorLogin": "DemoUser",
+        "administratorLoginPassword": "AzureTest@54321",
+        "storageProfile": {
+          "storageMB": "51200",
+          "backupRetentionDays": "7",
+          "geoRedundantBackup": "Disabled"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.DBforMariaDB/servers",
+      "apiVersion": "2018-06-01",
+      "name": "ace-mdb-srv-13",
+      "location": "westeurope",
+      "sku": {
+        "name": "MO_Gen5_32",
+        "tier": "MemoryOptimized",
+        "capacity": "32",
+        "size": "51200",
+        "family": "Gen5"
+      },
+      "properties": {
+        "createMode": "Default",
+        "version": "10.3",
+        "administratorLogin": "DemoUser",
+        "administratorLoginPassword": "AzureTest@54321",
+        "storageProfile": {
+          "storageMB": "51200",
+          "backupRetentionDays": "7",
+          "geoRedundantBackup": "Disabled"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.DBforMariaDB/servers",
+      "apiVersion": "2018-06-01",
+      "name": "ace-mdb-srv-14",
+      "location": "westeurope",
+      "sku": {
+        "name": "MO_Gen5_32",
+        "tier": "MemoryOptimized",
+        "capacity": "32",
+        "size": "51200",
+        "family": "Gen5"
+      },
+      "properties": {
+        "createMode": "Default",
+        "version": "10.3",
+        "administratorLogin": "DemoUser",
+        "administratorLoginPassword": "AzureTest@54321",
+        "storageProfile": {
+          "storageMB": "51200",
+          "backupRetentionDays": "7",
+          "geoRedundantBackup": "Enabled"
+        }
+      }
+    }
+  ]
+}
