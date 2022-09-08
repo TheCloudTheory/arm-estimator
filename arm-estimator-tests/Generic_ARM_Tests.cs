@@ -11,7 +11,7 @@ namespace arm_estimator_tests
 
         [Test]
         [TestCase("templates/acr.json", 2.8001, 2.8001)]
-        [TestCase("templates/alert.json", 2.8001, 2.8001)]
+        [TestCase("templates/alert.json", 13.599999999999998d, 13.599999999999998d)]
         [TestCase("templates/analysisservices.json", 14389.759999999998, 14389.759999999998)]
         public async Task ResourceEstimation_ShouldBeCalculatedCorrectly(string templatePath, double totalValue, double deltaValue)
         {
