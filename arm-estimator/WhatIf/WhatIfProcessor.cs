@@ -221,6 +221,12 @@ internal class WhatIfProcessor
                 case "Microsoft.Insights/scheduledQueryRules":
                     resource = await Calculate<MonitorRetailQuery, MonitorEstimationCalculation>(change, id);
                     break;
+                case "Microsoft.DBforMariaDB/servers":
+                    resource = await Calculate<MariaDBRetailQuery, MariaDBEstimationCalculation>(change, id);
+                    break;
+                case "Microsoft.DBforMariaDB/servers/virtualNetworkRules":
+                    ReportResourceWithoutCost(id, change.changeType);
+                    break;
                 default:
                     logger.LogWarning("{resourceType} is not yet supported.", id?.ResourceType);
                     logger.LogInformation("");

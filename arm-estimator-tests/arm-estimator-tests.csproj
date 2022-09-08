@@ -106,6 +106,9 @@
     <None Update="templates\logicapps.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="templates\mariadb.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="templates\sa.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
