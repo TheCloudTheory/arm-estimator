@@ -27,23 +27,27 @@ internal class MariaDBQueryFilter : IQueryFilter
         var familyId = skuParts[1];
         var cores = skuParts[2];
         string? skuProductName = null;
+        string? storageSkuName = null;
 
         if(tierId == "B")
         {
             skuProductName = "Basic";
+            storageSkuName = "Basic";
         }
         else if (tierId == "GP")
         {
             skuProductName = "General Purpose";
+            storageSkuName = "General Purpose";
         }
         else
         {
             skuProductName = "Memory Optimized";
+            storageSkuName = "Perf Optimized";
         }
 
         var skuName = $"{cores} vCore";
         var productName = $"Azure Database for MariaDB Single Server {skuProductName} - Compute {familyId}";
 
-        return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and skuName eq '{skuName}' and productName eq '{productName}'";
+        return $"serviceId eq '{ServiceId}' and ((armRegionName eq '{location}' and skuName eq '{skuName}' and productName eq '{productName}') or (armRegionName eq '{location}' and skuName eq '{storageSkuName}'))";
     }
 }

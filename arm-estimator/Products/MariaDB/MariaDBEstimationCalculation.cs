@@ -17,12 +17,16 @@ internal class MariaDBEstimationCalculation : BaseEstimation, IEstimationCalcula
         double? estimatedCost = 0;
         var items = GetItems();
 
-        var capacity = this.change.sku?.capacity;
-        capacity ??= 1;
-
         foreach (var item in items)
         {
-            estimatedCost += item.retailPrice * HoursInMonth * capacity;
+            if(item.meterName == "vCore")
+            {
+                estimatedCost += item.retailPrice * HoursInMonth;
+            }
+            else
+            {
+                estimatedCost += item.retailPrice;
+            }
         }
 
         return estimatedCost == null ? 0 : (double)estimatedCost;
