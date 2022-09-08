@@ -215,6 +215,12 @@ internal class WhatIfProcessor
                 case "Microsoft.RecoveryServices/vaults/replicationPolicies":
                     ReportResourceWithoutCost(id, change.changeType);
                     break;
+                case "Microsoft.Insights/metricAlerts":
+                    resource = await Calculate<MonitorRetailQuery, MonitorEstimationCalculation>(change, id);
+                    break;
+                case "Microsoft.Insights/scheduledQueryRules":
+                    resource = await Calculate<MonitorRetailQuery, MonitorEstimationCalculation>(change, id);
+                    break;
                 default:
                     logger.LogWarning("{resourceType} is not yet supported.", id?.ResourceType);
                     logger.LogInformation("");

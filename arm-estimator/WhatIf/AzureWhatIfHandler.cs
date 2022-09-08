@@ -39,6 +39,14 @@ internal class AzureWhatIfHandler
         this.logger.LogInformation("");
         
         var response = await SendInitialRequest();
+        if(response.IsSuccessStatusCode == false)
+        {
+            var result = await response.Content.ReadAsStringAsync();
+            this.logger.LogError(result);
+
+            return null;
+        }
+
         var maxRetries = 5;
         var currentRetry = 1;
         
@@ -81,8 +89,6 @@ internal class AzureWhatIfHandler
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
         var response = await httpClient.Value.SendAsync(request);
-        response.EnsureSuccessStatusCode();
-
         return response;
     }
 

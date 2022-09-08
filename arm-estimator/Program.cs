@@ -90,6 +90,10 @@ public class Program
 
             var handler = new AzureWhatIfHandler(subscriptionId, resourceGroupName, template, options.Mode, parameters, logger);
             var whatIfData = await handler.GetResponseWithRetries();
+            if(whatIfData == null)
+            {
+                Environment.Exit(1);
+            }
 
             if (whatIfData != null && whatIfData.status == "Failed")
             {
