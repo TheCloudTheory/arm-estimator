@@ -64,4 +64,5 @@ internal class WhatIfSku
     public string? name { get; set; }
     public string? tier { get; set; }
     public int? capacity { get; set; }
+    public string? size { get; set; }
 }

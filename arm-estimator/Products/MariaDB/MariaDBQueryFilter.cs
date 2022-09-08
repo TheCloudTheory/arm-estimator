@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using System.Text.Json;
 
 internal class MariaDBQueryFilter : IQueryFilter
 {
@@ -47,6 +48,24 @@ internal class MariaDBQueryFilter : IQueryFilter
 
         var skuName = $"{cores} vCore";
         var productName = $"Azure Database for MariaDB Single Server {skuProductName} - Compute {familyId}";
+
+        if (this.afterState.properties != null && this.afterState.properties.ContainsKey("storageProfile"))
+        {
+            var storageProfile = ((JsonElement)this.afterState.properties["storageProfile"]).Deserialize<MariaDBStorageProfile>();
+            if(storageProfile != null)
+            {
+                if(this.afterState.sku?.size != null && storageProfile.storageMB > int.Parse(this.afterState.sku?.size!))
+                {
+                    var backupSku = "Backup LRS";
+                    if (storageProfile.geoRedundantBackup != null && storageProfile.geoRedundantBackup == "Enabled")
+                    {
+                        backupSku = "Backup GRS";
+                    }
+
+                    return $"serviceId eq '{ServiceId}' and ((armRegionName eq '{location}' and skuName eq '{skuName}' and productName eq '{productName}') or (armRegionName eq '{location}' and skuName eq '{storageSkuName}') or (armRegionName eq '{location}' and skuName eq '{backupSku}'))";
+                }
+            }
+        }
 
         return $"serviceId eq '{ServiceId}' and ((armRegionName eq '{location}' and skuName eq '{skuName}' and productName eq '{productName}') or (armRegionName eq '{location}' and skuName eq '{storageSkuName}'))";
     }

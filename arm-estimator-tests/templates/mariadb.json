@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.9.1.41621",
-      "templateHash": "18176358537408000907"
+      "templateHash": "5594688179822310925"
     }
   },
   "resources": [
@@ -171,7 +171,7 @@
         "administratorLogin": "DemoUser",
         "administratorLoginPassword": "AzureTest@54321",
         "storageProfile": {
-          "storageMB": "5120",
+          "storageMB": 5120,
           "backupRetentionDays": "7",
           "geoRedundantBackup": "Disabled"
         }
@@ -195,7 +195,7 @@
         "administratorLogin": "DemoUser",
         "administratorLoginPassword": "AzureTest@54321",
         "storageProfile": {
-          "storageMB": "5120",
+          "storageMB": 5120,
           "backupRetentionDays": "7",
           "geoRedundantBackup": "Disabled"
         }
@@ -219,7 +219,7 @@
         "administratorLogin": "DemoUser",
         "administratorLoginPassword": "AzureTest@54321",
         "storageProfile": {
-          "storageMB": "51200",
+          "storageMB": 51200,
           "backupRetentionDays": "7",
           "geoRedundantBackup": "Disabled"
         }
@@ -243,7 +243,7 @@
         "administratorLogin": "DemoUser",
         "administratorLoginPassword": "AzureTest@54321",
         "storageProfile": {
-          "storageMB": "51200",
+          "storageMB": 51200,
           "backupRetentionDays": "7",
           "geoRedundantBackup": "Disabled"
         }
@@ -267,7 +267,7 @@
         "administratorLogin": "DemoUser",
         "administratorLoginPassword": "AzureTest@54321",
         "storageProfile": {
-          "storageMB": "51200",
+          "storageMB": 51200,
           "backupRetentionDays": "7",
           "geoRedundantBackup": "Disabled"
         }
@@ -291,7 +291,7 @@
         "administratorLogin": "DemoUser",
         "administratorLoginPassword": "AzureTest@54321",
         "storageProfile": {
-          "storageMB": "51200",
+          "storageMB": 51200,
           "backupRetentionDays": "7",
           "geoRedundantBackup": "Disabled"
         }
@@ -315,7 +315,7 @@
         "administratorLogin": "DemoUser",
         "administratorLoginPassword": "AzureTest@54321",
         "storageProfile": {
-          "storageMB": "51200",
+          "storageMB": 51200,
           "backupRetentionDays": "7",
           "geoRedundantBackup": "Disabled"
         }
@@ -339,7 +339,7 @@
         "administratorLogin": "DemoUser",
         "administratorLoginPassword": "AzureTest@54321",
         "storageProfile": {
-          "storageMB": "51200",
+          "storageMB": 51200,
           "backupRetentionDays": "7",
           "geoRedundantBackup": "Disabled"
         }
@@ -363,7 +363,7 @@
         "administratorLogin": "DemoUser",
         "administratorLoginPassword": "AzureTest@54321",
         "storageProfile": {
-          "storageMB": "51200",
+          "storageMB": 51200,
           "backupRetentionDays": "7",
           "geoRedundantBackup": "Disabled"
         }
@@ -387,7 +387,7 @@
         "administratorLogin": "DemoUser",
         "administratorLoginPassword": "AzureTest@54321",
         "storageProfile": {
-          "storageMB": "51200",
+          "storageMB": 51200,
           "backupRetentionDays": "7",
           "geoRedundantBackup": "Disabled"
         }
@@ -411,7 +411,7 @@
         "administratorLogin": "DemoUser",
         "administratorLoginPassword": "AzureTest@54321",
         "storageProfile": {
-          "storageMB": "51200",
+          "storageMB": 51200,
           "backupRetentionDays": "7",
           "geoRedundantBackup": "Disabled"
         }
@@ -435,7 +435,7 @@
         "administratorLogin": "DemoUser",
         "administratorLoginPassword": "AzureTest@54321",
         "storageProfile": {
-          "storageMB": "51200",
+          "storageMB": 51200,
           "backupRetentionDays": "7",
           "geoRedundantBackup": "Disabled"
         }
@@ -459,7 +459,7 @@
         "administratorLogin": "DemoUser",
         "administratorLoginPassword": "AzureTest@54321",
         "storageProfile": {
-          "storageMB": "51200",
+          "storageMB": 51200,
           "backupRetentionDays": "7",
           "geoRedundantBackup": "Disabled"
         }
@@ -483,7 +483,7 @@
         "administratorLogin": "DemoUser",
         "administratorLoginPassword": "AzureTest@54321",
         "storageProfile": {
-          "storageMB": "51200",
+          "storageMB": 51200,
           "backupRetentionDays": "7",
           "geoRedundantBackup": "Enabled"
         }

@@ -18,7 +18,7 @@ resource mariaDbServer01 'Microsoft.DBforMariaDB/servers@2018-06-01' = {
     administratorLogin: 'DemoUser'
     administratorLoginPassword: 'AzureTest@54321'
     storageProfile: {
-      storageMB: '5120'
+      storageMB: 5120
       backupRetentionDays: '7'
       geoRedundantBackup: 'Disabled'
     }
@@ -41,7 +41,7 @@ resource mariaDbServer02 'Microsoft.DBforMariaDB/servers@2018-06-01' = {
     administratorLogin: 'DemoUser'
     administratorLoginPassword: 'AzureTest@54321'
     storageProfile: {
-      storageMB: '5120'
+      storageMB: 5120
       backupRetentionDays: '7'
       geoRedundantBackup: 'Disabled'
     }
@@ -72,7 +72,7 @@ resource mariaDbServer03 'Microsoft.DBforMariaDB/servers@2018-06-01' = {
     administratorLogin: 'DemoUser'
     administratorLoginPassword: 'AzureTest@54321'
     storageProfile: {
-      storageMB: '51200'
+      storageMB: 51200
       backupRetentionDays: '7'
       geoRedundantBackup: 'Disabled'
     }
@@ -103,7 +103,7 @@ resource mariaDbServer04 'Microsoft.DBforMariaDB/servers@2018-06-01' = {
     administratorLogin: 'DemoUser'
     administratorLoginPassword: 'AzureTest@54321'
     storageProfile: {
-      storageMB: '51200'
+      storageMB: 51200
       backupRetentionDays: '7'
       geoRedundantBackup: 'Disabled'
     }
@@ -134,7 +134,7 @@ resource mariaDbServer05 'Microsoft.DBforMariaDB/servers@2018-06-01' = {
     administratorLogin: 'DemoUser'
     administratorLoginPassword: 'AzureTest@54321'
     storageProfile: {
-      storageMB: '51200'
+      storageMB: 51200
       backupRetentionDays: '7'
       geoRedundantBackup: 'Disabled'
     }
@@ -165,7 +165,7 @@ resource mariaDbServer06 'Microsoft.DBforMariaDB/servers@2018-06-01' = {
     administratorLogin: 'DemoUser'
     administratorLoginPassword: 'AzureTest@54321'
     storageProfile: {
-      storageMB: '51200'
+      storageMB: 51200
       backupRetentionDays: '7'
       geoRedundantBackup: 'Disabled'
     }
@@ -196,7 +196,7 @@ resource mariaDbServer07 'Microsoft.DBforMariaDB/servers@2018-06-01' = {
     administratorLogin: 'DemoUser'
     administratorLoginPassword: 'AzureTest@54321'
     storageProfile: {
-      storageMB: '51200'
+      storageMB: 51200
       backupRetentionDays: '7'
       geoRedundantBackup: 'Disabled'
     }
@@ -227,7 +227,7 @@ resource mariaDbServer08 'Microsoft.DBforMariaDB/servers@2018-06-01' = {
     administratorLogin: 'DemoUser'
     administratorLoginPassword: 'AzureTest@54321'
     storageProfile: {
-      storageMB: '51200'
+      storageMB: 51200
       backupRetentionDays: '7'
       geoRedundantBackup: 'Disabled'
     }
@@ -262,7 +262,7 @@ resource mariaDbServer09 'Microsoft.DBforMariaDB/servers@2018-06-01' = {
     administratorLogin: 'DemoUser'
     administratorLoginPassword: 'AzureTest@54321'
     storageProfile: {
-      storageMB: '51200'
+      storageMB: 51200
       backupRetentionDays: '7'
       geoRedundantBackup: 'Disabled'
     }
@@ -293,7 +293,7 @@ resource mariaDbServer10 'Microsoft.DBforMariaDB/servers@2018-06-01' = {
     administratorLogin: 'DemoUser'
     administratorLoginPassword: 'AzureTest@54321'
     storageProfile: {
-      storageMB: '51200'
+      storageMB: 51200
       backupRetentionDays: '7'
       geoRedundantBackup: 'Disabled'
     }
@@ -324,7 +324,7 @@ resource mariaDbServer11 'Microsoft.DBforMariaDB/servers@2018-06-01' = {
     administratorLogin: 'DemoUser'
     administratorLoginPassword: 'AzureTest@54321'
     storageProfile: {
-      storageMB: '51200'
+      storageMB: 51200
       backupRetentionDays: '7'
       geoRedundantBackup: 'Disabled'
     }
@@ -355,7 +355,7 @@ resource mariaDbServer12 'Microsoft.DBforMariaDB/servers@2018-06-01' = {
     administratorLogin: 'DemoUser'
     administratorLoginPassword: 'AzureTest@54321'
     storageProfile: {
-      storageMB: '51200'
+      storageMB: 51200
       backupRetentionDays: '7'
       geoRedundantBackup: 'Disabled'
     }
@@ -386,7 +386,7 @@ resource mariaDbServer13 'Microsoft.DBforMariaDB/servers@2018-06-01' = {
     administratorLogin: 'DemoUser'
     administratorLoginPassword: 'AzureTest@54321'
     storageProfile: {
-      storageMB: '51200'
+      storageMB: 51200
       backupRetentionDays: '7'
       geoRedundantBackup: 'Disabled'
     }
@@ -417,7 +417,7 @@ resource mariaDbServer14 'Microsoft.DBforMariaDB/servers@2018-06-01' = {
     administratorLogin: 'DemoUser'
     administratorLoginPassword: 'AzureTest@54321'
     storageProfile: {
-      storageMB: '51200'
+      storageMB: 51200
       backupRetentionDays: '7'
       geoRedundantBackup: 'Enabled'
     }
