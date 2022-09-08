@@ -338,6 +338,7 @@ Health Bot|Stable|-
 Key Vault|Stable|Doesn't support Azure Dedicated HSM
 Log Analytics|In development|Estimations doesn't include commitment tiers & logs retention
 Logic Apps|In development|Doesn't support ISE scale units
+Monitor|In development|Alerts estimations doesn't include frequency / metrics count
 Network Interface|Stable|-
 Network Security Group|Stable|-
 Public IP Address|Stable|-
