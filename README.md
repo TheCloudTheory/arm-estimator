@@ -24,6 +24,7 @@ Automated cost estimation of your Azure infrastructure made easy. Works with ARM
   + [Output redirection](#output-redirection)
   + [Disabling detailed metrics](#disabling-detailed-metrics)
   + [JSON output filename](#json-output-filename)
+  + [HTML output](#html-output)
 * [Known limitations](#known-limitations)
 * [Services support](#services-support)
 * [Contributions](#contributions)
