@@ -120,6 +120,7 @@ Name|Default value|Example|Description
 --stdout|`false`|`--stdout`|Redirects generated output to stdout instead of file
 --disableDetailedMetrics|`false`|`--disableDetailedMetrics`|Disables detailed metrics of estimated resource cost
 --jsonOutputFilename|`null`|`--jsonOutputFilename estimationOutput`|Sets a name of JSON output file created when `--generateJsonOutput` is enabled
+--generateHtmlOutput|`false`|`--generateHtmlOutput`|Generates HTML file with estimation result
 
 ### Deployment mode
 ##### Available from: 1.0.0-alpha2
@@ -297,6 +298,15 @@ arm-estimator <template-path>.json <subscription-id> <resource-group> --generate
 ```
 
 When `--jsonOutputFilename` is set, ACE will use provided custom name as the filename of JSON output file. Custom file is automatically saved as JSON, however timestamp is not automatically appended to its name.
+
+### HTML output
+##### Available from: 1.0.0-beta4
+While JSON output may be useful in scenarios when you want to process estimation result, sometimes you just need a prettier version of estimated result for attachment or report. To generate pretty HTML output with estimated cost, you may use `--generateHtmlOutput` option:
+```
+arm-estimator <template-path>.json <subscription-id> <resource-group> --generateHtmlOutput
+```
+Once estimation is completed, ACE will generate an HTML file with result data available in the working directory.
+> ACE comes with HTML template available for further customization. If you don't like how the result file looks like, you can modify Html/GeneratorTemplate.html file in any way you want. Remember not to remove `### [] ###` placeholders!
 
 ## Known limitations
 ACE is currently in `beta` development phase meaning there're no guarantees for stable interface and some features are still in design or planning phase. The main limitations as for now are:
