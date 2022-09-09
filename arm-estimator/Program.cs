@@ -24,6 +24,7 @@ public class Program
         var stdoutOption = new Option<bool>("--stdout", () => { return false; }, "Redirects JSON output to stdout");
         var disableDetailsOption = new Option<bool>("--disableDetailedMetrics", () => { return false; }, "Disables reporting of detailed metrics");
         var jsonOutputFilenameOption = new Option<string?>("--jsonOutputFilename", () => { return null; }, "Sets JSON output filename");
+        var htmlOutputOption = new Option<bool>("--generateHtmlOutput", () => { return false; }, "Should generate HTML output");
 
         var command = new RootCommand("ACE (Azure Cost Estimator)")
         {
@@ -35,7 +36,8 @@ public class Program
             silentOption,
             stdoutOption,
             disableDetailsOption,
-            jsonOutputFilenameOption
+            jsonOutputFilenameOption,
+            htmlOutputOption
         };
 
         command.AddArgument(templateFileArg);
@@ -57,7 +59,8 @@ public class Program
                 silentOption,
                 stdoutOption,
                 disableDetailsOption,
-                jsonOutputFilenameOption
+                jsonOutputFilenameOption,
+                htmlOutputOption
             ));
 
         return await command.InvokeAsync(args);
@@ -192,18 +195,28 @@ public class Program
 
     private static void GenerateOutputIfNeeded(EstimateOptions options, EstimationOutput output, ILogger<Program> logger)
     {
-        if (options.ShouldGenerateJsonOutput)
+        if (options.ShouldGenerateJsonOutput || options.ShouldGenerateHtmlOutput)
         {
-            var outputData = JsonSerializer.Serialize(output);
-            if (options.Stdout)
+            if (options.ShouldGenerateJsonOutput)
             {
-                logger.AddEstimatorNonSilentMessage(outputData);
+                var outputData = JsonSerializer.Serialize(output);
+                if (options.Stdout)
+                {
+                    logger.AddEstimatorNonSilentMessage(outputData);
+                }
+                else
+                {
+                    var fileName = options.JsonOutputFilename != null ? $"{options.JsonOutputFilename}.json" : $"ace_estimation_{DateTime.UtcNow:yyyyMMddHHmmss}.json";
+                    logger.AddEstimatorMessage("Generating JSON output file as {0}", fileName);
+                    File.WriteAllText(fileName, outputData);
+                }
             }
-            else
+            
+            if(options.ShouldGenerateHtmlOutput)
             {
-                var fileName = options.JsonOutputFilename != null ? $"{options.JsonOutputFilename}.json" : $"ace_estimation_{DateTime.UtcNow:yyyyMMddHHmmss}.json";
-                logger.AddEstimatorMessage("Generating output file as {0}", fileName);
-                File.WriteAllText(fileName, outputData);
+                logger.AddEstimatorMessage("Generating HTML output file.");
+                var generator = new HtmlOutputGenerator(output, logger);
+                generator.Generate();
             }
         }
     }
