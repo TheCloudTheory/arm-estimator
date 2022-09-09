@@ -139,6 +139,9 @@
     <None Update="templates\vm_av2.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="templates\vm_monitoring.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="templates\vpngateway.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

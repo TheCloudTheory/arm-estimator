@@ -214,7 +214,6 @@ public class Program
             
             if(options.ShouldGenerateHtmlOutput)
             {
-                logger.AddEstimatorMessage("Generating HTML output file.");
                 var generator = new HtmlOutputGenerator(output, logger);
                 generator.Generate();
             }
@@ -248,6 +247,7 @@ public class Program
         logger.AddEstimatorMessage("Silent mode: {0}", options.ShouldBeSilent);
         logger.AddEstimatorMessage("Redirect stdout: {0}", options.Stdout);
         logger.AddEstimatorMessage("Disabled detailed metrics: {0}", options.DisableDetailedMetrics);
+        logger.AddEstimatorMessage("Generate HTML output: {0}", options.ShouldGenerateHtmlOutput);
         logger.LogInformation("");
         logger.LogInformation("------------------------------");
         logger.LogInformation("");

@@ -26,10 +26,13 @@ internal class HtmlOutputGenerator
         foreach(var resource in this.output.Resources)
         {
             var id = new ResourceIdentifier(resource.Id);
-            resultRows += string.Format(tableRow, id.Name, id.ResourceType, resource.TotalCost, resource.Delta);
+            resultRows += string.Format(tableRow, id.Name, id.ResourceType, $"{resource.TotalCost:F} {this.output.Currency}", $"{resource.Delta:F} {this.output.Currency}");
         }
 
         template = template.Replace("### [ACE-TBODY] ###", resultRows);
+        template = template.Replace("### [ACE-TFOOT-TOTALSUM] ###", $"{this.output.TotalCost:F} {this.output.Currency}");
+        template = template.Replace("### [ACE-TFOOT-DELTASUM] ###", $"{this.output.Delta:F} {this.output.Currency}");
+        
         File.WriteAllText(this.fileName, template);
     }
 }
