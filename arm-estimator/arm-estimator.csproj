@@ -22,4 +22,10 @@
     <PackageReference Include="Azure.Identity" Version="1.6.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Html\GeneratorTemplate.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
