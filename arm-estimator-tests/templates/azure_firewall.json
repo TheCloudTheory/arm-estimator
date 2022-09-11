@@ -1,0 +1,264 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.9.1.41621",
+      "templateHash": "6953212809325160155"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Network/ipGroups",
+      "apiVersion": "2022-01-01",
+      "name": "ace-workloadIpGroup-01",
+      "location": "westeurope",
+      "properties": {
+        "ipAddresses": [
+          "10.20.0.0/24",
+          "10.30.0.0/24"
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Network/firewallPolicies",
+      "apiVersion": "2022-01-01",
+      "name": "ace-firewallPolicy",
+      "location": "westeurope",
+      "properties": {
+        "threatIntelMode": "Alert"
+      }
+    },
+    {
+      "type": "Microsoft.Network/firewallPolicies/ruleCollectionGroups",
+      "apiVersion": "2022-01-01",
+      "name": "[format('{0}/{1}', 'ace-firewallPolicy', 'DefaultNetworkRuleCollectionGroup')]",
+      "properties": {
+        "priority": 200,
+        "ruleCollections": [
+          {
+            "ruleCollectionType": "FirewallPolicyFilterRuleCollection",
+            "action": {
+              "type": "Allow"
+            },
+            "name": "azure-global-services-nrc",
+            "priority": 1250,
+            "rules": [
+              {
+                "ruleType": "NetworkRule",
+                "name": "time-windows",
+                "ipProtocols": [
+                  "UDP"
+                ],
+                "destinationAddresses": [
+                  "13.86.101.172"
+                ],
+                "sourceIpGroups": [
+                  "[resourceId('Microsoft.Network/ipGroups', 'ace-workloadIpGroup-01')]"
+                ],
+                "destinationPorts": [
+                  "123"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/firewallPolicies', 'ace-firewallPolicy')]",
+        "[resourceId('Microsoft.Network/ipGroups', 'ace-workloadIpGroup-01')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Network/firewallPolicies/ruleCollectionGroups",
+      "apiVersion": "2022-01-01",
+      "name": "[format('{0}/{1}', 'ace-firewallPolicy', 'DefaultApplicationRuleCollectionGroup')]",
+      "properties": {
+        "priority": 300,
+        "ruleCollections": [
+          {
+            "ruleCollectionType": "FirewallPolicyFilterRuleCollection",
+            "name": "global-rule-url-arc",
+            "priority": 1000,
+            "action": {
+              "type": "Allow"
+            },
+            "rules": [
+              {
+                "ruleType": "ApplicationRule",
+                "name": "winupdate-rule-01",
+                "protocols": [
+                  {
+                    "protocolType": "Https",
+                    "port": 443
+                  },
+                  {
+                    "protocolType": "Http",
+                    "port": 80
+                  }
+                ],
+                "fqdnTags": [
+                  "WindowsUpdate"
+                ],
+                "terminateTLS": false,
+                "sourceIpGroups": [
+                  "[resourceId('Microsoft.Network/ipGroups', 'ace-workloadIpGroup-01')]"
+                ]
+              }
+            ]
+          },
+          {
+            "ruleCollectionType": "FirewallPolicyFilterRuleCollection",
+            "action": {
+              "type": "Allow"
+            },
+            "name": "Global-rules-arc",
+            "priority": 1202,
+            "rules": [
+              {
+                "ruleType": "ApplicationRule",
+                "name": "global-rule-01",
+                "protocols": [
+                  {
+                    "protocolType": "Https",
+                    "port": 443
+                  }
+                ],
+                "targetFqdns": [
+                  "www.microsoft.com"
+                ],
+                "terminateTLS": false,
+                "sourceIpGroups": [
+                  "[resourceId('Microsoft.Network/ipGroups', 'ace-workloadIpGroup-01')]"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/firewallPolicies', 'ace-firewallPolicy')]",
+        "[resourceId('Microsoft.Network/firewallPolicies/ruleCollectionGroups', 'ace-firewallPolicy', 'DefaultNetworkRuleCollectionGroup')]",
+        "[resourceId('Microsoft.Network/ipGroups', 'ace-workloadIpGroup-01')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Network/publicIPAddresses",
+      "apiVersion": "2022-01-01",
+      "name": "ace-fw-pip-01",
+      "location": "westeurope",
+      "sku": {
+        "name": "Standard"
+      },
+      "properties": {
+        "publicIPAllocationMethod": "Static",
+        "publicIPAddressVersion": "IPv4"
+      },
+      "zones": [
+        "1",
+        "2"
+      ]
+    },
+    {
+      "type": "Microsoft.Network/azureFirewalls",
+      "apiVersion": "2021-03-01",
+      "name": "ace-fw-01",
+      "location": "westeurope",
+      "zones": [
+        "1",
+        "2"
+      ],
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "FirewallIPConfiguration01",
+            "properties": {
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'ace-vnet', 'AzureFirewallSubnet')]"
+              },
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', 'ace-fw-pip-01')]"
+              }
+            }
+          }
+        ],
+        "firewallPolicy": {
+          "id": "[resourceId('Microsoft.Network/firewallPolicies', 'ace-firewallPolicy')]"
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/firewallPolicies/ruleCollectionGroups', 'ace-firewallPolicy', 'DefaultApplicationRuleCollectionGroup')]",
+        "[resourceId('Microsoft.Network/firewallPolicies', 'ace-firewallPolicy')]",
+        "[resourceId('Microsoft.Network/firewallPolicies/ruleCollectionGroups', 'ace-firewallPolicy', 'DefaultNetworkRuleCollectionGroup')]",
+        "[resourceId('Microsoft.Network/publicIPAddresses', 'ace-fw-pip-01')]",
+        "[resourceId('Microsoft.Network/ipGroups', 'ace-workloadIpGroup-01')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Network/publicIPAddresses",
+      "apiVersion": "2022-01-01",
+      "name": "ace-fw-pip-02",
+      "location": "westeurope",
+      "sku": {
+        "name": "Standard"
+      },
+      "properties": {
+        "publicIPAllocationMethod": "Static",
+        "publicIPAddressVersion": "IPv4"
+      },
+      "zones": [
+        "1",
+        "2"
+      ]
+    },
+    {
+      "type": "Microsoft.Network/firewallPolicies",
+      "apiVersion": "2022-01-01",
+      "name": "DemoFirewallPolicy",
+      "location": "westeurope",
+      "properties": {
+        "sku": {
+          "tier": "Premium"
+        },
+        "threatIntelMode": "Alert"
+      }
+    },
+    {
+      "type": "Microsoft.Network/azureFirewalls",
+      "apiVersion": "2021-03-01",
+      "name": "ace-fw-02",
+      "location": "westeurope",
+      "zones": [
+        "1",
+        "2"
+      ],
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "FirewallIPConfiguration02",
+            "properties": {
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'ace-vnet-02', 'AzureFirewallSubnet')]"
+              },
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', 'ace-fw-pip-02')]"
+              }
+            }
+          }
+        ],
+        "firewallPolicy": {
+          "id": "[resourceId('Microsoft.Network/firewallPolicies', 'DemoFirewallPolicy')]"
+        },
+        "sku": {
+          "name": "AZFW_VNet",
+          "tier": "Premium"
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/firewallPolicies', 'DemoFirewallPolicy')]",
+        "[resourceId('Microsoft.Network/publicIPAddresses', 'ace-fw-pip-02')]"
+      ]
+    }
+  ]
+}

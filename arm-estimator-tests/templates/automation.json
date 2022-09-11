@@ -1,0 +1,78 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.9.1.41621",
+      "templateHash": "3980332299550829317"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.OperationalInsights/workspaces",
+      "apiVersion": "2020-08-01",
+      "name": "ace-la-01",
+      "location": "westeurope",
+      "properties": {
+        "sku": {
+          "name": "pergb2018"
+        },
+        "retentionInDays": "30",
+        "features": {
+          "searchVersion": 1,
+          "legacy": 0
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Automation/automationAccounts",
+      "apiVersion": "2021-06-22",
+      "name": "ace-automationAccount-01",
+      "location": "westeurope",
+      "identity": {
+        "type": "SystemAssigned"
+      },
+      "properties": {
+        "sku": {
+          "name": "Basic"
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.OperationalInsights/workspaces', 'ace-la-01')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Automation/automationAccounts/runbooks",
+      "apiVersion": "2020-01-13-preview",
+      "name": "[format('{0}/{1}', 'ace-automationAccount-01', 'ace-rb-001')]",
+      "location": "westeurope",
+      "properties": {
+        "runbookType": "PowerShell",
+        "logProgress": "false",
+        "logVerbose": "false",
+        "description": "samplePowerShellRunbookDescription",
+        "publishContentLink": {
+          "uri": "[uri('https://raw.githubusercontent.com/azureautomation/hello-world-for-azure-automation/master/', 'Write-HelloWorld.ps1')]",
+          "version": "1.0.0.0"
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Automation/automationAccounts', 'ace-automationAccount-01')]"
+      ]
+    },
+    {
+      "type": "Microsoft.OperationalInsights/workspaces/linkedServices",
+      "apiVersion": "2020-08-01",
+      "name": "[format('{0}/{1}', 'ace-la-01', 'Automation')]",
+      "location": "westeurope",
+      "properties": {
+        "resourceId": "[resourceId('Microsoft.Automation/automationAccounts', 'ace-automationAccount-01')]"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Automation/automationAccounts', 'ace-automationAccount-01')]",
+        "[resourceId('Microsoft.OperationalInsights/workspaces', 'ace-la-01')]"
+      ]
+    }
+  ]
+}
