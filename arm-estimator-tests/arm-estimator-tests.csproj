@@ -109,6 +109,9 @@
     <None Update="templates\mariadb.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="templates\redis.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="templates\sa.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

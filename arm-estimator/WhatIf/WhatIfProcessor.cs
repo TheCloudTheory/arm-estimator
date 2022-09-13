@@ -227,6 +227,9 @@ internal class WhatIfProcessor
                 case "Microsoft.DBforMariaDB/servers/virtualNetworkRules":
                     ReportResourceWithoutCost(id, change.changeType);
                     break;
+                case "Microsoft.Cache/redis":
+                    resource = await Calculate<RedisRetailQuery, RedisEstimationCalculation>(change, id);
+                    break;
                 default:
                     logger.LogWarning("{resourceType} is not yet supported.", id?.ResourceType);
                     logger.LogInformation("");
