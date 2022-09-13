@@ -16,6 +16,7 @@ namespace arm_estimator_tests
         [TestCase("templates/mariadb.json", 19525.8056d, 19525.8056d)]
         [TestCase("templates/automation.json", 1.00, 1.00)]
         [TestCase("templates/azure_firewall.json", 2390.32, 2390.32)]
+        [TestCase("templates/redis.json", 2390.32, 2390.32)]
         public async Task ResourceEstimation_ShouldBeCalculatedCorrectly(string templatePath, double totalValue, double deltaValue)
         {
             var outputFilename = $"ace_test_{DateTime.Now.Ticks}";
