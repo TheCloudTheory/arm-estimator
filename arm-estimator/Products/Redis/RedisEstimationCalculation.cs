@@ -1,4 +1,5 @@
 ﻿using Azure.Core;
+using System.Text.Json;
 
 internal class RedisEstimationCalculation : BaseEstimation, IEstimationCalculation
 {
@@ -16,10 +17,20 @@ internal class RedisEstimationCalculation : BaseEstimation, IEstimationCalculati
     {
         double? estimatedCost = 0;
         var items = GetItems();
+        var skuData = ((JsonElement)this.change.properties!["sku"]).Deserialize<RedisSkuData>();
+        var shardCount = 1;
+
+        if (skuData != null && skuData.family == "P")
+        {
+            if (this.change.properties != null && this.change.properties.ContainsKey("shardCount"))
+            {
+                _ = int.TryParse(this.change.properties["shardCount"].ToString(), out shardCount);
+            }
+        }
 
         foreach (var item in items)
         {
-            estimatedCost += item.retailPrice * HoursInMonth;
+            estimatedCost += item.retailPrice * HoursInMonth * shardCount;
         }
 
         return estimatedCost == null ? 0 : (double)estimatedCost;
