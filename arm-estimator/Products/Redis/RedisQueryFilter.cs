@@ -32,6 +32,24 @@ internal class RedisQueryFilter : IQueryFilter
         var family = skuData.family;
         var capacity = skuData.capacity;
         var skuName = $"{family}{capacity}";
+        var additionalReplicas = false;
+
+        if(this.afterState.properties != null)
+        {
+            if(this.afterState.properties.TryGetValue("replicasPerMaster", out var replicasCount))
+            {
+                additionalReplicas = true;
+            }
+            else if (this.afterState.properties.TryGetValue("replicasPerMaster", out replicasCount))
+            {
+                additionalReplicas = true;
+            }
+
+            if(additionalReplicas)
+            {
+                return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and skuName eq '{skuName}' and productName eq 'Azure Redis Cache {skuData.name}'";
+            }
+        }
 
         return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and skuName eq '{skuName}' and productName eq 'Azure Redis Cache {skuData.name}' and meterName eq '{skuName} Cache'";
     }
