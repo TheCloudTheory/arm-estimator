@@ -230,6 +230,18 @@ internal class WhatIfProcessor
                 case "Microsoft.Cache/redis":
                     resource = await Calculate<RedisRetailQuery, RedisEstimationCalculation>(change, id);
                     break;
+                case "Microsoft.Network/ipGroups":
+                    ReportResourceWithoutCost(id, change.changeType);
+                    break;
+                case "Microsoft.Network/firewallPolicies":
+                    ReportResourceWithoutCost(id, change.changeType);
+                    break;
+                case "Microsoft.Network/firewallPolicies/ruleCollectionGroups":
+                    ReportResourceWithoutCost(id, change.changeType);
+                    break;
+                case "Microsoft.Network/azureFirewalls":
+                    resource = await Calculate<FirewallRetailQuery, FirewallEstimationCalculation>(change, id);
+                    break;
                 default:
                     logger.LogWarning("{resourceType} is not yet supported.", id?.ResourceType);
                     logger.LogInformation("");
