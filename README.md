@@ -50,6 +50,7 @@ ACE follows a concept of [_running cost as architecture fitness function_](https
 * An option to stop CICD process if estimations exceed given limit (see `Usage` section)
 * Supports passing parameters along with your template
 * Handles extension resources as long as they're correctly configured (i.e. define `scope` parameter)
+* Works with both individually defined resources and nested resources
 * Supports 17 different currencies
 * Allows for generating output as an artifact for further processing
 
@@ -314,7 +315,6 @@ ACE is currently in `beta` development phase meaning there're no guarantees for 
 * You can use the project only with a resource group as deployment scope
 * Some services are in TBD state (see below for more information)
 * There's no possibility to define custom usage patterns so some metrics (mainly those described as price per second / hour / day) are projected for full month
-* Nested resources are not supported yet - however, you can define them as separated entities to mitigate that issue
 
 Those limitations will be removed in the future releases of the project.
 
