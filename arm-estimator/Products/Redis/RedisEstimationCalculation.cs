@@ -28,9 +28,30 @@ internal class RedisEstimationCalculation : BaseEstimation, IEstimationCalculati
             }
         }
 
+        var replicas = 0;
+
+        if (this.change.properties != null)
+        {
+            if (this.change.properties.TryGetValue("replicasPerMaster", out var replicasCount))
+            {
+                replicas = int.Parse(replicasCount.ToString()!);
+            }
+            else if (this.change.properties.TryGetValue("replicasPerMaster", out replicasCount))
+            {
+                replicas = int.Parse(replicasCount.ToString()!);
+            }
+        }
+
         foreach (var item in items)
         {
-            estimatedCost += item.retailPrice * HoursInMonth * shardCount;
+            if(item.meterName != null && item.meterName.Contains("Cache Instance"))
+            {
+                estimatedCost += item.retailPrice * HoursInMonth * shardCount * replicas;
+            }
+            else
+            {
+                estimatedCost += item.retailPrice * HoursInMonth * shardCount;
+            }
         }
 
         return estimatedCost == null ? 0 : (double)estimatedCost;
