@@ -355,14 +355,15 @@ Network Interface|Stable|-
 Network Security Group|Stable|-
 Public IP Address|Stable|-
 Public IP Address Prefixes|Stable|-
+Redis|In development|Doesn't support Redis Enterprise
 Sentinel|In progress|Estimations doesn't include commitment tiers
 SignalR|Stable|-
 SQL Database|In development|Supports only Databases (DTU model - Basic & Standard)
 Storage Account|In development|Supports only StorageV2 (without File Service & Data Lake Storage)
 Stream Analytics|Stable|Stream Analytics on Edge requires separate estimation
 Time Series|Stable|-
-Virtual Machine|In Progress|Supports A, BS, D, Dv2, Dv3, Dv4 VM families, doesn't support low-priority / spot VMs
-Virtual Network|In Progress|Doesn't support VNET peering
+Virtual Machine|In development|Supports A, BS, D, Dv2, Dv3, Dv4 VM families, doesn't support low-priority / spot VMs
+Virtual Network|In development|Doesn't support VNET peering
 VPN Gateway|Stable|-
 
 ## Contributions
