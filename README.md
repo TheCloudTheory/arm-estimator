@@ -334,6 +334,7 @@ Application Insights|In development|Supports classic mode, doesn't support Entep
 Analysis Services|Stable|-
 ASR|In progress|Doesn't support recovery to customer-owned sites
 Azure App Service|In development|Supports Azure App Service Plans (without Isolated tiers) and Azure Functions (Consumption / Premium / App Service Plan)
+Azure Firewall|Stable|-
 Backup|In Progress|Supports SQL Server in Azure VM, Azure VM, Azure Files, SAP HANA on Azure VM. Supports GRS backup replication only
 Bastion|Stable|-
 Bot Service|Stable|-
