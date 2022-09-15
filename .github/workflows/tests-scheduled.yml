@@ -16,10 +16,7 @@ jobs:
     - name: Azure Login
       uses: Azure/login@v1.4.6
       with:
-        creds: ${{ secrets.SP_SECRET }}
-        client-id: ${{ secrets.SP_CLIENT_ID }}
-        tenant-id: ${{ secrets.TENANT_ID }}
-        subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
+        creds: ${{ secrets.SP_CREDS }}
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
       with:
