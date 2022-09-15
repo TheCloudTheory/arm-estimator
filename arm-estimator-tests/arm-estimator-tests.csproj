@@ -94,6 +94,9 @@
     <None Update="templates\eventhub.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="templates\frontdoor.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="templates\functions.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

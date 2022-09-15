@@ -32,6 +32,8 @@ internal class WhatIfProcessor
         this.logger.LogInformation("");
 
         var resources = new List<EstimatedResourceData>();
+        var unsupportedResources = new List<ResourceIdentifier>();
+
         foreach (WhatIfChange change in this.changes)
         {
             if (change.resourceId == null)
@@ -249,8 +251,11 @@ internal class WhatIfProcessor
                     resource = ReportResourceWithoutCost(id, change.changeType);
                     break;
                 default:
-                    logger.LogWarning("{resourceType} is not yet supported.", id?.ResourceType);
-                    logger.LogInformation("");
+                    if(id?.Name != null)
+                    {
+                        unsupportedResources.Add(id);
+                    }
+                    
                     break;
             }
 
@@ -278,12 +283,39 @@ internal class WhatIfProcessor
             sign = "";
         }
 
+        if(resources.Count == 0)
+        {
+            this.logger.AddEstimatorMessage("No resource available for estimation.");
+            this.logger.LogInformation("");
+            this.logger.LogInformation("-------------------------------");
+            this.logger.LogInformation("");
+        }
+
+        if(unsupportedResources.Count > 0)
+        {
+            this.logger.LogInformation("Unsupported resources:");
+            this.logger.LogInformation("");
+            ReportUnsupportedResources(unsupportedResources);
+            this.logger.LogInformation("");
+            this.logger.LogInformation("-------------------------------");
+            this.logger.LogInformation("");
+        }
+
         this.logger.LogInformation("Summary:");
         this.logger.LogInformation("");
         this.logger.AddEstimatorMessage("Total cost: {0} {1}", totalCost.ToString("N2"), this.currency);
         this.logger.AddEstimatorMessage("Delta: {0}{1} {2}", sign, delta.ToString("N2"), this.currency);
+        this.logger.LogInformation("");
 
         return new EstimationOutput(totalCost, delta, resources, currency);
+    }
+
+    private void ReportUnsupportedResources(List<ResourceIdentifier> unsupportedResources)
+    {
+        foreach(var resource in unsupportedResources)
+        {
+            this.logger.AddEstimatorMessage("{0} [{1}]", resource.Name, resource.ResourceType);
+        }
     }
 
     private async Task<EstimatedResourceData?> Calculate<TQuery, TCalculation>(WhatIfChange change, ResourceIdentifier id)
