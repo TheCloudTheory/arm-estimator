@@ -25,6 +25,7 @@ public class Program
         var disableDetailsOption = new Option<bool>("--disableDetailedMetrics", () => { return false; }, "Disables reporting of detailed metrics");
         var jsonOutputFilenameOption = new Option<string?>("--jsonOutputFilename", () => { return null; }, "Sets JSON output filename");
         var htmlOutputOption = new Option<bool>("--generateHtmlOutput", () => { return false; }, "Should generate HTML output");
+        var inlineOptions = new Option<IEnumerable<string>>("--inline", () => { return Enumerable.Empty<string>(); }, "List of inline paramaters");
 
         var command = new RootCommand("ACE (Azure Cost Estimator)")
         {
@@ -37,7 +38,8 @@ public class Program
             stdoutOption,
             disableDetailsOption,
             jsonOutputFilenameOption,
-            htmlOutputOption
+            htmlOutputOption,
+            inlineOptions
         };
 
         command.AddArgument(templateFileArg);
@@ -60,7 +62,8 @@ public class Program
                 stdoutOption,
                 disableDetailsOption,
                 jsonOutputFilenameOption,
-                htmlOutputOption
+                htmlOutputOption,
+                inlineOptions
             ));
 
         return await command.InvokeAsync(args);
@@ -75,6 +78,7 @@ public class Program
         }))
         {
             var logger = loggerFactory.CreateLogger<Program>();
+
             DisplayWelcomeScreen(logger);
             DisplayUsedSettings(templateFile, subscriptionId, resourceGroupName, logger, options);
 
