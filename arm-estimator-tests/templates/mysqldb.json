@@ -1,0 +1,189 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.10.61.36676",
+      "templateHash": "5652652801654822933"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.DBforMySQL/servers",
+      "apiVersion": "2017-12-01",
+      "name": "ace-mysqldb-01",
+      "location": "westeurope",
+      "sku": {
+        "name": "B_Gen5_1",
+        "tier": "Basic",
+        "capacity": 1,
+        "size": "5120",
+        "family": "Gen5"
+      },
+      "properties": {
+        "createMode": "Default",
+        "version": "8.0",
+        "administratorLogin": "DemoUser",
+        "administratorLoginPassword": "AzureTest@654321",
+        "storageProfile": {
+          "storageMB": 5120
+        }
+      }
+    },
+    {
+      "type": "Microsoft.DBforMySQL/servers",
+      "apiVersion": "2017-12-01",
+      "name": "ace-mysqldb-02",
+      "location": "westeurope",
+      "sku": {
+        "name": "B_Gen5_2",
+        "tier": "Basic",
+        "capacity": 2,
+        "size": "5120",
+        "family": "Gen5"
+      },
+      "properties": {
+        "createMode": "Default",
+        "version": "8.0",
+        "administratorLogin": "DemoUser",
+        "administratorLoginPassword": "AzureTest@654321",
+        "storageProfile": {
+          "storageMB": 5120
+        }
+      }
+    },
+    {
+      "type": "Microsoft.DBforMySQL/servers",
+      "apiVersion": "2017-12-01",
+      "name": "ace-mysqldb-03",
+      "location": "westeurope",
+      "sku": {
+        "name": "GP_Gen5_2",
+        "tier": "GeneralPurpose",
+        "capacity": 2,
+        "size": "5120",
+        "family": "Gen5"
+      },
+      "properties": {
+        "createMode": "Default",
+        "version": "8.0",
+        "administratorLogin": "DemoUser",
+        "administratorLoginPassword": "AzureTest@654321",
+        "storageProfile": {
+          "storageMB": 5120
+        }
+      }
+    },
+    {
+      "type": "Microsoft.DBforMySQL/servers",
+      "apiVersion": "2017-12-01",
+      "name": "ace-mysqldb-04",
+      "location": "westeurope",
+      "sku": {
+        "name": "GP_Gen5_4",
+        "tier": "GeneralPurpose",
+        "capacity": 4,
+        "size": "5120",
+        "family": "Gen5"
+      },
+      "properties": {
+        "createMode": "Default",
+        "version": "8.0",
+        "administratorLogin": "DemoUser",
+        "administratorLoginPassword": "AzureTest@654321",
+        "storageProfile": {
+          "storageMB": 5120
+        }
+      }
+    },
+    {
+      "type": "Microsoft.DBforMySQL/servers",
+      "apiVersion": "2017-12-01",
+      "name": "ace-mysqldb-05",
+      "location": "westeurope",
+      "sku": {
+        "name": "GP_Gen5_8",
+        "tier": "GeneralPurpose",
+        "capacity": 8,
+        "size": "5120",
+        "family": "Gen5"
+      },
+      "properties": {
+        "createMode": "Default",
+        "version": "8.0",
+        "administratorLogin": "DemoUser",
+        "administratorLoginPassword": "AzureTest@654321",
+        "storageProfile": {
+          "storageMB": 5120
+        }
+      }
+    },
+    {
+      "type": "Microsoft.DBforMySQL/servers",
+      "apiVersion": "2017-12-01",
+      "name": "ace-mysqldb-06",
+      "location": "westeurope",
+      "sku": {
+        "name": "MO_Gen5_2",
+        "tier": "MemoryOptimized",
+        "capacity": 2,
+        "size": "5120",
+        "family": "Gen5"
+      },
+      "properties": {
+        "createMode": "Default",
+        "version": "8.0",
+        "administratorLogin": "DemoUser",
+        "administratorLoginPassword": "AzureTest@654321",
+        "storageProfile": {
+          "storageMB": 5120
+        }
+      }
+    },
+    {
+      "type": "Microsoft.DBforMySQL/servers",
+      "apiVersion": "2017-12-01",
+      "name": "ace-mysqldb-07",
+      "location": "westeurope",
+      "sku": {
+        "name": "MO_Gen5_4",
+        "tier": "MemoryOptimized",
+        "capacity": 4,
+        "size": "5120",
+        "family": "Gen5"
+      },
+      "properties": {
+        "createMode": "Default",
+        "version": "8.0",
+        "administratorLogin": "DemoUser",
+        "administratorLoginPassword": "AzureTest@654321",
+        "storageProfile": {
+          "storageMB": 5120
+        }
+      }
+    },
+    {
+      "type": "Microsoft.DBforMySQL/servers",
+      "apiVersion": "2017-12-01",
+      "name": "ace-mysqldb-08",
+      "location": "westeurope",
+      "sku": {
+        "name": "MO_Gen5_8",
+        "tier": "MemoryOptimized",
+        "capacity": 8,
+        "size": "5120",
+        "family": "Gen5"
+      },
+      "properties": {
+        "createMode": "Default",
+        "version": "8.0",
+        "administratorLogin": "DemoUser",
+        "administratorLoginPassword": "AzureTest@654321",
+        "storageProfile": {
+          "storageMB": 5120
+        }
+      }
+    }
+  ]
+}
