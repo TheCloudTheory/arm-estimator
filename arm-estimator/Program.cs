@@ -83,7 +83,7 @@ public class Program
             DisplayUsedSettings(templateFile, subscriptionId, resourceGroupName, logger, options);
 
             var template = GetTemplate(templateFile, logger);
-            if(template == null)
+            if (template == null)
             {
                 logger.LogError("There was a problem with processing template.");
                 return;
@@ -95,9 +95,41 @@ public class Program
                 parameters = Regex.Replace(File.ReadAllText(options.ParametersFile.FullName), @"\s+", string.Empty);
             }
 
+            if (options.InlineParameters.Any())
+            {
+                var parsedParameters = JsonSerializer.Deserialize<ParametersSchema>(parameters);
+                if (parsedParameters != null)
+                {
+                    foreach (var param in options.InlineParameters)
+                    {
+                        var keyValue = param.Split(new[] { '=' }, 2);
+                        if (keyValue.Length < 2)
+                        {
+                            logger.LogError("Couldn't parse {param} as inline parameter.", param);
+                            return;
+                        }
+
+                        var key = keyValue[0];
+                        var value = keyValue[1];
+
+                        if (parsedParameters.Parameters == null)
+                        {
+                            parsedParameters.Parameters = new Dictionary<string, Parameter>();
+                        }
+
+                        parsedParameters.Parameters.Add(key, new Parameter() { Value = value });
+                    }
+
+                    parameters = JsonSerializer.Serialize(parsedParameters, new JsonSerializerOptions()
+                    {
+                        WriteIndented = false
+                    });
+                }
+            }
+
             var handler = new AzureWhatIfHandler(subscriptionId, resourceGroupName, template, options.Mode, parameters, logger);
             var whatIfData = await handler.GetResponseWithRetries();
-            if(whatIfData == null)
+            if (whatIfData == null)
             {
                 Environment.Exit(1);
             }
@@ -167,15 +199,15 @@ public class Program
                 process.BeginErrorReadLine();
                 template = process.StandardOutput.ReadToEnd();
                 process.WaitForExit();
-               
-                if(string.IsNullOrWhiteSpace(template))
+
+                if (string.IsNullOrWhiteSpace(template))
                 {
                     logger.LogError("{error}", error);
                     return null;
                 }
                 else
                 {
-                    if(string.IsNullOrWhiteSpace(error) == false)
+                    if (string.IsNullOrWhiteSpace(error) == false)
                     {
                         // Bicep returns warnings as errors, so if a template is generated,
                         // that most likely the case and we need to handle it
@@ -215,8 +247,8 @@ public class Program
                     File.WriteAllText(fileName, outputData);
                 }
             }
-            
-            if(options.ShouldGenerateHtmlOutput)
+
+            if (options.ShouldGenerateHtmlOutput)
             {
                 var generator = new HtmlOutputGenerator(output, logger);
                 generator.Generate();
