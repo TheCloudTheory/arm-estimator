@@ -14,7 +14,9 @@ namespace arm_estimator_tests
                 "arm-estimator-rg",
                 "--generateJsonOutput",
                 "--jsonOutputFilename",
-                outputFilename
+                outputFilename,
+                "--inline",
+                "adminPassword=verysecretpassword123"
             });
 
             Assert.That(exitCode, Is.EqualTo(0));
