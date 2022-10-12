@@ -25,6 +25,7 @@ Automated cost estimation of your Azure infrastructure made easy. Works with ARM
   + [Disabling detailed metrics](#disabling-detailed-metrics)
   + [JSON output filename](#json-output-filename)
   + [HTML output](#html-output)
+  + [Inline parameters](#inline-parameters)
 * [Known limitations](#known-limitations)
 * [Services support](#services-support)
 * [Contributions](#contributions)
@@ -309,6 +310,55 @@ arm-estimator <template-path>.json <subscription-id> <resource-group> --generate
 ```
 Once estimation is completed, ACE will generate an HTML file with result data available in the working directory.
 > ACE comes with HTML template available for further customization. If you don't like how the result file looks like, you can modify Html/GeneratorTemplate.html file in any way you want. Remember not to remove `### [] ###` placeholders!
+
+### Inline parameters
+##### Available from: 1.0.0-beta5
+In many scenarios, you want to pass parameters inline instead of providing them via parameters file. Main use case is use of `secureString` type as including secrets in your codebase is considered a bad practice. ACE supports inline parameters by passing them with `--inline` option:
+```
+arm-estimator <template-path>.json <subscription-id> <resource-group> --inline param1=value1 --inline param2=value2 --inline param3=value3
+```
+Each inline parameter must be provided as `parameterName=parameterValue` in order to be parsed correctly. Parameters must be named exactly as they're named in your ARM Template / Bicep file, for instance:
+```
+param location string = resourceGroup().location
+param singleLineObject object
+param exampleArray array
+
+@secure()
+param adminPassword string
+param adminLogin string
+param minCapacity int
+
+resource dbserver 'Microsoft.Sql/servers@2021-11-01-preview' = {
+  name: 'sqlserver'
+  location: location
+  properties: {
+    administratorLogin: adminLogin
+    administratorLoginPassword: adminPassword
+  }
+}
+
+resource dbbasic 'Microsoft.Sql/servers/databases@2021-11-01-preview' = {
+  parent: dbserver
+  name: 'ace-db'
+  location: location
+  sku: {
+    name: 'Basic'
+  }
+  properties: {
+    minCapacity: minCapacity
+  }
+}
+```
+Will be estimated with the following command:
+```
+arm-estimator <template-path>.bicep <subscription-id> <resource-group> \
+--inline adminPassword=verysecretpassword123 \
+--inline adminLogin=adminace \
+--inline minCapacity=3 \
+--inline singleLineObject={"name": "test name", "id": "123-abc", "isCurrent": true, "tier": 1} \
+--inline exampleArray=["1", "2", "3"]
+```
+Avoid passing objects / array as strings as they need to be parsed correctly as JSON.
 
 ## Known limitations
 ACE is currently in `beta` development phase meaning there're no guarantees for stable interface and some features are still in design or planning phase. The main limitations as for now are:
