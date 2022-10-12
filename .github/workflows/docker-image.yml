@@ -3,7 +3,7 @@ name: Build & Push Docker image
 on: [workflow_dispatch]
 
 env:
-  TAG: 1.0.0-beta4
+  TAG: 1.0.0-beta5
 
 jobs:
   build:
