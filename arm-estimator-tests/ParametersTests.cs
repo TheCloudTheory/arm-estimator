@@ -5,7 +5,7 @@ namespace arm_estimator_tests
     internal class ParametersTests
     {
         [Test]
-        public async Task WhenNestedResourcesArePresent_TheyShouldBeDetected()
+        public async Task WhenSecureStringIsProvidedInline_ItShouldBeUsedInEstimate()
         {
             var outputFilename = $"ace_test_{DateTime.Now.Ticks}";
             var exitCode = await Program.Main(new[] {
@@ -28,7 +28,42 @@ namespace arm_estimator_tests
             });
 
             Assert.That(output, Is.Not.Null);
-            Assert.That(output.Resources.Count(), Is.EqualTo(3));
+            Assert.That(output.Resources.Count(), Is.EqualTo(2));
+        }
+
+        [Test]
+        public async Task WhenMultipleParamsAreUsedInline_TheyShouldBeUsedInEstimate()
+        {
+            var outputFilename = $"ace_test_{DateTime.Now.Ticks}";
+            var exitCode = await Program.Main(new[] {
+                "templates/bicep/inlineParams.bicep",
+                "f81e70a7-e819-49b2-a980-8e9c433743dd",
+                "arm-estimator-rg",
+                "--generateJsonOutput",
+                "--jsonOutputFilename",
+                outputFilename,
+                "--inline",
+                "adminPassword=verysecretpassword123",
+                "--inline",
+                "adminLogin=adminace",
+                "--inline",
+                "minCapacity=3",
+                "--inline",
+                "singleLineObject={\"name\": \"test name\", \"id\": \"123-abc\", \"isCurrent\": true, \"tier\": 1}",
+                "--inline",
+                "exampleArray=[\"1\", \"2\", \"3\"]"
+            });
+
+            Assert.That(exitCode, Is.EqualTo(0));
+
+            var outputFile = File.ReadAllText($"{outputFilename}.json");
+            var output = JsonSerializer.Deserialize<EstimationOutput>(outputFile, new JsonSerializerOptions()
+            {
+                PropertyNameCaseInsensitive = true
+            });
+
+            Assert.That(output, Is.Not.Null);
+            Assert.That(output.Resources.Count(), Is.EqualTo(2));
         }
     }
 }
