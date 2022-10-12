@@ -97,34 +97,8 @@ public class Program
 
             if (options.InlineParameters.Any())
             {
-                var parsedParameters = JsonSerializer.Deserialize<ParametersSchema>(parameters);
-                if (parsedParameters != null)
-                {
-                    foreach (var param in options.InlineParameters)
-                    {
-                        var keyValue = param.Split(new[] { '=' }, 2);
-                        if (keyValue.Length < 2)
-                        {
-                            logger.LogError("Couldn't parse {param} as inline parameter.", param);
-                            return;
-                        }
-
-                        var key = keyValue[0];
-                        var value = keyValue[1];
-
-                        if (parsedParameters.Parameters == null)
-                        {
-                            parsedParameters.Parameters = new Dictionary<string, Parameter>();
-                        }
-
-                        parsedParameters.Parameters.Add(key, new Parameter() { Value = value });
-                    }
-
-                    parameters = JsonSerializer.Serialize(parsedParameters, new JsonSerializerOptions()
-                    {
-                        WriteIndented = false
-                    });
-                }
+                var parser = new TemplateParser(template, parameters, options.InlineParameters, logger);
+                parser.ParseInlineParameters(out parameters);
             }
 
             var handler = new AzureWhatIfHandler(subscriptionId, resourceGroupName, template, options.Mode, parameters, logger);
