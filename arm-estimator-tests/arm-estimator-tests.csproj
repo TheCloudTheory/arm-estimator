@@ -46,6 +46,9 @@
     <None Update="templates\appserviceplan.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="templates\automation.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="templates\azure_firewall.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
