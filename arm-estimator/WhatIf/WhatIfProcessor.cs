@@ -250,6 +250,15 @@ internal class WhatIfProcessor
                 case "Microsoft.Storage/storageAccounts/blobServices/containers":
                     resource = ReportResourceWithoutCost(id, change.changeType);
                     break;
+                case "Microsoft.Automation/automationAccounts":
+                    resource = await Calculate<AutomationAccountRetailQuery, AutomationAccountEstimationCalculation>(change, id);
+                    break;
+                case "Microsoft.Automation/automationAccounts/runbooks":
+                    resource = ReportResourceWithoutCost(id, change.changeType);
+                    break;
+                case "Microsoft.OperationalInsights/workspaces/linkedServices":
+                    resource = ReportResourceWithoutCost(id, change.changeType);
+                    break;
                 default:
                     if(id?.Name != null)
                     {
