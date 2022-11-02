@@ -124,6 +124,7 @@ Name|Default value|Example|Description
 --disableDetailedMetrics|`false`|`--disableDetailedMetrics`|Disables detailed metrics of estimated resource cost
 --jsonOutputFilename|`null`|`--jsonOutputFilename estimationOutput`|Sets a name of JSON output file created when `--generateJsonOutput` is enabled
 --generateHtmlOutput|`false`|`--generateHtmlOutput`|Generates HTML file with estimation result
+--inline|`null`|`--inline param1=value1 --inline param2=value2`|Passes parameters inline instead of relying on hardcoded values in parameters file
 
 ### Deployment mode
 ##### Available from: 1.0.0-alpha2
