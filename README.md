@@ -39,6 +39,7 @@ Infrastructure-as-Code (IaC) makes things even more difficult - it solves the pr
 ACE follows a concept of [_running cost as architecture fitness function_](https://www.thoughtworks.com/radar/techniques/run-cost-as-architecture-fitness-function). You can make it an integral part of your CICD pipeline and quickly gather information of how much you're going to spend.
 
 ## Main features
+* Supports 41 Azure services (68 resource types)
 * Native support for Bicep & ARM Templates
 * Detailed output containing information about cost of your infrastructure and metrics used for calculation
 * Seamless integration with ARM Templates and Bicep (with a little help of Bicep CLI)
@@ -384,6 +385,7 @@ Application Gateway|Stable|-
 Application Insights|In development|Supports classic mode, doesn't support Enteprise Nodes and Multi-step Web Test
 Analysis Services|Stable|-
 ASR|In progress|Doesn't support recovery to customer-owned sites
+Automation Account|Stable|Supports Process Automation only
 Azure App Service|In development|Supports Azure App Service Plans (without Isolated tiers) and Azure Functions (Consumption / Premium / App Service Plan)
 Azure Firewall|Stable|-
 Backup|In Progress|Supports SQL Server in Azure VM, Azure VM, Azure Files, SAP HANA on Azure VM. Supports GRS backup replication only
