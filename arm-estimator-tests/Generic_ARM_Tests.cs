@@ -20,6 +20,7 @@ namespace arm_estimator_tests
         [TestCase("templates/frontdoor.json", 2197.348, 2197.348)]
         [TestCase("templates/azuresqlmi.json", 5707.58, 5707.58)]
         [TestCase("templates/mysqldb.json", 2617.82, 2617.82)]
+        [TestCase("templates/postgresql.json", 2617.82, 2617.82)]
         public async Task ResourceEstimation_ShouldBeCalculatedCorrectly(string templatePath, double totalValue, double deltaValue)
         {
             var outputFilename = $"ace_test_{DateTime.Now.Ticks}";
