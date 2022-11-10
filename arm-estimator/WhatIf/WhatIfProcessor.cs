@@ -259,6 +259,9 @@ internal class WhatIfProcessor
                 case "Microsoft.OperationalInsights/workspaces/linkedServices":
                     resource = ReportResourceWithoutCost(id, change.changeType);
                     break;
+                case "Microsoft.DBforPostgreSQL/servers":
+                    resource = await Calculate<PostgreSQLRetailQuery, PostgreSQLEstimationCalculation>(change, id);
+                    break;
                 default:
                     if(id?.Name != null)
                     {
