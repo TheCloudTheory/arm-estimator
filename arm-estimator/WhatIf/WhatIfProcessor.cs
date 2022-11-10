@@ -262,6 +262,9 @@ internal class WhatIfProcessor
                 case "Microsoft.DBforPostgreSQL/servers":
                     resource = await Calculate<PostgreSQLRetailQuery, PostgreSQLEstimationCalculation>(change, id);
                     break;
+                case "Microsoft.DBforPostgreSQL/flexibleServers":
+                    resource = await Calculate<PostgreSQLFlexibleRetailQuery, PostgreSQLFlexibleEstimationCalculation>(change, id);
+                    break;
                 default:
                     if(id?.Name != null)
                     {
