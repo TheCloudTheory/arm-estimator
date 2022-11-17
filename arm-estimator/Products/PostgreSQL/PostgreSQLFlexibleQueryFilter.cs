@@ -30,25 +30,27 @@ internal class PostgreSQLFlexibleQueryFilter : IQueryFilter
         var skuName = $"{cores} vCore";
         string? skuProductName;
         string? storageProductName;
+        string? productName;
 
         if (tierId == "Burstable")
         {
             skuName = familyId;
             skuProductName = "Burstable BS";
             storageProductName = "Az DB for PostgreSQL Flexible Server Storage";
+            productName = $"Azure Database for PostgreSQL Flexible Server {skuProductName} Series Compute";
         }
-        else if (tierId == "GP")
+        else if (tierId == "GeneralPurpose")
         {
-            skuProductName = "General Purpose";
-            storageProductName = "Azure Database for PostgreSQL Single Server General Purpose - Storage";
+            skuProductName = $"General Purpose\u00A0{familyId}\u00A0";
+            storageProductName = "Az DB for PostgreSQL Flexible Server Storage";
+            productName = $"Azure Database for PostgreSQL Flexible Server {skuProductName}Series Compute";
         }
         else
         {
-            skuProductName = "Memory Optimized";
+            skuProductName = $"Memory Optimized\u00A0{familyId}\u00A0";
             storageProductName = "Azure Database for PostgreSQL Single Server General Purpose - Storage";
+            productName = $"Azure Database for PostgreSQL Flexible Server {skuProductName}Series Compute";
         }
-
-        var productName = $"Azure Database for PostgreSQL Flexible Server {skuProductName} Series Compute";
 
         if (this.afterState.properties != null && this.afterState.properties.ContainsKey("storageProfile"))
         {

@@ -15,4 +15,5 @@ internal class RetailItem
     public string? meterName { get; set; }
     public string? serviceName { get; set; }
     public string? serviceId { get; set; }
+    public string? armSkuName { get; set; }
 }

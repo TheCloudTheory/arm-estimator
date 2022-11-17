@@ -9,7 +9,7 @@ internal class Program
             File.Delete("westeurope.csv");
         }
 
-        File.AppendAllText("westeurope.csv", "type;serviceId;serviceName;skuId;skuName;productId;productName;meterId;meterName" + Environment.NewLine);
+        File.AppendAllText("westeurope.csv", "type;serviceId;serviceName;skuId;skuName;productId;productName;meterId;meterName;armSkuName" + Environment.NewLine);
 
         var client = new HttpClient();
         var request = new HttpRequestMessage(HttpMethod.Get, $"https://prices.azure.com/api/retail/prices?$filter=armRegionName eq 'westeurope'");
@@ -18,7 +18,7 @@ internal class Program
 
         foreach(var item in data.Items)
         {
-            File.AppendAllText("westeurope.csv", $"{item.type};{item.serviceId};{item.serviceName};{item.skuId};{item.skuName};{item.productId};{item.productName};{item.meterId};{item.meterName}" + Environment.NewLine);
+            File.AppendAllText("westeurope.csv", $"{item.type};{item.serviceId};{item.serviceName};{item.skuId};{item.skuName};{item.productId};{item.productName};{item.meterId};{item.meterName};{item.armSkuName}" + Environment.NewLine);
         }
 
         var nextLink = data.NextPageLink;
@@ -38,7 +38,7 @@ internal class Program
 
         foreach (var item in data.Items)
         {
-            File.AppendAllText("westeurope.csv", $"{item.type};{item.serviceId};{item.serviceName};{item.skuId};{item.skuName};{item.productId};{item.productName};{item.meterId};{item.meterName}" + Environment.NewLine);
+            File.AppendAllText("westeurope.csv", $"{item.type};{item.serviceId};{item.serviceName};{item.skuId};{item.skuName};{item.productId};{item.productName};{item.meterId};{item.meterName};{item.armSkuName}" + Environment.NewLine);
         }
 
         return data.NextPageLink;
