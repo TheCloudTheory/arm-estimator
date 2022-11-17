@@ -39,7 +39,7 @@ Infrastructure-as-Code (IaC) makes things even more difficult - it solves the pr
 ACE follows a concept of [_running cost as architecture fitness function_](https://www.thoughtworks.com/radar/techniques/run-cost-as-architecture-fitness-function). You can make it an integral part of your CICD pipeline and quickly gather information of how much you're going to spend.
 
 ## Main features
-* Supports 42 Azure services (~70 resource types)
+* Supports 43 Azure services (~71 resource types)
 * Native support for Bicep & ARM Templates
 * Detailed output containing information about cost of your infrastructure and metrics used for calculation
 * Seamless integration with ARM Templates and Bicep (with a little help of Bicep CLI)
@@ -412,6 +412,7 @@ Public IP Address|Stable|-
 Public IP Address Prefixes|Stable|-
 Redis|In development|Doesn't support Redis Enterprise
 Sentinel|In progress|Estimations doesn't include commitment tiers
+Service Bus|Stable|Doesn't support Hybrid Connections and WCF Relay
 SignalR|Stable|-
 SQL Database|In development|Supports only Databases (DTU model - Basic & Standard)
 Storage Account|In development|Supports only StorageV2 (without File Service & Data Lake Storage)
