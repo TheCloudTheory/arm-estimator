@@ -181,3 +181,99 @@ resource db10 'Microsoft.DBforPostgreSQL/flexibleServers@2021-06-01' = {
     }
   }
 }
+
+resource db11 'Microsoft.DBforPostgreSQL/flexibleServers@2021-06-01' = {
+  name: 'db11'
+  location: resourceGroup().location
+  sku: {
+    name: 'Standard_Esv3_2'
+    tier: 'MemoryOptimized'
+  }
+  properties: {
+    administratorLogin: 'login'
+    administratorLoginPassword: 'password'
+    storage: {
+      storageSizeGB: 5
+    }
+  }
+}
+
+resource db12 'Microsoft.DBforPostgreSQL/flexibleServers@2021-06-01' = {
+  name: 'db12'
+  location: resourceGroup().location
+  sku: {
+    name: 'Standard_Esv3_8'
+    tier: 'MemoryOptimized'
+  }
+  properties: {
+    administratorLogin: 'login'
+    administratorLoginPassword: 'password'
+    storage: {
+      storageSizeGB: 5
+    }
+  }
+}
+
+resource db13 'Microsoft.DBforPostgreSQL/flexibleServers@2021-06-01' = {
+  name: 'db13'
+  location: resourceGroup().location
+  sku: {
+    name: 'Standard_Esv3_16'
+    tier: 'MemoryOptimized'
+  }
+  properties: {
+    administratorLogin: 'login'
+    administratorLoginPassword: 'password'
+    storage: {
+      storageSizeGB: 5
+    }
+  }
+}
+
+resource db14 'Microsoft.DBforPostgreSQL/flexibleServers@2021-06-01' = {
+  name: 'db14'
+  location: resourceGroup().location
+  sku: {
+    name: 'Standard_Edsv4_2'
+    tier: 'MemoryOptimized'
+  }
+  properties: {
+    administratorLogin: 'login'
+    administratorLoginPassword: 'password'
+    storage: {
+      storageSizeGB: 5
+    }
+  }
+}
+
+resource db15 'Microsoft.DBforPostgreSQL/flexibleServers@2021-06-01' = {
+  name: 'db15'
+  location: resourceGroup().location
+  sku: {
+    name: 'Standard_Edsv4_8'
+    tier: 'MemoryOptimized'
+  }
+  properties: {
+    administratorLogin: 'login'
+    administratorLoginPassword: 'password'
+    storage: {
+      storageSizeGB: 5
+    }
+  }
+}
+
+resource db16 'Microsoft.DBforPostgreSQL/flexibleServers@2021-06-01' = {
+  name: 'db16'
+  location: resourceGroup().location
+  sku: {
+    name: 'Standard_Edsv4_16'
+    tier: 'MemoryOptimized'
+  }
+  properties: {
+    administratorLogin: 'login'
+    administratorLoginPassword: 'password'
+    storage: {
+      storageSizeGB: 5
+    }
+  }
+}

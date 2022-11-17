@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.9.1.41621",
-      "templateHash": "17654864250480954715"
+      "templateHash": "9393056723850975829"
     }
   },
   "resources": [
@@ -194,6 +194,108 @@
       "sku": {
         "name": "Standard_Ddsv4_16",
         "tier": "GeneralPurpose"
+      },
+      "properties": {
+        "administratorLogin": "login",
+        "administratorLoginPassword": "password",
+        "storage": {
+          "storageSizeGB": 5
+        }
+      }
+    },
+    {
+      "type": "Microsoft.DBforPostgreSQL/flexibleServers",
+      "apiVersion": "2021-06-01",
+      "name": "db11",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "name": "Standard_Esv3_2",
+        "tier": "MemoryOptimized"
+      },
+      "properties": {
+        "administratorLogin": "login",
+        "administratorLoginPassword": "password",
+        "storage": {
+          "storageSizeGB": 5
+        }
+      }
+    },
+    {
+      "type": "Microsoft.DBforPostgreSQL/flexibleServers",
+      "apiVersion": "2021-06-01",
+      "name": "db12",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "name": "Standard_Esv3_8",
+        "tier": "MemoryOptimized"
+      },
+      "properties": {
+        "administratorLogin": "login",
+        "administratorLoginPassword": "password",
+        "storage": {
+          "storageSizeGB": 5
+        }
+      }
+    },
+    {
+      "type": "Microsoft.DBforPostgreSQL/flexibleServers",
+      "apiVersion": "2021-06-01",
+      "name": "db13",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "name": "Standard_Esv3_16",
+        "tier": "MemoryOptimized"
+      },
+      "properties": {
+        "administratorLogin": "login",
+        "administratorLoginPassword": "password",
+        "storage": {
+          "storageSizeGB": 5
+        }
+      }
+    },
+    {
+      "type": "Microsoft.DBforPostgreSQL/flexibleServers",
+      "apiVersion": "2021-06-01",
+      "name": "db14",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "name": "Standard_Edsv4_2",
+        "tier": "MemoryOptimized"
+      },
+      "properties": {
+        "administratorLogin": "login",
+        "administratorLoginPassword": "password",
+        "storage": {
+          "storageSizeGB": 5
+        }
+      }
+    },
+    {
+      "type": "Microsoft.DBforPostgreSQL/flexibleServers",
+      "apiVersion": "2021-06-01",
+      "name": "db15",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "name": "Standard_Edsv4_8",
+        "tier": "MemoryOptimized"
+      },
+      "properties": {
+        "administratorLogin": "login",
+        "administratorLoginPassword": "password",
+        "storage": {
+          "storageSizeGB": 5
+        }
+      }
+    },
+    {
+      "type": "Microsoft.DBforPostgreSQL/flexibleServers",
+      "apiVersion": "2021-06-01",
+      "name": "db16",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "name": "Standard_Edsv4_16",
+        "tier": "MemoryOptimized"
       },
       "properties": {
         "administratorLogin": "login",
