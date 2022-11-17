@@ -97,6 +97,9 @@
     <None Update="templates\cosmosdb.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="templates\datafactory.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="templates\eventgrid.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

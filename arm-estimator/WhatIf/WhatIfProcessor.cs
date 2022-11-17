@@ -268,6 +268,18 @@ internal class WhatIfProcessor
                 case "Microsoft.ServiceBus/namespaces":
                     resource = await Calculate<ServiceBusRetailQuery, ServiceBusEstimationCalculation>(change, id);
                     break;
+                case "Microsoft.DataFactory/factories/datasets":
+                    resource = ReportResourceWithoutCost(id, change.changeType);
+                    break;
+                case "Microsoft.DataFactory/factories/pipelines":
+                    resource = ReportResourceWithoutCost(id, change.changeType);
+                    break;
+                case "Microsoft.DataFactory/factories/linkedservices":
+                    resource = ReportResourceWithoutCost(id, change.changeType);
+                    break;
+                case "Microsoft.DataFactory/factories":
+                    resource = await Calculate<DataFactoryRetailQuery, DataFactoryEstimationCalculation>(change, id);
+                    break;
                 default:
                     if(id?.Name != null)
                     {
