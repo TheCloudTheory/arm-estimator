@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Text.Json;
 
 internal class PostgreSQLFlexibleQueryFilter : IQueryFilter
@@ -32,6 +33,8 @@ internal class PostgreSQLFlexibleQueryFilter : IQueryFilter
         string? storageProductName;
         string? productName;
 
+        // Note that for some reasons some product names for PostgreSQL contain non-breaking space \u00A0
+        // meaning query won't work if we miss them. We may use armSkuName in the future
         if (tierId == "Burstable")
         {
             skuName = familyId;
@@ -48,8 +51,16 @@ internal class PostgreSQLFlexibleQueryFilter : IQueryFilter
         else
         {
             skuProductName = $"Memory Optimized\u00A0{familyId}\u00A0";
-            storageProductName = "Azure Database for PostgreSQL Single Server General Purpose - Storage";
-            productName = $"Azure Database for PostgreSQL Flexible Server {skuProductName}Series Compute";
+            storageProductName = "Az DB for PostgreSQL Flexible Server Storage";
+
+            if(familyId == "Edsv4")
+            {
+                productName = $"Azure\u00A0Database for PostgreSQL Flexible Server {skuProductName}Series Compute";
+            }
+            else
+            {
+                productName = $"Azure\u00A0Database for PostgreSQL Flexible Server\u00A0{skuProductName}Series Compute";
+            }           
         }
 
         if (this.afterState.properties != null && this.afterState.properties.ContainsKey("storageProfile"))
