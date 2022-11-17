@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.9.1.41621",
-      "templateHash": "1978115693316785014"
+      "templateHash": "17654864250480954715"
     }
   },
   "resources": [
@@ -126,6 +126,74 @@
       "sku": {
         "name": "Standard_B2S_2",
         "tier": "Burstable"
+      },
+      "properties": {
+        "administratorLogin": "login",
+        "administratorLoginPassword": "password",
+        "storage": {
+          "storageSizeGB": 5
+        }
+      }
+    },
+    {
+      "type": "Microsoft.DBforPostgreSQL/flexibleServers",
+      "apiVersion": "2021-06-01",
+      "name": "db7",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "name": "Standard_Dsv3_2",
+        "tier": "GeneralPurpose"
+      },
+      "properties": {
+        "administratorLogin": "login",
+        "administratorLoginPassword": "password",
+        "storage": {
+          "storageSizeGB": 5
+        }
+      }
+    },
+    {
+      "type": "Microsoft.DBforPostgreSQL/flexibleServers",
+      "apiVersion": "2021-06-01",
+      "name": "db8",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "name": "Standard_Dsv3_16",
+        "tier": "GeneralPurpose"
+      },
+      "properties": {
+        "administratorLogin": "login",
+        "administratorLoginPassword": "password",
+        "storage": {
+          "storageSizeGB": 5
+        }
+      }
+    },
+    {
+      "type": "Microsoft.DBforPostgreSQL/flexibleServers",
+      "apiVersion": "2021-06-01",
+      "name": "db9",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "name": "Standard_Ddsv4_2",
+        "tier": "GeneralPurpose"
+      },
+      "properties": {
+        "administratorLogin": "login",
+        "administratorLoginPassword": "password",
+        "storage": {
+          "storageSizeGB": 5
+        }
+      }
+    },
+    {
+      "type": "Microsoft.DBforPostgreSQL/flexibleServers",
+      "apiVersion": "2021-06-01",
+      "name": "db10",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "name": "Standard_Ddsv4_16",
+        "tier": "GeneralPurpose"
       },
       "properties": {
         "administratorLogin": "login",

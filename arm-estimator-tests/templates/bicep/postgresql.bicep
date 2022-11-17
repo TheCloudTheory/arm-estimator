@@ -117,3 +117,67 @@ resource db6 'Microsoft.DBforPostgreSQL/flexibleServers@2021-06-01' = {
     }
   }
 }
+
+resource db7 'Microsoft.DBforPostgreSQL/flexibleServers@2021-06-01' = {
+  name: 'db7'
+  location: resourceGroup().location
+  sku: {
+    name: 'Standard_Dsv3_2'
+    tier: 'GeneralPurpose'
+  }
+  properties: {
+    administratorLogin: 'login'
+    administratorLoginPassword: 'password'
+    storage: {
+      storageSizeGB: 5
+    }
+  }
+}
+
+resource db8 'Microsoft.DBforPostgreSQL/flexibleServers@2021-06-01' = {
+  name: 'db8'
+  location: resourceGroup().location
+  sku: {
+    name: 'Standard_Dsv3_16'
+    tier: 'GeneralPurpose'
+  }
+  properties: {
+    administratorLogin: 'login'
+    administratorLoginPassword: 'password'
+    storage: {
+      storageSizeGB: 5
+    }
+  }
+}
+
+resource db9 'Microsoft.DBforPostgreSQL/flexibleServers@2021-06-01' = {
+  name: 'db9'
+  location: resourceGroup().location
+  sku: {
+    name: 'Standard_Ddsv4_2'
+    tier: 'GeneralPurpose'
+  }
+  properties: {
+    administratorLogin: 'login'
+    administratorLoginPassword: 'password'
+    storage: {
+      storageSizeGB: 5
+    }
+  }
+}
+
+resource db10 'Microsoft.DBforPostgreSQL/flexibleServers@2021-06-01' = {
+  name: 'db10'
+  location: resourceGroup().location
+  sku: {
+    name: 'Standard_Ddsv4_16'
+    tier: 'GeneralPurpose'
+  }
+  properties: {
+    administratorLogin: 'login'
+    administratorLoginPassword: 'password'
+    storage: {
+      storageSizeGB: 5
+    }
+  }
+}
