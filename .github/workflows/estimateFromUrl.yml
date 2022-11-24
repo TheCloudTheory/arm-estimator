@@ -58,10 +58,6 @@ on:
         required: true
       AZURE_SUBSCRIPTION_ID:
         required: true
-    outputs:
-      TotalCost:
-        description: "The TotalCost"
-        value: 0
 
 permissions:
   id-token: write
