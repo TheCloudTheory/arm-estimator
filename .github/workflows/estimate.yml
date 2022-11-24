@@ -1,0 +1,87 @@
+# This is a reusable workflow that can be called from your repository to provide an estimate given specific template/params
+name: Estimate 
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: 'Which GitHub Environment to use'
+        required: false
+        type: string
+      rg:
+        description: 'Resource Group name'
+        required: true
+        type: string
+#      templateParamFile:
+#        description: 'Template parameters file'
+#        required: false
+#        type: string
+#      templateParams:
+#        description: 'Template parameters, space seperated key=value'
+#        required: false
+#        default: ''
+#        type: string
+    secrets:
+      AZURE_CLIENT_ID:
+        required: true
+      AZURE_TENANT_ID:
+        required: true
+      AZURE_SUBSCRIPTION_ID:
+        required: true
+    outputs:
+      TotalCost:
+        description: "The TotalCost"
+        value: 0
+
+permissions:
+  id-token: read
+  contents: read
+
+concurrency: "${{ inputs.environment }}-${{ inputs.rg }}"
+
+jobs:
+  Estimate:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      # Login to Azure
+    - uses: azure/login@v1.4.6
+      name: Initial Login to Azure to Deploy
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+    - uses: robinraju/release-downloader@v1.5
+      name: Download Arm-Estimator release
+      id: downloadACE
+      with:
+        repository: "TheCloudTheory/arm-estimator"
+        latest: true
+        fileName: "arm-estimator-linux-x64*.zip"
+        #fileName: "arm-estimator-linux-x64-1.0.0-beta5.zip"
+        
+    - name: Unzip release
+      run: |
+        echo ${{steps.downloadACE.outputs.tag_name}}
+        ACEZIP="arm-estimator-linux-x64-${{steps.downloadACE.outputs.tag_name}}.zip"
+        echo $ACEZIP
+        unzip $ACEZIP
+        ls
+        
+      # Deploy Bicep file
+    - name: Estimate
+      id: ace
+      env:
+        templateParams: ${{ inputs.templateParams}}
+      run: |
+        echo "Creating deployment ${{ inputs.resourceName }} using params $templateParams and AKSC ${{ inputs.templateVersion }}"
+        
+        echo "Downloading arm template"
+        curl -O https://github.com/Azure/AKS-Construction/releases/download/0.9.4/main.json
+        
+        echo "Downloading param file"
+        curl -O https://raw.githubusercontent.com/Azure/AKS-Construction/main/.github/workflows_dep/AksDeploy-Private.parameters.json
+        
+        echo "Estimating"
+        ./arm-estimator main.json ${{ secrets.AZURE_SUBSCRIPTION_ID }} ${{ inputs.rg }} --parameters AksDeploy-Private.parameters.json
