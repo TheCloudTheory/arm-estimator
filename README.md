@@ -117,7 +117,7 @@ Simply add this new job to your workflow, using your own URL's.
       rg: 'MyResourceGroup'
       environment: '' #Use empty string for repo level secrets
       templateFileURL: https://github.com/Azure/AKS-Construction/releases/download/0.9.4/main.json
-      templateParamFileURL: https://raw.githubusercontent.com/Azure/AKS-Construction/main/.github/workflows_dep/AksDeploy-ByoVnet.parameters.json
+      templateParamFileURL: https://raw.githubusercontent.com/Azure/AKS-Construction/main/.github/workflows_dep/AksDeploy-Private.parameters.json
     secrets:
       AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
       AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
