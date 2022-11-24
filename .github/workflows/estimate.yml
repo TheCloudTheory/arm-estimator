@@ -119,10 +119,7 @@ jobs:
       id: ace
       env:
         templateParams: ${{ inputs.templateParams}}
-      run: |
-        echo "${{ steps.armassets.outputs.template }}""
-        echo "${{ steps.armassets.outputs.params }}""
-        
+      run: |       
         echo "Estimating"
         ./arm-estimator ${{ steps.armassets.outputs.template }} ${{ secrets.AZURE_SUBSCRIPTION_ID }} ${{ inputs.rg }} --parameters ${{ steps.armassets.outputs.params }} --generateJsonOutput --jsonOutputFilename estimate
         
