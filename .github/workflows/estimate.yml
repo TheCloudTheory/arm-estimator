@@ -94,9 +94,7 @@ jobs:
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         
-      # Deploy Bicep file
-    - name: Estimate
-      id: ace
+    - name: Prepare/Check Arm Assets
       env:
         templateParams: ${{ inputs.templateParams}}
       run: |
@@ -105,6 +103,14 @@ jobs:
         
         echo "Downloading param file"
         curl -O https://raw.githubusercontent.com/Azure/AKS-Construction/main/.github/workflows_dep/AksDeploy-Private.parameters.json
+        cat AksDeploy-Private.parameters.json
         
+        ls
+        
+    - name: Estimate
+      id: ace
+      env:
+        templateParams: ${{ inputs.templateParams}}
+      run: |
         echo "Estimating"
         ./arm-estimator main.json ${{ secrets.AZURE_SUBSCRIPTION_ID }} ${{ inputs.rg }} --parameters AksDeploy-Private.parameters.json
