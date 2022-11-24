@@ -99,13 +99,13 @@ jobs:
         templateParams: ${{ inputs.templateParams}}
       run: |
         echo "Downloading arm template"
-        curl -O https://github.com/Azure/AKS-Construction/releases/download/0.9.4/main.json
-        
+        curl -O https://github.com/Azure/AKS-Construction/releases/download/0.9.4/main.json -L
+
         echo "Downloading param file"
         curl -O https://raw.githubusercontent.com/Azure/AKS-Construction/main/.github/workflows_dep/AksDeploy-Private.parameters.json
         cat AksDeploy-Private.parameters.json
         
-        ls
+        ls -l
         
     - name: Estimate
       id: ace
