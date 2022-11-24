@@ -99,6 +99,7 @@ jobs:
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         
     - name: Prepare/Check Arm Assets
+      id: armassets
       env:
         templateURL: ${{ inputs.templateFileURL}}
         paramsURL: ${{ inputs.templateParamFileURL}}
@@ -111,13 +112,20 @@ jobs:
         
         ls -l
         
+        echo "template=${templateURL##*/}" >> $GITHUB_OUTPUT
+        echo "params=${paramsURL##*/}" >> $GITHUB_OUTPUT
+        
     - name: Estimate
       id: ace
       env:
         templateParams: ${{ inputs.templateParams}}
       run: |
+        echo "${{ steps.armassets.outputs.template }}""
+        echo "${{ steps.armassets.outputs.params }}""
+        
         echo "Estimating"
-        ./arm-estimator ${{ inputs.templateFileURL}} ${{ secrets.AZURE_SUBSCRIPTION_ID }} ${{ inputs.rg }} --parameters ${{ inputs.templateParamFileURL}} --generateJsonOutput --jsonOutputFilename estimate
+        ./arm-estimator ${{ steps.armassets.outputs.template }} ${{ secrets.AZURE_SUBSCRIPTION_ID }} ${{ inputs.rg }} --parameters ${{ steps.armassets.outputs.params }} --generateJsonOutput --jsonOutputFilename estimate
+        
         ls
         
     - uses: actions/upload-artifact@v3.1.1
