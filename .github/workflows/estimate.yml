@@ -40,7 +40,7 @@ on:
         type: string
       aceVersion:
         description: 'Ace version tag'
-        required: true
+        required: false
         default: 1.0.0-beta5
         type: string
       templateFileURL:
