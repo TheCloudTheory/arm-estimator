@@ -2,6 +2,17 @@
 name: Estimate 
 
 on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Which GitHub Environment to use'
+        required: false
+        type: string
+      rg:
+        description: 'Resource Group name'
+        required: true
+        type: string
+        
   workflow_call:
     inputs:
       environment:
@@ -44,14 +55,6 @@ jobs:
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     steps:
-      # Login to Azure
-    - uses: azure/login@v1.4.6
-      name: Initial Login to Azure to Deploy
-      with:
-        client-id: ${{ secrets.AZURE_CLIENT_ID }}
-        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-
     - uses: robinraju/release-downloader@v1.5
       name: Download Arm-Estimator release
       id: downloadACE
@@ -68,6 +71,14 @@ jobs:
         echo $ACEZIP
         unzip $ACEZIP
         ls
+
+      # Login to Azure
+    - uses: azure/login@v1.4.6
+      name: Initial Login to Azure to Deploy
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         
       # Deploy Bicep file
     - name: Estimate
