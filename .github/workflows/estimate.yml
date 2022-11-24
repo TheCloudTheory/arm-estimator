@@ -45,7 +45,7 @@ on:
         value: 0
 
 permissions:
-  id-token: read
+  id-token: write
   contents: read
 
 concurrency: "${{ inputs.environment }}-${{ inputs.rg }}"
