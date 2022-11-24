@@ -115,7 +115,7 @@ Simply add this new job to your workflow, using your own URL's.
     uses: TheCloudTheory/arm-estimator/.github/workflows/estimateFromUrl.yml@main
     with:
       rg: 'MyResourceGroup'
-      environment: '' #Use empty strign for repo level secrets
+      environment: '' #Use empty string for repo level secrets
       templateFileURL: https://github.com/Azure/AKS-Construction/releases/download/0.9.4/main.json
       templateParamFileURL: https://raw.githubusercontent.com/Azure/AKS-Construction/main/.github/workflows_dep/AksDeploy-ByoVnet.parameters.json
     secrets:
