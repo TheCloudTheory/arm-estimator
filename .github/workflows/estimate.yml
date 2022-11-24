@@ -12,6 +12,14 @@ on:
         description: 'Resource Group name'
         required: true
         type: string
+      aceVersion:
+        description: 'Ace version tag'
+        required: true
+        type: choice
+        default: 1.0.0-beta5
+        options:
+          - Latest
+          - 1.0.0-beta5
         
   workflow_call:
     inputs:
@@ -22,6 +30,11 @@ on:
       rg:
         description: 'Resource Group name'
         required: true
+        type: string
+      aceVersion:
+        description: 'Ace version tag'
+        required: true
+        default: 1.0.0-beta5
         type: string
 #      templateParamFile:
 #        description: 'Template parameters file'
@@ -60,7 +73,8 @@ jobs:
       id: downloadACE
       with:
         repository: "TheCloudTheory/arm-estimator"
-        latest: true
+        latest: false
+        tag: ${{ inputs.aceVersion }}
         fileName: "arm-estimator-linux-x64*.zip"
         #fileName: "arm-estimator-linux-x64-1.0.0-beta5.zip"
         
