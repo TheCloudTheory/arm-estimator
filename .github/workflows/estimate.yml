@@ -113,4 +113,9 @@ jobs:
         templateParams: ${{ inputs.templateParams}}
       run: |
         echo "Estimating"
-        ./arm-estimator main.json ${{ secrets.AZURE_SUBSCRIPTION_ID }} ${{ inputs.rg }} --parameters AksDeploy-Private.parameters.json
+        ./arm-estimator main.json ${{ secrets.AZURE_SUBSCRIPTION_ID }} ${{ inputs.rg }} --parameters AksDeploy-Private.parameters.json --disableDetailedMetrics --generateJsonOutput --jsonOutputFilename estimate.json
+
+    - uses: actions/upload-artifact@v3.1.1
+      with:
+        name: estimate
+        path: estimate.json
