@@ -1,5 +1,5 @@
 # This is a reusable workflow that can be called from your repository to provide an estimate given specific template/params
-name: Estimate 
+name: Estimate From Url
 
 on:
   workflow_dispatch:
@@ -18,9 +18,16 @@ on:
         type: choice
         default: 1.0.0-beta5
         options:
-          - Latest
           - 1.0.0-beta5
-        
+      templateFileURL:
+        description: 'Template file URL'
+        required: true
+        type: string
+      templateParamFileURL:
+        description: 'Template parameters file URL'
+        required: true
+        type: string
+
   workflow_call:
     inputs:
       environment:
@@ -36,15 +43,14 @@ on:
         required: true
         default: 1.0.0-beta5
         type: string
-#      templateParamFile:
-#        description: 'Template parameters file'
-#        required: false
-#        type: string
-#      templateParams:
-#        description: 'Template parameters, space seperated key=value'
-#        required: false
-#        default: ''
-#        type: string
+      templateFileURL:
+        description: 'Template file URL'
+        required: true
+        type: string
+      templateParamFileURL:
+        description: 'Template parameters file URL'
+        required: true
+        type: string
     secrets:
       AZURE_CLIENT_ID:
         required: true
@@ -76,7 +82,6 @@ jobs:
         latest: false
         tag: ${{ inputs.aceVersion }}
         fileName: "arm-estimator-linux-x64*.zip"
-        #fileName: "arm-estimator-linux-x64-1.0.0-beta5.zip"
         
     - name: Unzip and prepare ACE
       run: |
@@ -86,7 +91,6 @@ jobs:
         unzip $ACEZIP
         chmod +x ./arm-estimator
 
-      # Login to Azure
     - uses: azure/login@v1.4.6
       name: Login to Azure
       with:
@@ -96,14 +100,14 @@ jobs:
         
     - name: Prepare/Check Arm Assets
       env:
-        templateParams: ${{ inputs.templateParams}}
+        templateURL: ${{ inputs.templateFileURL}}
+        paramsURL: ${{ inputs.templateParamFileURL}}
       run: |
         echo "Downloading arm template"
-        curl -O https://github.com/Azure/AKS-Construction/releases/download/0.9.4/main.json -L
+        curl -O $templateURL -L
 
         echo "Downloading param file"
-        curl -O https://raw.githubusercontent.com/Azure/AKS-Construction/main/.github/workflows_dep/AksDeploy-Private.parameters.json
-        cat AksDeploy-Private.parameters.json
+        curl -O $paramsURL -L
         
         ls -l
         
@@ -113,10 +117,11 @@ jobs:
         templateParams: ${{ inputs.templateParams}}
       run: |
         echo "Estimating"
-        ./arm-estimator main.json ${{ secrets.AZURE_SUBSCRIPTION_ID }} ${{ inputs.rg }} --parameters AksDeploy-Private.parameters.json --generateJsonOutput --jsonOutputFilename estimate.json
+        ./arm-estimator ${{ inputs.templateFileURL}} ${{ secrets.AZURE_SUBSCRIPTION_ID }} ${{ inputs.rg }} --parameters ${{ inputs.templateParamFileURL}} --generateJsonOutput --jsonOutputFilename estimate
         ls
         
     - uses: actions/upload-artifact@v3.1.1
+      name: Save Estimate Artifact
       with:
         name: estimate
         path: estimate.json
