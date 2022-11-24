@@ -78,17 +78,17 @@ jobs:
         fileName: "arm-estimator-linux-x64*.zip"
         #fileName: "arm-estimator-linux-x64-1.0.0-beta5.zip"
         
-    - name: Unzip release
+    - name: Unzip and prepare ACE
       run: |
         echo ${{steps.downloadACE.outputs.tag_name}}
         ACEZIP="arm-estimator-linux-x64-${{steps.downloadACE.outputs.tag_name}}.zip"
         echo $ACEZIP
         unzip $ACEZIP
-        ls
+        chmod +x ./arm-estimator
 
       # Login to Azure
     - uses: azure/login@v1.4.6
-      name: Initial Login to Azure to Deploy
+      name: Login to Azure
       with:
         client-id: ${{ secrets.AZURE_CLIENT_ID }}
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
@@ -100,8 +100,6 @@ jobs:
       env:
         templateParams: ${{ inputs.templateParams}}
       run: |
-        echo "Creating deployment ${{ inputs.resourceName }} using params $templateParams and AKSC ${{ inputs.templateVersion }}"
-        
         echo "Downloading arm template"
         curl -O https://github.com/Azure/AKS-Construction/releases/download/0.9.4/main.json
         
