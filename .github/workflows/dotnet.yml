@@ -6,11 +6,14 @@ defaults:
  run:
   working-directory: ./arm-estimator
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
+    name: Build
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET
@@ -36,3 +39,21 @@ jobs:
         name: linux-64
         path: $GITHUB_WORKSPACE/arm-estimator/bin/Release/net6.0/publish/linux-64
       
+  tests:
+    runs-on: ubuntu-latest
+    needs: [build]
+    if: ${{ inputs.runtests }}
+    name: Integration Tests
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Azure Login
+      uses: Azure/login@v1.4.6
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        
+    - name: Test
+      working-directory: ./arm-estimator-tests
+      run: dotnet test
