@@ -13,6 +13,7 @@ Automated cost estimation of your Azure infrastructure made easy. Works with ARM
   + [Windows](#windows)
   + [Linux / OSX](#linux--osx)
   + [Docker](#docker-1)
+  + [GitHub Action Workflows](#github-action-workflows)
   + [Parameters](#parameters)
   + [Options](#options)
   + [Deployment mode](#deployment-mode)
@@ -102,6 +103,28 @@ There're three ways of configuring `EnvironmentCredentials` within a running con
 * setup variables AZURE_USERNAME and AZURE_PASSWORD
 
 Which method is used, is transparent to the estimation process.
+
+### GitHub Action Workflows
+
+This repository contains a [Reusable Workflow](https://docs.github.com/en/actions/using-workflows/reusing-workflows#calling-a-reusable-workflow) that can easily be integrated into your existing GitHub Actions Workflow.
+
+Simply add this new job to your workflow, using your own URL's.
+
+```yml
+  CostEstimate:
+    uses: TheCloudTheory/arm-estimator/.github/workflows/estimateFromUrl.yml@main
+    with:
+      rg: 'MyResourceGroup'
+      environment: '' #Use empty string for repo level secrets
+      templateFileURL: https://github.com/Azure/AKS-Construction/releases/download/0.9.4/main.json
+      templateParamFileURL: https://raw.githubusercontent.com/Azure/AKS-Construction/main/.github/workflows_dep/AksDeploy-Private.parameters.json
+    secrets:
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+```
+
+> The referenced secrets are required to be created in your repository, see this [documentation](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-azure) for more information.
 
 ### Parameters
 When using ACE, you must use the following three required parameters:
