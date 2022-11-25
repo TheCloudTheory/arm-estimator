@@ -22,6 +22,11 @@ internal class SQLQueryFilter : IQueryFilter
             return null;
         }
 
+        if(sku == "Basic")
+        {
+            sku = "B";
+        }
+
         return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and skuName eq '{sku}'";
     }
 }
