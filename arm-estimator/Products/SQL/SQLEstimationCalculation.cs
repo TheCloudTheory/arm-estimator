@@ -19,7 +19,7 @@ internal class SQLEstimationCalculation : BaseEstimation, IEstimationCalculation
         
         foreach(var item in items)
         {
-            if(item.meterName == "B DTUs")
+            if(item.meterName == "B DTU")
             {
                 estimatedCost += item.retailPrice * 30;
             }
