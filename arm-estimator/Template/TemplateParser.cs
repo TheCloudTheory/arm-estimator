@@ -48,7 +48,13 @@ internal class TemplateParser
                     parsedParameters.Parameters = new Dictionary<string, Parameter>();
                 }
 
-                parsedParameters.Parameters.Add(parameterName, new Parameter() { Value = value });
+                if (parsedParameters.Parameters.Keys.Contains(parameterName))
+                {
+                    parsedParameters.Parameters[parameterName].Value = value;
+                }
+                else {
+                    parsedParameters.Parameters.Add(parameterName, new Parameter() { Value = value });
+                }
             }
 
             parameters = JsonSerializer.Serialize(parsedParameters, new JsonSerializerOptions()
