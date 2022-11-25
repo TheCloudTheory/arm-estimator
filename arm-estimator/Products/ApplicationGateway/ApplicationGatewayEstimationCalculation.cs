@@ -50,11 +50,11 @@ internal class ApplicationGatewayEstimationCalculation : BaseEstimation, IEstima
             {
                 estimatedCost += item.retailPrice * HoursInMonth * capacity;
             }
-            else if (item.meterName == " Capacity Units")
+            else if (item.meterName == "Standard Capacity Units")
             {
                 estimatedCost += item.retailPrice * HoursInMonth * capacity;
             }
-            else if (item.meterName == "Fixed Cost")
+            else if (item.meterName == "Standard Fixed Cost")
             {
                 estimatedCost += item.retailPrice * HoursInMonth;
             }
