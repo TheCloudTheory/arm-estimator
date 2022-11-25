@@ -52,7 +52,8 @@ internal class TemplateParser
                 {
                     parsedParameters.Parameters[parameterName].Value = value;
                 }
-                else {
+                else
+                {
                     parsedParameters.Parameters.Add(parameterName, new Parameter() { Value = value });
                 }
             }
