@@ -1,6 +1,13 @@
 name: .NET
 
-on: [workflow_dispatch]
+on:
+  workflow_dispatch:
+    inputs:
+      runtests:
+        type: boolean
+        required: false
+        default: false
+        description: Run Integration Tests
 
 defaults:
  run:
