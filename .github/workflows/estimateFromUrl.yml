@@ -27,7 +27,12 @@ on:
         description: 'Template parameters file URL'
         required: true
         type: string
-
+      templateParams:
+        description: 'Parameters in Key=Value format. Use spaces to separate multiple params'
+        required: false
+        default: ''
+        type: string
+        
   workflow_call:
     inputs:
       environment:
@@ -50,6 +55,11 @@ on:
       templateParamFileURL:
         description: 'Template parameters file URL'
         required: true
+        type: string
+      templateParams:
+        description: 'Parameters in Key=Value format. Use spaces to separate multiple params'
+        required: false
+        default: ''
         type: string
     secrets:
       AZURE_CLIENT_ID:
@@ -116,8 +126,10 @@ jobs:
       env:
         templateParams: ${{ inputs.templateParams}}
       run: |       
+        templateParamsInlined=$(echo --inline ${templateParams//[' ']/ --inline })
+        
         echo "Estimating"
-        ./arm-estimator ${{ steps.armassets.outputs.template }} ${{ secrets.AZURE_SUBSCRIPTION_ID }} ${{ inputs.rg }} --parameters ${{ steps.armassets.outputs.params }} --generateJsonOutput --jsonOutputFilename estimate
+        ./arm-estimator ${{ steps.armassets.outputs.template }} ${{ secrets.AZURE_SUBSCRIPTION_ID }} ${{ inputs.rg }} --parameters ${{ steps.armassets.outputs.params }} $templateParamsInlined --generateJsonOutput --jsonOutputFilename estimate
         
         ls
         
