@@ -17,9 +17,9 @@ namespace arm_estimator_tests
         [TestCase("templates/automation.json", 8.5300000000000011d, 8.5300000000000011d)]
         [TestCase("templates/redis.json", 12339.190000000001, 12339.190000000001)]
         [TestCase("templates/azure_firewall.json", 2197.348, 2197.348)]
-        [TestCase("templates/frontdoor.json", 2197.348, 2197.348)]
-        [TestCase("templates/azuresqlmi.json", 5707.58, 5707.58)]
-        [TestCase("templates/mysqldb.json", 2617.82, 2617.82)]
+        [TestCase("templates/frontdoor.json", 0.0, 0.0)] // Not supported yet
+        [TestCase("templates/azuresqlmi.json", 0.0, 0.0)] // Not supported yet
+        [TestCase("templates/mysqldb.json", 0.0, 0.0)] // Not supported yet
         [TestCase("templates/postgresql.json", 10190.492299999996d, 10190.492299999996d)]
         [TestCase("templates/servicebus.json", 688.50693000000001d, 688.50693000000001d)]
         [TestCase("templates/datafactory.json", 189.13086000000001d, 189.13086000000001d)]

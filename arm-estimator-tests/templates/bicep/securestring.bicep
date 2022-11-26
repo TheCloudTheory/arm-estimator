@@ -14,7 +14,7 @@ resource dbserver 'Microsoft.Sql/servers@2021-11-01-preview' = {
 
 resource dbbasic 'Microsoft.Sql/servers/databases@2021-11-01-preview' = {
   parent: dbserver
-  name: 'ace-db'
+  name: 'ace-db-securestring'
   location: location
   sku: {
     name: 'Basic'
