@@ -411,7 +411,15 @@ internal class WhatIfProcessor
 
         if (desiredState.location != null)
         {
-            parentResourceToLocation.Add(change.resourceId, desiredState.location);
+            try
+            {
+                parentResourceToLocation.Add(change.resourceId, desiredState.location);
+            }
+            catch(ArgumentException ex)
+            {
+                this.logger.LogError("Couldn't process two resources with the same resource ID - {message}", ex.Message);
+                return null;
+            }
         }
 
         if (Activator.CreateInstance(typeof(T), new object[] { change, id, logger, this.currency }) is not T query)
