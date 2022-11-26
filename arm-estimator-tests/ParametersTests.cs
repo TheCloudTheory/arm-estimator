@@ -109,7 +109,9 @@ namespace arm_estimator_tests
                 "--parameters",
                 "templates/106-file-and-inline-params.parameters.json",
                 "--inline",
-                "dbName=anOverridenDbName"
+                "dbName=anOverridenDbName",
+                "--inline",
+                "adminPassword=verysecretpassword123"
             });
 
             Assert.That(exitCode, Is.EqualTo(0));
