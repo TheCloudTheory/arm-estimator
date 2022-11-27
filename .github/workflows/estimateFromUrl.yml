@@ -15,10 +15,8 @@ on:
       aceVersion:
         description: 'Ace version tag'
         required: false
-        type: choice
-        default: 1.0.0-beta5
-        options:
-          - 1.0.0-beta5
+        type: string
+        default: latest #1.0.0-beta5
       templateFileURL:
         description: 'Template file URL'
         required: true
@@ -46,8 +44,8 @@ on:
       aceVersion:
         description: 'Ace version tag'
         required: false
-        default: 1.0.0-beta5
         type: string
+        default: latest #1.0.0-beta5
       templateFileURL:
         description: 'Template file URL'
         required: true
