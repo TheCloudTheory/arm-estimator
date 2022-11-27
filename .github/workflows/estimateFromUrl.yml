@@ -126,6 +126,7 @@ jobs:
       env:
         templateParams: ${{ inputs.templateParams}}
       run: |       
+        echo $templateParams
         templateParamsInlined=$(echo --inline ${templateParams//[' ']/ --inline })
         
         echo "Estimating template ${{ steps.armassets.outputs.template }} with params file ${{ steps.armassets.outputs.params }} and inline params $templateParamsInlined"
