@@ -16,7 +16,7 @@ on:
         description: 'Ace version tag'
         required: false
         type: string
-        default: latest #1.0.0-beta5
+        default: 1.0.0-beta6
       templateFileURL:
         description: 'Template file URL'
         required: true
@@ -45,7 +45,7 @@ on:
         description: 'Ace version tag'
         required: false
         type: string
-        default: latest #1.0.0-beta5
+        default: 1.0.0-beta6
       templateFileURL:
         description: 'Template file URL'
         required: true
@@ -83,8 +83,10 @@ jobs:
       id: downloadACE
       with:
         repository: "TheCloudTheory/arm-estimator"
-        latest: ${{ inputs.aceVersion == 'latest' }}
-        tag: ${{ (inputs.aceVersion != 'latest' && inputs.aceVersion) || '' }}
+        #We can't use the latest flag when the releases are marked as pre-release. IE. Https://api.github.com/repos/TheCloudTheory/arm-estimator/releases/latest comes back 404
+        #latest: ${{ inputs.aceVersion == 'latest' }}
+        #tag: ${{ (inputs.aceVersion != 'latest' && inputs.aceVersion) || '' }}
+        tag: ${{ inputs.aceVersion }}
         fileName: "arm-estimator-linux-x64*.zip"
         
     - name: Unzip and prepare ACE
