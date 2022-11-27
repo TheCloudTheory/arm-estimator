@@ -125,9 +125,11 @@ jobs:
       id: ace
       env:
         templateParams: ${{ inputs.templateParams}}
-      run: |       
-        echo $templateParams
-        templateParamsInlined=$(echo --inline ${templateParams//[' ']/ --inline })
+      run: |             
+        if [ ! -z "$templateParams" ]
+        then 
+          templateParamsInlined=$(echo --inline ${templateParams//[' ']/ --inline })
+        fi
         
         echo "Estimating template ${{ steps.armassets.outputs.template }} with params file ${{ steps.armassets.outputs.params }} and inline params $templateParamsInlined"
         ./arm-estimator ${{ steps.armassets.outputs.template }} ${{ secrets.AZURE_SUBSCRIPTION_ID }} ${{ inputs.rg }} --parameters ${{ steps.armassets.outputs.params }} $templateParamsInlined --generateJsonOutput --jsonOutputFilename estimate
