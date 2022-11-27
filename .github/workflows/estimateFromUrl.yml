@@ -84,7 +84,7 @@ jobs:
       with:
         repository: "TheCloudTheory/arm-estimator"
         latest: ${{ inputs.aceVersion == 'latest' }}
-        tag: ${{ (inputs.aceVersion == 'latest' && '') || inputs.aceVersion }}
+        tag: ${{ (inputs.aceVersion != 'latest' && inputs.aceVersion) || '' }}
         fileName: "arm-estimator-linux-x64*.zip"
         
     - name: Unzip and prepare ACE
