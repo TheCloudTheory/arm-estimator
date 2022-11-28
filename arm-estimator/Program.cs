@@ -95,9 +95,9 @@ public class Program
                 parameters = Regex.Replace(File.ReadAllText(options.ParametersFile.FullName), @"\s+", string.Empty);
             }
 
+            var parser = new TemplateParser(template, parameters, options.InlineParameters, logger);
             if (options.InlineParameters.Any())
             {
-                var parser = new TemplateParser(template, parameters, options.InlineParameters, logger);
                 parser.ParseInlineParameters(out parameters);
             }
 

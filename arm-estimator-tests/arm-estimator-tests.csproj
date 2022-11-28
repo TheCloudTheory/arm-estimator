@@ -139,6 +139,9 @@
     <None Update="templates\mariadb.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="templates\metadata-template.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="templates\mysqldb.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

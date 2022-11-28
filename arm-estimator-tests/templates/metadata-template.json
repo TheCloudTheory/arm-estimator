@@ -1,0 +1,26 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.12.40.16777",
+      "templateHash": "9122483791542076558"
+    },
+    "aceUsagePatterns": {
+      "Microsoft_ContainerRegistry_registries_Data_Stored": "50",
+      "Microsoft_ContainerRegistry_registries_Task_vCPU_Duration": "3600"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.ContainerRegistry/registries",
+      "apiVersion": "2021-09-01",
+      "name": "metadataacr",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "name": "Basic"
+      }
+    }
+  ]
+}
