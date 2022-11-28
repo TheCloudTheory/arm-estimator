@@ -15,10 +15,8 @@ on:
       aceVersion:
         description: 'Ace version tag'
         required: false
-        type: choice
-        default: 1.0.0-beta5
-        options:
-          - 1.0.0-beta5
+        type: string
+        default: 1.0.0-beta6
       templateFileURL:
         description: 'Template file URL'
         required: true
@@ -46,8 +44,8 @@ on:
       aceVersion:
         description: 'Ace version tag'
         required: false
-        default: 1.0.0-beta5
         type: string
+        default: 1.0.0-beta6
       templateFileURL:
         description: 'Template file URL'
         required: true
@@ -85,7 +83,9 @@ jobs:
       id: downloadACE
       with:
         repository: "TheCloudTheory/arm-estimator"
-        latest: false
+        #We can't use the latest flag when the releases are marked as pre-release. IE. Https://api.github.com/repos/TheCloudTheory/arm-estimator/releases/latest comes back 404
+        #latest: ${{ inputs.aceVersion == 'latest' }}
+        #tag: ${{ (inputs.aceVersion != 'latest' && inputs.aceVersion) || '' }}
         tag: ${{ inputs.aceVersion }}
         fileName: "arm-estimator-linux-x64*.zip"
         
@@ -125,8 +125,11 @@ jobs:
       id: ace
       env:
         templateParams: ${{ inputs.templateParams}}
-      run: |       
-        templateParamsInlined=$(echo --inline ${templateParams//[' ']/ --inline })
+      run: |             
+        if [ ! -z "$templateParams" ]
+        then 
+          templateParamsInlined=$(echo --inline ${templateParams//[' ']/ --inline })
+        fi
         
         echo "Estimating template ${{ steps.armassets.outputs.template }} with params file ${{ steps.armassets.outputs.params }} and inline params $templateParamsInlined"
         ./arm-estimator ${{ steps.armassets.outputs.template }} ${{ secrets.AZURE_SUBSCRIPTION_ID }} ${{ inputs.rg }} --parameters ${{ steps.armassets.outputs.params }} $templateParamsInlined --generateJsonOutput --jsonOutputFilename estimate
