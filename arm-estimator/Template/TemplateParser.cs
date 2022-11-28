@@ -11,7 +11,7 @@ internal class TemplateParser
 
     public TemplateParser(string template, string parameters, IEnumerable<string> inlineParameters, ILogger logger)
     {
-        this.template = JsonSerializer.Deserialize<TemplateSchema>(template); ;
+        this.template = JsonSerializer.Deserialize<TemplateSchema>(template);
         this.parameters = parameters;
         this.inlineParameters = inlineParameters;
         this.logger = logger;
