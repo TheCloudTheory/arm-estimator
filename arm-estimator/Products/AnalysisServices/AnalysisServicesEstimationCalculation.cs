@@ -12,7 +12,7 @@ internal class AnalysisServicesEstimationCalculation : BaseEstimation, IEstimati
         return this.items.OrderByDescending(_ => _.retailPrice);
     }
 
-    public double GetTotalCost(WhatIfChange[] changes)
+    public double GetTotalCost(WhatIfChange[] changes, IDictionary<string, string>? usagePatterns)
     {
         double? estimatedCost = 0;
         var items = GetItems();

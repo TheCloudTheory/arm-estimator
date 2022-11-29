@@ -140,7 +140,7 @@ public class Program
             logger.LogInformation("-------------------------------");
             logger.LogInformation("");
 
-            var output = await new WhatIfProcessor(logger, whatIfData.properties.changes, options.Currency, options.DisableDetailedMetrics).Process();
+            var output = await new WhatIfProcessor(logger, whatIfData.properties.changes, options.Currency, options.DisableDetailedMetrics, parser.Template).Process();
             GenerateOutputIfNeeded(options, output, logger);
 
             if (options.Threshold != -1 && output.TotalCost > options.Threshold)
