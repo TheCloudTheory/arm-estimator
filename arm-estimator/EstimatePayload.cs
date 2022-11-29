@@ -1,3 +1,4 @@
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -24,7 +25,11 @@ internal class EstimatePayloadProperties
         var templateParametersObject = JsonSerializer.Deserialize<TemplateParameters>(parameters);
 
         this.template = template;
-        this.parameters = JsonSerializer.Serialize(templateParametersObject?.parameters);
+        this.parameters = JsonSerializer.Serialize(templateParametersObject?.parameters, new JsonSerializerOptions()
+        {
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+        });
+
         this.mode = deploymentMode.ToString();
     }
 
