@@ -1,17 +1,17 @@
-﻿using arm_estimator.Template;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using System.Text.Json;
 
 internal class TemplateParser
 {
-    private readonly TemplateSchema? template;
+    public TemplateSchema? Template { get; private set; }
     private readonly string parameters;
     private readonly IEnumerable<string> inlineParameters;
     private readonly ILogger logger;
 
     public TemplateParser(string template, string parameters, IEnumerable<string> inlineParameters, ILogger logger)
     {
-        this.template = JsonSerializer.Deserialize<TemplateSchema>(template);
+        Template = JsonSerializer.Deserialize<TemplateSchema>(template);
+
         this.parameters = parameters;
         this.inlineParameters = inlineParameters;
         this.logger = logger;
@@ -22,7 +22,7 @@ internal class TemplateParser
         var parsedParameters = JsonSerializer.Deserialize<ParametersSchema>(this.parameters);
         if (parsedParameters != null)
         {
-            if(this.template == null)
+            if(this.Template == null)
             {
                 this.logger.LogError("Couldn't parse template.");
                 parameters = "{}";
@@ -71,12 +71,12 @@ internal class TemplateParser
 
     private object ParseParamaterByTheirType(string name, string value)
     {
-        if(this.template!.Parameters == null)
+        if(this.Template!.Parameters == null)
         {
             throw new TemplateParsingException("Parameters cannot be null when parsed.");
         }
 
-        if(this.template!.Parameters.TryGetValue(name, out var parameterSchema) == false)
+        if(this.Template!.Parameters.TryGetValue(name, out var parameterSchema) == false)
         {
             throw new TemplateParsingException($"Couldn't parse {name} as parameter.");
         }

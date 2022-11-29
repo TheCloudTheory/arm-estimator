@@ -14,13 +14,15 @@ internal class WhatIfProcessor
     private readonly WhatIfChange[] changes;
     private readonly CurrencyCode currency;
     private readonly bool disableDetailedMetrics;
+    private readonly TemplateSchema? template;
 
-    public WhatIfProcessor(ILogger logger, WhatIfChange[] changes, CurrencyCode currency, bool disableDetailedMetrics)
+    public WhatIfProcessor(ILogger logger, WhatIfChange[] changes, CurrencyCode currency, bool disableDetailedMetrics, TemplateSchema? template)
     {
         this.logger = logger;
         this.changes = changes;
         this.currency = currency;
         this.disableDetailedMetrics = disableDetailedMetrics;
+        this.template = template;
     }
 
     public async Task<EstimationOutput> Process()
@@ -380,7 +382,7 @@ internal class WhatIfProcessor
             return null;
         }
 
-        var totalCost = estimation.GetTotalCost(this.changes);
+        var totalCost = estimation.GetTotalCost(this.changes, this.template?.Metadata?.UsagePatterns);
 
         double? delta = null;
         if(change.before != null)
@@ -391,7 +393,7 @@ internal class WhatIfProcessor
             }
             else
             {
-                var previousCost = previousStateEstimation.GetTotalCost(this.changes);
+                var previousCost = previousStateEstimation.GetTotalCost(this.changes, this.template?.Metadata?.UsagePatterns);
                 delta = totalCost - previousCost;
             }
         }

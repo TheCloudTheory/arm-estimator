@@ -12,7 +12,7 @@ internal class APIMEstimationCalculation : BaseEstimation, IEstimationCalculatio
         return this.items.OrderByDescending(_ => _.retailPrice);
     }
 
-    public double GetTotalCost(WhatIfChange[] changes)
+    public double GetTotalCost(WhatIfChange[] changes, IDictionary<string, string>? usagePatterns)
     {
         double? estimatedCost = 0;
         var capacity = this.change.sku?.capacity;
