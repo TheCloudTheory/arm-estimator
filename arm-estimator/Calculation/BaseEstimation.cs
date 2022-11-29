@@ -13,4 +13,17 @@ internal abstract class BaseEstimation
         this.id = id;
         this.change = change;
     }
+
+    protected int IncludeUsagePattern(string key, IDictionary<string, string>? usagePatterns)
+    {
+        if(usagePatterns != null && usagePatterns.TryGetValue(key, out string? value))
+        {
+            if(value != null)
+            {
+                return int.Parse(value);
+            }
+        }
+
+        return 1;
+    }
 }

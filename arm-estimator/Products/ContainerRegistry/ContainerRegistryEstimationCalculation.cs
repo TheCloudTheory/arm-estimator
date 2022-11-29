@@ -19,17 +19,25 @@ internal class ContainerRegistryEstimationCalculation : BaseEstimation, IEstimat
         
         foreach(var item in items)
         {
-            if (item.meterId == "Basic Registry Unit")
+            if (item.meterName == "Basic Registry Unit")
             {
                 estimatedCost += item.retailPrice * 30;
             }
-            else if (item.meterId == "Standard Registry Unit")
+            else if (item.meterName == "Standard Registry Unit")
             {
                 estimatedCost += item.retailPrice * 30;
             }
-            else if (item.meterId == "Premium Registry Unit")
+            else if (item.meterName == "Premium Registry Unit")
             {
                 estimatedCost += item.retailPrice * 30;
+            }
+            else if (item.meterName == "Data Stored")
+            {
+                estimatedCost += item.retailPrice * base.IncludeUsagePattern("Microsoft_ContainerRegistry_registries_Data_Stored", usagePatterns);
+            }
+            else if (item.meterName == "Task vCPU Duration")
+            {
+                estimatedCost += item.retailPrice * base.IncludeUsagePattern("Microsoft_ContainerRegistry_registries_Task_vCPU_Duration", usagePatterns);
             }
             else
             {
