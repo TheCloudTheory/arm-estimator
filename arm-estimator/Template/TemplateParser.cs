@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
+using System.Text.Encodings.Web;
 using System.Text.Json;
+using System.Text.Unicode;
 
 internal class TemplateParser
 {
@@ -60,7 +62,8 @@ internal class TemplateParser
 
             parameters = JsonSerializer.Serialize(parsedParameters, new JsonSerializerOptions()
             {
-                WriteIndented = false
+                WriteIndented = false,
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
             });
         } 
         else
@@ -89,6 +92,14 @@ internal class TemplateParser
         switch(parameterSchema.Type)
         {
             case "string":
+                // If a user passes a parameter as empty string (by using '' or "", eg. myparam=''),
+                // ACE needs to properly pass it as empty value.
+                // See https://github.com/TheCloudTheory/arm-estimator/issues/118
+                if (value == "''" || value == "\"\"")
+                {
+                    return string.Empty;
+                }
+
                 return value;
             case "bool":
                 return bool.Parse(value);
