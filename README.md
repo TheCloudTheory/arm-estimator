@@ -241,6 +241,9 @@ If that option is set to `true`, once all data is obtained, a JSON file is creat
 {
     "TotalCost": 119.3248,
     "Delta": 119.3248,
+    "TotalResourceCount": 5,
+    "EstimatedResourceCount": 3,
+    "SkippedResourceCount": 2,
     "Resources": [
         {
             "Id": "/subscriptions/.../Microsoft.Compute/virtualMachines/ace-vm-01",
