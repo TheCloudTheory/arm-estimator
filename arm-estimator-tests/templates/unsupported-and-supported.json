@@ -1,0 +1,41 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.12.40.16777",
+      "templateHash": "11666640903791291641"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.ContainerRegistry/registries",
+      "apiVersion": "2021-09-01",
+      "name": "metadataacr",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "name": "Basic"
+      }
+    },
+    {
+      "type": "Microsoft.DevOps/pipelines",
+      "apiVersion": "2020-07-13-preview",
+      "name": "pipeline",
+      "properties": {
+        "bootstrapConfiguration": {
+          "template": {
+            "id": "id"
+          }
+        },
+        "organization": {
+          "name": "thecloudtheory"
+        },
+        "pipelineType": "azurePipeline",
+        "project": {
+          "name": "arm-estimator"
+        }
+      }
+    }
+  ]
+}

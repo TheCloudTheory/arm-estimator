@@ -339,7 +339,7 @@ internal class WhatIfProcessor
         this.logger.AddEstimatorMessage("Delta: {0}{1} {2}", sign, delta.ToString("N2"), this.currency);
         this.logger.LogInformation("");
 
-        return new EstimationOutput(totalCost, delta, resources, currency);
+        return new EstimationOutput(totalCost, delta, resources, currency, this.changes.Length, unsupportedResources.Count);
     }
 
     private void ReportUnsupportedResources(List<ResourceIdentifier> unsupportedResources)
