@@ -190,6 +190,9 @@
     <None Update="templates\traffic_manager.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="templates\unsupported-and-supported.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="templates\vm.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

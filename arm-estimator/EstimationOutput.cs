@@ -6,13 +6,24 @@ public class EstimationOutput
     public double Delta { get; }
     public IEnumerable<EstimatedResourceData> Resources { get; }
     public string Currency { get; }
+    public int TotalResourceCount { get; }
+    public int EstimatedResourceCount { get; }
+    public int SkippedResourceCount { get; }
 
-    internal EstimationOutput(double totalCost, double delta, IEnumerable<EstimatedResourceData> resources, CurrencyCode currency)
+    internal EstimationOutput(double totalCost,
+                              double delta,
+                              IEnumerable<EstimatedResourceData> resources,
+                              CurrencyCode currency,
+                              int totalResourcesCount,
+                              int skippedResourcesCount)
     {
         TotalCost = totalCost;
         Delta = delta;
         Resources = resources;
         Currency = currency.ToString();
+        TotalResourceCount = totalResourcesCount;
+        EstimatedResourceCount = resources.Count();
+        SkippedResourceCount = skippedResourcesCount;
     }
 }
 
