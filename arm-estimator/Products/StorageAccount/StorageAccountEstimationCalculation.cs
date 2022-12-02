@@ -14,11 +14,26 @@ internal class StorageAccountEstimationCalculation : BaseEstimation, IEstimation
 
     public TotalCostSummary GetTotalCost(WhatIfChange[] changes, IDictionary<string, string>? usagePatterns)
     {
-        double? estimatedCost;
+        double? estimatedCost = 0;
         var items = GetItems();
         var summary = new TotalCostSummary();
 
-        estimatedCost = items.Select(_ => _.retailPrice).Sum();
+        foreach(var item in items)
+        {
+            var cost = item.retailPrice;
+            estimatedCost += cost;
+
+            if (summary.DetailedCost.ContainsKey(item.meterName!))
+            {
+                summary.DetailedCost[item.meterName!] += cost;
+            }
+            else
+            {
+                summary.DetailedCost.Add(item.meterName!, cost);
+            }
+        }
+    
+        summary.TotalCost = estimatedCost.GetValueOrDefault();
         return summary;
     }
 }
