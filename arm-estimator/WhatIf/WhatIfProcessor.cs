@@ -382,7 +382,7 @@ internal class WhatIfProcessor
             return null;
         }
 
-        var totalCost = estimation.GetTotalCost(this.changes, this.template?.Metadata?.UsagePatterns);
+        var summary = estimation.GetTotalCost(this.changes, this.template?.Metadata?.UsagePatterns);
 
         double? delta = null;
         if(change.before != null)
@@ -393,13 +393,13 @@ internal class WhatIfProcessor
             }
             else
             {
-                var previousCost = previousStateEstimation.GetTotalCost(this.changes, this.template?.Metadata?.UsagePatterns);
-                delta = totalCost.TotalCost - previousCost.TotalCost;
+                var previousSummary = previousStateEstimation.GetTotalCost(this.changes, this.template?.Metadata?.UsagePatterns);
+                delta = summary.TotalCost - previousSummary.TotalCost;
             }
         }
 
-        ReportEstimationToConsole(id, estimation.GetItems(), totalCost.TotalCost, change.changeType, delta, data.Items?.FirstOrDefault()?.location);
-        return new EstimatedResourceData(totalCost.TotalCost, delta, id);
+        ReportEstimationToConsole(id, estimation.GetItems(), summary, change.changeType, delta, data.Items?.FirstOrDefault()?.location);
+        return new EstimatedResourceData(summary.TotalCost, delta, id);
     }
 
     private async Task<RetailAPIResponse?> GetRetailAPIResponse<T>(WhatIfChange change, ResourceIdentifier id) where T : BaseRetailQuery, IRetailQuery
@@ -527,20 +527,21 @@ internal class WhatIfProcessor
         }
     }
 
-    private void ReportEstimationToConsole(ResourceIdentifier id, IOrderedEnumerable<RetailItem> items, double? totalCost, WhatIfChangeType? changeType, double? delta, string? location)
+    private void ReportEstimationToConsole(ResourceIdentifier id, IOrderedEnumerable<RetailItem> items, TotalCostSummary summary, WhatIfChangeType? changeType, double? delta, string? location)
     {
         var deltaSign = delta == null ? "+" : delta == 0 ? "" : "-";
-        delta = delta == null ? totalCost : 0;
+        delta = delta == null ? summary.TotalCost : 0;
 
         this.logger.AddEstimatorMessageSensibleToChange(changeType, "{0}", id.Name);
         this.logger.AddEstimatorMessageSubsection("Type: {0}", id.ResourceType);
         this.logger.AddEstimatorMessageSubsection("Location: {0}", location);
-        this.logger.AddEstimatorMessageSubsection("Total cost: {0} {1}", totalCost?.ToString("N2"), this.currency);
+        this.logger.AddEstimatorMessageSubsection("Total cost: {0} {1}", summary.TotalCost.ToString("N2"), this.currency);
         this.logger.AddEstimatorMessageSubsection("Delta: {0} {1}", $"{deltaSign}{delta.GetValueOrDefault().ToString("N2")}", this.currency);
 
         if(this.disableDetailedMetrics == false)
         {
-            ReportDetailedMetrics(items);
+            ReportAggregatedMetrics(summary);
+            ReportUsedMetrics(items);
         }
 
         this.logger.LogInformation("");
@@ -548,10 +549,22 @@ internal class WhatIfProcessor
         this.logger.LogInformation("");
     }
 
-    private void ReportDetailedMetrics(IOrderedEnumerable<RetailItem> items)
+    private void ReportAggregatedMetrics(TotalCostSummary summary)
     {
         this.logger.LogInformation("");
         this.logger.LogInformation("Aggregated metrics:");
+        this.logger.LogInformation("");
+
+        foreach(var metric in summary.DetailedCost)
+        {
+            this.logger.LogInformation("-> {metricName} [{cost} {currency}]", metric.Key, metric.Value, this.currency);
+        }
+    }
+
+    private void ReportUsedMetrics(IOrderedEnumerable<RetailItem> items)
+    {
+        this.logger.LogInformation("");
+        this.logger.LogInformation("Used metrics:");
         this.logger.LogInformation("");
 
         if (items.Any())

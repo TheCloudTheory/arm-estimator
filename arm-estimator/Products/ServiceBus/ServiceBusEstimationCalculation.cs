@@ -36,9 +36,17 @@ internal class ServiceBusEstimationCalculation : BaseEstimation, IEstimationCalc
             }
 
             estimatedCost += cost;
-            summary.DetailedCost.Add(item.meterName!, cost);
+            if (summary.DetailedCost.ContainsKey(item.meterName!))
+            {
+                summary.DetailedCost[item.meterName!] += cost;
+            }
+            else
+            {
+                summary.DetailedCost.Add(item.meterName!, cost);
+            }
         }
 
+        summary.TotalCost = estimatedCost.GetValueOrDefault();
         return summary;
     }
 }
