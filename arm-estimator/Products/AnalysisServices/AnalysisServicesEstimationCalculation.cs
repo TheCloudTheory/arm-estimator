@@ -12,13 +12,14 @@ internal class AnalysisServicesEstimationCalculation : BaseEstimation, IEstimati
         return this.items.OrderByDescending(_ => _.retailPrice);
     }
 
-    public double GetTotalCost(WhatIfChange[] changes, IDictionary<string, string>? usagePatterns)
+    public TotalCostSummary GetTotalCost(WhatIfChange[] changes, IDictionary<string, string>? usagePatterns)
     {
         double? estimatedCost = 0;
         var items = GetItems();
         int? capacity = 1;
+        var summary = new TotalCostSummary();
 
-        if(change.sku != null)
+        if (change.sku != null)
         {
             if(change.sku.capacity != null)
             {
@@ -28,11 +29,13 @@ internal class AnalysisServicesEstimationCalculation : BaseEstimation, IEstimati
 
         foreach (var item in items)
         {
-            if(item.meterName == "S0 Scale-Out")
+            double? cost = 0;
+
+            if (item.meterName == "S0 Scale-Out")
             {
                 if(capacity >= 1)
                 {
-                    estimatedCost += item.retailPrice * HoursInMonth * capacity;
+                    cost = item.retailPrice * HoursInMonth * capacity;
                 }
             }
             // S1 scale-out
@@ -40,7 +43,7 @@ internal class AnalysisServicesEstimationCalculation : BaseEstimation, IEstimati
             {
                 if (capacity >= 1)
                 {
-                    estimatedCost += item.retailPrice * HoursInMonth * capacity;
+                    cost = item.retailPrice * HoursInMonth * capacity;
                 }
             }
             // S2 scale-out
@@ -48,7 +51,7 @@ internal class AnalysisServicesEstimationCalculation : BaseEstimation, IEstimati
             {
                 if (capacity >= 1)
                 {
-                    estimatedCost += item.retailPrice * HoursInMonth * capacity;
+                    cost = item.retailPrice * HoursInMonth * capacity;
                 }
             }
             // S4 scale-out
@@ -56,7 +59,7 @@ internal class AnalysisServicesEstimationCalculation : BaseEstimation, IEstimati
             {
                 if (capacity >= 1)
                 {
-                    estimatedCost += item.retailPrice * HoursInMonth * capacity;
+                    cost = item.retailPrice * HoursInMonth * capacity;
                 }
             }
             // S8 scale-out
@@ -64,7 +67,7 @@ internal class AnalysisServicesEstimationCalculation : BaseEstimation, IEstimati
             {
                 if (capacity >= 1)
                 {
-                    estimatedCost += item.retailPrice * HoursInMonth * capacity;
+                    cost = item.retailPrice * HoursInMonth * capacity;
                 }
             }
             // S9 scale-out
@@ -72,7 +75,7 @@ internal class AnalysisServicesEstimationCalculation : BaseEstimation, IEstimati
             {
                 if (capacity >= 1)
                 {
-                    estimatedCost += item.retailPrice * HoursInMonth * capacity;
+                    cost = item.retailPrice * HoursInMonth * capacity;
                 }
             }
             // S8 V2 scale-out
@@ -80,7 +83,7 @@ internal class AnalysisServicesEstimationCalculation : BaseEstimation, IEstimati
             {
                 if (capacity >= 1)
                 {
-                    estimatedCost += item.retailPrice * HoursInMonth * capacity;
+                    cost = item.retailPrice * HoursInMonth * capacity;
                 }
             }
             // S9 V2 scale-out
@@ -88,15 +91,18 @@ internal class AnalysisServicesEstimationCalculation : BaseEstimation, IEstimati
             {
                 if (capacity >= 1)
                 {
-                    estimatedCost += item.retailPrice * HoursInMonth * capacity;
+                    cost = item.retailPrice * HoursInMonth * capacity;
                 }
             }
             else
             {
-                estimatedCost += item.retailPrice * HoursInMonth;
+                cost = item.retailPrice * HoursInMonth;
             }
+
+            estimatedCost += cost;
+            summary.DetailedCost.Add(item.meterName!, cost);
         }
 
-        return estimatedCost == null ? 0 : (double)estimatedCost;
+        return summary;
     }
 }

@@ -12,23 +12,29 @@ internal class LogAnalyticsEstimationCalculation : BaseEstimation, IEstimationCa
         return this.items.OrderByDescending(_ => _.retailPrice);
     }
 
-    public double GetTotalCost(WhatIfChange[] changes, IDictionary<string, string>? usagePatterns)
+    public TotalCostSummary GetTotalCost(WhatIfChange[] changes, IDictionary<string, string>? usagePatterns)
     {
         double? estimatedCost = 0;
         var items = GetItems();
+        var summary = new TotalCostSummary();
 
         foreach (var item in items)
         {
+            double? cost = 0;
+
             if (item.meterName == "Standard Instances")
             {
-                estimatedCost += item.retailPrice * 30;
+                cost = item.retailPrice * 30;
             }
             else
             {
-                estimatedCost += item.retailPrice;
+                cost = item.retailPrice;
             }
+
+            estimatedCost += cost;
+            summary.DetailedCost.Add(item.meterName!, cost);
         }
 
-        return estimatedCost == null ? 0 : (double)estimatedCost;
+        return summary;
     }
 }

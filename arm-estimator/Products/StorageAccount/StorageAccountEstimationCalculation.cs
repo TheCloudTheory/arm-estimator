@@ -12,12 +12,13 @@ internal class StorageAccountEstimationCalculation : BaseEstimation, IEstimation
         return this.items.OrderByDescending(_ => _.retailPrice);
     }
 
-    public double GetTotalCost(WhatIfChange[] changes, IDictionary<string, string>? usagePatterns)
+    public TotalCostSummary GetTotalCost(WhatIfChange[] changes, IDictionary<string, string>? usagePatterns)
     {
         double? estimatedCost;
         var items = GetItems();
-        
+        var summary = new TotalCostSummary();
+
         estimatedCost = items.Select(_ => _.retailPrice).Sum();
-        return estimatedCost == null ? 0 : (double)estimatedCost;
+        return summary;
     }
 }

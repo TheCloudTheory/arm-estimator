@@ -12,19 +12,29 @@ internal class AKSEstimationCalculation : BaseEstimation, IEstimationCalculation
         return this.items.OrderByDescending(_ => _.retailPrice);
     }
 
-    public double GetTotalCost(WhatIfChange[] changess, IDictionary<string, string>? usagePatterns)
+    public TotalCostSummary GetTotalCost(WhatIfChange[] changess, IDictionary<string, string>? usagePatterns)
     {
         double? estimatedCost = 0;
         var items = GetItems();
-        
-        foreach(var item in items)
+        var summary = new TotalCostSummary();
+
+        foreach (var item in items)
         {
-            if(item.meterName == "Uptime SLA")
+            double? cost = 0;
+
+            if (item.meterName == "Uptime SLA")
             {
-                estimatedCost += item.retailPrice * HoursInMonth;
+                cost = item.retailPrice * HoursInMonth;
             }
+            else
+            {
+                cost = item.retailPrice;
+            }
+
+            estimatedCost += cost;
+            summary.DetailedCost.Add(item.meterName!, cost);
         }
 
-        return estimatedCost == null ? 0 : (double)estimatedCost;
+        return summary;
     }
 }

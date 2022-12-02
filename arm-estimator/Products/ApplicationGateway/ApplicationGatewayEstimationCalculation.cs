@@ -13,10 +13,11 @@ internal class ApplicationGatewayEstimationCalculation : BaseEstimation, IEstima
         return this.items.OrderByDescending(_ => _.retailPrice);
     }
 
-    public double GetTotalCost(WhatIfChange[] changes, IDictionary<string, string>? usagePatterns)
+    public TotalCostSummary GetTotalCost(WhatIfChange[] changes, IDictionary<string, string>? usagePatterns)
     {
         double? estimatedCost = 0;
         var items = GetItems();
+        var summary = new TotalCostSummary();
 
         var capacity = 1;
         if(this.change.properties != null && this.change.properties.ContainsKey("sku"))
@@ -38,40 +39,45 @@ internal class ApplicationGatewayEstimationCalculation : BaseEstimation, IEstima
 
         foreach (var item in items)
         {
+            double? cost = 0;
+
             if (item.meterName == "Small Gateway")
             {
-                estimatedCost += item.retailPrice * HoursInMonth * capacity;
+                cost = item.retailPrice * HoursInMonth * capacity;
             }
             else if (item.meterName == "Medium Gateway")
             {
-                estimatedCost += item.retailPrice * HoursInMonth * capacity;
+                cost = item.retailPrice * HoursInMonth * capacity;
             }
             else if (item.meterName == "Large Gateway")
             {
-                estimatedCost += item.retailPrice * HoursInMonth * capacity;
+                cost = item.retailPrice * HoursInMonth * capacity;
             }
             else if (item.meterName == "Standard Capacity Units")
             {
-                estimatedCost += item.retailPrice * HoursInMonth * capacity;
+                cost = item.retailPrice * HoursInMonth * capacity;
             }
             else if (item.meterName == "Standard Fixed Cost")
             {
-                estimatedCost += item.retailPrice * HoursInMonth;
+                cost = item.retailPrice * HoursInMonth;
             }
             else if (item.meterName == "Medium Gateway")
             {
-                estimatedCost += item.retailPrice * HoursInMonth * capacity;
+                cost = item.retailPrice * HoursInMonth * capacity;
             }
             else if (item.meterName == "Large Gateway")
             {
-                estimatedCost += item.retailPrice * HoursInMonth * capacity;
+                cost = item.retailPrice * HoursInMonth * capacity;
             }
             else
             {
-                estimatedCost += item.retailPrice;
+                cost = item.retailPrice;
             }
+
+            estimatedCost += cost;
+            summary.DetailedCost.Add(item.meterName!, cost);
         }
 
-        return estimatedCost == null ? 0 : (double)estimatedCost;
+        return summary;
     }
 }

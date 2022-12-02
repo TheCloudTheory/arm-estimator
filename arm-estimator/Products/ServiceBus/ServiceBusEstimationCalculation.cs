@@ -12,27 +12,33 @@ internal class ServiceBusEstimationCalculation : BaseEstimation, IEstimationCalc
         return this.items.OrderByDescending(_ => _.retailPrice);
     }
 
-    public double GetTotalCost(WhatIfChange[] changes, IDictionary<string, string>? usagePatterns)
+    public TotalCostSummary GetTotalCost(WhatIfChange[] changes, IDictionary<string, string>? usagePatterns)
     {
         double? estimatedCost = 0;
         var items = GetItems();
+        var summary = new TotalCostSummary();
 
         foreach (var item in items)
         {
+            double? cost = 0;
+
             if (item.meterName == "Standard Base Unit")
             {
-                estimatedCost += item.retailPrice * HoursInMonth;
+                cost = item.retailPrice * HoursInMonth;
             }
             else if (item.meterName == "Premium Messaging Unit")
             {
-                estimatedCost += item.retailPrice * HoursInMonth;
+                cost = item.retailPrice * HoursInMonth;
             }
             else
             {
-                estimatedCost += item.retailPrice;
+                cost = item.retailPrice;
             }
+
+            estimatedCost += cost;
+            summary.DetailedCost.Add(item.meterName!, cost);
         }
 
-        return estimatedCost == null ? 0 : (double)estimatedCost;
+        return summary;
     }
 }

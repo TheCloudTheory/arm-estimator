@@ -12,29 +12,35 @@ internal class SignalREstimationCalculation : BaseEstimation, IEstimationCalcula
         return this.items.OrderByDescending(_ => _.retailPrice);
     }
 
-    public double GetTotalCost(WhatIfChange[] changes, IDictionary<string, string>? usagePatterns)
+    public TotalCostSummary GetTotalCost(WhatIfChange[] changes, IDictionary<string, string>? usagePatterns)
     {
         double? estimatedCost = 0;
         var items = GetItems();
         var capacity = this.change.sku?.capacity;
-        
-        if(capacity == null)
+        var summary = new TotalCostSummary();
+
+        if (capacity == null)
         {
             capacity = 1;
         }
 
         foreach (var item in items)
         {
+            double? cost = 0;
+
             if (item.meterName == "Units")
             {
-                estimatedCost += item.retailPrice * 30 * capacity;
+                cost = item.retailPrice * 30 * capacity;
             }
             else
             {
-                estimatedCost += item.retailPrice * capacity;
+                cost = item.retailPrice * capacity;
             }
+
+            estimatedCost += cost;
+            summary.DetailedCost.Add(item.meterName!, cost);
         }
 
-        return estimatedCost == null ? 0 : (double)estimatedCost;
+        return summary;
     }
 }

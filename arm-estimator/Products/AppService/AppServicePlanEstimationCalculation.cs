@@ -12,7 +12,7 @@ internal class AppServicePlanEstimationCalculation : BaseEstimation, IEstimation
         return this.items.OrderByDescending(_ => _.retailPrice);
     }
 
-    public double GetTotalCost(WhatIfChange[] changes, IDictionary<string, string>? usagePatterns)
+    public TotalCostSummary GetTotalCost(WhatIfChange[] changes, IDictionary<string, string>? usagePatterns)
     {
         double? estimatedCost = 0;
         var items = GetItems();
@@ -20,8 +20,9 @@ internal class AppServicePlanEstimationCalculation : BaseEstimation, IEstimation
         var capacity = this.change.sku?.capacity ?? 1;
         var vCpuCapacity = 1;
         var memoryCapacity = 3.5;
+        var summary = new TotalCostSummary();
 
-        if(sku != null)
+        if (sku != null)
         {
             if (IsSkuOfLogicApp(sku))
             {
@@ -53,13 +54,15 @@ internal class AppServicePlanEstimationCalculation : BaseEstimation, IEstimation
 
         foreach (var item in items)
         {
+            double? cost = 0;
+
             if (item.meterName == "vCPU Duration" && item.productName != "Logic Apps")
             {
-                estimatedCost += item.retailPrice * HoursInMonth * capacity;
+                cost = item.retailPrice * HoursInMonth * capacity;
             }
             else if (item.meterName == "Memory Duration" && item.productName != "Logic Apps")
             {
-                estimatedCost += item.retailPrice * HoursInMonth * capacity;
+                cost = item.retailPrice * HoursInMonth * capacity;
             }
             else if (item.meterName == "Shared"
                 || item.meterName == "B1"
@@ -79,23 +82,26 @@ internal class AppServicePlanEstimationCalculation : BaseEstimation, IEstimation
                 || item.meterName == "P3 v3"
                 )
             {
-                estimatedCost += item.retailPrice * HoursInMonth * capacity;
+                cost = item.retailPrice * HoursInMonth * capacity;
             }
             else if (item.meterName == "vCPU Duration" && item.productName == "Logic Apps")
             {
-                estimatedCost += item.retailPrice * HoursInMonth * vCpuCapacity;
+                cost = item.retailPrice * HoursInMonth * vCpuCapacity;
             }
             else if (item.meterName == "Memory Duration" && item.productName == "Logic Apps")
             {
-                estimatedCost += item.retailPrice * HoursInMonth * memoryCapacity;
+                cost = item.retailPrice * HoursInMonth * memoryCapacity;
             }
             else
             {
-                estimatedCost += item.retailPrice;
+                cost = item.retailPrice;
             }
+
+            estimatedCost += cost;
+            summary.DetailedCost.Add(item.meterName!, cost);
         }
 
-        return estimatedCost == null ? 0 : (double)estimatedCost;
+        return summary;
     }
 
     private bool IsSkuOfPremiumFunctions(string sku)
