@@ -12,39 +12,39 @@ internal class ContainerRegistryEstimationCalculation : BaseEstimation, IEstimat
         return this.items.OrderByDescending(_ => _.retailPrice);
     }
 
-    public double GetTotalCost(WhatIfChange[] changess, IDictionary<string, string>? usagePatterns)
+    public TotalCostSummary GetTotalCost(WhatIfChange[] changess, IDictionary<string, string>? usagePatterns)
     {
         double? estimatedCost = 0;
         var items = GetItems();
+        var summary = new TotalCostSummary();
         
         foreach(var item in items)
         {
-            if (item.meterName == "Basic Registry Unit")
+            double? cost = 0;
+
+            if (item.meterName == "Basic Registry Unit" || item.meterName == "Standard Registry Unit" || item.meterName == "Premium Registry Unit")
             {
-                estimatedCost += item.retailPrice * 30;
-            }
-            else if (item.meterName == "Standard Registry Unit")
-            {
-                estimatedCost += item.retailPrice * 30;
-            }
-            else if (item.meterName == "Premium Registry Unit")
-            {
-                estimatedCost += item.retailPrice * 30;
+                cost = item.retailPrice * 30;
             }
             else if (item.meterName == "Data Stored")
             {
-                estimatedCost += item.retailPrice * base.IncludeUsagePattern("Microsoft_ContainerRegistry_registries_Data_Stored", usagePatterns);
+                cost = item.retailPrice * base.IncludeUsagePattern("Microsoft_ContainerRegistry_registries_Data_Stored", usagePatterns);
             }
             else if (item.meterName == "Task vCPU Duration")
             {
-                estimatedCost += item.retailPrice * base.IncludeUsagePattern("Microsoft_ContainerRegistry_registries_Task_vCPU_Duration", usagePatterns);
+                cost += item.retailPrice * base.IncludeUsagePattern("Microsoft_ContainerRegistry_registries_Task_vCPU_Duration", usagePatterns);
             }
             else
             {
-                estimatedCost += item.retailPrice;
+                cost += item.retailPrice;
             }
+
+            estimatedCost += cost;
+            summary.DetailedCost.Add(item.meterName!, cost);
         }
 
-        return estimatedCost == null ? 0 : (double)estimatedCost;
+        summary.TotalCost = estimatedCost.GetValueOrDefault();
+
+        return summary;
     }
 }

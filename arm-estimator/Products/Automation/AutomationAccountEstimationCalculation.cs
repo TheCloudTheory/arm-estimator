@@ -12,27 +12,33 @@ internal class AutomationAccountEstimationCalculation : BaseEstimation, IEstimat
         return this.items.OrderByDescending(_ => _.retailPrice);
     }
 
-    public double GetTotalCost(WhatIfChange[] changes, IDictionary<string, string>? usagePatterns)
+    public TotalCostSummary GetTotalCost(WhatIfChange[] changes, IDictionary<string, string>? usagePatterns)
     {
         double? estimatedCost = 0;
         var items = GetItems();
+        var summary = new TotalCostSummary();
 
         foreach (var item in items)
         {
+            double? cost = 0;
+
             if (item.meterName == "Watcher")
             {
-                estimatedCost += item.retailPrice * HoursInMonth;
+                cost = item.retailPrice * HoursInMonth;
             }
             else if (item.meterName == "Basic Runtime")
             {
-                estimatedCost += item.retailPrice * 500; // Give it the same amount as free tier
+                cost = item.retailPrice * 500; // Give it the same amount as free tier
             }
             else
             {
-                estimatedCost += item.retailPrice;
+                cost = item.retailPrice;
             }
+
+            estimatedCost += cost;
+            summary.DetailedCost.Add(item.meterName!, cost);
         }
 
-        return estimatedCost == null ? 0 : (double)estimatedCost;
+        return summary;
     }
 }

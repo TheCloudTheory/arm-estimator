@@ -13,12 +13,13 @@ internal class RedisEstimationCalculation : BaseEstimation, IEstimationCalculati
         return this.items.OrderByDescending(_ => _.retailPrice);
     }
 
-    public double GetTotalCost(WhatIfChange[] changes, IDictionary<string, string>? usagePatterns)
+    public TotalCostSummary GetTotalCost(WhatIfChange[] changes, IDictionary<string, string>? usagePatterns)
     {
         double? estimatedCost = 0;
         var items = GetItems();
         var skuData = ((JsonElement)this.change.properties!["sku"]).Deserialize<RedisSkuData>();
         var shardCount = 1;
+        var summary = new TotalCostSummary();
 
         if (skuData != null && skuData.family == "P")
         {
@@ -44,16 +45,21 @@ internal class RedisEstimationCalculation : BaseEstimation, IEstimationCalculati
 
         foreach (var item in items)
         {
+            double? cost = 0;
+
             if(item.meterName != null && item.meterName.Contains("Cache Instance"))
             {
-                estimatedCost += item.retailPrice * HoursInMonth * shardCount * replicas;
+                cost = item.retailPrice * HoursInMonth * shardCount * replicas;
             }
             else
             {
-                estimatedCost += item.retailPrice * HoursInMonth * shardCount;
+                cost = item.retailPrice * HoursInMonth * shardCount;
             }
+
+            estimatedCost += cost;
+            summary.DetailedCost.Add(item.meterName!, cost);
         }
 
-        return estimatedCost == null ? 0 : (double)estimatedCost;
+        return summary;
     }
 }

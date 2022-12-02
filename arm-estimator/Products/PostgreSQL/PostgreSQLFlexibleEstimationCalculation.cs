@@ -13,16 +13,19 @@ internal class PostgreSQLFlexibleEstimationCalculation : BaseEstimation, IEstima
         return this.items.OrderByDescending(_ => _.retailPrice);
     }
 
-    public double GetTotalCost(WhatIfChange[] changes, IDictionary<string, string>? usagePatterns)
+    public TotalCostSummary GetTotalCost(WhatIfChange[] changes, IDictionary<string, string>? usagePatterns)
     {
         double? estimatedCost = 0;
         var items = GetItems();
+        var summary = new TotalCostSummary();
 
         foreach (var item in items)
         {
+            double? cost = 0;
+
             if (item.meterName != null && (item.meterName.Contains("vCore") || item.meterName == "B1MS" || item.meterName == "B2S"))
             {
-                estimatedCost += item.retailPrice * HoursInMonth;
+                cost = item.retailPrice * HoursInMonth;
             }
             else if (item.meterName == "Basic Data Stored"
                 || item.meterName == "General Purpose Data Stored"
@@ -31,11 +34,11 @@ internal class PostgreSQLFlexibleEstimationCalculation : BaseEstimation, IEstima
                 if (this.change.sku?.size != null)
                 {
                     var sizeInGbs = double.Parse(this.change.sku.size) / 1024;
-                    estimatedCost += item.retailPrice * sizeInGbs;
+                    cost = item.retailPrice * sizeInGbs;
                 }
                 else
                 {
-                    estimatedCost += item.retailPrice;
+                    cost = item.retailPrice;
                 }
             }
             else if (item.meterName == "Backup LRS Data Stored" || item.meterName == "Backup GRS Data Stored")
@@ -47,16 +50,19 @@ internal class PostgreSQLFlexibleEstimationCalculation : BaseEstimation, IEstima
                     {
                         var mbsDifference = storageProfile.storageMB - int.Parse(this.change.sku?.size!);
                         var sizeInGbs = mbsDifference / 1024d;
-                        estimatedCost += item.retailPrice * sizeInGbs;
+                        cost = item.retailPrice * sizeInGbs;
                     }
                 }
             }
             else
             {
-                estimatedCost += item.retailPrice;
+                cost = item.retailPrice;
             }
+
+            estimatedCost += cost;
+            summary.DetailedCost.Add(item.meterName!, cost);
         }
 
-        return estimatedCost == null ? 0 : (double)estimatedCost;
+        return summary;
     }
 }

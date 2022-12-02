@@ -12,25 +12,28 @@ internal class EventHubEstimationCalculation : BaseEstimation, IEstimationCalcul
         return this.items.OrderByDescending(_ => _.retailPrice);
     }
 
-    public double GetTotalCost(WhatIfChange[] changes, IDictionary<string, string>? usagePatterns)
+    public TotalCostSummary GetTotalCost(WhatIfChange[] changes, IDictionary<string, string>? usagePatterns)
     {
         double? estimatedCost = 0;
         var items = GetItems();
         var capacity = this.change.sku?.capacity == null ? 1 : this.change.sku?.capacity;
+        var summary = new TotalCostSummary();
 
         foreach (var item in items)
         {
+            double? cost = 0;
+
             if (item.meterName == "Basic Throughput Unit")
             {
-                estimatedCost += item.retailPrice * HoursInMonth * capacity;
+                cost = item.retailPrice * HoursInMonth * capacity;
             }
             else if (item.meterName == "Standard Throughput Unit")
             {
-                estimatedCost += item.retailPrice * HoursInMonth * capacity;
+                cost = item.retailPrice * HoursInMonth * capacity;
             }
             else if (item.meterName == "Processing Unit")
             {
-                estimatedCost += item.retailPrice * HoursInMonth * capacity;
+                cost = item.retailPrice * HoursInMonth * capacity;
             }
             else if (item.meterName == "Capture" && this.change.type == "Microsoft.EventHub/namespaces/eventhubs")
             {
@@ -39,18 +42,21 @@ internal class EventHubEstimationCalculation : BaseEstimation, IEstimationCalcul
                 var parentDesiredState = parent.after ?? parent.before;
 
                 capacity = parentDesiredState?.sku?.capacity;
-                estimatedCost += item.retailPrice * HoursInMonth * capacity;
+                cost = item.retailPrice * HoursInMonth * capacity;
             }
             else if (item.meterName == "Dedicated Capacity Unit")
             {
-                estimatedCost += item.retailPrice * HoursInMonth;
+                cost = item.retailPrice * HoursInMonth;
             }
             else
             {
-                estimatedCost += item.retailPrice;
+                cost = item.retailPrice;
             }
+
+            estimatedCost += cost;
+            summary.DetailedCost.Add(item.meterName!, cost);
         }
 
-        return estimatedCost == null ? 0 : (double)estimatedCost;
+        return summary;
     }
 }

@@ -12,8 +12,8 @@ internal class BotServiceEstimationCalculation : BaseEstimation, IEstimationCalc
         return this.items.OrderByDescending(_ => _.retailPrice);
     }
 
-    public double GetTotalCost(WhatIfChange[] changes, IDictionary<string, string>? usagePatterns)
+    public TotalCostSummary GetTotalCost(WhatIfChange[] changes, IDictionary<string, string>? usagePatterns)
     {
-        return 0;
+        return new TotalCostSummary();
     }
 }

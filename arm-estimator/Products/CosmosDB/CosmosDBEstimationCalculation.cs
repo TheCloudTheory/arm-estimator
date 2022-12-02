@@ -13,11 +13,12 @@ internal class CosmosDBEstimationCalculation : BaseEstimation, IEstimationCalcul
         return this.items.OrderByDescending(_ => _.retailPrice);
     }
 
-    public double GetTotalCost(WhatIfChange[] changes, IDictionary<string, string>? usagePatterns)
+    public TotalCostSummary GetTotalCost(WhatIfChange[] changes, IDictionary<string, string>? usagePatterns)
     {
         double? estimatedCost = 0;
         var rus = 0;
         var items = GetItems();
+        var summary = new TotalCostSummary();
 
         if (this.change.properties != null && this.change.properties.ContainsKey("options"))
         {
@@ -38,16 +39,21 @@ internal class CosmosDBEstimationCalculation : BaseEstimation, IEstimationCalcul
 
         foreach (var item in items)
         {
+            double? cost = 0;
+
             if (item.meterName == "100 RU/s")
             {
-                estimatedCost += item.retailPrice * HoursInMonth * rus;
+                cost = item.retailPrice * HoursInMonth * rus;
             }
             else
             {
-                estimatedCost += item.retailPrice;
+                cost = item.retailPrice;
             }
+
+            estimatedCost += cost;
+            summary.DetailedCost.Add(item.meterName!, cost);
         }
 
-        return estimatedCost == null ? 0 : (double)estimatedCost;
+        return summary;
     }
 }

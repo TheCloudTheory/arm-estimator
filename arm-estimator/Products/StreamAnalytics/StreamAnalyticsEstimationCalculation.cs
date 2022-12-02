@@ -13,13 +13,14 @@ internal class StreamAnalyticsEstimationCalculation : BaseEstimation, IEstimatio
         return this.items.OrderByDescending(_ => _.retailPrice);
     }
 
-    public double GetTotalCost(WhatIfChange[] changes, IDictionary<string, string>? usagePatterns)
+    public TotalCostSummary GetTotalCost(WhatIfChange[] changes, IDictionary<string, string>? usagePatterns)
     {
         double? estimatedCost = 0;
         var items = GetItems();
         int? capacity = 1;
+        var summary = new TotalCostSummary();
 
-        if(this.change.type != null && this.change.type == "Microsoft.StreamAnalytics/clusters")
+        if (this.change.type != null && this.change.type == "Microsoft.StreamAnalytics/clusters")
         {
             capacity = this.change?.sku?.capacity;
         }
@@ -38,9 +39,12 @@ internal class StreamAnalyticsEstimationCalculation : BaseEstimation, IEstimatio
 
         foreach (var item in items)
         {
-            estimatedCost += item.retailPrice * HoursInMonth * capacity;
+            var cost = item.retailPrice * HoursInMonth * capacity;
+
+            estimatedCost += cost;
+            summary.DetailedCost.Add(item.meterName!, cost);
         }
 
-        return estimatedCost == null ? 0 : (double)estimatedCost;
+        return summary;
     }
 }

@@ -394,12 +394,12 @@ internal class WhatIfProcessor
             else
             {
                 var previousCost = previousStateEstimation.GetTotalCost(this.changes, this.template?.Metadata?.UsagePatterns);
-                delta = totalCost - previousCost;
+                delta = totalCost.TotalCost - previousCost.TotalCost;
             }
         }
 
-        ReportEstimationToConsole(id, estimation.GetItems(), totalCost, change.changeType, delta, data.Items?.FirstOrDefault()?.location);
-        return new EstimatedResourceData(totalCost, delta, id);
+        ReportEstimationToConsole(id, estimation.GetItems(), totalCost.TotalCost, change.changeType, delta, data.Items?.FirstOrDefault()?.location);
+        return new EstimatedResourceData(totalCost.TotalCost, delta, id);
     }
 
     private async Task<RetailAPIResponse?> GetRetailAPIResponse<T>(WhatIfChange change, ResourceIdentifier id) where T : BaseRetailQuery, IRetailQuery

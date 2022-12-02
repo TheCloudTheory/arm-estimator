@@ -12,10 +12,11 @@ internal class BastionEstimationCalculation : BaseEstimation, IEstimationCalcula
         return this.items.OrderByDescending(_ => _.retailPrice);
     }
 
-    public double GetTotalCost(WhatIfChange[] changes, IDictionary<string, string>? usagePatterns)
+    public TotalCostSummary GetTotalCost(WhatIfChange[] changes, IDictionary<string, string>? usagePatterns)
     {
         double? estimatedCost = 0;
         var items = GetItems();
+        var summary = new TotalCostSummary();
 
         var scaleUnits = 0;
         if(this.change.properties != null)
@@ -29,24 +30,29 @@ internal class BastionEstimationCalculation : BaseEstimation, IEstimationCalcula
 
         foreach (var item in items)
         {
+            double? cost = 0;
+
             if (item.meterName == "Basic Gateway")
             {
-                estimatedCost += item.retailPrice * HoursInMonth;
+                cost = item.retailPrice * HoursInMonth;
             }
             else if (item.meterName == "Standard Gateway")
             {
-                estimatedCost += item.retailPrice * HoursInMonth;
+                cost = item.retailPrice * HoursInMonth;
             }
             else if (item.meterName == "Standard Additional Gateway")
             {
-                estimatedCost += item.retailPrice * HoursInMonth * scaleUnits;
+                cost = item.retailPrice * HoursInMonth * scaleUnits;
             }
             else
             {
-                estimatedCost += item.retailPrice;
+                cost = item.retailPrice;
             }
+
+            estimatedCost += cost;
+            summary.DetailedCost.Add(item.meterName!, cost);
         }
 
-        return estimatedCost == null ? 0 : (double)estimatedCost;
+        return summary;
     }
 }

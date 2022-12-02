@@ -12,11 +12,12 @@ internal class TimeSeriesEstimationCalculation : BaseEstimation, IEstimationCalc
         return this.items.OrderByDescending(_ => _.retailPrice);
     }
 
-    public double GetTotalCost(WhatIfChange[] changes, IDictionary<string, string>? usagePatterns)
+    public TotalCostSummary GetTotalCost(WhatIfChange[] changes, IDictionary<string, string>? usagePatterns)
     {
         double? estimatedCost = 0;
         var items = GetItems();
         var capacity = this.change.sku?.capacity;
+        var summary = new TotalCostSummary();
 
         if (capacity == null)
         {
@@ -25,9 +26,12 @@ internal class TimeSeriesEstimationCalculation : BaseEstimation, IEstimationCalc
 
         foreach (var item in items)
         {
-            estimatedCost += item.retailPrice * 30 * capacity;
+            var cost = item.retailPrice * 30 * capacity;
+
+            estimatedCost += cost;
+            summary.DetailedCost.Add(item.meterName!, cost);
         }
 
-        return estimatedCost == null ? 0 : (double)estimatedCost;
+        return summary;
     }
 }

@@ -12,35 +12,41 @@ internal class ContainerAppsEstimationCalculation : BaseEstimation, IEstimationC
         return this.items.OrderByDescending(_ => _.retailPrice);
     }
 
-    public double GetTotalCost(WhatIfChange[] changes, IDictionary<string, string>? usagePatterns)
+    public TotalCostSummary GetTotalCost(WhatIfChange[] changes, IDictionary<string, string>? usagePatterns)
     {
         double? estimatedCost = 0;
         var items = GetItems();
-        
-        foreach(var item in items)
+        var summary = new TotalCostSummary();
+
+        foreach (var item in items)
         {
+            double? cost = 0;
+
             if(item.meterId == "vCPU Active Usage")
             {
-                estimatedCost += item.retailPrice * HoursInMonth / 2 * 3600;
+                cost = item.retailPrice * HoursInMonth / 2 * 3600;
             }
             else if (item.meterId == "Memory Active Usage")
             {
-                estimatedCost += item.retailPrice * HoursInMonth / 2 * 3600;
+                cost = item.retailPrice * HoursInMonth / 2 * 3600;
             }
             else if (item.meterId == "vCPU Idle Usage")
             {
-                estimatedCost += item.retailPrice * HoursInMonth / 2 * 3600;
+                cost = item.retailPrice * HoursInMonth / 2 * 3600;
             }
             else if (item.meterId == "Memory Idle Usage")
             {
-                estimatedCost += item.retailPrice * HoursInMonth / 2 * 3600;
+                cost = item.retailPrice * HoursInMonth / 2 * 3600;
             }
             else
             {
-                estimatedCost += item.retailPrice;
+                cost = item.retailPrice;
             }
+
+            estimatedCost += cost;
+            summary.DetailedCost.Add(item.meterName!, cost);
         }
 
-        return estimatedCost == null ? 0 : (double)estimatedCost;
+        return summary;
     }
 }

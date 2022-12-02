@@ -12,43 +12,49 @@ internal class SQLEstimationCalculation : BaseEstimation, IEstimationCalculation
         return this.items.OrderByDescending(_ => _.retailPrice);
     }
 
-    public double GetTotalCost(WhatIfChange[] changes, IDictionary<string, string>? usagePatterns)
+    public TotalCostSummary GetTotalCost(WhatIfChange[] changes, IDictionary<string, string>? usagePatterns)
     {
         double? estimatedCost = 0;
         var items = GetItems();
-        
-        foreach(var item in items)
+        var summary = new TotalCostSummary();
+
+        foreach (var item in items)
         {
+            double? cost = 0;
+
             if(item.meterName == "B DTU")
             {
-                estimatedCost += item.retailPrice * 30;
+                cost = item.retailPrice * 30;
             }
             else if (item.meterName == " S0 DTUs")
             {
-                estimatedCost += item.retailPrice * 30;
+                cost = item.retailPrice * 30;
             }
             else if (item.meterName == "S1 DTUs")
             {
-                estimatedCost += item.retailPrice * 30;
+                cost = item.retailPrice * 30;
             }
             else if (item.meterName == "S2 DTUs")
             {
-                estimatedCost += item.retailPrice * 30;
+                cost = item.retailPrice * 30;
             }
             else if (item.meterName == "S3 DTUs")
             {
-                estimatedCost += item.retailPrice * 30;
+                cost = item.retailPrice * 30;
             }
             else if (item.meterName == "10 DTU")
             {
-                estimatedCost +=  item.retailPrice * 30;
+                cost =  item.retailPrice * 30;
             }
             else
             {
-                estimatedCost += item.retailPrice;
+                cost = item.retailPrice;
             }
+
+            estimatedCost += cost;
+            summary.DetailedCost.Add(item.meterName!, cost);
         }
 
-        return estimatedCost == null ? 0 : (double)estimatedCost;
+        return summary;
     }
 }
