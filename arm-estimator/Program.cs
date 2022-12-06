@@ -25,7 +25,8 @@ public class Program
         var disableDetailsOption = new Option<bool>("--disableDetailedMetrics", () => { return false; }, "Disables reporting of detailed metrics");
         var jsonOutputFilenameOption = new Option<string?>("--jsonOutputFilename", () => { return null; }, "Sets JSON output filename");
         var htmlOutputOption = new Option<bool>("--generateHtmlOutput", () => { return false; }, "Should generate HTML output");
-        var inlineOptions = new Option<IEnumerable<string>>("--inline", () => { return Enumerable.Empty<string>(); }, "List of inline paramaters");
+        var inlineOptions = new Option<IEnumerable<string>>("--inline", () => { return Enumerable.Empty<string>(); }, "List of inline parameters");
+        var dryRunOption = new Option<bool>("--dry-run", () => { return false; }, "Run template validation only");
 
         var command = new RootCommand("ACE (Azure Cost Estimator)")
         {
@@ -39,7 +40,8 @@ public class Program
             disableDetailsOption,
             jsonOutputFilenameOption,
             htmlOutputOption,
-            inlineOptions
+            inlineOptions,
+            dryRunOption
         };
 
         command.AddArgument(templateFileArg);
@@ -63,7 +65,8 @@ public class Program
                 disableDetailsOption,
                 jsonOutputFilenameOption,
                 htmlOutputOption,
-                inlineOptions
+                inlineOptions,
+                dryRunOption
             ));
 
         return await command.InvokeAsync(args);
@@ -139,6 +142,12 @@ public class Program
             logger.LogInformation("");
             logger.LogInformation("-------------------------------");
             logger.LogInformation("");
+
+            if(options.DryRunOnly)
+            {
+                logger.LogInformation("Dry run enabled, skipping estimation.");
+                return;
+            }
 
             var output = await new WhatIfProcessor(logger, whatIfData.properties.changes, options.Currency, options.DisableDetailedMetrics, parser.Template).Process();
             GenerateOutputIfNeeded(options, output, logger);
@@ -258,6 +267,7 @@ public class Program
         logger.AddEstimatorMessage("Redirect stdout: {0}", options.Stdout);
         logger.AddEstimatorMessage("Disabled detailed metrics: {0}", options.DisableDetailedMetrics);
         logger.AddEstimatorMessage("Generate HTML output: {0}", options.ShouldGenerateHtmlOutput);
+        logger.AddEstimatorMessage("Dry run enabled: {0}", options.DryRunOnly);
         logger.LogInformation("");
         logger.LogInformation("------------------------------");
         logger.LogInformation("");
