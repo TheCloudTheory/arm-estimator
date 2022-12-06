@@ -10,7 +10,8 @@
                            bool disableDetailedMetrics,
                            string? jsonOutputFilename,
                            bool shouldGenerateHtmlOutput,
-                           IEnumerable<string> inlineParameters)
+                           IEnumerable<string> inlineParameters,
+                           bool dryRunOnly)
     {
         Mode = mode;
         Threshold = threshold;
@@ -23,6 +24,7 @@
         JsonOutputFilename = jsonOutputFilename;
         ShouldGenerateHtmlOutput = shouldGenerateHtmlOutput;
         InlineParameters = inlineParameters;
+        DryRunOnly = dryRunOnly;
     }
 
     public DeploymentMode Mode { get; }
@@ -36,4 +38,5 @@
     public string? JsonOutputFilename { get; }
     public bool ShouldGenerateHtmlOutput { get; }
     public IEnumerable<string> InlineParameters { get; }
+    public bool DryRunOnly { get; }
 }

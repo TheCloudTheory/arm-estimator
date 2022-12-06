@@ -14,6 +14,7 @@ internal class EstimateOptionsBinder : BinderBase<EstimateOptions>
     private readonly Option<string?> jsonOutputFilenameOption;
     private readonly Option<bool> generateHtmlOutput;
     private readonly Option<IEnumerable<string>> inlineParameters;
+    private readonly Option<bool> dryRunOnly;
 
     public EstimateOptionsBinder(Option<DeploymentMode> mode,
                                  Option<int> threshold,
@@ -25,7 +26,8 @@ internal class EstimateOptionsBinder : BinderBase<EstimateOptions>
                                  Option<bool> disableDetailsOptions,
                                  Option<string?> jsonOutputFilenameOption,
                                  Option<bool> generateHtmlOutput,
-                                 Option<IEnumerable<string>> inlineParameters)
+                                 Option<IEnumerable<string>> inlineParameters,
+                                 Option<bool> dryRunOnly)
     {
         this.mode = mode;
         this.threshold = threshold;
@@ -38,6 +40,7 @@ internal class EstimateOptionsBinder : BinderBase<EstimateOptions>
         this.jsonOutputFilenameOption = jsonOutputFilenameOption;
         this.generateHtmlOutput = generateHtmlOutput;
         this.inlineParameters = inlineParameters;
+        this.dryRunOnly = dryRunOnly;
     }
 
     protected override EstimateOptions GetBoundValue(BindingContext bindingContext)
@@ -53,7 +56,8 @@ internal class EstimateOptionsBinder : BinderBase<EstimateOptions>
             bindingContext.ParseResult.GetValueForOption(disableDetailsOptions),
             bindingContext.ParseResult.GetValueForOption(jsonOutputFilenameOption),
             bindingContext.ParseResult.GetValueForOption(generateHtmlOutput),
-            bindingContext.ParseResult.GetValueForOption(inlineParameters)
+            bindingContext.ParseResult.GetValueForOption(inlineParameters),
+            bindingContext.ParseResult.GetValueForOption(dryRunOnly)
             );
     }
 }
