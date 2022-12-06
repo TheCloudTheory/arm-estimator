@@ -27,6 +27,7 @@ Automated cost estimation of your Azure infrastructure made easy. Works with ARM
   + [JSON output filename](#json-output-filename)
   + [HTML output](#html-output)
   + [Inline parameters](#inline-parameters)
+  + [Dry run](#dry-run)
 * [Known limitations](#known-limitations)
 * [Services support](#services-support)
 * [Contributions](#contributions)
@@ -387,6 +388,14 @@ arm-estimator <template-path>.bicep <subscription-id> <resource-group> \
 --inline exampleArray=["1", "2", "3"]
 ```
 Avoid passing objects / array as strings as they need to be parsed correctly as JSON.
+
+### Dry run
+##### Available from: 1.0
+If you want to perform only template validation / check for changes, use `--dry-run` parameter, which skips estimation part:
+```
+arm-estimator <template-path>.json <subscription-id> <resource-group> --dry-run
+```
+When dry run is enabled, ACE performs only What If check and returns its result. No further actions are performed (including JSON / HTML output generation).
 
 ## Known limitations
 ACE is currently in `beta` development phase meaning there're no guarantees for stable interface and some features are still in design or planning phase. The main limitations as for now are:
