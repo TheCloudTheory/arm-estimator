@@ -1,3 +1,4 @@
+using System.Drawing;
 using System.Text.Json;
 
 namespace arm_estimator_tests
@@ -118,7 +119,7 @@ namespace arm_estimator_tests
             var exitCode = await Program.Main(new[] {
                 "templates/bicep/vm/vm-windows.bicep",
                 "cf70b558-b930-45e4-9048-ebcefb926adf",
-                "arm-estimator-tests-rg", 
+                "arm-estimator-tests-rg",
                 "--generateJsonOutput",
                 "--jsonOutputFilename",
                 outputFilename,
@@ -138,6 +139,33 @@ namespace arm_estimator_tests
 
             Assert.That(output, Is.Not.Null);
             Assert.That(output.TotalCost, Is.EqualTo(totalValue));
+        }
+
+        [Test]
+        [Parallelizable(ParallelScope.Self)]
+        public async Task ResourceEstimation_ShouldBeCalculatedCorrectlyForAvailabilitySet()
+        {
+            var outputFilename = $"ace_test_{DateTime.Now.Ticks}";
+            var exitCode = await Program.Main(new[] {
+                "templates/bicep/availability-set.bicep",
+                "cf70b558-b930-45e4-9048-ebcefb926adf",
+                "arm-estimator-tests-rg",
+                "--generateJsonOutput",
+                "--jsonOutputFilename",
+                outputFilename
+            });
+
+            Assert.That(exitCode, Is.EqualTo(0));
+
+            var outputFile = File.ReadAllText($"{outputFilename}.json");
+            var output = JsonSerializer.Deserialize<EstimationOutput>(outputFile, new JsonSerializerOptions()
+            {
+                PropertyNameCaseInsensitive = true
+            });
+
+            Assert.That(output, Is.Not.Null);
+            Assert.That(output.TotalCost, Is.EqualTo(211.69999999999999d));
+            Assert.That(output.TotalResourceCount, Is.EqualTo(4));
         }
     }
 }
