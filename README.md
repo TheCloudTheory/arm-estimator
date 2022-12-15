@@ -456,6 +456,7 @@ Storage Account|In development|Supports only StorageV2 (without File Service & D
 Stream Analytics|Stable|Stream Analytics on Edge requires separate estimation
 Time Series|Stable|-
 Virtual Machine|In development|Supports Ax, Bx and Dx VM families, doesn't support low-priority / spot VMs
+VMSS|Stable|Supports the same VM families as Virtual Machines
 Virtual Network|In development|Doesn't support VNET peering
 VPN Gateway|Stable|-
 
