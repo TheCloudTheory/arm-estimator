@@ -282,6 +282,9 @@ internal class WhatIfProcessor
                 case "Microsoft.DataFactory/factories":
                     resource = await Calculate<DataFactoryRetailQuery, DataFactoryEstimationCalculation>(change, id);
                     break;
+                case "Microsoft.Compute/availabilitySets":
+                    resource = ReportResourceWithoutCost(id, change.changeType);
+                    break;
                 default:
                     if(id?.Name != null)
                     {
