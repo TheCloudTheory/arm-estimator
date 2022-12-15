@@ -94,6 +94,9 @@
     <None Update="templates\bicep\storage.bicep">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="templates\bicep\vmss.bicep">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="templates\bicep\vm\a-series-windows.bicep">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

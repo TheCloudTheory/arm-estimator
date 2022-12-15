@@ -285,6 +285,9 @@ internal class WhatIfProcessor
                 case "Microsoft.Compute/availabilitySets":
                     resource = ReportResourceWithoutCost(id, change.changeType);
                     break;
+                case "Microsoft.Compute/virtualMachineScaleSets":
+                    resource = await Calculate<VmssRetailQuery, VmssEstimationCalculation>(change, id);
+                    break;
                 default:
                     if(id?.Name != null)
                     {
