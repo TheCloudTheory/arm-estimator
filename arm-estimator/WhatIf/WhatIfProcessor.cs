@@ -288,6 +288,18 @@ internal class WhatIfProcessor
                 case "Microsoft.Compute/virtualMachineScaleSets":
                     resource = await Calculate<VmssRetailQuery, VmssEstimationCalculation>(change, id);
                     break;
+                case "Microsoft.Authorization/policyAssignments":
+                    resource = ReportResourceWithoutCost(id, change.changeType);
+                    break;
+                case "Microsoft.Authorization/roleAssignments":
+                    resource = ReportResourceWithoutCost(id, change.changeType);
+                    break;
+                case "Microsoft.Insights/diagnosticSettings":
+                    resource = ReportResourceWithoutCost(id, change.changeType);
+                    break;
+                case "Microsoft.ManagedIdentity/userAssignedIdentities":
+                    resource = ReportResourceWithoutCost(id, change.changeType);
+                    break;
                 default:
                     if(id?.Name != null)
                     {
@@ -481,6 +493,16 @@ internal class WhatIfProcessor
         }
         else
         {
+            if(url == "SKIP")
+            {
+                data = new RetailAPIResponse()
+                {
+                    Items = Enumerable.Empty<RetailItem>().ToArray()
+                };
+
+                return data;
+            }
+
             var response = await GetRetailDataResponse(url);
             if(response.IsSuccessStatusCode == false)
             {
@@ -560,6 +582,12 @@ internal class WhatIfProcessor
         this.logger.LogInformation("");
         this.logger.LogInformation("Aggregated metrics:");
         this.logger.LogInformation("");
+
+        if(summary.DetailedCost.Count == 0)
+        {
+            this.logger.LogInformation("No metrics available.");
+            return;
+        }
 
         foreach(var metric in summary.DetailedCost)
         {
