@@ -24,6 +24,8 @@ internal class AKSRetailQuery : BaseRetailQuery, IRetailQuery
         }
 
         var filter = new AKSQueryFilter(change, this.logger).GetFiltersBasedOnDesiredState(location);
+        if (filter == "SKIP") return filter;
+
         return $"{baseQuery}{filter}";
     }
 }

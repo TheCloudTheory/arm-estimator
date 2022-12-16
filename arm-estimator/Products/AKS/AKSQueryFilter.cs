@@ -28,6 +28,11 @@ internal class AKSQueryFilter : IQueryFilter
             tier = "Free";
         }
 
+        if(tier == "Free")
+        {
+            return "SKIP";
+        }
+
         var skuIds = AKSSupportedData.TierToSkuNameMap[tier];
         var skuIdsFilter = string.Join(" or ", skuIds.Select(_ => $"skuName eq '{_}'"));
 
