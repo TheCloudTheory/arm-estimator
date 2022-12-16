@@ -24,13 +24,14 @@ namespace arm_estimator_tests
         [TestCase("templates/servicebus.json", 688.50693000000001d, 688.50693000000001d)]
         [TestCase("templates/datafactory.json", 189.13086000000001d, 189.13086000000001d)]
         [TestCase("templates/appgw.json", 1598.7849000000001d, 1598.7849000000001d)]
+        [Parallelizable(ParallelScope.All)]
         public async Task ResourceEstimation_ShouldBeCalculatedCorrectly(string templatePath, double totalValue, double deltaValue)
         {
             var outputFilename = $"ace_test_{DateTime.Now.Ticks}";
             var exitCode = await Program.Main(new[] {
-                templatePath, 
+                templatePath,
                 "f81e70a7-e819-49b2-a980-8e9c433743dd",
-                "arm-estimator-rg", 
+                "arm-estimator-rg",
                 "--generateJsonOutput",
                 "--jsonOutputFilename",
                 outputFilename
@@ -47,6 +48,34 @@ namespace arm_estimator_tests
             Assert.That(output, Is.Not.Null);
             Assert.That(output.TotalCost, Is.EqualTo(totalValue));
             Assert.That(output.Delta, Is.EqualTo(deltaValue));
+        }
+
+        [Test]
+        [Parallelizable(ParallelScope.Self)]
+        public async Task AksResourceEstimation_ShouldBeCalculatedCorrectly()
+        {
+            var outputFilename = $"ace_test_{DateTime.Now.Ticks}";
+            var exitCode = await Program.Main(new[] {
+                "templates/107-aks-support.json",
+                "f81e70a7-e819-49b2-a980-8e9c433743dd",
+                "arm-estimator-rg",
+                "--parameters",
+                "templates/107-aks-support.parameters.json",
+                "--generateJsonOutput",
+                "--jsonOutputFilename",
+                outputFilename
+            });
+
+            Assert.That(exitCode, Is.EqualTo(0));
+
+            var outputFile = File.ReadAllText($"{outputFilename}.json");
+            var output = JsonSerializer.Deserialize<EstimationOutput>(outputFile, new JsonSerializerOptions()
+            {
+                PropertyNameCaseInsensitive = true
+            });
+
+            Assert.That(output, Is.Not.Null);
+            Assert.That(output.TotalCost, Is.EqualTo(0));
         }
     }
 }
