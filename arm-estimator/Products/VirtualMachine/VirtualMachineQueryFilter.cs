@@ -785,7 +785,14 @@ internal class VirtualMachineQueryFilter : IQueryFilter
             }
             else
             {
-                productName = $"{prefix}{familySku}{postfix} Linux";
+                if(tier == "Basic")
+                {
+                    productName = $"{prefix}{familySku}{postfix} Linux";
+                }
+                else
+                {
+                    productName = $"{prefix}{familySku}{postfix}";
+                }            
             }
         }
 
