@@ -1,6 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using System.Net;
-using System.Security.Cryptography;
 using System.Text.Json;
 
 internal class VirtualMachineQueryFilter : IQueryFilter
@@ -33,25 +31,32 @@ internal class VirtualMachineQueryFilter : IQueryFilter
             isWindows = storageProfile?.imageReference?.offer?.Contains("Windows");
         }
 
-        if(isWindows == null)
-        {
-            isWindows = true;
-        }
-
+        isWindows ??= true;
         if (vmSize == null || isWindows == null)
         {
             this.logger.LogError("Can't create a filter for Virtual Machine when VM size or OS is unavailable.");
             return null;
         }
 
+        var os = isWindows.Value ? "Windows" : "Linux";
+
+        DefineVmParameteres(os, vmSize, out string? productName, out string? skuName);
+        if (skuName == null || productName == null)
+        {
+            this.logger.LogWarning("VM size {size} is not supported.", vmSize);
+            return null;
+        }
+
+        return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and skuName eq '{skuName}' and productName eq '{productName}'";
+    }
+
+    internal static void DefineVmParameteres(string os, string vmSize, out string? productName, out string? skuName)
+    {
         var vmSizeParts = vmSize.Split("_");
         var familySku = vmSizeParts.Length == 3 ? vmSizeParts[1] + vmSizeParts[2] : vmSizeParts[1];
         var tier = vmSizeParts[0];
-        var os = isWindows.Value ? "Windows" : "Linux";
-        string? skuName;
-        string? productName;
 
-        if(tier == "Basic" && os == "Windows")
+        if (tier == "Basic" && os == "Windows")
         {
             productName = "Virtual Machines A Series Basic Windows";
             skuName = vmSizeParts[1];
@@ -763,8 +768,10 @@ internal class VirtualMachineQueryFilter : IQueryFilter
                     skuName = $"Standard_DC96as_v5";
                     break;
                 default:
-                    this.logger.LogWarning("VM size {size} is not supported.", vmSize);
-                    return null;
+                    productName = null;
+                    skuName = null;
+
+                    return;
             }
 
             var prefix = "Virtual Machines ";
@@ -774,28 +781,26 @@ internal class VirtualMachineQueryFilter : IQueryFilter
             }
 
             var postfix = " Series";
-            if(familySku == "DCadsv5-" || familySku == "DCasv5-")
+            if (familySku == "DCadsv5-" || familySku == "DCasv5-")
             {
                 postfix = "series";
             }
 
-            if(os == "Windows")
+            if (os == "Windows")
             {
                 productName = $"{prefix}{familySku}{postfix} Windows";
             }
             else
             {
-                if(tier == "Basic")
+                if (tier == "Basic")
                 {
                     productName = $"{prefix}{familySku}{postfix} Linux";
                 }
                 else
                 {
                     productName = $"{prefix}{familySku}{postfix}";
-                }            
+                }
             }
         }
-
-        return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and skuName eq '{skuName}' and productName eq '{productName}'";
     }
 }
