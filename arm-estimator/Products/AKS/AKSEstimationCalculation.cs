@@ -1,4 +1,5 @@
 ﻿using Azure.Core;
+using System.Text.Json;
 
 internal class AKSEstimationCalculation : BaseEstimation, IEstimationCalculation
 {
@@ -12,7 +13,7 @@ internal class AKSEstimationCalculation : BaseEstimation, IEstimationCalculation
         return this.items.OrderByDescending(_ => _.retailPrice);
     }
 
-    public TotalCostSummary GetTotalCost(WhatIfChange[] changess, IDictionary<string, string>? usagePatterns)
+    public TotalCostSummary GetTotalCost(WhatIfChange[] changes, IDictionary<string, string>? usagePatterns)
     {
         double? estimatedCost = 0;
         var items = GetItems();
@@ -25,6 +26,22 @@ internal class AKSEstimationCalculation : BaseEstimation, IEstimationCalculation
             if (item.meterName == "Uptime SLA")
             {
                 cost = item.retailPrice * HoursInMonth;
+            }
+            else if (item.productName != null && item.productName.Contains("Virtual Machine"))
+            {
+                var properties = JsonSerializer.Deserialize<AKSProperties>(JsonSerializer.Serialize(this.change.properties));
+                if (properties != null && properties.AgentPoolProfiles != null)
+                {
+                    foreach (var pool in properties.AgentPoolProfiles)
+                    {
+                        VirtualMachineQueryFilter.DefineVmParameteres(pool.OsType!, pool.VmSize!, out var productName, out var skuName);
+                        if(productName == item.productName)
+                        {
+                            var agentCount = pool.Count;
+                            cost = item.retailPrice * HoursInMonth * agentCount;
+                        }
+                    }
+                }
             }
             else
             {
