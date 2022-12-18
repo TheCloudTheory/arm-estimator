@@ -241,8 +241,24 @@ public class Program
 
     private static void DisplayWelcomeScreen(ILogger<Program> logger)
     {
-        logger.LogInformation("ACE (Azure Cost Estimator) [{version}]", GetInformationalVersion());
-        logger.LogInformation("------------------------------");
+        logger.LogInformation(@"                                                                                                   
+                                              .***      ***                                         
+                                   ,    ***.********,****                                           
+                                     **********************                                         
+                               *    ************. ***********  *                                    
+                             ///   *******, ****  ////////////******                                
+                               .//************ ///// /////////********                              
+                           ///////// ********///////// //////.********    (,                        
+                     .   ///////////// **** ////////////,////******* ( (/                           
+                       *////////////////   ////////////////  ** ((((((((((((                        
+                        ///,  */////////.   **************,    ((((((((((((((                       
+                       ///////////////.(((((((,******** ///// (((((( (((((((((                      
+                       ///////////// ((((((((((((   ////////// ((((((((((*((((                      
+                        ////////// ((((((((((( ((    //////////(((((((((((((((                      
+                    //   /////// (((((( (((((((((((((((( ///////(((((((((((((                       
+                       //   /  ( ((((((((((((((((,((((((((((.////(((((((((  ((                      
+                                                                                                    
+                                  ACE (Azure Cost Estimator) [{version}]", GetInformationalVersion());
         logger.LogInformation("");
         logger.LogInformation("General help: https://github.com/TheCloudTheory/arm-estimator/discussions");
         logger.LogInformation("Bugs & issues: https://github.com/TheCloudTheory/arm-estimator/issues");
