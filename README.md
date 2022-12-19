@@ -75,9 +75,9 @@ Alternatively you can use Azure CLI, which comes with in-built Azure Bicep suppo
 az bicep build --file <your-bicep-file>.bicep
 ```
 This will create an ARM Template based on the Bicep file passed as argument.
-> Native Bicep support is available since `1.0.0-beta2` version.
+> Native Bicep support is available since `1.0.0-beta2` version. Starting with version `1.0`, ACE tries to compile Bicep file using Bicep CLI and falls backs to Azure CLI.
 
-> If you want to use Bicep files and pass them directly to ACE, make sure you've installed Bicep CLI before. This is especially important for build agents, which may have limited capabilities and don't include Bicep by default. In case of any problems, fall back to ARM Templates.
+> If you want to use Bicep files and pass them directly to ACE, make sure you've installed Bicep CLI / Azure CLI before. This is especially important for build agents, which may have limited capabilities and don't include Bicep by default. In case of any problems, fall back to ARM Templates.
 
 ### Windows
 ```
