@@ -3,7 +3,7 @@
 Automated cost estimation of your Azure infrastructure made easy. Works with ARM Templates and Bicep.
 
 ## Demo
-![arm-estimator-demo](docs/arm-estimator.gif)
+[![asciicast](https://asciinema.org/a/jqYCjfu18ZbMaGdbsuMtPYuc5.svg)](https://asciinema.org/a/jqYCjfu18ZbMaGdbsuMtPYuc5)
 
 ## Table of contents
 * [Philosophy](#philosophy)
