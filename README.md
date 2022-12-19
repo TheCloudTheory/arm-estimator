@@ -70,6 +70,10 @@ You can use the project with both ARM Templates and with Bicep files. In general
 ```
 bicep build <your-bicep-file>.bicep
 ```
+Alternatively you can use Azure CLI, which comes with in-built Azure Bicep support:
+```
+az bicep build --file <your-bicep-file>.bicep
+```
 This will create an ARM Template based on the Bicep file passed as argument.
 > Native Bicep support is available since `1.0.0-beta2` version.
 
