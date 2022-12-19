@@ -38,7 +38,7 @@ namespace arm_estimator_tests
             });
 
             Assert.That(output, Is.Not.Null);
-            Assert.That(output.Resources.Count(), Is.EqualTo(19));
+            Assert.That(output.Resources.Count(), Is.EqualTo(24));
         }
     }
 }

@@ -5,9 +5,10 @@
     "_generator": {
       "name": "bicep",
       "version": "0.12.40.16777",
-      "templateHash": "9122483791542076558"
+      "templateHash": "8060235446393778821"
     },
     "aceUsagePatterns": {
+      "Microsoft_ContainerRegistry_registries_Registry_Unit": "15",
       "Microsoft_ContainerRegistry_registries_Data_Stored": "50",
       "Microsoft_ContainerRegistry_registries_Task_vCPU_Duration": "3600"
     }

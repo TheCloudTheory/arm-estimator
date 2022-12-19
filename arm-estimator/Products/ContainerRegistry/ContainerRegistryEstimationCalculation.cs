@@ -24,7 +24,7 @@ internal class ContainerRegistryEstimationCalculation : BaseEstimation, IEstimat
 
             if (item.meterName == "Basic Registry Unit" || item.meterName == "Standard Registry Unit" || item.meterName == "Premium Registry Unit")
             {
-                cost = item.retailPrice * 30;
+                cost = item.retailPrice * base.IncludeUsagePattern("Microsoft_ContainerRegistry_registries_Registry_Unit", usagePatterns, 30);
             }
             else if (item.meterName == "Data Stored")
             {

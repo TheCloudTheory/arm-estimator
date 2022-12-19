@@ -91,6 +91,9 @@
     <None Update="templates\bicep\inlineParams.bicep">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="templates\bicep\metadata-template.bicep">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="templates\bicep\nested.bicep">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
