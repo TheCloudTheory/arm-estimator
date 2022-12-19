@@ -29,6 +29,7 @@ Automated cost estimation of your Azure infrastructure made easy. Works with ARM
   + [HTML output](#html-output)
   + [Inline parameters](#inline-parameters)
   + [Dry run](#dry-run)
+  + [Usage patterns](#usage-patterns)
 * [Known limitations](#known-limitations)
 * [Services support](#services-support)
 * [Contributions](#contributions)
@@ -402,11 +403,69 @@ arm-estimator <template-path>.json <subscription-id> <resource-group> --dry-run
 ```
 When dry run is enabled, ACE performs only What If check and returns its result. No further actions are performed (including JSON / HTML output generation).
 
+### Usage patterns
+##### Available from: 1.0
+To achieve better accurracy with estimations, you can leverage usage patterns feature. If usage pattern is specified for a resource type, ACE will use provided value for calculating monthly cost. Usage patterns are defined as `metadata` object for both ARM Templates and Azure Bicep:
+```
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.12.40.16777",
+      "templateHash": "8060235446393778821"
+    },
+    "aceUsagePatterns": {
+      "Microsoft_ContainerRegistry_registries_Registry_Unit": "15",
+      "Microsoft_ContainerRegistry_registries_Data_Stored": "50",
+      "Microsoft_ContainerRegistry_registries_Task_vCPU_Duration": "3600"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.ContainerRegistry/registries",
+      "apiVersion": "2021-09-01",
+      "name": "metadataacr",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "name": "Basic"
+      }
+    }
+  ]
+}
+```
+```
+metadata aceUsagePatterns = {
+  Microsoft_ContainerRegistry_registries_Registry_Unit: '15'
+  Microsoft_ContainerRegistry_registries_Data_Stored: '50'
+  Microsoft_ContainerRegistry_registries_Task_vCPU_Duration: '3600'
+}
+
+resource acr 'Microsoft.ContainerRegistry/registries@2021-09-01' = {
+  name: 'metadataacr'
+  location: resourceGroup().location
+  sku: {
+    name: 'Basic'
+  }
+}
+
+```
+> `Metadata` object in Azure Bicep was introduced quite recently - make sure you've updated Bicep CLI / Azure CLI to get support for it.
+
+Below table shows currently implemented support for usage patterns. Resources not listed are considered TBD:
+Service|Metric|Data type
+----|----|----
+ACR|Microsoft_ContainerRegistry_registries_Registry_Unit|Days
+ACR|Microsoft_ContainerRegistry_registries_Data_Stored|GB
+ACR|Microsoft_ContainerRegistry_registries_Task_vCPU_Duration|Second
+
+Note, that usage patterns are applied for all resources of given type. For example, if you use `Microsoft_ContainerRegistry_registries_Task_vCPU_Duration` metric, its value will be applied to all Azure Container Registries defined within your template. This behavior will probably change in the future releases.
+
 ## Known limitations
-ACE is currently in `beta` development phase meaning there're no guarantees for stable interface and some features are still in design or planning phase. The main limitations as for now are:
+As ACE reached first major release, most of the fundementals features are already available. However, the project is actively developed and new functions will be available with each new release. The main limitations as for now are:
 * You can use the project only with a resource group as deployment scope
 * Some services are in TBD state (see below for more information)
-* There's no possibility to define custom usage patterns so some metrics (mainly those described as price per second / hour / day) are projected for full month
 
 Those limitations will be removed in the future releases of the project.
 

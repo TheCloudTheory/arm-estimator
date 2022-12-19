@@ -14,7 +14,7 @@ internal abstract class BaseEstimation
         this.change = change;
     }
 
-    protected int IncludeUsagePattern(string key, IDictionary<string, string>? usagePatterns)
+    protected int IncludeUsagePattern(string key, IDictionary<string, string>? usagePatterns, int defaultUsage = 1)
     {
         if(usagePatterns != null && usagePatterns.TryGetValue(key, out string? value))
         {
@@ -24,6 +24,6 @@ internal abstract class BaseEstimation
             }
         }
 
-        return 1;
+        return defaultUsage;
     }
 }
