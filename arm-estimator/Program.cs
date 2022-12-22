@@ -70,6 +70,7 @@ public class Program
                 dryRunOption
             ));
 
+        return 0;
         return await command.InvokeAsync(args);
     }
 
