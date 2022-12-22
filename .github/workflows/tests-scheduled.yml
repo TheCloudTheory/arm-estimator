@@ -9,7 +9,7 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v3
@@ -21,16 +21,10 @@ jobs:
       uses: actions/setup-dotnet@v2
       with:
         dotnet-version: 6.0.x
-    - name: List files
-      run: ls -la
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
-    - name: vstest-action
-      uses: microsoft/vstest-action@v1.0.0
-      with:
-        testAssembly: bin/Debug/net6.0/arm-estimator-tests.dll
-        searchFolder: ./arm-estimator-tests/
-        runInParallel: true
+    - name: Test
+      run: dotnet test
 
