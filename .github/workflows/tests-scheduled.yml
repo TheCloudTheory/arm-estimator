@@ -27,3 +27,8 @@ jobs:
       run: dotnet build --no-restore
     - name: vstest-action
       uses: microsoft/vstest-action@v1.0.0
+      with:
+        testAssembly: '**\\*arm-estimator-tests.dll'
+        searchFolder: arm-estimator-tests
+        runInParallel: true
+
