@@ -48,9 +48,9 @@ public class Program
         command.AddArgument(templateFileArg);
         command.AddArgument(susbcriptionIdArg);
         command.AddArgument(resourceGroupArg);
-        command.SetHandler((file, subscription, resourceGroup, options) =>
+        command.SetHandler(async (file, subscription, resourceGroup, options) =>
         {
-           // await Estimate(file, subscription, resourceGroup, options);
+            await Estimate(file, subscription, resourceGroup, options);
         },
             templateFileArg,
             susbcriptionIdArg,
@@ -81,83 +81,84 @@ public class Program
             builder.AddEstimatorLogger(options.ShouldBeSilent);
         }))
         {
-            var logger = loggerFactory.CreateLogger<Program>();
+            await Task.CompletedTask;
+            // var logger = loggerFactory.CreateLogger<Program>();
 
-            DisplayWelcomeScreen(logger);
-            DisplayUsedSettings(templateFile, subscriptionId, resourceGroupName, logger, options);
+            // DisplayWelcomeScreen(logger);
+            // DisplayUsedSettings(templateFile, subscriptionId, resourceGroupName, logger, options);
 
-            var template = GetTemplate(templateFile, logger);
-            if (template == null)
-            {
-                logger.LogError("There was a problem with processing template.");
-                return;
-            }
+            // var template = GetTemplate(templateFile, logger);
+            // if (template == null)
+            // {
+            //     logger.LogError("There was a problem with processing template.");
+            //     return;
+            // }
 
-            var parameters = "{}";
-            if (options.ParametersFile != null)
-            {
-                parameters = Regex.Replace(File.ReadAllText(options.ParametersFile.FullName), @"\s+", string.Empty);
-            }
+            // var parameters = "{}";
+            // if (options.ParametersFile != null)
+            // {
+            //     parameters = Regex.Replace(File.ReadAllText(options.ParametersFile.FullName), @"\s+", string.Empty);
+            // }
 
-            var parser = new TemplateParser(template, parameters, options.InlineParameters, logger);
-            if (options.InlineParameters.Any())
-            {
-                parser.ParseInlineParameters(out parameters);
-            }
+            // var parser = new TemplateParser(template, parameters, options.InlineParameters, logger);
+            // if (options.InlineParameters.Any())
+            // {
+            //     parser.ParseInlineParameters(out parameters);
+            // }
 
-            var handler = new AzureWhatIfHandler(subscriptionId, resourceGroupName, template, options.Mode, parameters, logger);
-            var whatIfData = await handler.GetResponseWithRetries();
-            if (whatIfData == null)
-            {
-                Environment.Exit(1);
-            }
+            // var handler = new AzureWhatIfHandler(subscriptionId, resourceGroupName, template, options.Mode, parameters, logger);
+            // var whatIfData = await handler.GetResponseWithRetries();
+            // if (whatIfData == null)
+            // {
+            //     Environment.Exit(1);
+            // }
 
-            if (whatIfData != null && whatIfData.status == "Failed")
-            {
-                logger.LogError("An error happened when performing WhatIf operation.");
+            // if (whatIfData != null && whatIfData.status == "Failed")
+            // {
+            //     logger.LogError("An error happened when performing WhatIf operation.");
 
-                if (whatIfData.error != null)
-                {
-                    var errorDetails = JsonSerializer.Serialize(whatIfData.error, typeof(WhatIfError), new JsonSerializerOptions()
-                    {
-                        WriteIndented = true
-                    });
+            //     if (whatIfData.error != null)
+            //     {
+            //         var errorDetails = JsonSerializer.Serialize(whatIfData.error, typeof(WhatIfError), new JsonSerializerOptions()
+            //         {
+            //             WriteIndented = true
+            //         });
 
-                    logger.LogError("{error}", errorDetails);
-                }
+            //         logger.LogError("{error}", errorDetails);
+            //     }
 
-                return;
-            }
+            //     return;
+            // }
 
-            if (whatIfData == null || whatIfData.properties == null || whatIfData.properties.changes == null || whatIfData.properties.changes.Length == 0)
-            {
-                logger.AddEstimatorMessage("No changes detected.");
-                return;
-            }
+            // if (whatIfData == null || whatIfData.properties == null || whatIfData.properties.changes == null || whatIfData.properties.changes.Length == 0)
+            // {
+            //     logger.AddEstimatorMessage("No changes detected.");
+            //     return;
+            // }
 
-            logger.AddEstimatorMessage("Detected {0} resources.", whatIfData.properties.changes.Length);
-            logger.LogInformation("");
+            // logger.AddEstimatorMessage("Detected {0} resources.", whatIfData.properties.changes.Length);
+            // logger.LogInformation("");
 
-            ReportChangesToConsole(whatIfData.properties.changes, logger);
+            // ReportChangesToConsole(whatIfData.properties.changes, logger);
 
-            logger.LogInformation("");
-            logger.LogInformation("-------------------------------");
-            logger.LogInformation("");
+            // logger.LogInformation("");
+            // logger.LogInformation("-------------------------------");
+            // logger.LogInformation("");
 
-            if (options.DryRunOnly)
-            {
-                logger.LogInformation("Dry run enabled, skipping estimation.");
-                return;
-            }
+            // if (options.DryRunOnly)
+            // {
+            //     logger.LogInformation("Dry run enabled, skipping estimation.");
+            //     return;
+            // }
 
-            var output = await new WhatIfProcessor(logger, whatIfData.properties.changes, options.Currency, options.DisableDetailedMetrics, parser.Template).Process();
-            GenerateOutputIfNeeded(options, output, logger);
+            // var output = await new WhatIfProcessor(logger, whatIfData.properties.changes, options.Currency, options.DisableDetailedMetrics, parser.Template).Process();
+            // GenerateOutputIfNeeded(options, output, logger);
 
-            if (options.Threshold != -1 && output.TotalCost > options.Threshold)
-            {
-                logger.LogError("Estimated cost [{totalCost} USD] exceeds configured threshold [{threshold} USD].", output.TotalCost, options.Threshold);
-                Environment.Exit(1);
-            }
+            // if (options.Threshold != -1 && output.TotalCost > options.Threshold)
+            // {
+            //     logger.LogError("Estimated cost [{totalCost} USD] exceeds configured threshold [{threshold} USD].", output.TotalCost, options.Threshold);
+            //     Environment.Exit(1);
+            // }
         }
     }
 
