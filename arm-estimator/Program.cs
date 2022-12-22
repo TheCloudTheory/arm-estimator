@@ -110,57 +110,56 @@ public class Program
             var whatIfData = await handler.GetResponseWithRetries();
             if (whatIfData == null)
             {
+                logger.LogError("Couldn't fetch data for What If request.");
                 Environment.Exit(1);
             }
 
-            await Task.CompletedTask;
+            if (whatIfData != null && whatIfData.status == "Failed")
+            {
+                logger.LogError("An error happened when performing WhatIf operation.");
 
-            // if (whatIfData != null && whatIfData.status == "Failed")
-            // {
-            //     logger.LogError("An error happened when performing WhatIf operation.");
+                if (whatIfData.error != null)
+                {
+                    var errorDetails = JsonSerializer.Serialize(whatIfData.error, typeof(WhatIfError), new JsonSerializerOptions()
+                    {
+                        WriteIndented = true
+                    });
 
-            //     if (whatIfData.error != null)
-            //     {
-            //         var errorDetails = JsonSerializer.Serialize(whatIfData.error, typeof(WhatIfError), new JsonSerializerOptions()
-            //         {
-            //             WriteIndented = true
-            //         });
+                    logger.LogError("{error}", errorDetails);
+                }
 
-            //         logger.LogError("{error}", errorDetails);
-            //     }
+                return;
+            }
 
-            //     return;
-            // }
+            if (whatIfData == null || whatIfData.properties == null || whatIfData.properties.changes == null || whatIfData.properties.changes.Length == 0)
+            {
+                logger.AddEstimatorMessage("No changes detected.");
+                return;
+            }
 
-            // if (whatIfData == null || whatIfData.properties == null || whatIfData.properties.changes == null || whatIfData.properties.changes.Length == 0)
-            // {
-            //     logger.AddEstimatorMessage("No changes detected.");
-            //     return;
-            // }
+            logger.AddEstimatorMessage("Detected {0} resources.", whatIfData.properties.changes.Length);
+            logger.LogInformation("");
 
-            // logger.AddEstimatorMessage("Detected {0} resources.", whatIfData.properties.changes.Length);
-            // logger.LogInformation("");
+            ReportChangesToConsole(whatIfData.properties.changes, logger);
 
-            // ReportChangesToConsole(whatIfData.properties.changes, logger);
+            logger.LogInformation("");
+            logger.LogInformation("-------------------------------");
+            logger.LogInformation("");
 
-            // logger.LogInformation("");
-            // logger.LogInformation("-------------------------------");
-            // logger.LogInformation("");
+            if (options.DryRunOnly)
+            {
+                logger.LogInformation("Dry run enabled, skipping estimation.");
+                return;
+            }
 
-            // if (options.DryRunOnly)
-            // {
-            //     logger.LogInformation("Dry run enabled, skipping estimation.");
-            //     return;
-            // }
+            var output = await new WhatIfProcessor(logger, whatIfData.properties.changes, options.Currency, options.DisableDetailedMetrics, parser.Template).Process();
+            GenerateOutputIfNeeded(options, output, logger);
 
-            // var output = await new WhatIfProcessor(logger, whatIfData.properties.changes, options.Currency, options.DisableDetailedMetrics, parser.Template).Process();
-            // GenerateOutputIfNeeded(options, output, logger);
-
-            // if (options.Threshold != -1 && output.TotalCost > options.Threshold)
-            // {
-            //     logger.LogError("Estimated cost [{totalCost} USD] exceeds configured threshold [{threshold} USD].", output.TotalCost, options.Threshold);
-            //     Environment.Exit(1);
-            // }
+            if (options.Threshold != -1 && output.TotalCost > options.Threshold)
+            {
+                logger.LogError("Estimated cost [{totalCost} USD] exceeds configured threshold [{threshold} USD].", output.TotalCost, options.Threshold);
+                Environment.Exit(1);
+            }
         }
     }
 
