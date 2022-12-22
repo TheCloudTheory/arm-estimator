@@ -86,32 +86,34 @@ public class Program
             DisplayWelcomeScreen(logger);
             DisplayUsedSettings(templateFile, subscriptionId, resourceGroupName, logger, options);
 
+
+            var template = GetTemplate(templateFile, logger);
+            if (template == null)
+            {
+                logger.LogError("There was a problem with processing template.");
+                return;
+            }
+
+            var parameters = "{}";
+            if (options.ParametersFile != null)
+            {
+                parameters = Regex.Replace(File.ReadAllText(options.ParametersFile.FullName), @"\s+", string.Empty);
+            }
+
+            var parser = new TemplateParser(template, parameters, options.InlineParameters, logger);
+            if (options.InlineParameters.Any())
+            {
+                parser.ParseInlineParameters(out parameters);
+            }
+
+            var handler = new AzureWhatIfHandler(subscriptionId, resourceGroupName, template, options.Mode, parameters, logger);
+            var whatIfData = await handler.GetResponseWithRetries();
+            if (whatIfData == null)
+            {
+                Environment.Exit(1);
+            }
+
             await Task.CompletedTask;
-            // var template = GetTemplate(templateFile, logger);
-            // if (template == null)
-            // {
-            //     logger.LogError("There was a problem with processing template.");
-            //     return;
-            // }
-
-            // var parameters = "{}";
-            // if (options.ParametersFile != null)
-            // {
-            //     parameters = Regex.Replace(File.ReadAllText(options.ParametersFile.FullName), @"\s+", string.Empty);
-            // }
-
-            // var parser = new TemplateParser(template, parameters, options.InlineParameters, logger);
-            // if (options.InlineParameters.Any())
-            // {
-            //     parser.ParseInlineParameters(out parameters);
-            // }
-
-            // var handler = new AzureWhatIfHandler(subscriptionId, resourceGroupName, template, options.Mode, parameters, logger);
-            // var whatIfData = await handler.GetResponseWithRetries();
-            // if (whatIfData == null)
-            // {
-            //     Environment.Exit(1);
-            // }
 
             // if (whatIfData != null && whatIfData.status == "Failed")
             // {
