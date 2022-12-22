@@ -30,7 +30,7 @@ jobs:
     - name: vstest-action
       uses: microsoft/vstest-action@v1.0.0
       with:
-        testAssembly: ./bin/Debug/net6.0/arm-estimator-tests.dll
+        testAssembly: bin/Debug/net6.0/arm-estimator-tests.dll
         searchFolder: ./arm-estimator-tests/
         runInParallel: true
 
