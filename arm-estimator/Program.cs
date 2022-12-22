@@ -81,12 +81,12 @@ public class Program
             builder.AddEstimatorLogger(options.ShouldBeSilent);
         }))
         {
+            var logger = loggerFactory.CreateLogger<Program>();
+
+            DisplayWelcomeScreen(logger);
+            DisplayUsedSettings(templateFile, subscriptionId, resourceGroupName, logger, options);
+
             await Task.CompletedTask;
-            // var logger = loggerFactory.CreateLogger<Program>();
-
-            // DisplayWelcomeScreen(logger);
-            // DisplayUsedSettings(templateFile, subscriptionId, resourceGroupName, logger, options);
-
             // var template = GetTemplate(templateFile, logger);
             // if (template == null)
             // {
