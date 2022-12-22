@@ -613,7 +613,7 @@ internal class VirtualMachineQueryFilter : IQueryFilter
                     break;
                 case "DC8sv2":
                     familySku = "DCSv2";
-                    skuName = $"DC8s v2";
+                    skuName = $"DC8 v2";
                     break;
                 case "DC1sv3":
                     familySku = "DCsv3";
