@@ -50,7 +50,11 @@ public class Program
         command.AddArgument(resourceGroupArg);
         command.SetHandler(async (file, subscription, resourceGroup, options) =>
         {
-            await Estimate(file, subscription, resourceGroup, options);
+            var exitCode = await Estimate(file, subscription, resourceGroup, options);
+            if(exitCode != 0)
+            {
+                throw new Exception();
+            }
         },
             templateFileArg,
             susbcriptionIdArg,
@@ -73,7 +77,7 @@ public class Program
         return await command.InvokeAsync(args);
     }
 
-    private static async Task Estimate(FileInfo templateFile, string subscriptionId, string resourceGroupName, EstimateOptions options)
+    private static async Task<int> Estimate(FileInfo templateFile, string subscriptionId, string resourceGroupName, EstimateOptions options)
     {
         using (var loggerFactory = LoggerFactory.Create(builder =>
         {
@@ -86,11 +90,12 @@ public class Program
             DisplayWelcomeScreen(logger);
             DisplayUsedSettings(templateFile, subscriptionId, resourceGroupName, logger, options);
 
+
             var template = GetTemplate(templateFile, logger);
             if (template == null)
             {
                 logger.LogError("There was a problem with processing template.");
-                return;
+                return 1;
             }
 
             var parameters = "{}";
@@ -109,7 +114,8 @@ public class Program
             var whatIfData = await handler.GetResponseWithRetries();
             if (whatIfData == null)
             {
-                Environment.Exit(1);
+                logger.LogError("Couldn't fetch data for What If request.");
+                return 1;
             }
 
             if (whatIfData != null && whatIfData.status == "Failed")
@@ -126,13 +132,13 @@ public class Program
                     logger.LogError("{error}", errorDetails);
                 }
 
-                return;
+                return 1;
             }
 
             if (whatIfData == null || whatIfData.properties == null || whatIfData.properties.changes == null || whatIfData.properties.changes.Length == 0)
             {
                 logger.AddEstimatorMessage("No changes detected.");
-                return;
+                return 0;
             }
 
             logger.AddEstimatorMessage("Detected {0} resources.", whatIfData.properties.changes.Length);
@@ -147,7 +153,7 @@ public class Program
             if (options.DryRunOnly)
             {
                 logger.LogInformation("Dry run enabled, skipping estimation.");
-                return;
+                return 0;
             }
 
             var output = await new WhatIfProcessor(logger, whatIfData.properties.changes, options.Currency, options.DisableDetailedMetrics, parser.Template).Process();
@@ -156,8 +162,10 @@ public class Program
             if (options.Threshold != -1 && output.TotalCost > options.Threshold)
             {
                 logger.LogError("Estimated cost [{totalCost} USD] exceeds configured threshold [{threshold} USD].", output.TotalCost, options.Threshold);
-                Environment.Exit(1);
+                return 1;
             }
+
+            return 0;
         }
     }
 

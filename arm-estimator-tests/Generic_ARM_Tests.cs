@@ -30,8 +30,8 @@ namespace arm_estimator_tests
             var outputFilename = $"ace_test_{DateTime.Now.Ticks}";
             var exitCode = await Program.Main(new[] {
                 templatePath,
-                "f81e70a7-e819-49b2-a980-8e9c433743dd",
-                "arm-estimator-rg",
+                "cf70b558-b930-45e4-9048-ebcefb926adf",
+                "arm-estimator-tests-rg",
                 "--generateJsonOutput",
                 "--jsonOutputFilename",
                 outputFilename
@@ -57,8 +57,8 @@ namespace arm_estimator_tests
             var outputFilename = $"ace_test_{DateTime.Now.Ticks}";
             var exitCode = await Program.Main(new[] {
                 "templates/107-aks-support.json",
-                "f81e70a7-e819-49b2-a980-8e9c433743dd",
-                "arm-estimator-rg",
+                "cf70b558-b930-45e4-9048-ebcefb926adf",
+                "arm-estimator-tests-rg",
                 "--parameters",
                 "templates/107-aks-support.parameters.json",
                 "--generateJsonOutput",
