@@ -11,7 +11,7 @@ namespace arm_estimator_tests
             var exitCode = await Program.Main(new[] {
                 "templates/bicep/securestring.bicep",
                 "cf70b558-b930-45e4-9048-ebcefb926adf",
-                "arm-estimator-rg",
+                "arm-estimator-tests-rg",
                 "--generateJsonOutput",
                 "--jsonOutputFilename",
                 outputFilename,
@@ -38,7 +38,7 @@ namespace arm_estimator_tests
             var exitCode = await Program.Main(new[] {
                 "templates/bicep/inlineParams.bicep",
                 "cf70b558-b930-45e4-9048-ebcefb926adf",
-                "arm-estimator-rg",
+                "arm-estimator-tests-rg",
                 "--generateJsonOutput",
                 "--jsonOutputFilename",
                 outputFilename,
@@ -73,7 +73,7 @@ namespace arm_estimator_tests
             var exitCode = await Program.Main(new[] {
                 "templates/bicep/106-file-and-inline-params.bicep",
                 "cf70b558-b930-45e4-9048-ebcefb926adf",
-                "arm-estimator-rg",
+                "arm-estimator-tests-rg",
                 "--generateJsonOutput",
                 "--jsonOutputFilename",
                 outputFilename,
@@ -102,7 +102,7 @@ namespace arm_estimator_tests
             var exitCode = await Program.Main(new[] {
                 "templates/bicep/106-file-and-inline-params.bicep",
                 "cf70b558-b930-45e4-9048-ebcefb926adf",
-                "arm-estimator-rg",
+                "arm-estimator-tests-rg",
                 "--generateJsonOutput",
                 "--jsonOutputFilename",
                 outputFilename,
@@ -133,7 +133,7 @@ namespace arm_estimator_tests
             var exitCode = await Program.Main(new[] {
                 "templates/bicep/106-file-and-inline-params.bicep",
                 "cf70b558-b930-45e4-9048-ebcefb926adf",
-                "arm-estimator-rg",
+                "arm-estimator-tests-rg",
                 "--generateJsonOutput",
                 "--jsonOutputFilename",
                 outputFilename,

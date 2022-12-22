@@ -96,7 +96,7 @@ Running ACE as Docker container has following benefits:
 
 However, when running a container with ACE, there're additional things to think about. Here's an example of starting ACE as container:
 ```
-docker run -e AZURE_CLIENT_ID=<client-id> -e AZURE_TENANT_ID=<tenant-id> -e AZURE_CLIENT_SECRET=<client-secret> -v ./templates:/app azure-cost-estimator:latest templates/acr.json <subscription-id> arm-estimator-rg
+docker run -e AZURE_CLIENT_ID=<client-id> -e AZURE_TENANT_ID=<tenant-id> -e AZURE_CLIENT_SECRET=<client-secret> -v ./templates:/app azure-cost-estimator:latest templates/acr.json <subscription-id> arm-estimator-tests-rg
 ```
 Using above command, you can run ACE with default values for options. Once container runs, it'll log all estimation information to stdout. As opposite to running executable, when Docker container is used, you must configure two elements by yourself:
 * authentication to Azure

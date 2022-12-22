@@ -2,7 +2,7 @@
   "profiles": {
     "arm-estimator": {
       "commandName": "Project",
-      "commandLineArgs": "templates/bicep/asr.bicep cf70b558-b930-45e4-9048-ebcefb926adf arm-estimator-rg"
+      "commandLineArgs": "templates/bicep/asr.bicep cf70b558-b930-45e4-9048-ebcefb926adf arm-estimator-tests-rg"
     },
     "Docker": {
       "commandName": "Docker"

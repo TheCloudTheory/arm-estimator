@@ -11,7 +11,7 @@ namespace arm_estimator_tests
             var exitCode = await Program.Main(new[] {
                 "templates/bicep/metadata-template.bicep",
                 "cf70b558-b930-45e4-9048-ebcefb926adf",
-                "arm-estimator-rg",
+                "arm-estimator-tests-rg",
                 "--generateJsonOutput",
                 "--jsonOutputFilename",
                 outputFilename

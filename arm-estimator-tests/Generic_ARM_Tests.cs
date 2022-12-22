@@ -31,7 +31,7 @@ namespace arm_estimator_tests
             var exitCode = await Program.Main(new[] {
                 templatePath,
                 "cf70b558-b930-45e4-9048-ebcefb926adf",
-                "arm-estimator-rg",
+                "arm-estimator-tests-rg",
                 "--generateJsonOutput",
                 "--jsonOutputFilename",
                 outputFilename
@@ -58,7 +58,7 @@ namespace arm_estimator_tests
             var exitCode = await Program.Main(new[] {
                 "templates/107-aks-support.json",
                 "cf70b558-b930-45e4-9048-ebcefb926adf",
-                "arm-estimator-rg",
+                "arm-estimator-tests-rg",
                 "--parameters",
                 "templates/107-aks-support.parameters.json",
                 "--generateJsonOutput",
