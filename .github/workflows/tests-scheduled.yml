@@ -7,7 +7,7 @@ on:
     - cron: 0 0 * * *
 
 jobs:
-  build:
+  buildAndTest:
 
     runs-on: ubuntu-latest
 
@@ -26,5 +26,9 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     - name: Test
-      run: dotnet test --blame --no-build --verbosity detailed
-
+      run: dotnet test --no-build --verbosity normal --logger "trx;logfilename=testResults.trx"
+    - name: Publish Test Results
+      uses: EnricoMi/publish-unit-test-result-action@v2
+      if: always()
+      with:
+        trx_files: "**/*.trx"
