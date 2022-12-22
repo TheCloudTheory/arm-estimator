@@ -427,6 +427,38 @@ internal class VirtualMachineQueryFilter : IQueryFilter
                     familySku = "Dsv4";
                     skuName = $"D64s v4";
                     break;
+                case "D2sv5":
+                    familySku = "Dsv5";
+                    skuName = $"Standard_D2s_v5";
+                    break;
+                case "D4sv5":
+                    familySku = "Dsv5";
+                    skuName = $"Standard_D4s_v5";
+                    break;
+                case "D8sv5":
+                    familySku = "Dsv5";
+                    skuName = $"Standard_D8s_v5";
+                    break;
+                case "D16sv5":
+                    familySku = "Dsv5";
+                    skuName = $"Standard_D16s_v5";
+                    break;
+                case "D32sv5":
+                    familySku = "Dsv5";
+                    skuName = $"Standard_D32s_v5";
+                    break;
+                case "D48sv5":
+                    familySku = "Dsv5";
+                    skuName = $"Standard_D48s_v5";
+                    break;
+                case "D64sv5":
+                    familySku = "Dsv5";
+                    skuName = $"Standard_D64s_v5";
+                    break;
+                case "D96sv5":
+                    familySku = "Dsv5";
+                    skuName = $"Standard_D96s_v5";
+                    break;
                 case "D1s":
                     familySku = "DS";
                     skuName = $"DS1";
