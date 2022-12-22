@@ -2,7 +2,7 @@ param vmSize string
 param vmName string
 
 resource vm 'Microsoft.Compute/virtualMachines@2022-03-01' = {
-  name: vmName
+  name: '${vmName}-linux'
   location: 'westeurope'
   properties: {
     hardwareProfile: {
