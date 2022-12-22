@@ -48,9 +48,9 @@ public class Program
         command.AddArgument(templateFileArg);
         command.AddArgument(susbcriptionIdArg);
         command.AddArgument(resourceGroupArg);
-        command.SetHandler(async (file, subscription, resourceGroup, options) =>
+        command.SetHandler((file, subscription, resourceGroup, options) =>
         {
-            await Estimate(file, subscription, resourceGroup, options);
+           // await Estimate(file, subscription, resourceGroup, options);
         },
             templateFileArg,
             susbcriptionIdArg,
@@ -70,7 +70,6 @@ public class Program
                 dryRunOption
             ));
 
-        return 0;
         return await command.InvokeAsync(args);
     }
 
