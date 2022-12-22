@@ -51,6 +51,10 @@ public class Program
         command.SetHandler(async (file, subscription, resourceGroup, options) =>
         {
             var exitCode = await Estimate(file, subscription, resourceGroup, options);
+            if(exitCode != 0)
+            {
+                throw new Exception();
+            }
         },
             templateFileArg,
             susbcriptionIdArg,
