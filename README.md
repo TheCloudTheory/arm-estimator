@@ -1,4 +1,4 @@
-# ACE (Azure Cost Estimator) ![](https://img.shields.io/github/v/release/thecloudtheory/arm-estimator?include_prereleases&style=flat-square)
+# ACE (Azure Cost Estimator) ![](https://img.shields.io/github/v/release/thecloudtheory/arm-estimator?include_prereleases&style=flat-square) ![](https://img.shields.io/github/actions/workflow/status/thecloudtheory/arm-estimator/tests-scheduled.yml?style=flat-square)
 ![arm-estimator-demo](docs/logo.png)
 Automated cost estimation of your Azure infrastructure made easy. Works with ARM Templates and Bicep.
 
