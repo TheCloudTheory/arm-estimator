@@ -818,6 +818,11 @@ internal class VirtualMachineQueryFilter : IQueryFilter
                 postfix = "series";
             }
 
+            if(familySku == "DCdsv3")
+            {
+                postfix += " Linux";
+            }
+
             if (os == "Windows")
             {
                 productName = $"{prefix}{familySku}{postfix} Windows";
