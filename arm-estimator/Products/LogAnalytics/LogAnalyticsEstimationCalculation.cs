@@ -1,4 +1,5 @@
 ﻿using Azure.Core;
+using System.Text.Json;
 
 internal class LogAnalyticsEstimationCalculation : BaseEstimation, IEstimationCalculation
 {
@@ -18,6 +19,14 @@ internal class LogAnalyticsEstimationCalculation : BaseEstimation, IEstimationCa
         var items = GetItems();
         var summary = new TotalCostSummary();
 
+        int? dailyQuota = null;
+        if (this.change.properties != null && this.change.properties.ContainsKey("workspaceCapping"))
+        {
+            var cappingProperties = ((JsonElement)this.change.properties["workspaceCapping"]).Deserialize<WorkspaceCapping>();
+            dailyQuota = cappingProperties?.DailyQuotaGB;
+        }
+        
+
         foreach (var item in items)
         {
             double? cost = 0;
@@ -25,6 +34,10 @@ internal class LogAnalyticsEstimationCalculation : BaseEstimation, IEstimationCa
             if (item.meterName == "Standard Instances")
             {
                 cost = item.retailPrice * 30;
+            }
+            else if (item.meterName == "Pay-as-you-go Data Ingestion" && dailyQuota != null)
+            {
+                cost = item.retailPrice * 30 * dailyQuota;
             }
             else
             {
