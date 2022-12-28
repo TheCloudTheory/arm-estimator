@@ -37,7 +37,8 @@ internal class LogAnalyticsEstimationCalculation : BaseEstimation, IEstimationCa
             }
             else if (item.meterName == "Pay-as-you-go Data Ingestion" && dailyQuota != null)
             {
-                cost = item.retailPrice * 30 * dailyQuota;
+                // Remember, that first 5GBs are free
+                cost = item.retailPrice * 30 * dailyQuota - (5 * item.retailPrice);
             }
             else
             {
