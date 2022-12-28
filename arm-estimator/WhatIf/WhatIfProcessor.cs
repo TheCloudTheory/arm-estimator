@@ -1,5 +1,6 @@
 ﻿using Azure.Core;
 using Microsoft.Extensions.Logging;
+using System.Collections.Concurrent;
 using System.Net;
 using System.Text;
 using System.Text.Json;
@@ -8,7 +9,7 @@ internal class WhatIfProcessor
 {
     private static readonly Lazy<HttpClient> httpClient = new(() => new HttpClient());
     private static readonly Dictionary<string, string> parentResourceToLocation = new();
-    private static readonly Dictionary<string, RetailAPIResponse> cachedResults = new();
+    private static readonly ConcurrentDictionary<string, RetailAPIResponse> cachedResults = new();
 
     private readonly ILogger logger;
     private readonly WhatIfChange[] changes;
@@ -513,7 +514,7 @@ internal class WhatIfProcessor
 
             if (data != null)
             {
-                cachedResults.Add(urlHash, data);
+                cachedResults.GetOrAdd(urlHash, data);
             }
         }
 
