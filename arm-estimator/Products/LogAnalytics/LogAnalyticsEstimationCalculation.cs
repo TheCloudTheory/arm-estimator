@@ -40,6 +40,12 @@ internal class LogAnalyticsEstimationCalculation : BaseEstimation, IEstimationCa
                 // Remember, that first 5GBs are free
                 cost = item.retailPrice * 30 * dailyQuota - (5 * item.retailPrice);
             }
+            else if (item.meterName == "Pay-as-you-go Data Ingestion" && dailyQuota == null)
+            {
+                // Remember, that first 5GBs are free
+                var baseCost = item.retailPrice * base.IncludeUsagePattern("Microsoft_OperationalInsights_workspaces_Paug_Data_Ingestion", usagePatterns, 1) - (5 * item.retailPrice);
+                cost = baseCost < 0 ? 0 : baseCost;
+            }
             else
             {
                 cost = item.retailPrice;
