@@ -818,7 +818,7 @@ internal class VirtualMachineQueryFilter : IQueryFilter
                 postfix = "series";
             }
 
-            if(familySku == "DCdsv3")
+            if(familySku == "DCdsv3" && os != "Windows")
             {
                 postfix += " Linux";
             }
