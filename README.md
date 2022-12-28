@@ -454,13 +454,35 @@ resource acr 'Microsoft.ContainerRegistry/registries@2021-09-01' = {
 > `Metadata` object in Azure Bicep was introduced quite recently - make sure you've updated Bicep CLI / Azure CLI to get support for it.
 
 Below table shows currently implemented support for usage patterns. Resources not listed are considered TBD:
-Service|Metric|Data type
-----|----|----
-ACR|Microsoft_ContainerRegistry_registries_Registry_Unit|Days
-ACR|Microsoft_ContainerRegistry_registries_Data_Stored|GB
-ACR|Microsoft_ContainerRegistry_registries_Task_vCPU_Duration|Second
+Service|Metric|Data type|Availability
+----|----|----|----
+ACR|Microsoft_ContainerRegistry_registries_Registry_Unit|Days|1.0
+ACR|Microsoft_ContainerRegistry_registries_Data_Stored|GB|1.0
+ACR|Microsoft_ContainerRegistry_registries_Task_vCPU_Duration|Second|1.0
+Log Analytics|Microsoft_OperationalInsights_workspaces_Paug_Data_Ingestion|GB|> 1.0
 
 Note, that usage patterns are applied for all resources of given type. For example, if you use `Microsoft_ContainerRegistry_registries_Task_vCPU_Duration` metric, its value will be applied to all Azure Container Registries defined within your template. This behavior will probably change in the future releases.
+
+If you search for additional details, check below sections for advanced use.
+
+**Log Analytics**
+
+While Log Analytics supports `Microsoft_OperationalInsights_workspaces_Paug_Data_Ingestion` usage pattern in ACE, you can achieve more granular usage calculation if you leverage `dailyQuotaGb` parameter:
+```
+resource la 'Microsoft.OperationalInsights/workspaces@2022-10-01' = {
+  name: 'infer-la-cost'
+  location: rgLocation
+  properties: {
+    sku: {
+      name: 'PerGB2018'
+    }
+    workspaceCapping: {
+      dailyQuotaGb: 5
+    }
+  }
+}
+```
+If `dailyQuotaGb` is defined, it overrides any value defined by `Microsoft_OperationalInsights_workspaces_Paug_Data_Ingestion` pattern.
 
 ## Known limitations
 As ACE reached first major release, most of the fundementals features are already available. However, the project is actively developed and new functions will be available with each new release. The main limitations as for now are:
