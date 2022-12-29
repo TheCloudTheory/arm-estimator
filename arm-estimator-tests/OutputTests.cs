@@ -26,9 +26,9 @@ namespace arm_estimator_tests
             });
 
             Assert.That(output, Is.Not.Null);
-            Assert.That(output.Resources.Count(), Is.EqualTo(2));
-            Assert.That(output.TotalResourceCount, Is.EqualTo(3));
-            Assert.That(output.EstimatedResourceCount, Is.EqualTo(2));
+            Assert.That(output.Resources.Count(), Is.EqualTo(1));
+            Assert.That(output.TotalResourceCount, Is.EqualTo(2));
+            Assert.That(output.EstimatedResourceCount, Is.EqualTo(1));
             Assert.That(output.SkippedResourceCount, Is.EqualTo(1));
         }
     }
