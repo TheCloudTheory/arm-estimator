@@ -816,6 +816,11 @@ internal class VirtualMachineQueryFilter : IQueryFilter
             if (familySku == "DCadsv5-" || familySku == "DCasv5-")
             {
                 postfix = "series";
+
+                if(os == "Linux")
+                {
+                    postfix = "series Linux";
+                }
             }
 
             if(familySku == "DCdsv3" && os != "Windows")
