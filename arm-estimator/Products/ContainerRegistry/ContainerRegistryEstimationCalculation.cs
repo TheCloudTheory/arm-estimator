@@ -32,7 +32,9 @@ internal class ContainerRegistryEstimationCalculation : BaseEstimation, IEstimat
             }
             else if (item.meterName == "Task vCPU Duration")
             {
-                cost += item.retailPrice * base.IncludeUsagePattern("Microsoft_ContainerRegistry_registries_Task_vCPU_Duration", usagePatterns);
+                // Remember, that first 100 minutes are free
+                var baseCost = item.retailPrice * base.IncludeUsagePattern("Microsoft_ContainerRegistry_registries_Task_vCPU_Duration", usagePatterns) - (item.retailPrice * 6000);
+                cost += baseCost < 0 ? 0 : baseCost;
             }
             else
             {
