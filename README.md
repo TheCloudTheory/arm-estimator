@@ -484,6 +484,10 @@ resource la 'Microsoft.OperationalInsights/workspaces@2022-10-01' = {
 ```
 If `dailyQuotaGb` is defined, it overrides any value defined by `Microsoft_OperationalInsights_workspaces_Paug_Data_Ingestion` pattern.
 
+**Azure Container Registry**
+
+As `Microsoft_ContainerRegistry_registries_Task_vCPU_Duration` first 100 minutes are free, when usage pattern for this metric is used, it'll incorporate the free tier. Thus anytime you define custom value for `Microsoft_ContainerRegistry_registries_Task_vCPU_Duration`, ACE will report no cost for it until you define more than 100 minutes of its use.
+
 ## Known limitations
 As ACE reached first major release, most of the fundementals features are already available. However, the project is actively developed and new functions will be available with each new release. The main limitations as for now are:
 * You can use the project only with a resource group as deployment scope
