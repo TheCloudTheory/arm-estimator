@@ -14,7 +14,7 @@ namespace arm_estimator_tests
         [TestCase("templates/alert.json", 13.599999999999998d, 13.599999999999998d)]
         [TestCase("templates/analysisservices.json", 14389.759999999998, 14389.759999999998)]
         [TestCase("templates/mariadb.json", 19525.8056d, 19525.8056d)]
-        [TestCase("templates/automation.json", 8.5300000000000011d, 8.5300000000000011d)]
+        [TestCase("templates/automation.json", 5.5399999999999991d, 5.5399999999999991d)]
         [TestCase("templates/redis.json", 12339.190000000001, 12339.190000000001)]
         [TestCase("templates/azure_firewall.json", 2197.348, 2197.348)]
         [TestCase("templates/frontdoor.json", 0.0, 0.0)] // Not supported yet

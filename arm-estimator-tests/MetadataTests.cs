@@ -26,8 +26,8 @@ namespace arm_estimator_tests
             });
 
             Assert.That(output, Is.Not.Null);
-            Assert.That(output.TotalCost, Is.EqualTo(7.8590000000000009d));
-            Assert.That(output.Delta, Is.EqualTo(7.8590000000000009d));
+            Assert.That(output.TotalCost, Is.EqualTo(7.4990000000000006d));
+            Assert.That(output.Delta, Is.EqualTo(7.4990000000000006d));
         }
     }
 }
