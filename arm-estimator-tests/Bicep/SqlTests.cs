@@ -15,6 +15,12 @@ namespace arm_estimator_tests.Bicep
         [TestCase("S7", 1177.4900000000002d)]
         [TestCase("S9", 2354.9800000000005d)]
         [TestCase("S12", 4415.5874999999996d)]
+        [TestCase("P1", 456.25d)]
+        [TestCase("P2", 912.50d)]
+        [TestCase("P4", 1825.00d)]
+        [TestCase("P6", 3650d)]
+        [TestCase("P11", 6868.3875000000007d)]
+        [TestCase("P15", 15698.893333333335d)]
         [Parallelizable(ParallelScope.All)]
         public async Task SQLDatabase_WhenGivenSkuIsProvided_ItShouldBeCorrectlyEstimated(string sku, double cost)
         {

@@ -77,10 +77,10 @@ PostgreSQL|Stable|Doesn't include `Hyperscale` being part of Cosmos DB
 Public IP Address|Stable|-
 Public IP Address Prefixes|Stable|-
 Redis|In development|Doesn't support Redis Enterprise
-Sentinel|In progress|Estimations doesn't include commitment tiers
+Sentinel|In development|Estimations doesn't include commitment tiers
 Service Bus|Stable|Doesn't support Hybrid Connections and WCF Relay
 SignalR|Stable|-
-SQL Database|In development|Supports only Databases (DTU model - Basic & Standard)
+SQL Database|Stable|-
 Storage Account|In development|Supports only StorageV2 (without File Service & Data Lake Storage)
 Stream Analytics|Stable|Stream Analytics on Edge requires separate estimation
 Time Series|Stable|-

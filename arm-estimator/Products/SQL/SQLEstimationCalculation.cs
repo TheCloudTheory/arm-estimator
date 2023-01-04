@@ -31,7 +31,13 @@ internal class SQLEstimationCalculation : BaseEstimation, IEstimationCalculation
                 item.meterName == "S2 DTUs" || 
                 item.meterName == "S3 DTUs" || 
                 item.meterName == "S4 DTUs" ||
-                item.meterName == "10 DTUs")
+                item.meterName == "10 DTUs" ||
+                item.meterName == "P1 DTU" ||
+                item.meterName == "P2 DTU" ||
+                item.meterName == "P4 DTU" ||
+                item.meterName == "P6 DTU" ||
+                item.meterName == "P11 DTU" ||
+                item.meterName == "P15 DTU")
             {
                 cost = item.retailPrice * (730 / 24d);
             }
