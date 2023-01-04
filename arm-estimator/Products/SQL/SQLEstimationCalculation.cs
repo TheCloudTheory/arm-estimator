@@ -26,25 +26,14 @@ internal class SQLEstimationCalculation : BaseEstimation, IEstimationCalculation
             {
                 cost = item.retailPrice * 30;
             }
-            else if (item.meterName == " S0 DTUs")
+            else if (item.meterName == "S0 DTUs" || 
+                item.meterName == "S1 DTUs" || 
+                item.meterName == "S2 DTUs" || 
+                item.meterName == "S3 DTUs" || 
+                item.meterName == "S4 DTUs" ||
+                item.meterName == "10 DTUs")
             {
-                cost = item.retailPrice * 30;
-            }
-            else if (item.meterName == "S1 DTUs")
-            {
-                cost = item.retailPrice * 30;
-            }
-            else if (item.meterName == "S2 DTUs")
-            {
-                cost = item.retailPrice * 30;
-            }
-            else if (item.meterName == "S3 DTUs")
-            {
-                cost = item.retailPrice * 30;
-            }
-            else if (item.meterName == "10 DTU")
-            {
-                cost =  item.retailPrice * 30;
+                cost = item.retailPrice * (730 / 24d);
             }
             else
             {
