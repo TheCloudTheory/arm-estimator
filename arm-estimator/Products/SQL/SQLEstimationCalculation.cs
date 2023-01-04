@@ -2,6 +2,8 @@
 
 internal class SQLEstimationCalculation : BaseEstimation, IEstimationCalculation
 {
+    private const double HybridBenefitCost = 145.95d;
+
     public SQLEstimationCalculation(RetailItem[] items, ResourceIdentifier id, WhatIfAfterBeforeChange change)
         : base(items, id, change)
     {
@@ -40,6 +42,10 @@ internal class SQLEstimationCalculation : BaseEstimation, IEstimationCalculation
                 item.meterName == "P15 DTU")
             {
                 cost = item.retailPrice * (730 / 24d);
+            }
+            else if (item.meterName == "vCore")
+            {
+                cost = item.retailPrice * HoursInMonth + (HybridBenefitCost * SQLQueryFilter.GetNumberOfCoresBasedOnSku(this.change.sku!.name!) / 2);
             }
             else
             {

@@ -109,6 +109,9 @@
     <None Update="templates\bicep\securestring.bicep">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="templates\bicep\sql\sqldatabase-vcore.bicep">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="templates\bicep\sql\sqldatabase.bicep">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

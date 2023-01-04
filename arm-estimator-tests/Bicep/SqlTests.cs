@@ -52,5 +52,52 @@ namespace arm_estimator_tests.Bicep
             Assert.That(output.TotalCost, Is.EqualTo(cost));
             Assert.That(output.TotalResourceCount, Is.EqualTo(2));
         }
+
+        [Test]
+        [TestCase("GP_Gen5_2", 390.41093999999998d)]
+        [TestCase("GP_Gen5_4", 780.82187999999996d)]
+        [TestCase("GP_Gen5_6", 1171.2328199999999d)]
+        [TestCase("GP_Gen5_8", 1561.6437599999999d)]
+        [TestCase("GP_Gen5_10", 1952.0547000000001d)]
+        [TestCase("GP_Gen5_12", 2342.4656399999999d)]
+        [TestCase("GP_Gen5_14", 2732.8765799999996d)]
+        [TestCase("GP_Gen5_16", 3123.2875199999999d)]
+        [TestCase("GP_Gen5_18", 3513.6984599999996d)]
+        [TestCase("GP_Gen5_20", 3904.1094000000003d)]
+        [TestCase("GP_Gen5_24", 4684.9312799999998d)]
+        [TestCase("GP_Gen5_32", 6246.5750399999997d)]
+        [TestCase("GP_Gen5_40", 7808.2188000000006d)]
+        [TestCase("GP_Gen5_80", 15616.437600000001d)]
+        [Parallelizable(ParallelScope.All)]
+        public async Task SQLDatabase_WhenGivenVCoreIsProvided_ItShouldBeCorrectlyEstimated(string sku, double cost)
+        {
+            var outputFilename = $"ace_test_{DateTime.Now.Ticks}";
+            var exitCode = await Program.Main(new[] {
+                "templates/bicep/sql/sqldatabase-vcore.bicep",
+                "cf70b558-b930-45e4-9048-ebcefb926adf",
+                "arm-estimator-tests-rg",
+                "--generateJsonOutput",
+                "--jsonOutputFilename",
+                outputFilename,
+                "--inline",
+                $"serverName=svr{DateTime.Now.Ticks}",
+                "--inline",
+                $"dbName=db{DateTime.Now.Ticks}",
+                "--inline",
+                $"dbSku={sku}"
+            });
+
+            Assert.That(exitCode, Is.EqualTo(0));
+
+            var outputFile = File.ReadAllText($"{outputFilename}.json");
+            var output = JsonSerializer.Deserialize<EstimationOutput>(outputFile, new JsonSerializerOptions()
+            {
+                PropertyNameCaseInsensitive = true
+            });
+
+            Assert.That(output, Is.Not.Null);
+            Assert.That(output.TotalCost, Is.EqualTo(cost));
+            Assert.That(output.TotalResourceCount, Is.EqualTo(2));
+        }
     }
 }
