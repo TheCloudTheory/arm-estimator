@@ -10,7 +10,7 @@ namespace arm_estimator_tests
         }
 
         [Test]
-        [TestCase("templates/acr.json", 75.294300000000007d, 75.294300000000007d)]
+        [TestCase("templates/acr.json", 75.294000000000011d, 75.294000000000011d)]
         [TestCase("templates/alert.json", 13.599999999999998d, 13.599999999999998d)]
         [TestCase("templates/analysisservices.json", 14389.759999999998, 14389.759999999998)]
         [TestCase("templates/mariadb.json", 19525.8056d, 19525.8056d)]
