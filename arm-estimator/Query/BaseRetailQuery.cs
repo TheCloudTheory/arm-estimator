@@ -7,6 +7,7 @@ internal abstract class BaseRetailQuery
     protected readonly ResourceIdentifier id;
     protected readonly ILogger logger;
     protected readonly string baseQuery;
+    protected readonly CurrencyCode currency;
 
     public BaseRetailQuery(WhatIfChange change, ResourceIdentifier id, ILogger logger, CurrencyCode currency)
     {
@@ -14,6 +15,7 @@ internal abstract class BaseRetailQuery
         this.id = id;
         this.logger = logger;
         this.baseQuery = $"https://prices.azure.com/api/retail/prices?currencyCode='{currency}'&$filter=priceType eq 'Consumption' and ";
+        this.currency = currency;
     }
 
     public string? GetLocation()

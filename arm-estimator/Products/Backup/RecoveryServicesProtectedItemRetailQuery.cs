@@ -8,6 +8,11 @@ internal class RecoveryServicesProtectedItemRetailQuery : BaseRetailQuery, IReta
     {
     }
 
+    public RetailAPIResponse? GetFakeResponse()
+    {
+        throw new NotImplementedException();
+    }
+
     public string? GetQueryUrl(string location)
     {
         if (this.change.after == null && this.change.before == null)

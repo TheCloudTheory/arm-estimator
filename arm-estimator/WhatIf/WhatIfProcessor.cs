@@ -191,7 +191,7 @@ internal class WhatIfProcessor
                     resource = ReportResourceWithoutCost(id, change.changeType);
                     break;
                 case "Microsoft.Network/virtualNetworks":
-                    resource = ReportResourceWithoutCost(id, change.changeType);
+                    resource = await Calculate<VNetRetailQuery, VNetEstimationCalculation>(change, id, true);
                     break;
                 case "Microsoft.RecoveryServices/vaults/backupPolicies":
                     resource = ReportResourceWithoutCost(id, change.changeType);
@@ -369,11 +369,14 @@ internal class WhatIfProcessor
         }
     }
 
-    private async Task<EstimatedResourceData?> Calculate<TQuery, TCalculation>(WhatIfChange change, ResourceIdentifier id)
+    private async Task<EstimatedResourceData?> Calculate<TQuery, TCalculation>(WhatIfChange change, ResourceIdentifier id, bool? useFakeApiResponse = null)
         where TQuery : BaseRetailQuery, IRetailQuery
         where TCalculation : BaseEstimation, IEstimationCalculation
     {
-        var data = await GetRetailAPIResponse<TQuery>(change, id);
+        var data = useFakeApiResponse == null || useFakeApiResponse.Value == false ? 
+            await GetRetailAPIResponse<TQuery>(change, id) :
+            GetFakeRetailAPIResponse<TQuery>(change, id);
+
         if (data == null || data.Items == null)
         {
             this.logger.LogWarning("Got no records for {type} from Retail API", id.ResourceType);
@@ -519,6 +522,17 @@ internal class WhatIfProcessor
         }
 
         return data;
+    }
+
+    private RetailAPIResponse? GetFakeRetailAPIResponse<T>(WhatIfChange change, ResourceIdentifier id) where T : BaseRetailQuery, IRetailQuery
+    {
+        if (Activator.CreateInstance(typeof(T), new object[] { change, id, logger, this.currency }) is not T query)
+        {
+            this.logger.LogError("Couldn't create an instance of {type}.", typeof(T));
+            return null;
+        }
+
+        return query.GetFakeResponse();
     }
 
     private string FindParentId(ResourceIdentifier id)
