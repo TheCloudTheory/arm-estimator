@@ -21,7 +21,19 @@ internal class VNetEstimationCalculation : BaseEstimation, IEstimationCalculatio
         foreach(var item in items)
         {
             double? cost = 0;
-            cost += item.retailPrice;
+
+            if (item.meterName == "Inbound data transfer")
+            {
+                cost = item.retailPrice * base.IncludeUsagePattern("Microsoft_Network_virtualNetworks_Inbound_data_transfer", usagePatterns);
+            }
+            else if (item.meterName == "Outbound data transfer")
+            {
+                cost = item.retailPrice * base.IncludeUsagePattern("Microsoft_Network_virtualNetworks_Outbound_data_transfer", usagePatterns);
+            }
+            else
+            {
+                cost += item.retailPrice;
+            }      
 
             estimatedCost += cost;
 
