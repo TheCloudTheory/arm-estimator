@@ -8,6 +8,11 @@ internal class AppConfigurationRetailQuery : BaseRetailQuery, IRetailQuery
     {
     }
 
+    public RetailAPIResponse? GetFakeResponse()
+    {
+        throw new NotImplementedException();
+    }
+
     public string? GetQueryUrl(string location)
     {
         if (this.change.after == null && this.change.before == null)
