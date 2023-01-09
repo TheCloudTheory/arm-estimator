@@ -823,7 +823,7 @@ internal class VirtualMachineQueryFilter : IQueryFilter
                 }
             }
 
-            if(familySku == "DCdsv3" && os != "Windows")
+            if((familySku == "DCdsv3" || familySku == "DCsv3") && os != "Windows")
             {
                 postfix += " Linux";
             }
