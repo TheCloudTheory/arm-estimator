@@ -3,8 +3,12 @@ using Microsoft.Extensions.Logging;
 
 internal class AKSRetailQuery : BaseRetailQuery, IRetailQuery
 {
-    public AKSRetailQuery(WhatIfChange change, ResourceIdentifier id, ILogger logger, CurrencyCode currency)
-        : base(change, id, logger, currency)
+    public AKSRetailQuery(WhatIfChange change,
+                          ResourceIdentifier id,
+                          ILogger logger,
+                          CurrencyCode currency, 
+                          WhatIfChange[] changes)
+        : base(change, id, logger, currency, changes)
     {
     }
 

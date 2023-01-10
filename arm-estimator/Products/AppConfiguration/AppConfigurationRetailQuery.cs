@@ -3,8 +3,7 @@ using Microsoft.Extensions.Logging;
 
 internal class AppConfigurationRetailQuery : BaseRetailQuery, IRetailQuery
 {
-    public AppConfigurationRetailQuery(WhatIfChange change, ResourceIdentifier id, ILogger logger, CurrencyCode currency)
-        : base(change, id, logger, currency)
+    public AppConfigurationRetailQuery(WhatIfChange change, ResourceIdentifier id, ILogger logger, CurrencyCode currency, WhatIfChange[] changes) : base(change, id, logger, currency, changes)
     {
     }
 

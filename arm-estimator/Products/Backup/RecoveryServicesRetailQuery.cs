@@ -3,8 +3,12 @@ using Microsoft.Extensions.Logging;
 
 internal class RecoveryServicesRetailQuery : BaseRetailQuery, IRetailQuery
 {
-    public RecoveryServicesRetailQuery(WhatIfChange change, ResourceIdentifier id, ILogger logger, CurrencyCode currency)
-        : base(change, id, logger, currency)
+    public RecoveryServicesRetailQuery(WhatIfChange change,
+                                       ResourceIdentifier id,
+                                       ILogger logger,
+                                       CurrencyCode currency,
+                                       WhatIfChange[] changes)
+        : base(change, id, logger, currency, changes)
     {
     }
 
@@ -28,7 +32,7 @@ internal class RecoveryServicesRetailQuery : BaseRetailQuery, IRetailQuery
             return null;
         }
 
-        var filter = new RecoveryServicesQueryFilter(change, this.logger).GetFiltersBasedOnDesiredState(location);
+        var filter = new RecoveryServicesQueryFilter(change, this.logger, this.changes, this.id).GetFiltersBasedOnDesiredState(location);
         return $"{baseQuery}{filter}";
     }
 }

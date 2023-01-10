@@ -3,8 +3,7 @@ using Microsoft.Extensions.Logging;
 
 internal class HealthBotServiceRetailQuery : BaseRetailQuery, IRetailQuery
 {
-    public HealthBotServiceRetailQuery(WhatIfChange change, ResourceIdentifier id, ILogger logger, CurrencyCode currency)
-        : base(change, id, logger, currency)
+    public HealthBotServiceRetailQuery(WhatIfChange change, ResourceIdentifier id, ILogger logger, CurrencyCode currency, WhatIfChange[] changes) : base(change, id, logger, currency, changes)
     {
     }
 
