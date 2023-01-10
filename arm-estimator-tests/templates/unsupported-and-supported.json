@@ -12,7 +12,7 @@
     {
       "type": "Microsoft.ContainerRegistry/registries",
       "apiVersion": "2021-09-01",
-      "name": "metadataacr",
+      "name": "metadataacr2",
       "location": "[resourceGroup().location]",
       "sku": {
         "name": "Basic"
