@@ -26,6 +26,13 @@ internal class RecoveryServicesEstimationCalculation : BaseEstimation, IEstimati
             {
                 cost = item.retailPrice * 30;
             }
+            else if (item.meterName == "LRS Data Stored" ||
+                item.meterName == "ZRS Data Stored" ||
+                item.meterName == "GRS Data Stored" ||
+                item.meterName == "RA-GRS Data Stored")
+            {
+                cost = item.retailPrice * base.IncludeUsagePattern("Microsoft_RecoveryServices_vaults_Data_Stored", usagePatterns);
+            }
             else
             {
                 cost = item.retailPrice;

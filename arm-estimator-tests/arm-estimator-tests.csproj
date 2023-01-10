@@ -124,6 +124,9 @@
     <None Update="templates\bicep\usagePatterns\acr.bicep">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="templates\bicep\usagePatterns\backup.bicep">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="templates\bicep\usagePatterns\loganalytics.bicep">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
