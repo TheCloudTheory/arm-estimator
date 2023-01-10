@@ -3,8 +3,7 @@ using Microsoft.Extensions.Logging;
 
 internal class PublicIPRetailQuery : BaseRetailQuery, IRetailQuery
 {
-    public PublicIPRetailQuery(WhatIfChange change, ResourceIdentifier id, ILogger logger, CurrencyCode currency)
-        : base(change, id, logger, currency)
+    public PublicIPRetailQuery(WhatIfChange change, ResourceIdentifier id, ILogger logger, CurrencyCode currency, WhatIfChange[] changes) : base(change, id, logger, currency, changes)
     {
     }
 

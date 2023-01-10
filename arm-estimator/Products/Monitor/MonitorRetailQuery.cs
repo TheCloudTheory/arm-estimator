@@ -3,8 +3,7 @@ using Microsoft.Extensions.Logging;
 
 internal class MonitorRetailQuery : BaseRetailQuery, IRetailQuery
 {
-    public MonitorRetailQuery(WhatIfChange change, ResourceIdentifier id, ILogger logger, CurrencyCode currency)
-        : base(change, id, logger, currency)
+    public MonitorRetailQuery(WhatIfChange change, ResourceIdentifier id, ILogger logger, CurrencyCode currency, WhatIfChange[] changes) : base(change, id, logger, currency, changes)
     {
     }
 

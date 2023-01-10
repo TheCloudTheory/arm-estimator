@@ -3,8 +3,7 @@ using Microsoft.Extensions.Logging;
 
 internal class ServiceBusRetailQuery : BaseRetailQuery, IRetailQuery
 {
-    public ServiceBusRetailQuery(WhatIfChange change, ResourceIdentifier id, ILogger logger, CurrencyCode currency)
-        : base(change, id, logger, currency)
+    public ServiceBusRetailQuery(WhatIfChange change, ResourceIdentifier id, ILogger logger, CurrencyCode currency, WhatIfChange[] changes) : base(change, id, logger, currency, changes)
     {
     }
 

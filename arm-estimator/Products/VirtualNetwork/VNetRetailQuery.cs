@@ -4,8 +4,12 @@ using System.Text.Json;
 
 internal class VNetRetailQuery : BaseRetailQuery, IRetailQuery
 {
-    public VNetRetailQuery(WhatIfChange change, ResourceIdentifier id, ILogger logger, CurrencyCode currency)
-        : base(change, id, logger, currency)
+    public VNetRetailQuery(WhatIfChange change,
+                           ResourceIdentifier id,
+                           ILogger logger,
+                           CurrencyCode currency,
+                           WhatIfChange[] changes)
+        : base(change, id, logger, currency, changes)
     {
     }
 

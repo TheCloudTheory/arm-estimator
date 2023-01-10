@@ -3,8 +3,11 @@ using Microsoft.Extensions.Logging;
 
 internal class VmssRetailQuery : BaseRetailQuery, IRetailQuery
 {
-    public VmssRetailQuery(WhatIfChange change, ResourceIdentifier id, ILogger logger, CurrencyCode currency)
-        : base(change, id, logger, currency)
+    public VmssRetailQuery(WhatIfChange change,
+                           ResourceIdentifier id,
+                           ILogger logger,
+                           CurrencyCode currency, WhatIfChange[] changes)
+        : base(change, id, logger, currency, changes)
     {
     }
 

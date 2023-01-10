@@ -94,6 +94,9 @@
     <None Update="templates\bicep\availability-set.bicep">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="templates\bicep\backup\backup-redundancy.bicep">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="templates\bicep\infer-log-analytics-cost.bicep">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

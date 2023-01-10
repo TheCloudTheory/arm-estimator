@@ -220,6 +220,9 @@ internal class WhatIfProcessor
                 case "Microsoft.RecoveryServices/vaults/replicationPolicies":
                     resource = ReportResourceWithoutCost(id, change.changeType);
                     break;
+                case "Microsoft.RecoveryServices/vaults/backupstorageconfig":
+                    resource = ReportResourceWithoutCost(id, change.changeType);
+                    break;
                 case "Microsoft.Insights/metricAlerts":
                     resource = await Calculate<MonitorRetailQuery, MonitorEstimationCalculation>(change, id);
                     break;
@@ -446,7 +449,7 @@ internal class WhatIfProcessor
             }
         }
 
-        if (Activator.CreateInstance(typeof(T), new object[] { change, id, logger, this.currency }) is not T query)
+        if (Activator.CreateInstance(typeof(T), new object[] { change, id, logger, this.currency, this.changes }) is not T query)
         {
             this.logger.LogError("Couldn't create an instance of {type}.", typeof(T));
             return null;
@@ -526,7 +529,7 @@ internal class WhatIfProcessor
 
     private RetailAPIResponse? GetFakeRetailAPIResponse<T>(WhatIfChange change, ResourceIdentifier id) where T : BaseRetailQuery, IRetailQuery
     {
-        if (Activator.CreateInstance(typeof(T), new object[] { change, id, logger, this.currency }) is not T query)
+        if (Activator.CreateInstance(typeof(T), new object[] { change, id, logger, this.currency, this.changes }) is not T query)
         {
             this.logger.LogError("Couldn't create an instance of {type}.", typeof(T));
             return null;
