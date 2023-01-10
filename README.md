@@ -53,7 +53,7 @@ Automation Account|Stable|Supports Process Automation only
 Azure App Service|In development|Supports Azure App Service Plans (without Isolated tiers) and Azure Functions (Consumption / Premium / App Service Plan)
 Azure Firewall|Stable|-
 Availability Set|Stable|-
-Backup|In Progress|Supports SQL Server in Azure VM, Azure VM, Azure Files, SAP HANA on Azure VM. Supports GRS backup replication only
+Backup|Stable|-
 Bastion|Stable|-
 Bot Service|Stable|-
 Chaos Studio|Stable|-
