@@ -22,6 +22,11 @@ namespace ACE.Compilation
                 return new BicepCompiler(this.logger);
             }
 
+            if(this.templateFile.Extension == ".tf")
+            {
+                return new TerraformCompiler();
+            }
+
             return new ArmTemplateCompiler();
         }
 
