@@ -241,6 +241,12 @@
     <None Update="templates\template_with_params.parameters.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="templates\terraform\main.tf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="templates\terraform\rg-vnet.tfplan">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="templates\timeseries.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
