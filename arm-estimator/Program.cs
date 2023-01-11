@@ -1,8 +1,7 @@
-﻿using Azure.Core;
+﻿using ACE.Compilation;
+using Azure.Core;
 using Microsoft.Extensions.Logging;
 using System.CommandLine;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.RegularExpressions;
@@ -90,7 +89,6 @@ public class Program
             DisplayWelcomeScreen(logger);
             DisplayUsedSettings(templateFile, subscriptionId, resourceGroupName, logger, options);
 
-
             var template = GetTemplate(templateFile, logger);
             if (template == null)
             {
@@ -171,71 +169,8 @@ public class Program
 
     private static string? GetTemplate(FileInfo templateFile, ILogger<Program> logger)
     {
-        string? template = null;
-        if (templateFile.Extension == ".bicep")
-        {
-            try
-            {
-                logger.AddEstimatorMessage("Attempting to compile Bicep file using Bicep CLI.");
-                CompileBicepWith("bicep", $"build {templateFile} --stdout", logger, out template);
-            }
-            catch (Win32Exception)
-            {
-                // First compilation may not work if Bicep CLI is not installed directly,
-                // try to use Azure CLI instead
-                logger.AddEstimatorMessage("Compilation failed, attempting to compile Bicep file using Azure CLI.");
-                CompileBicepWith("az", $"bicep build --file {templateFile} --stdout", logger, out template);
-            }
-        }
-        else
-        {
-            template = Regex.Replace(File.ReadAllText(templateFile.FullName), @"\s+", string.Empty);  // Make JSON a single-line value
-        }
-
-        return template;
-    }
-
-    private static void CompileBicepWith(string fileName, string arguments, ILogger logger, out string? template)
-    {
-        using (var process = new Process())
-        {
-            process.StartInfo.FileName = fileName;
-            process.StartInfo.UseShellExecute = false;
-            process.StartInfo.CreateNoWindow = false;
-            process.StartInfo.Arguments = arguments;
-            process.StartInfo.RedirectStandardOutput = true;
-            process.StartInfo.RedirectStandardError = true;
-
-            string? error = null;
-            process.ErrorDataReceived += new DataReceivedEventHandler((sender, e) => { error += e.Data; });
-
-            process.Start();
-            process.BeginErrorReadLine();
-            template = process.StandardOutput.ReadToEnd();
-            process.WaitForExit();
-
-            if (string.IsNullOrWhiteSpace(template))
-            {
-                logger.LogError("{error}", error);
-                template = null;
-
-                return;
-            }
-            else
-            {
-                if (string.IsNullOrWhiteSpace(error) == false)
-                {
-                    // Bicep returns warnings as errors, so if a template is generated,
-                    // that most likely the case and we need to handle it
-                    logger.LogWarning("{warning}", error);
-                }
-            }
-
-            logger.AddEstimatorMessage("Compilation completed!");
-            logger.LogInformation("");
-            logger.LogInformation("------------------------------");
-            logger.LogInformation("");
-        }
+        var compiler = new TemplateCompiler(templateFile, logger);
+        return compiler.Compile();
     }
 
     private static void GenerateOutputIfNeeded(EstimateOptions options, EstimationOutput output, ILogger<Program> logger)
