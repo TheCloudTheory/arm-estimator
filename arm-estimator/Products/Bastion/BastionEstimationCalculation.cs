@@ -1,8 +1,9 @@
-﻿using Azure.Core;
+﻿using ACE.WhatIf;
+using Azure.Core;
 
 internal class BastionEstimationCalculation : BaseEstimation, IEstimationCalculation
 {
-    public BastionEstimationCalculation(RetailItem[] items, ResourceIdentifier id, WhatIfAfterBeforeChange change)
+    public BastionEstimationCalculation(RetailItem[] items, CommonResourceIdentifier id, WhatIfAfterBeforeChange change)
         : base(items, id, change)
     {
     }

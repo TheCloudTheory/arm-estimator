@@ -1,17 +1,17 @@
-﻿using Azure.Core;
+﻿using ACE.WhatIf;
 using Microsoft.Extensions.Logging;
 
 internal abstract class BaseRetailQuery
 {
     protected readonly WhatIfChange change;
-    protected readonly ResourceIdentifier id;
+    protected readonly CommonResourceIdentifier id;
     protected readonly ILogger logger;
     protected readonly string baseQuery;
     protected readonly CurrencyCode currency;
     protected readonly WhatIfChange[] changes;
 
     public BaseRetailQuery(WhatIfChange change,
-                           ResourceIdentifier id,
+                           CommonResourceIdentifier id,
                            ILogger logger,
                            CurrencyCode currency,
                            WhatIfChange[] changes)
@@ -26,7 +26,7 @@ internal abstract class BaseRetailQuery
 
     public string? GetLocation()
     {
-        var location = this.id.Location == null ? this.id?.Parent?.Location : this.id.Location;
+        var location = this.id.GetLocation() ?? (this.id?.GetParent()?.GetLocation());
         return location;
     }
 }

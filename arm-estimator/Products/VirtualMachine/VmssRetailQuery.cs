@@ -1,10 +1,11 @@
-﻿using Azure.Core;
+﻿using ACE.WhatIf;
+using Azure.Core;
 using Microsoft.Extensions.Logging;
 
 internal class VmssRetailQuery : BaseRetailQuery, IRetailQuery
 {
     public VmssRetailQuery(WhatIfChange change,
-                           ResourceIdentifier id,
+                           CommonResourceIdentifier id,
                            ILogger logger,
                            CurrencyCode currency, WhatIfChange[] changes)
         : base(change, id, logger, currency, changes)

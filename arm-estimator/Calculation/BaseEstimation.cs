@@ -1,13 +1,13 @@
-﻿using Azure.Core;
+﻿using ACE.WhatIf;
 
 internal abstract class BaseEstimation
 {
     internal static readonly int HoursInMonth = 730;
     internal readonly RetailItem[] items;
-    internal readonly ResourceIdentifier id;
+    internal readonly CommonResourceIdentifier id;
     internal readonly WhatIfAfterBeforeChange change;
 
-    public BaseEstimation(RetailItem[] items, ResourceIdentifier id, WhatIfAfterBeforeChange change)
+    public BaseEstimation(RetailItem[] items, CommonResourceIdentifier id, WhatIfAfterBeforeChange change)
     {
         this.items = items;
         this.id = id;

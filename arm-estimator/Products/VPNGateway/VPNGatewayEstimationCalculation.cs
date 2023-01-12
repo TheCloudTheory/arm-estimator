@@ -1,8 +1,9 @@
-﻿using Azure.Core;
+﻿using ACE.WhatIf;
+using Azure.Core;
 
 internal class VPNGatewayEstimationCalculation : BaseEstimation, IEstimationCalculation
 {
-    public VPNGatewayEstimationCalculation(RetailItem[] items, ResourceIdentifier id, WhatIfAfterBeforeChange change)
+    public VPNGatewayEstimationCalculation(RetailItem[] items, CommonResourceIdentifier id, WhatIfAfterBeforeChange change)
         : base(items, id, change)
     {
     }

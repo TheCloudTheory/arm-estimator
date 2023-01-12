@@ -18,7 +18,7 @@ internal class ContainerRegistryQueryFilter : IQueryFilter
         var sku = this.afterState.sku?.name;
         if (sku == null)
         {
-            this.logger.LogError("Can't create a filter for Storage Account when SKU is unavailable.");
+            this.logger.LogError("Can't create a filter for Container Registry when SKU is unavailable.");
             return null;
         }
 

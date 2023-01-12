@@ -1,8 +1,9 @@
-﻿using Azure.Core;
+﻿using ACE.WhatIf;
+using Azure.Core;
 
 internal class ChaosEstimationCalculation : BaseEstimation, IEstimationCalculation
 {
-    public ChaosEstimationCalculation(RetailItem[] items, ResourceIdentifier id, WhatIfAfterBeforeChange change)
+    public ChaosEstimationCalculation(RetailItem[] items, CommonResourceIdentifier id, WhatIfAfterBeforeChange change)
         : base(items, id, change)
     {
     }

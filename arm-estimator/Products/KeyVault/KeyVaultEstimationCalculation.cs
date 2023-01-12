@@ -1,8 +1,9 @@
-﻿using Azure.Core;
+﻿using ACE.WhatIf;
+using Azure.Core;
 
 internal class KeyVaultEstimationCalculation : BaseEstimation, IEstimationCalculation
 {
-    public KeyVaultEstimationCalculation(RetailItem[] items, ResourceIdentifier id, WhatIfAfterBeforeChange change)
+    public KeyVaultEstimationCalculation(RetailItem[] items, CommonResourceIdentifier id, WhatIfAfterBeforeChange change)
         : base(items, id, change)
     {
     }

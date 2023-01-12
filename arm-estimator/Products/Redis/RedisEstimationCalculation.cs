@@ -1,9 +1,10 @@
-﻿using Azure.Core;
+﻿using ACE.WhatIf;
+using Azure.Core;
 using System.Text.Json;
 
 internal class RedisEstimationCalculation : BaseEstimation, IEstimationCalculation
 {
-    public RedisEstimationCalculation(RetailItem[] items, ResourceIdentifier id, WhatIfAfterBeforeChange change)
+    public RedisEstimationCalculation(RetailItem[] items, CommonResourceIdentifier id, WhatIfAfterBeforeChange change)
         : base(items, id, change)
     {
     }

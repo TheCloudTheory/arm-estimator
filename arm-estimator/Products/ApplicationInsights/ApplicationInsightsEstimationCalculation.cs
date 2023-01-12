@@ -1,8 +1,9 @@
-﻿using Azure.Core;
+﻿using ACE.WhatIf;
+using Azure.Core;
 
 internal class ApplicationInsightsEstimationCalculation : BaseEstimation, IEstimationCalculation
 {
-    public ApplicationInsightsEstimationCalculation(RetailItem[] items, ResourceIdentifier id, WhatIfAfterBeforeChange change)
+    public ApplicationInsightsEstimationCalculation(RetailItem[] items, CommonResourceIdentifier id, WhatIfAfterBeforeChange change)
         : base(items, id, change)
     {
     }

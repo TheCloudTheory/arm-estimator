@@ -1,4 +1,5 @@
-﻿using Azure.Core;
+﻿using ACE.WhatIf;
+using Azure.Core;
 using Microsoft.Extensions.Logging;
 using System.Collections.Concurrent;
 using System.Net;
@@ -35,7 +36,7 @@ internal class WhatIfProcessor
         this.logger.LogInformation("");
 
         var resources = new List<EstimatedResourceData>();
-        var unsupportedResources = new List<ResourceIdentifier>();
+        var unsupportedResources = new List<CommonResourceIdentifier>();
 
         foreach (WhatIfChange change in this.changes)
         {
@@ -51,9 +52,9 @@ internal class WhatIfProcessor
                 continue;
             }
 
-            var id = new ResourceIdentifier(change.resourceId);
+            var id = new CommonResourceIdentifier(change.resourceId);
             EstimatedResourceData? resource = null;
-            switch (id?.ResourceType)
+            switch (id?.GetResourceType())
             {
                 case "Microsoft.Storage/storageAccounts":
                     resource = await Calculate<StorageAccountRetailQuery, StorageAccountEstimationCalculation>(change, id);
@@ -305,7 +306,7 @@ internal class WhatIfProcessor
                     resource = ReportResourceWithoutCost(id, change.changeType);
                     break;
                 default:
-                    if(id?.Name != null)
+                    if(id?.GetName() != null)
                     {
                         unsupportedResources.Add(id);
                     }
@@ -364,15 +365,15 @@ internal class WhatIfProcessor
         return new EstimationOutput(totalCost, delta, resources, currency, this.changes.Length, unsupportedResources.Count);
     }
 
-    private void ReportUnsupportedResources(List<ResourceIdentifier> unsupportedResources)
+    private void ReportUnsupportedResources(List<CommonResourceIdentifier> unsupportedResources)
     {
         foreach(var resource in unsupportedResources)
         {
-            this.logger.AddEstimatorMessage("{0} [{1}]", resource.Name, resource.ResourceType);
+            this.logger.AddEstimatorMessage("{0} [{1}]", resource.GetName(), resource.GetResourceType());
         }
     }
 
-    private async Task<EstimatedResourceData?> Calculate<TQuery, TCalculation>(WhatIfChange change, ResourceIdentifier id, bool? useFakeApiResponse = null)
+    private async Task<EstimatedResourceData?> Calculate<TQuery, TCalculation>(WhatIfChange change, CommonResourceIdentifier id, bool? useFakeApiResponse = null)
         where TQuery : BaseRetailQuery, IRetailQuery
         where TCalculation : BaseEstimation, IEstimationCalculation
     {
@@ -382,7 +383,7 @@ internal class WhatIfProcessor
 
         if (data == null || data.Items == null)
         {
-            this.logger.LogWarning("Got no records for {type} from Retail API", id.ResourceType);
+            this.logger.LogWarning("Got no records for {type} from Retail API", id.GetResourceType());
             this.logger.LogInformation("");
 
             return null;
@@ -427,7 +428,7 @@ internal class WhatIfProcessor
         return new EstimatedResourceData(summary.TotalCost, delta, id);
     }
 
-    private async Task<RetailAPIResponse?> GetRetailAPIResponse<T>(WhatIfChange change, ResourceIdentifier id) where T : BaseRetailQuery, IRetailQuery
+    private async Task<RetailAPIResponse?> GetRetailAPIResponse<T>(WhatIfChange change, CommonResourceIdentifier id) where T : BaseRetailQuery, IRetailQuery
     {
         var desiredState = change.after ?? change.before;
         if (desiredState == null || change.resourceId == null)
@@ -474,7 +475,7 @@ internal class WhatIfProcessor
         }
         catch(KeyNotFoundException)
         {
-            this.logger.LogWarning("{name} ({type}) [SKU is not yet supported - {sku}]", id.Name, id.ResourceType, desiredState.sku?.name);
+            this.logger.LogWarning("{name} ({type}) [SKU is not yet supported - {sku}]", id.GetName(), id.GetResourceType(), desiredState.sku?.name);
             return null;
         }
 
@@ -482,7 +483,7 @@ internal class WhatIfProcessor
         var data = await TryGetCachedResultForUrl(url);
         if (data == null || data.Items == null)
         {
-            this.logger.LogWarning("Data for {resourceType} is not available.", id.ResourceType);
+            this.logger.LogWarning("Data for {resourceType} is not available.", id.GetResourceType());
             return null;
         }
 
@@ -527,7 +528,7 @@ internal class WhatIfProcessor
         return data;
     }
 
-    private RetailAPIResponse? GetFakeRetailAPIResponse<T>(WhatIfChange change, ResourceIdentifier id) where T : BaseRetailQuery, IRetailQuery
+    private RetailAPIResponse? GetFakeRetailAPIResponse<T>(WhatIfChange change, CommonResourceIdentifier id) where T : BaseRetailQuery, IRetailQuery
     {
         if (Activator.CreateInstance(typeof(T), new object[] { change, id, logger, this.currency, this.changes }) is not T query)
         {
@@ -538,18 +539,18 @@ internal class WhatIfProcessor
         return query.GetFakeResponse();
     }
 
-    private string FindParentId(ResourceIdentifier id)
+    private string FindParentId(CommonResourceIdentifier id)
     {
-        var currentParent = id.Parent;
-        var parentType = currentParent?.Parent?.ResourceType;
+        var currentParent = id.GetParent();
+        var parentType = currentParent?.GetParent()?.GetResourceType();
 
         while(parentType != "Microsoft.Resources/resourceGroups" && parentType != "Microsoft.Resources/subscriptions")
         {
-            currentParent = currentParent?.Parent;
-            parentType = currentParent?.Parent?.ResourceType;
+            currentParent = currentParent?.GetParent();
+            parentType = currentParent?.GetParent()?.GetResourceType();
         }
 
-        if(currentParent?.Name == null)
+        if(currentParent?.GetName() == null)
         {
             throw new Exception("Couldn't find resource parent.");
         }
@@ -573,13 +574,13 @@ internal class WhatIfProcessor
         }
     }
 
-    private void ReportEstimationToConsole(ResourceIdentifier id, IOrderedEnumerable<RetailItem> items, TotalCostSummary summary, WhatIfChangeType? changeType, double? delta, string? location)
+    private void ReportEstimationToConsole(CommonResourceIdentifier id, IOrderedEnumerable<RetailItem> items, TotalCostSummary summary, WhatIfChangeType? changeType, double? delta, string? location)
     {
         var deltaSign = delta == null ? "+" : delta == 0 ? "" : "-";
         delta = delta == null ? summary.TotalCost : 0;
 
-        this.logger.AddEstimatorMessageSensibleToChange(changeType, "{0}", id.Name);
-        this.logger.AddEstimatorMessageSubsection("Type: {0}", id.ResourceType);
+        this.logger.AddEstimatorMessageSensibleToChange(changeType, "{0}", id.GetName());
+        this.logger.AddEstimatorMessageSubsection("Type: {0}", id.GetResourceType());
         this.logger.AddEstimatorMessageSubsection("Location: {0}", location);
         this.logger.AddEstimatorMessageSubsection("Total cost: {0} {1}", summary.TotalCost.ToString("N2"), this.currency);
         this.logger.AddEstimatorMessageSubsection("Delta: {0} {1}", $"{deltaSign}{delta.GetValueOrDefault().ToString("N2")}", this.currency);
@@ -632,10 +633,10 @@ internal class WhatIfProcessor
         }
     }
 
-    private EstimatedResourceData ReportResourceWithoutCost(ResourceIdentifier id, WhatIfChangeType? changeType)
+    private EstimatedResourceData ReportResourceWithoutCost(CommonResourceIdentifier id, WhatIfChangeType? changeType)
     {
-        this.logger.AddEstimatorMessageSensibleToChange(changeType, "{0}", id.Name);
-        this.logger.AddEstimatorMessageSubsection("Type: {0}", id.ResourceType);
+        this.logger.AddEstimatorMessageSensibleToChange(changeType, "{0}", id.GetName());
+        this.logger.AddEstimatorMessageSubsection("Type: {0}", id.GetResourceType());
         this.logger.AddEstimatorMessageSubsection("Total cost: Free");
         this.logger.LogInformation("");
         this.logger.LogInformation("-------------------------------");

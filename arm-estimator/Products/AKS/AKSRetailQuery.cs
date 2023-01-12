@@ -1,10 +1,10 @@
-﻿using Azure.Core;
+﻿using ACE.WhatIf;
 using Microsoft.Extensions.Logging;
 
 internal class AKSRetailQuery : BaseRetailQuery, IRetailQuery
 {
     public AKSRetailQuery(WhatIfChange change,
-                          ResourceIdentifier id,
+                          CommonResourceIdentifier id,
                           ILogger logger,
                           CurrencyCode currency, 
                           WhatIfChange[] changes)

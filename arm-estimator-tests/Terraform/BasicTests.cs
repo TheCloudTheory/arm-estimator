@@ -6,7 +6,7 @@ namespace arm_estimator_tests.Terraform
     {
         [Test]
         [Parallelizable(ParallelScope.Self)]
-        public async Task TF_WhenCalculationIsPerformedWithUsage_FreeTierForTasksShouldBeIncluded()
+        public async Task TF_WhenCalculationIsPerformed_ItShouldGiveCorrectValue()
         {
             var outputFilename = $"ace_test_{DateTime.Now.Ticks}";
             var exitCode = await Program.Main(new[] {
@@ -27,8 +27,8 @@ namespace arm_estimator_tests.Terraform
             });
 
             Assert.That(output, Is.Not.Null);
-            Assert.That(output.TotalCost, Is.EqualTo(5.218d));
-            Assert.That(output.TotalResourceCount, Is.EqualTo(1));
+            Assert.That(output.TotalCost, Is.EqualTo(5.0979999999999999d));
+            Assert.That(output.TotalResourceCount, Is.EqualTo(3));
         }
     }
 }

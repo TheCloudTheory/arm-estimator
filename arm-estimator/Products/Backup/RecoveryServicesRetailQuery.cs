@@ -1,10 +1,11 @@
-﻿using Azure.Core;
+﻿using ACE.WhatIf;
+using Azure.Core;
 using Microsoft.Extensions.Logging;
 
 internal class RecoveryServicesRetailQuery : BaseRetailQuery, IRetailQuery
 {
     public RecoveryServicesRetailQuery(WhatIfChange change,
-                                       ResourceIdentifier id,
+                                       CommonResourceIdentifier id,
                                        ILogger logger,
                                        CurrencyCode currency,
                                        WhatIfChange[] changes)
