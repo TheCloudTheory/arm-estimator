@@ -1,4 +1,5 @@
 ﻿using ACE.Compilation;
+using ACE.WhatIf;
 using Azure.Core;
 using Microsoft.Extensions.Logging;
 using System.CommandLine;
@@ -89,7 +90,7 @@ public class Program
             DisplayWelcomeScreen(logger);
             DisplayUsedSettings(templateFile, subscriptionId, resourceGroupName, logger, options);
 
-            var template = GetTemplate(templateFile, logger);
+            var template = GetTemplate(templateFile, logger, out var templateType);
             if (template == null)
             {
                 logger.LogError("There was a problem with processing template.");
@@ -108,8 +109,8 @@ public class Program
                 parser.ParseInlineParameters(out parameters);
             }
 
-            var handler = new AzureWhatIfHandler(subscriptionId, resourceGroupName, template, options.Mode, parameters, logger);
-            var whatIfData = await handler.GetResponseWithRetries();
+            var whatIfParser = new WhatIfParser(templateType, subscriptionId, resourceGroupName, template, options.Mode, parameters, logger);
+            var whatIfData = await whatIfParser.GetWhatIfData();
             if (whatIfData == null)
             {
                 logger.LogError("Couldn't fetch data for What If request.");
@@ -167,9 +168,11 @@ public class Program
         }
     }
 
-    private static string? GetTemplate(FileInfo templateFile, ILogger<Program> logger)
+    private static string? GetTemplate(FileInfo templateFile, ILogger<Program> logger, out TemplateType templateType)
     {
         var compiler = new TemplateCompiler(templateFile, logger);
+        templateType = compiler.TemplateType;
+
         return compiler.Compile();
     }
 
