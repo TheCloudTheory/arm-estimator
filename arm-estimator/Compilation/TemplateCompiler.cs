@@ -8,6 +8,8 @@ namespace ACE.Compilation
         private readonly ILogger<Program> logger;
         private readonly ICompiler compiler;
 
+        public TemplateType TemplateType { get; private set; }
+
         public TemplateCompiler(FileInfo templateFile, ILogger<Program> logger)
         {
             this.templateFile = templateFile;
@@ -19,14 +21,17 @@ namespace ACE.Compilation
         {
             if(this.templateFile.Extension == ".bicep")
             {
+                TemplateType = TemplateType.ArmTemplateOrBicep;
                 return new BicepCompiler(this.logger);
             }
 
             if(this.templateFile.Extension == ".tf")
             {
+                TemplateType = TemplateType.Terraform;
                 return new TerraformCompiler();
             }
 
+            TemplateType = TemplateType.ArmTemplateOrBicep;
             return new ArmTemplateCompiler();
         }
 
