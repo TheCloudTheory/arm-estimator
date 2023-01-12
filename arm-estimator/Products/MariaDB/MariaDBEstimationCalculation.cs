@@ -1,9 +1,10 @@
-﻿using Azure.Core;
+﻿using ACE.WhatIf;
+using Azure.Core;
 using System.Text.Json;
 
 internal class MariaDBEstimationCalculation : BaseEstimation, IEstimationCalculation
 {
-    public MariaDBEstimationCalculation(RetailItem[] items, ResourceIdentifier id, WhatIfAfterBeforeChange change)
+    public MariaDBEstimationCalculation(RetailItem[] items, CommonResourceIdentifier id, WhatIfAfterBeforeChange change)
         : base(items, id, change)
     {
     }

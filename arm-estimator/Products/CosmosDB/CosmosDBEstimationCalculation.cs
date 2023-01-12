@@ -1,9 +1,10 @@
-﻿using Azure.Core;
+﻿using ACE.WhatIf;
+using Azure.Core;
 using System.Text.Json;
 
 internal class CosmosDBEstimationCalculation : BaseEstimation, IEstimationCalculation
 {
-    public CosmosDBEstimationCalculation(RetailItem[] items, ResourceIdentifier id, WhatIfAfterBeforeChange change)
+    public CosmosDBEstimationCalculation(RetailItem[] items, CommonResourceIdentifier id, WhatIfAfterBeforeChange change)
         : base(items, id, change)
     {
     }

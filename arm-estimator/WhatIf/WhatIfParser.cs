@@ -48,7 +48,7 @@ namespace ACE.WhatIf
 
             if(this.templateType == TemplateType.Terraform)
             {
-                var parser = new TerraformTemplateParser(this.template);
+                var parser = new TerraformTemplateParser(this.template, this.logger);
                 return parser.GetConfigurationAsWhatIfData();
             }
 

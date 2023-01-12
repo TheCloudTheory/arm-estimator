@@ -1,6 +1,5 @@
-﻿using Azure.Core;
+﻿using ACE.WhatIf;
 using Microsoft.Extensions.Logging;
-using System.Linq;
 
 internal class RecoveryServicesQueryFilter : IQueryFilter
 {
@@ -9,12 +8,12 @@ internal class RecoveryServicesQueryFilter : IQueryFilter
     private readonly WhatIfAfterBeforeChange afterState;
     private readonly ILogger logger;
     private readonly WhatIfChange[] changes;
-    private readonly ResourceIdentifier id;
+    private readonly CommonResourceIdentifier id;
 
     public RecoveryServicesQueryFilter(WhatIfAfterBeforeChange afterState,
                                        ILogger logger,
                                        WhatIfChange[] changes,
-                                       ResourceIdentifier id)
+                                       CommonResourceIdentifier id)
     {
         this.afterState = afterState;
         this.logger = logger;
@@ -25,7 +24,7 @@ internal class RecoveryServicesQueryFilter : IQueryFilter
     public string? GetFiltersBasedOnDesiredState(string location)
     {
         var meterName = "GRS Data Stored";
-        var backupConfiguration = this.changes.SingleOrDefault(_ => GetAfterOrBefore(_)?.type == "Microsoft.RecoveryServices/vaults/backupstorageconfig" && _.resourceId != null && _.resourceId.Contains(this.id.Name));
+        var backupConfiguration = this.changes.SingleOrDefault(_ => GetAfterOrBefore(_)?.type == "Microsoft.RecoveryServices/vaults/backupstorageconfig" && _.resourceId != null && _.resourceId.Contains(this.id.GetName()));
         if (backupConfiguration != null)
         {
             var change = GetAfterOrBefore(backupConfiguration);

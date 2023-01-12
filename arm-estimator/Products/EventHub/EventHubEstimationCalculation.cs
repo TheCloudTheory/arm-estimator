@@ -1,8 +1,9 @@
-﻿using Azure.Core;
+﻿using ACE.WhatIf;
+using Azure.Core;
 
 internal class EventHubEstimationCalculation : BaseEstimation, IEstimationCalculation
 {
-    public EventHubEstimationCalculation(RetailItem[] items, ResourceIdentifier id, WhatIfAfterBeforeChange change)
+    public EventHubEstimationCalculation(RetailItem[] items, CommonResourceIdentifier id, WhatIfAfterBeforeChange change)
         : base(items, id, change)
     {
     }
@@ -37,7 +38,7 @@ internal class EventHubEstimationCalculation : BaseEstimation, IEstimationCalcul
             }
             else if (item.meterName == "Capture" && this.change.type == "Microsoft.EventHub/namespaces/eventhubs")
             {
-                var parentId = this.id.Parent?.ToString();
+                var parentId = this.id.GetParent()?.ToString();
                 var parent = changes.Single(_ => _.resourceId == parentId);
                 var parentDesiredState = parent.after ?? parent.before;
 

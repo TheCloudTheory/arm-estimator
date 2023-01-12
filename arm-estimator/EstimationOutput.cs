@@ -1,4 +1,5 @@
-﻿using Azure.Core;
+﻿using ACE.WhatIf;
+using Azure.Core;
 
 public class EstimationOutput
 {
@@ -33,7 +34,7 @@ public class EstimatedResourceData
     public double TotalCost { get; }
     public double Delta { get; }
 
-    public EstimatedResourceData(double totalCost, double? delta, ResourceIdentifier id)
+    public EstimatedResourceData(double totalCost, double? delta, CommonResourceIdentifier id)
     {
         TotalCost = totalCost;
         Delta = delta == null ? totalCost : 0;

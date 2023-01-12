@@ -1,11 +1,12 @@
-﻿using Azure.Core;
+﻿using ACE.WhatIf;
+using Azure.Core;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
 
 internal class VNetRetailQuery : BaseRetailQuery, IRetailQuery
 {
     public VNetRetailQuery(WhatIfChange change,
-                           ResourceIdentifier id,
+                           CommonResourceIdentifier id,
                            ILogger logger,
                            CurrencyCode currency,
                            WhatIfChange[] changes)

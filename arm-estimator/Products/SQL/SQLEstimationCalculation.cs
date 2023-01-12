@@ -1,10 +1,11 @@
-﻿using Azure.Core;
+﻿using ACE.WhatIf;
+using Azure.Core;
 
 internal class SQLEstimationCalculation : BaseEstimation, IEstimationCalculation
 {
     private const double HybridBenefitCost = 145.95d;
 
-    public SQLEstimationCalculation(RetailItem[] items, ResourceIdentifier id, WhatIfAfterBeforeChange change)
+    public SQLEstimationCalculation(RetailItem[] items, CommonResourceIdentifier id, WhatIfAfterBeforeChange change)
         : base(items, id, change)
     {
     }
