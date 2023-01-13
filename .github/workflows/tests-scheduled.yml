@@ -17,6 +17,8 @@ jobs:
       uses: Azure/login@v1.4.6
       with:
         creds: ${{ secrets.SP_CREDS }}
+    - name: HashiCorp - Setup Terraform
+      uses: hashicorp/setup-terraform@v2.0.3
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
       with:
