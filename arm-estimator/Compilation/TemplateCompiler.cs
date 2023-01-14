@@ -28,7 +28,7 @@ namespace ACE.Compilation
             if(this.templateFile.Extension == ".tf")
             {
                 TemplateType = TemplateType.Terraform;
-                return new TerraformCompiler();
+                return new TerraformCompiler(this.logger);
             }
 
             TemplateType = TemplateType.ArmTemplateOrBicep;

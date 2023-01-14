@@ -1,9 +1,17 @@
-﻿using System.Diagnostics;
+﻿using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 
 namespace ACE.Compilation
 {
     internal class TerraformCompiler : ICompiler
     {
+        private ILogger<Program> logger;
+
+        public TerraformCompiler(ILogger<Program> logger)
+        {
+            this.logger = logger;
+        }
+
         public string? Compile(FileInfo templateFile)
         {
             InitializeProviders(templateFile);
@@ -21,6 +29,11 @@ namespace ACE.Compilation
 
                 string? error = null;
                 process.ErrorDataReceived += new DataReceivedEventHandler((sender, e) => { error += e.Data; });
+
+                if(error != null)
+                {
+                    this.logger.LogError("{error}", error);
+                }
 
                 process.Start();
                 process.BeginErrorReadLine();
@@ -46,6 +59,11 @@ namespace ACE.Compilation
                 string? error = null;
                 process.ErrorDataReceived += new DataReceivedEventHandler((sender, e) => { error += e.Data; });
 
+                if (error != null)
+                {
+                    this.logger.LogError("{error}", error);
+                }
+
                 process.Start();
                 process.BeginErrorReadLine();
                 process.WaitForExit();
@@ -66,6 +84,11 @@ namespace ACE.Compilation
 
                 string? error = null;
                 process.ErrorDataReceived += new DataReceivedEventHandler((sender, e) => { error += e.Data; });
+
+                if (error != null)
+                {
+                    this.logger.LogError("{error}", error);
+                }
 
                 process.Start();
                 process.BeginErrorReadLine();
