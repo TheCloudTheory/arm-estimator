@@ -46,7 +46,7 @@ internal class SQLEstimationCalculation : BaseEstimation, IEstimationCalculation
             }
             else if (item.meterName == "vCore")
             {
-                cost = item.retailPrice * HoursInMonth + (HybridBenefitCost * SQLQueryFilter.GetNumberOfCoresBasedOnSku(this.change.sku!.name!) / 2);
+                cost = item.retailPrice * HoursInMonth + AddHybridBenefitCostIfNeeded(this.change.sku!.name!, usagePatterns);
             }
             else
             {
@@ -66,5 +66,15 @@ internal class SQLEstimationCalculation : BaseEstimation, IEstimationCalculation
 
         summary.TotalCost = estimatedCost.GetValueOrDefault();
         return summary;
+    }
+
+    private double AddHybridBenefitCostIfNeeded(string skuName, IDictionary<string, string>? usagePatterns)
+    {
+        if(base.IncludeUsagePattern("Microsoft_Sql_servers_Hybrid_Benefit_Enabled", usagePatterns, 0) != 0)
+        {
+            return 0;
+        }
+
+        return HybridBenefitCost * SQLQueryFilter.GetNumberOfCoresBasedOnSku(skuName) / 2;
     }
 }
