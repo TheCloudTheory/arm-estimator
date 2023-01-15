@@ -103,7 +103,17 @@ public class Program
                 parameters = Regex.Replace(File.ReadAllText(options.ParametersFile.FullName), @"\s+", string.Empty);
             }
 
-            var parser = new TemplateParser(template, parameters, options.InlineParameters, logger);
+            TemplateParser parser;
+            try
+            {
+                parser = new TemplateParser(template, parameters, options.InlineParameters, logger);
+            }
+            catch(JsonException)
+            {
+                logger.LogError("Couldn't parse the following template - {template}", template);
+                return 1;
+            }
+            
             if (options.InlineParameters.Any())
             {
                 parser.ParseInlineParameters(out parameters);

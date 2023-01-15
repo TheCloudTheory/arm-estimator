@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.Text.Encodings.Web;
 using System.Text.Json;
-using System.Text.Unicode;
 
 internal class TemplateParser
 {

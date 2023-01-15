@@ -5,7 +5,7 @@ namespace ACE.Compilation
 {
     internal class TerraformCompiler : ICompiler
     {
-        private ILogger<Program> logger;
+        private readonly ILogger<Program> logger;
 
         public TerraformCompiler(ILogger<Program> logger)
         {
@@ -33,6 +33,7 @@ namespace ACE.Compilation
                 if(error != null)
                 {
                     this.logger.LogError("{error}", error);
+                    return null;
                 }
 
                 process.Start();
