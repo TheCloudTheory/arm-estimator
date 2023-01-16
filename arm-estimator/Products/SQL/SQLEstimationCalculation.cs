@@ -48,6 +48,17 @@ internal class SQLEstimationCalculation : BaseEstimation, IEstimationCalculation
             {
                 cost = item.retailPrice * HoursInMonth + AddHybridBenefitCostIfNeeded(this.change.sku!.name!, usagePatterns);
             }
+            else if (item.meterName == "Data Stored")
+            {
+                if(item.skuName == "Standard")
+                {
+                    if(usagePatterns != null && usagePatterns.ContainsKey("Microsoft_Sql_servers_databases_DTU_Storage"))
+                    {
+                        var definedSize = int.Parse(usagePatterns["Microsoft_Sql_servers_databases_DTU_Storage"]);
+                        cost = item.retailPrice * definedSize - item.retailPrice * 250;
+                    }              
+                }
+            }
             else
             {
                 cost = item.retailPrice;
