@@ -41,12 +41,23 @@ internal class SQLQueryFilter : IQueryFilter
             return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and (skuName eq '{sku}' or skuName eq 'Standard')";
         }
 
+        if(IsPremiumTierWithAdditionalStorageTier(sku))
+        {
+            return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and (skuName eq '{sku}' or skuName eq 'Premium')";
+        }
+
         return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and skuName eq '{sku}'";
     }
 
     private bool IsStandardTierWithAdditionalStorageTier(string sku)
     {
         var tiers = new[] { "S3", "S4", "S6", "S7", "S9", "S12" };
+        return tiers.Contains(sku);
+    }
+
+    private bool IsPremiumTierWithAdditionalStorageTier(string sku)
+    {
+        var tiers = new[] { "P1", "P2", "P4", "P6" };
         return tiers.Contains(sku);
     }
 
