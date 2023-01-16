@@ -25,6 +25,7 @@ internal class SQLQueryFilter : IQueryFilter
         if(sku == "Basic")
         {
             sku = "B";
+            return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and skuName eq '{sku}'";
         }
 
         var skuParts = sku.Split('_');
@@ -35,7 +36,18 @@ internal class SQLQueryFilter : IQueryFilter
             return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and skuName eq '{sku}' and productName eq 'SQL Database Single/Elastic Pool General Purpose - Compute Gen5'&$top=1";
         }
 
+        if(IsStandardTierWithAdditionalStorageTier(sku))
+        {
+            return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and (skuName eq '{sku}' or skuName eq 'Standard')";
+        }
+
         return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and skuName eq '{sku}'";
+    }
+
+    private bool IsStandardTierWithAdditionalStorageTier(string sku)
+    {
+        var tiers = new[] { "S3", "S4", "S6", "S7", "S9", "S12" };
+        return tiers.Contains(sku);
     }
 
     public static int GetNumberOfCoresBasedOnSku(string sku)
