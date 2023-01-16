@@ -67,6 +67,13 @@ namespace ACE.Compilation
 
                 process.Start();
                 process.BeginErrorReadLine();
+
+                var output = process.StandardOutput.ReadToEnd();
+                if(output != null)
+                {
+                    this.logger.LogInformation(output);
+                }
+
                 process.WaitForExit();
             }
         }
@@ -93,6 +100,12 @@ namespace ACE.Compilation
 
                 process.Start();
                 process.BeginErrorReadLine();
+
+                var output = process.StandardOutput.ReadToEnd();
+                if (output != null)
+                {
+                    this.logger.LogInformation(output);
+                }
                 process.WaitForExit();
             }
         }
