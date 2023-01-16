@@ -58,6 +58,15 @@ internal class SQLEstimationCalculation : BaseEstimation, IEstimationCalculation
                         cost = item.retailPrice * definedSize - item.retailPrice * 250;
                     }              
                 }
+
+                if (item.skuName == "Premium")
+                {
+                    if (usagePatterns != null && usagePatterns.ContainsKey("Microsoft_Sql_servers_databases_DTU_Storage"))
+                    {
+                        var definedSize = int.Parse(usagePatterns["Microsoft_Sql_servers_databases_DTU_Storage"]);
+                        cost = item.retailPrice * definedSize - item.retailPrice * 500;
+                    }
+                }
             }
             else
             {
