@@ -19,6 +19,7 @@ internal class AKSEstimationCalculation : BaseEstimation, IEstimationCalculation
         double? estimatedCost = 0;
         var items = GetItems();
         var summary = new TotalCostSummary();
+        var properties = JsonSerializer.Deserialize<AKSProperties>(JsonSerializer.Serialize(this.change.properties));
 
         foreach (var item in items)
         {
@@ -29,17 +30,20 @@ internal class AKSEstimationCalculation : BaseEstimation, IEstimationCalculation
                 cost = item.retailPrice * HoursInMonth;
             }
             else if (item.productName != null && item.productName.Contains("Virtual Machine"))
-            {
-                var properties = JsonSerializer.Deserialize<AKSProperties>(JsonSerializer.Serialize(this.change.properties));
+            {        
                 if (properties != null && properties.AgentPoolProfiles != null)
                 {
                     foreach (var pool in properties.AgentPoolProfiles)
                     {
                         VirtualMachineQueryFilter.DefineVmParameteres(pool.OsType!, pool.VmSize!, out var productName, out var skuName);
-                        if(productName == item.productName)
+                        if(productName == item.productName && skuName == item.skuName)
                         {
                             var agentCount = pool.Count;
                             cost = item.retailPrice * HoursInMonth * agentCount;
+
+                            // When there's more than a single agent pool, once found,
+                            // break the loop so another item can be processed
+                            break;
                         }
                     }
                 }
