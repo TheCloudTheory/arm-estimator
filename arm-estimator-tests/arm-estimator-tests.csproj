@@ -43,6 +43,12 @@
     <None Update="templates\acr.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="templates\aks\149-bug.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="templates\aks\149-bug.parameters.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="templates\alert.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
