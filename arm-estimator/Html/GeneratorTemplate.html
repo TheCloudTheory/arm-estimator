@@ -6,32 +6,51 @@
     <title>ACE HTML Output</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <link rel="stylesheet" href="https://unpkg.com/mvp.css">
     <meta name="theme-color" content="#fafafa">
+    <style>
+        body {
+            padding: 1em;
+        }
+    </style>
 </head>
 <body>
-    <h1>Azure Cost Estimator (ACE)</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Resource name</th>
-                <th>Resource type</th>
-                <th>Resource cost</th>
-                <th>Resource delta</th>
-            </tr>
-        </thead>
-        <tbody>
-            ### [ACE-TBODY] ###
-        </tbody>
-        <tfoot>
-            <tr>
-                <td></td>
-                <td><b>Total</b></td>
-                <td><b>### [ACE-TFOOT-TOTALSUM] ###</b></td>
-                <td><b>### [ACE-TFOOT-DELTASUM] ###</b></td>
-            </tr>
-        </tfoot>
-    </table>
+    <header>
+        <h1>Azure Cost Estimator (ACE)</h1>
+        <p>Cost estimation report</p>
+    </header>
+
+    <main>
+        <hr style="margin-top: 0;"/>
+        <section>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Resource name</th>
+                        <th>Resource type</th>
+                        <th>Resource cost</th>
+                        <th>Resource delta</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ### [ACE-TBODY] ###
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td></td>
+                        <td><b>Total</b></td>
+                        <td><b>### [ACE-TFOOT-TOTALSUM] ###</b></td>
+                        <td><b>### [ACE-TFOOT-DELTASUM] ###</b></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </section>
+    </main> 
+    
+    <footer>
+        <p>
+            <small>Report date: ### [ACE-FOOTER-REPORTDATE] ###</small>
+        </p>      
+    </footer>
 </body>
 </html>

@@ -32,6 +32,7 @@ internal class HtmlOutputGenerator
         template = template.Replace("### [ACE-TBODY] ###", resultRows);
         template = template.Replace("### [ACE-TFOOT-TOTALSUM] ###", $"{this.output.TotalCost:F} {this.output.Currency}");
         template = template.Replace("### [ACE-TFOOT-DELTASUM] ###", $"{this.output.Delta:F} {this.output.Currency}");
+        template = template.Replace("### [ACE-FOOTER-REPORTDATE] ###", DateTime.Now.ToString());
         
         File.WriteAllText(this.fileName, template);
     }
