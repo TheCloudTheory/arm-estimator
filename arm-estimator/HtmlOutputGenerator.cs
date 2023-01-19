@@ -33,6 +33,9 @@ internal class HtmlOutputGenerator
         template = template.Replace("### [ACE-TFOOT-TOTALSUM] ###", $"{this.output.TotalCost:F} {this.output.Currency}");
         template = template.Replace("### [ACE-TFOOT-DELTASUM] ###", $"{this.output.Delta:F} {this.output.Currency}");
         template = template.Replace("### [ACE-FOOTER-REPORTDATE] ###", DateTime.Now.ToString());
+        template = template.Replace("### [ACE-BASIC-TD-ALLRESOURCES] ###", this.output.TotalResourceCount.ToString());
+        template = template.Replace("### [ACE-BASIC-TD-ESTIMATEDRESOURCES] ###", this.output.EstimatedResourceCount.ToString());
+        template = template.Replace("### [ACE-BASIC-TD-SKIPPEDRESOURCES] ###", this.output.SkippedResourceCount.ToString());
         
         File.WriteAllText(this.fileName, template);
     }
