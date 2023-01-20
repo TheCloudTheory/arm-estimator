@@ -85,7 +85,7 @@ namespace ACE.Compilation
                 process.StartInfo.FileName = "terraform";
                 process.StartInfo.UseShellExecute = false;
                 process.StartInfo.CreateNoWindow = false;
-                process.StartInfo.Arguments = $"plan -out tfplan";
+                process.StartInfo.Arguments = $"plan -out tfplan -no-color";
                 process.StartInfo.RedirectStandardOutput = true;
                 process.StartInfo.RedirectStandardError = true;
                 process.StartInfo.WorkingDirectory = templateFile.DirectoryName;

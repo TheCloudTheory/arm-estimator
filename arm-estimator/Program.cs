@@ -108,9 +108,9 @@ public class Program
             {
                 parser = new TemplateParser(template, parameters, options.InlineParameters, logger);
             }
-            catch(JsonException)
+            catch(JsonException ex)
             {
-                logger.LogError("Couldn't parse the following template - {template}", template);
+                logger.LogError("Couldn't parse the following template - {template}. Error: {error}", template, ex.Message);
                 return 1;
             }
             
