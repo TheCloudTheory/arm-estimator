@@ -26,7 +26,7 @@ namespace ACE.WhatIf
         {
             if (this.type == CommonResourceIdentifierType.AzureResourceManager)
             {
-                return this.azureResourceIdentifier!.ResourceType;
+                return this.azureResourceIdentifier!.Name;
             }
 
             return this.otherResourceIdentifier!.Split('.')[3];

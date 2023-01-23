@@ -37,6 +37,7 @@ internal class WhatIfProcessor
 
         var resources = new List<EstimatedResourceData>();
         var unsupportedResources = new List<CommonResourceIdentifier>();
+        var freeResources = new Dictionary<CommonResourceIdentifier, WhatIfChangeType?>();
 
         foreach (WhatIfChange change in this.changes)
         {
@@ -66,7 +67,7 @@ internal class WhatIfProcessor
                     resource = await Calculate<AppServicePlanRetailQuery, AppServicePlanEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.Web/sites":
-                    resource = ReportResourceWithoutCost(id, change.changeType);
+                    freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.ContainerService/managedClusters":
                     resource = await Calculate<AKSRetailQuery, AKSEstimationCalculation>(change, id);
@@ -75,7 +76,7 @@ internal class WhatIfProcessor
                     resource = await Calculate<ContainerAppsRetailQuery, ContainerAppsEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.Sql/servers":
-                    resource = ReportResourceWithoutCost(id, change.changeType);
+                    freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.Sql/servers/databases":
                     resource = await Calculate<SQLRetailQuery, SQLEstimationCalculation>(change, id);
@@ -186,16 +187,16 @@ internal class WhatIfProcessor
                     resource = await Calculate<LogAnalyticsRetailQuery, LogAnalyticsEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.Network/networkInterfaces":
-                    resource = ReportResourceWithoutCost(id, change.changeType);
+                    freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.Network/networkSecurityGroups":
-                    resource = ReportResourceWithoutCost(id, change.changeType);
+                    freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.Network/virtualNetworks":
                     resource = await Calculate<VNetRetailQuery, VNetEstimationCalculation>(change, id, true);
                     break;
                 case "Microsoft.RecoveryServices/vaults/backupPolicies":
-                    resource = ReportResourceWithoutCost(id, change.changeType);
+                    freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.RecoveryServices/vaults":
                     resource = await Calculate<RecoveryServicesRetailQuery, RecoveryServicesEstimationCalculation>(change, id);
@@ -204,25 +205,25 @@ internal class WhatIfProcessor
                     resource = await Calculate<RecoveryServicesProtectedItemRetailQuery, RecoveryServicesProtectedItemEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.RecoveryServices/vaults/replicationFabrics":
-                    resource = ReportResourceWithoutCost(id, change.changeType);
+                    freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.RecoveryServices/vaults/replicationFabrics/replicationNetworks/replicationNetworkMappings":
-                    resource = ReportResourceWithoutCost(id, change.changeType);
+                    freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers":
-                    resource = ReportResourceWithoutCost(id, change.changeType);
+                    freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers/replicationProtectionContainerMappings":
-                    resource = ReportResourceWithoutCost(id, change.changeType);
+                    freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers/replicationProtectedItems":
                     resource = await Calculate<AzureSiteRecoveryRetailQuery, AzureSiteRecoveryEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.RecoveryServices/vaults/replicationPolicies":
-                    resource = ReportResourceWithoutCost(id, change.changeType);
+                    freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.RecoveryServices/vaults/backupstorageconfig":
-                    resource = ReportResourceWithoutCost(id, change.changeType);
+                    freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.Insights/metricAlerts":
                     resource = await Calculate<MonitorRetailQuery, MonitorEstimationCalculation>(change, id);
@@ -234,37 +235,37 @@ internal class WhatIfProcessor
                     resource = await Calculate<MariaDBRetailQuery, MariaDBEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.DBforMariaDB/servers/virtualNetworkRules":
-                    resource = ReportResourceWithoutCost(id, change.changeType);
+                    freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.Cache/redis":
                     resource = await Calculate<RedisRetailQuery, RedisEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.Network/ipGroups":
-                    resource = ReportResourceWithoutCost(id, change.changeType);
+                    freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.Network/firewallPolicies":
-                    resource = ReportResourceWithoutCost(id, change.changeType);
+                    freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.Network/firewallPolicies/ruleCollectionGroups":
-                    resource = ReportResourceWithoutCost(id, change.changeType);
+                    freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.Network/azureFirewalls":
                     resource = await Calculate<FirewallRetailQuery, FirewallEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.Storage/storageAccounts/blobServices":
-                    resource = ReportResourceWithoutCost(id, change.changeType);
+                    freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.Storage/storageAccounts/blobServices/containers":
-                    resource = ReportResourceWithoutCost(id, change.changeType);
+                    freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.Automation/automationAccounts":
                     resource = await Calculate<AutomationAccountRetailQuery, AutomationAccountEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.Automation/automationAccounts/runbooks":
-                    resource = ReportResourceWithoutCost(id, change.changeType);
+                    freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.OperationalInsights/workspaces/linkedServices":
-                    resource = ReportResourceWithoutCost(id, change.changeType);
+                    freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.DBforPostgreSQL/servers":
                     resource = await Calculate<PostgreSQLRetailQuery, PostgreSQLEstimationCalculation>(change, id);
@@ -276,34 +277,34 @@ internal class WhatIfProcessor
                     resource = await Calculate<ServiceBusRetailQuery, ServiceBusEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.DataFactory/factories/datasets":
-                    resource = ReportResourceWithoutCost(id, change.changeType);
+                    freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.DataFactory/factories/pipelines":
-                    resource = ReportResourceWithoutCost(id, change.changeType);
+                    freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.DataFactory/factories/linkedservices":
-                    resource = ReportResourceWithoutCost(id, change.changeType);
+                    freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.DataFactory/factories":
                     resource = await Calculate<DataFactoryRetailQuery, DataFactoryEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.Compute/availabilitySets":
-                    resource = ReportResourceWithoutCost(id, change.changeType);
+                    freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.Compute/virtualMachineScaleSets":
                     resource = await Calculate<VmssRetailQuery, VmssEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.Authorization/policyAssignments":
-                    resource = ReportResourceWithoutCost(id, change.changeType);
+                    freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.Authorization/roleAssignments":
-                    resource = ReportResourceWithoutCost(id, change.changeType);
+                    freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.Insights/diagnosticSettings":
-                    resource = ReportResourceWithoutCost(id, change.changeType);
+                    freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.ManagedIdentity/userAssignedIdentities":
-                    resource = ReportResourceWithoutCost(id, change.changeType);
+                    freeResources.Add(id, change.changeType);
                     break;
                 default:
                     if(id?.GetName() != null)
@@ -341,6 +342,21 @@ internal class WhatIfProcessor
         if(resources.Count == 0)
         {
             this.logger.AddEstimatorMessage("No resource available for estimation.");
+            this.logger.LogInformation("");
+            this.logger.LogInformation("-------------------------------");
+            this.logger.LogInformation("");
+        }
+
+        if(freeResources.Count > 0)
+        {
+            this.logger.LogInformation("Free resources:");
+            this.logger.LogInformation("");
+
+            foreach(var resource in freeResources)
+            {
+                ReportResourceWithoutCost(resource.Key, resource.Value);
+            }
+
             this.logger.LogInformation("");
             this.logger.LogInformation("-------------------------------");
             this.logger.LogInformation("");
@@ -637,9 +653,6 @@ internal class WhatIfProcessor
     {
         this.logger.AddEstimatorMessageSensibleToChange(changeType, "{0}", id.GetName());
         this.logger.AddEstimatorMessageSubsection("Type: {0}", id.GetResourceType());
-        this.logger.AddEstimatorMessageSubsection("Total cost: Free");
-        this.logger.LogInformation("");
-        this.logger.LogInformation("-------------------------------");
         this.logger.LogInformation("");
 
         return new EstimatedResourceData(0, 0, id);
