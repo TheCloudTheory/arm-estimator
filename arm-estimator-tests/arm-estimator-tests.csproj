@@ -115,6 +115,9 @@
     <None Update="templates\bicep\nested.bicep">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="templates\bicep\redis\redis-enterprise.bicep">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="templates\bicep\securestring.bicep">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
