@@ -306,6 +306,9 @@ internal class WhatIfProcessor
                 case "Microsoft.ManagedIdentity/userAssignedIdentities":
                     freeResources.Add(id, change.changeType);
                     break;
+                case "Microsoft.Cache/redisEnterprise":
+                    resource = await Calculate<RedisEnterpriseRetailQuery, RedisEnterpriseEstimationCalculation>(change, id);
+                    break;
                 default:
                     if(id?.GetName() != null)
                     {
