@@ -67,6 +67,7 @@ internal class WhatIfProcessor
                     resource = await Calculate<AppServicePlanRetailQuery, AppServicePlanEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.Web/sites":
+                    resource = new EstimatedResourceData(0, 0, id);
                     freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.ContainerService/managedClusters":
@@ -76,6 +77,7 @@ internal class WhatIfProcessor
                     resource = await Calculate<ContainerAppsRetailQuery, ContainerAppsEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.Sql/servers":
+                    resource = new EstimatedResourceData(0, 0, id);
                     freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.Sql/servers/databases":
@@ -187,15 +189,18 @@ internal class WhatIfProcessor
                     resource = await Calculate<LogAnalyticsRetailQuery, LogAnalyticsEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.Network/networkInterfaces":
+                    resource = new EstimatedResourceData(0, 0, id);
                     freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.Network/networkSecurityGroups":
+                    resource = new EstimatedResourceData(0, 0, id);
                     freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.Network/virtualNetworks":
                     resource = await Calculate<VNetRetailQuery, VNetEstimationCalculation>(change, id, true);
                     break;
                 case "Microsoft.RecoveryServices/vaults/backupPolicies":
+                    resource = new EstimatedResourceData(0, 0, id);
                     freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.RecoveryServices/vaults":
@@ -205,24 +210,30 @@ internal class WhatIfProcessor
                     resource = await Calculate<RecoveryServicesProtectedItemRetailQuery, RecoveryServicesProtectedItemEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.RecoveryServices/vaults/replicationFabrics":
+                    resource = new EstimatedResourceData(0, 0, id);
                     freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.RecoveryServices/vaults/replicationFabrics/replicationNetworks/replicationNetworkMappings":
+                    resource = new EstimatedResourceData(0, 0, id);
                     freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers":
+                    resource = new EstimatedResourceData(0, 0, id);
                     freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers/replicationProtectionContainerMappings":
+                    resource = new EstimatedResourceData(0, 0, id);
                     freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers/replicationProtectedItems":
                     resource = await Calculate<AzureSiteRecoveryRetailQuery, AzureSiteRecoveryEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.RecoveryServices/vaults/replicationPolicies":
+                    resource = new EstimatedResourceData(0, 0, id);
                     freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.RecoveryServices/vaults/backupstorageconfig":
+                    resource = new EstimatedResourceData(0, 0, id);
                     freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.Insights/metricAlerts":
@@ -235,15 +246,18 @@ internal class WhatIfProcessor
                     resource = await Calculate<MariaDBRetailQuery, MariaDBEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.DBforMariaDB/servers/virtualNetworkRules":
+                    resource = new EstimatedResourceData(0, 0, id);
                     freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.Cache/redis":
                     resource = await Calculate<RedisRetailQuery, RedisEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.Network/ipGroups":
+                    resource = new EstimatedResourceData(0, 0, id);
                     freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.Network/firewallPolicies":
+                    resource = new EstimatedResourceData(0, 0, id);
                     freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.Network/firewallPolicies/ruleCollectionGroups":
@@ -253,18 +267,22 @@ internal class WhatIfProcessor
                     resource = await Calculate<FirewallRetailQuery, FirewallEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.Storage/storageAccounts/blobServices":
+                    resource = new EstimatedResourceData(0, 0, id);
                     freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.Storage/storageAccounts/blobServices/containers":
+                    resource = new EstimatedResourceData(0, 0, id);
                     freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.Automation/automationAccounts":
                     resource = await Calculate<AutomationAccountRetailQuery, AutomationAccountEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.Automation/automationAccounts/runbooks":
+                    resource = new EstimatedResourceData(0, 0, id);
                     freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.OperationalInsights/workspaces/linkedServices":
+                    resource = new EstimatedResourceData(0, 0, id);
                     freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.DBforPostgreSQL/servers":
@@ -277,33 +295,41 @@ internal class WhatIfProcessor
                     resource = await Calculate<ServiceBusRetailQuery, ServiceBusEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.DataFactory/factories/datasets":
+                    resource = new EstimatedResourceData(0, 0, id);
                     freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.DataFactory/factories/pipelines":
+                    resource = new EstimatedResourceData(0, 0, id);
                     freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.DataFactory/factories/linkedservices":
+                    resource = new EstimatedResourceData(0, 0, id);
                     freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.DataFactory/factories":
                     resource = await Calculate<DataFactoryRetailQuery, DataFactoryEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.Compute/availabilitySets":
+                    resource = new EstimatedResourceData(0, 0, id);
                     freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.Compute/virtualMachineScaleSets":
                     resource = await Calculate<VmssRetailQuery, VmssEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.Authorization/policyAssignments":
+                    resource = new EstimatedResourceData(0, 0, id);
                     freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.Authorization/roleAssignments":
+                    resource = new EstimatedResourceData(0, 0, id);
                     freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.Insights/diagnosticSettings":
+                    resource = new EstimatedResourceData(0, 0, id);
                     freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.ManagedIdentity/userAssignedIdentities":
+                    resource = new EstimatedResourceData(0, 0, id);
                     freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.Cache/redisEnterprise":
