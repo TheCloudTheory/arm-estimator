@@ -1,5 +1,6 @@
 ﻿using ACE.WhatIf;
-using Azure.Core;
+
+namespace ACE;
 
 public class EstimationOutput
 {

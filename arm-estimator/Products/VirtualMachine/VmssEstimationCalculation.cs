@@ -21,7 +21,7 @@ internal class VmssEstimationCalculation : BaseEstimation, IEstimationCalculatio
 
         foreach (var item in items)
         {
-            var cost = item.retailPrice * HoursInMonth * this.change.sku.capacity;
+            var cost = item.retailPrice * HoursInMonth * this.change.sku!.capacity;
 
             estimatedCost += cost;
             if (summary.DetailedCost.ContainsKey(item.meterName!))

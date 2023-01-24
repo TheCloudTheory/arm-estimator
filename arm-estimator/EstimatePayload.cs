@@ -2,6 +2,8 @@ using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
+namespace ACE;
+
 internal class EstimatePayload
 {
     public EstimatePayloadProperties properties { get; }
@@ -30,7 +32,7 @@ internal class EstimatePayloadProperties
             Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
         });
 
-        this.mode = deploymentMode.ToString();
+        mode = deploymentMode.ToString();
     }
 
     public string mode { get; }

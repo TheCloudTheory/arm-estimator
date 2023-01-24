@@ -1,4 +1,6 @@
-﻿internal class EstimateOptions
+﻿namespace ACE;
+
+internal class EstimateOptions
 {
     public EstimateOptions(DeploymentMode mode,
                            int threshold,
@@ -10,7 +12,7 @@
                            bool disableDetailedMetrics,
                            string? jsonOutputFilename,
                            bool shouldGenerateHtmlOutput,
-                           IEnumerable<string> inlineParameters,
+                           IEnumerable<string>? inlineParameters,
                            bool dryRunOnly)
     {
         Mode = mode;
@@ -37,6 +39,6 @@
     public bool DisableDetailedMetrics { get; }
     public string? JsonOutputFilename { get; }
     public bool ShouldGenerateHtmlOutput { get; }
-    public IEnumerable<string> InlineParameters { get; }
+    public IEnumerable<string>? InlineParameters { get; }
     public bool DryRunOnly { get; }
 }

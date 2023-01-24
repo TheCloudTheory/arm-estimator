@@ -7,6 +7,8 @@ using System.Reflection;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 
+namespace ACE;
+
 public class Program
 {
     private static string? GetInformationalVersion() => Assembly.GetEntryAssembly()?.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
@@ -51,7 +53,7 @@ public class Program
         command.SetHandler(async (file, subscription, resourceGroup, options) =>
         {
             var exitCode = await Estimate(file, subscription, resourceGroup, options);
-            if(exitCode != 0)
+            if (exitCode != 0)
             {
                 throw new Exception();
             }
@@ -108,12 +110,12 @@ public class Program
             {
                 parser = new TemplateParser(template, parameters, options.InlineParameters, logger);
             }
-            catch(JsonException ex)
+            catch (JsonException ex)
             {
                 logger.LogError("Couldn't parse the following template - {template}. Error: {error}", template, ex.Message);
                 return 1;
             }
-            
+
             if (options.InlineParameters.Any())
             {
                 parser.ParseInlineParameters(out parameters);

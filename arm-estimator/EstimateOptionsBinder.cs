@@ -1,6 +1,8 @@
 ﻿using System.CommandLine;
 using System.CommandLine.Binding;
 
+namespace ACE;
+
 internal class EstimateOptionsBinder : BinderBase<EstimateOptions>
 {
     private readonly Option<DeploymentMode> mode;
