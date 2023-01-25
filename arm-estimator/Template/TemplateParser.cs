@@ -50,12 +50,8 @@ internal class TemplateParser
                 var parameterValue = keyValue[1];
                 var value = ParseParamaterByTheirType(parameterName, parameterValue);
 
-                if (parsedParameters.Parameters == null)
-                {
-                    parsedParameters.Parameters = new Dictionary<string, Parameter>();
-                }
-
-                if (parsedParameters.Parameters.Keys.Contains(parameterName))
+                parsedParameters.Parameters ??= new Dictionary<string, Parameter>();
+                if (parsedParameters.Parameters.ContainsKey(parameterName))
                 {
                     parsedParameters.Parameters[parameterName].Value = value;
                 }
