@@ -6,10 +6,10 @@ internal class TemplateParser
 {
     public TemplateSchema? Template { get; private set; }
     private readonly string parameters;
-    private readonly IEnumerable<string> inlineParameters;
+    private readonly IEnumerable<string>? inlineParameters;
     private readonly ILogger logger;
 
-    public TemplateParser(string template, string parameters, IEnumerable<string> inlineParameters, ILogger logger)
+    public TemplateParser(string template, string parameters, IEnumerable<string>? inlineParameters, ILogger logger)
     {
         Template = JsonSerializer.Deserialize<TemplateSchema>(template);
 
@@ -26,6 +26,12 @@ internal class TemplateParser
             if(this.Template == null)
             {
                 this.logger.LogError("Couldn't parse template.");
+                parameters = "{}";
+                return;
+            }
+
+            if(this.inlineParameters == null)
+            {
                 parameters = "{}";
                 return;
             }
