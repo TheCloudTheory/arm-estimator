@@ -1,5 +1,7 @@
 ﻿using ACE.WhatIf;
 
+namespace ACE.Calculation;
+
 internal abstract class BaseEstimation
 {
     internal static readonly int HoursInMonth = 730;
@@ -16,9 +18,9 @@ internal abstract class BaseEstimation
 
     protected int IncludeUsagePattern(string key, IDictionary<string, string>? usagePatterns, int defaultUsage = 1)
     {
-        if(usagePatterns != null && usagePatterns.TryGetValue(key, out string? value))
+        if (usagePatterns != null && usagePatterns.TryGetValue(key, out string? value))
         {
-            if(value != null)
+            if (value != null)
             {
                 return int.Parse(value);
             }

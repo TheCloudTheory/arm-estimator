@@ -1,4 +1,5 @@
-﻿using ACE.WhatIf;
+﻿using ACE.Calculation;
+using ACE.WhatIf;
 using Azure.Core;
 using System.Text.Json;
 

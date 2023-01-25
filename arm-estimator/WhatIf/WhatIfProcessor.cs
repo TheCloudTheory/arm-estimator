@@ -1,4 +1,5 @@
 ﻿using ACE;
+using ACE.Calculation;
 using ACE.WhatIf;
 using Azure.Core;
 using Microsoft.Extensions.Logging;
