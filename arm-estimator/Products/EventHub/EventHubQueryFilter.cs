@@ -3,7 +3,7 @@ using System.Text.Json;
 
 internal class EventHubQueryFilter : IQueryFilter
 {
-    private const string ServiceId = "DZH318TR2LMQ";
+    internal const string ServiceId = "DZH318TR2LMQ";
 
     private readonly WhatIfAfterBeforeChange afterState;
     private readonly ILogger logger;
@@ -48,13 +48,12 @@ internal class EventHubQueryFilter : IQueryFilter
         }
 
         var skuName = EventHubSupportedData.SkuToSkuNameMap[sku];
-        var skuNameFilter = string.Join(" or ", skuName.Select(_ => $"skuName eq '{_}'"));
 
         if (sku == "Capture")
         {
-            return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and ({skuNameFilter}) and meterName eq 'Capture'";
+            return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and skuName eq '{skuName}' and meterName eq 'Capture'";
         }
 
-        return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and ({skuNameFilter})";
+        return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and skuName eq '{skuName}'";
     }
 }

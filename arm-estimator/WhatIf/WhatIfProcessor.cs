@@ -1,7 +1,6 @@
 ﻿using ACE;
 using ACE.Calculation;
 using ACE.WhatIf;
-using Azure.Core;
 using Microsoft.Extensions.Logging;
 using System.Collections.Concurrent;
 using System.Net;
@@ -13,6 +12,7 @@ internal class WhatIfProcessor
     private static readonly Lazy<HttpClient> httpClient = new(() => new HttpClient());
     private static readonly Dictionary<string, string> parentResourceToLocation = new();
     private static readonly ConcurrentDictionary<string, RetailAPIResponse> cachedResults = new();
+    private static readonly Dictionary<string, string> childParentMap = new();
 
     private readonly ILogger logger;
     private readonly WhatIfChange[] changes;
@@ -27,6 +27,28 @@ internal class WhatIfProcessor
         this.currency = currency;
         this.disableDetailedMetrics = disableDetailedMetrics;
         this.template = template;
+
+        PreprocessResources(changes);
+    }
+
+    /// <summary>
+    /// Populate resources with their parents
+    /// </summary>
+    private void PreprocessResources(WhatIfChange[] changes)
+    {
+        foreach (var change in changes)
+        {
+            if (change.resourceId == null)
+            {
+                this.logger.LogError("Couldn't find resource ID");
+                continue;
+            }
+
+            var id = new CommonResourceIdentifier(change.resourceId);
+            var parentId = FindParentId(id);
+
+            childParentMap[id.ToString()] = parentId;
+        }
     }
 
     public async Task<EstimationOutput> Process()
@@ -327,8 +349,7 @@ internal class WhatIfProcessor
                     freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.Insights/diagnosticSettings":
-                    resource = new EstimatedResourceData(0, 0, id);
-                    freeResources.Add(id, change.changeType);
+                    resource = await Calculate<DiagnosticSettingsRetailQuery, DiagnosticSettingsEstimationCalculation>(change, id);
                     break;
                 case "Microsoft.ManagedIdentity/userAssignedIdentities":
                     resource = new EstimatedResourceData(0, 0, id);
@@ -338,11 +359,11 @@ internal class WhatIfProcessor
                     resource = await Calculate<RedisEnterpriseRetailQuery, RedisEnterpriseEstimationCalculation>(change, id);
                     break;
                 default:
-                    if(id?.GetName() != null)
+                    if (id?.GetName() != null)
                     {
                         unsupportedResources.Add(id);
                     }
-                    
+
                     break;
             }
 
@@ -370,7 +391,7 @@ internal class WhatIfProcessor
             sign = "";
         }
 
-        if(resources.Count == 0)
+        if (resources.Count == 0)
         {
             this.logger.AddEstimatorMessage("No resource available for estimation.");
             this.logger.LogInformation("");
@@ -378,12 +399,12 @@ internal class WhatIfProcessor
             this.logger.LogInformation("");
         }
 
-        if(freeResources.Count > 0)
+        if (freeResources.Count > 0)
         {
             this.logger.LogInformation("Free resources:");
             this.logger.LogInformation("");
 
-            foreach(var resource in freeResources)
+            foreach (var resource in freeResources)
             {
                 ReportResourceWithoutCost(resource.Key, resource.Value);
             }
@@ -393,7 +414,7 @@ internal class WhatIfProcessor
             this.logger.LogInformation("");
         }
 
-        if(unsupportedResources.Count > 0)
+        if (unsupportedResources.Count > 0)
         {
             this.logger.LogInformation("Unsupported resources:");
             this.logger.LogInformation("");
@@ -414,7 +435,7 @@ internal class WhatIfProcessor
 
     private void ReportUnsupportedResources(List<CommonResourceIdentifier> unsupportedResources)
     {
-        foreach(var resource in unsupportedResources)
+        foreach (var resource in unsupportedResources)
         {
             this.logger.AddEstimatorMessage("{0} [{1}]", resource.GetName(), resource.GetResourceType());
         }
@@ -424,7 +445,7 @@ internal class WhatIfProcessor
         where TQuery : BaseRetailQuery, IRetailQuery
         where TCalculation : BaseEstimation, IEstimationCalculation
     {
-        var data = useFakeApiResponse == null || useFakeApiResponse.Value == false ? 
+        var data = useFakeApiResponse == null || useFakeApiResponse.Value == false ?
             await GetRetailAPIResponse<TQuery>(change, id) :
             GetFakeRetailAPIResponse<TQuery>(change, id);
 
@@ -443,7 +464,7 @@ internal class WhatIfProcessor
         }
 
         var desiredState = change.after ?? change.before;
-        if(desiredState == null)
+        if (desiredState == null)
         {
             this.logger.LogError("No data available for WhatIf operation.");
             return null;
@@ -458,7 +479,7 @@ internal class WhatIfProcessor
         var summary = estimation.GetTotalCost(this.changes, this.template?.Metadata?.UsagePatterns);
 
         double? delta = null;
-        if(change.before != null)
+        if (change.before != null)
         {
             if (Activator.CreateInstance(typeof(TCalculation), new object[] { data.Items, id, desiredState }) is not TCalculation previousStateEstimation)
             {
@@ -490,7 +511,7 @@ internal class WhatIfProcessor
             {
                 parentResourceToLocation.Add(change.resourceId, desiredState.location);
             }
-            catch(ArgumentException ex)
+            catch (ArgumentException ex)
             {
                 this.logger.LogError("Couldn't process two resources with the same resource ID - {message}", ex.Message);
                 return null;
@@ -503,7 +524,7 @@ internal class WhatIfProcessor
             return null;
         }
 
-        var location = desiredState.location ?? parentResourceToLocation[FindParentId(id)];
+        var location = desiredState.location ?? parentResourceToLocation[childParentMap[id.ToString()]];
         if (location == null)
         {
             this.logger.LogError("Resources without location are not supported.");
@@ -520,7 +541,7 @@ internal class WhatIfProcessor
                 return null;
             }
         }
-        catch(KeyNotFoundException)
+        catch (KeyNotFoundException)
         {
             this.logger.LogWarning("{name} ({type}) [SKU is not yet supported - {sku}]", id.GetName(), id.GetResourceType(), desiredState.sku?.name);
             return null;
@@ -548,7 +569,7 @@ internal class WhatIfProcessor
         }
         else
         {
-            if(url == "SKIP")
+            if (url == "SKIP")
             {
                 data = new RetailAPIResponse()
                 {
@@ -559,7 +580,7 @@ internal class WhatIfProcessor
             }
 
             var response = await GetRetailDataResponse(url);
-            if(response.IsSuccessStatusCode == false)
+            if (response.IsSuccessStatusCode == false)
             {
                 return null;
             }
@@ -589,15 +610,8 @@ internal class WhatIfProcessor
     private string FindParentId(CommonResourceIdentifier id)
     {
         var currentParent = id.GetParent();
-        var parentType = currentParent?.GetParent()?.GetResourceType();
-
-        while(parentType != "Microsoft.Resources/resourceGroups" && parentType != "Microsoft.Resources/subscriptions")
-        {
-            currentParent = currentParent?.GetParent();
-            parentType = currentParent?.GetParent()?.GetResourceType();
-        }
-
-        if(currentParent?.GetName() == null)
+        
+        if (currentParent?.GetName() == null)
         {
             throw new Exception("Couldn't find resource parent.");
         }
@@ -632,7 +646,7 @@ internal class WhatIfProcessor
         this.logger.AddEstimatorMessageSubsection("Total cost: {0} {1}", summary.TotalCost.ToString("N2"), this.currency);
         this.logger.AddEstimatorMessageSubsection("Delta: {0} {1}", $"{deltaSign}{delta.GetValueOrDefault().ToString("N2")}", this.currency);
 
-        if(this.disableDetailedMetrics == false)
+        if (this.disableDetailedMetrics == false)
         {
             ReportAggregatedMetrics(summary);
             ReportUsedMetrics(items);
@@ -649,13 +663,13 @@ internal class WhatIfProcessor
         this.logger.LogInformation("Aggregated metrics:");
         this.logger.LogInformation("");
 
-        if(summary.DetailedCost.Count == 0)
+        if (summary.DetailedCost.Count == 0)
         {
             this.logger.LogInformation("No metrics available.");
             return;
         }
 
-        foreach(var metric in summary.DetailedCost)
+        foreach (var metric in summary.DetailedCost)
         {
             this.logger.LogInformation("-> {metricName} [{cost} {currency}]", metric.Key, metric.Value, this.currency);
         }

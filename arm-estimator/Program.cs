@@ -116,7 +116,7 @@ public class Program
                 return 1;
             }
 
-            if (options.InlineParameters.Any())
+            if (options.InlineParameters != null && options.InlineParameters.Any())
             {
                 parser.ParseInlineParameters(out parameters);
             }

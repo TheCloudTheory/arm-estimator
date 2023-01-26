@@ -2,7 +2,7 @@
 
 internal class StorageAccountQueryFilter : IQueryFilter
 {
-    private const string ServiceId = "DZH317F1HKN0";
+    internal const string ServiceId = "DZH317F1HKN0";
 
     private readonly WhatIfAfterBeforeChange afterState;
     private readonly ILogger logger;
