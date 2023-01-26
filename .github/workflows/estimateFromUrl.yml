@@ -147,4 +147,4 @@ jobs:
         TOTALCOST=$(cat estimate.json | jq -r '.TotalCost')
         CURRENCY=$(cat estimate.json | jq -r '.Currency')
         echo $TOTALCOST $CURRENCY
-        echo "##Azure Cost Estimate\n\Monthly cost estimate : $TOTALCOST $CURRENCY" >> $GITHUB_STEP_SUMMARY
+        echo "## Azure Cost Estimate 💸\n\Monthly cost estimate : $TOTALCOST $CURRENCY" >> $GITHUB_STEP_SUMMARY
