@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -107,6 +107,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="templates\bicep\inlineParams.bicep">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="templates\bicep\insights\diagnostic-settings.bicep">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="templates\bicep\metadata-template.bicep">
