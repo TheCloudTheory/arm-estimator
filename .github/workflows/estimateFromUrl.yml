@@ -125,7 +125,6 @@ jobs:
       id: ace
       env:
         templateParams: ${{ inputs.templateParams}}
-        templateParamsInlined: ''
       run: |             
         if [ ! -z "$templateParams" ]
         then 
