@@ -16,7 +16,7 @@ on:
         description: 'Ace version tag'
         required: false
         type: string
-        default: 1.0.0-beta6
+        default: 1.1-beta2
       templateFileURL:
         description: 'Template file URL'
         required: true
@@ -45,7 +45,7 @@ on:
         description: 'Ace version tag'
         required: false
         type: string
-        default: 1.0.0-beta6
+        default: 1.1-beta2
       templateFileURL:
         description: 'Template file URL'
         required: true
@@ -131,13 +131,20 @@ jobs:
           templateParamsInlined=$(echo --inline ${templateParams//[' ']/ --inline })
         fi
         
-        echo "Estimating template ${{ steps.armassets.outputs.template }} with params file ${{ steps.armassets.outputs.params }} and inline params $templateParamsInlined"
+        echo "Estimating template ${{ steps.armassets.outputs.template }} with params file ${{ steps.armassets.outputs.params }} and inline params $templateParamsInlined - deploying into rg ${{ inputs.rg }}"
         ./arm-estimator ${{ steps.armassets.outputs.template }} ${{ secrets.AZURE_SUBSCRIPTION_ID }} ${{ inputs.rg }} --parameters ${{ steps.armassets.outputs.params }} $templateParamsInlined --generateJsonOutput --jsonOutputFilename estimate
         
         ls
         
-    - uses: actions/upload-artifact@v3.1.1
+    - uses: actions/upload-artifact@v3.1.2
       name: Save Estimate Artifact
       with:
         name: estimate
         path: estimate.json
+
+    - name: Job summary
+      run: |
+        TOTALCOST=$(cat estimate.json | jq -r '.TotalCost')
+        CURRENCY=$(cat estimate.json | jq -r '.Currency')
+        echo $TOTALCOST $CURRENCY
+        printf "## Azure Cost Estimate 💸\n\nMonthly cost estimate : $TOTALCOST $CURRENCY" >> $GITHUB_STEP_SUMMARY
