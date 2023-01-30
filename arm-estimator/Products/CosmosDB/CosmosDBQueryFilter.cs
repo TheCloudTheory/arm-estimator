@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using ACE.WhatIf;
+using Microsoft.Extensions.Logging;
 
 internal class CosmosDBQueryFilter : IQueryFilter
 {

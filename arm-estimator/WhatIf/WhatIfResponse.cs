@@ -1,5 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 
+namespace ACE.WhatIf;
+
 internal class WhatIfResponse
 {
     public string? status { get; set; }

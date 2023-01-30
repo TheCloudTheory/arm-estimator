@@ -1,4 +1,6 @@
-﻿internal enum WhatIfChangeType
+﻿namespace ACE.WhatIf;
+
+internal enum WhatIfChangeType
 {
     Create,
     Delete,

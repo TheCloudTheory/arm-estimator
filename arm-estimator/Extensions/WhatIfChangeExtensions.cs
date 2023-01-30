@@ -1,4 +1,6 @@
-﻿namespace ACE.Extensions
+﻿using ACE.WhatIf;
+
+namespace ACE.Extensions
 {
     internal static class WhatIfChangeExtensions
     {

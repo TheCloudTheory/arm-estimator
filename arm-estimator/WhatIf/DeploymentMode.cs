@@ -1,4 +1,6 @@
-﻿internal enum DeploymentMode
+﻿namespace ACE.WhatIf;
+
+internal enum DeploymentMode
 {
     Incremental,
     Complete

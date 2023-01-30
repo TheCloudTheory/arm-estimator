@@ -1,5 +1,4 @@
-﻿using ACE;
-using Azure.Core;
+﻿using Azure.Core;
 using Azure.Identity;
 using Microsoft.Extensions.Logging;
 using System.Net;
@@ -7,6 +6,8 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
+
+namespace ACE.WhatIf;
 
 internal class AzureWhatIfHandler
 {
