@@ -45,16 +45,7 @@ internal class PostgreSQLEstimationCalculation : BaseEstimation, IEstimationCalc
             }
             else if (item.meterName == "Backup LRS Data Stored" || item.meterName == "Backup GRS Data Stored")
             {
-                var storageProfile = ((JsonElement)this.change.properties!["storageProfile"]).Deserialize<MariaDBStorageProfile>();
-                if (storageProfile != null)
-                {
-                    if (this.change.sku?.size != null && storageProfile.storageMB > int.Parse(this.change.sku?.size!))
-                    {
-                        var mbsDifference = storageProfile.storageMB - int.Parse(this.change.sku?.size!);
-                        var sizeInGbs = mbsDifference / 1024d;
-                        cost = item.retailPrice * sizeInGbs;
-                    }
-                }
+                cost = item.retailPrice * base.IncludeUsagePattern("Microsoft_DBforPostgreSQL_servers_Backup_Storage", usagePatterns, 0);
             }
             else
             {

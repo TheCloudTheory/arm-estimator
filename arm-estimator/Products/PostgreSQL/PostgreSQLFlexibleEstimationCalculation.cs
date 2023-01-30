@@ -1,6 +1,5 @@
 ﻿using ACE.Calculation;
 using ACE.WhatIf;
-using Azure.Core;
 using System.Text.Json;
 
 internal class PostgreSQLFlexibleEstimationCalculation : BaseEstimation, IEstimationCalculation
@@ -45,14 +44,16 @@ internal class PostgreSQLFlexibleEstimationCalculation : BaseEstimation, IEstima
             }
             else if (item.meterName == "Backup LRS Data Stored" || item.meterName == "Backup GRS Data Stored")
             {
-                var storageProfile = ((JsonElement)this.change.properties!["storageProfile"]).Deserialize<MariaDBStorageProfile>();
-                if (storageProfile != null)
+                if(this.change.properties != null && this.change.properties.ContainsKey("storageProfile"))
                 {
-                    if (this.change.sku?.size != null && storageProfile.storageMB > int.Parse(this.change.sku?.size!))
+                    var storageProfile = ((JsonElement)this.change.properties["storageProfile"]).Deserialize<PostgreSQLStorageProfile>();
+                    if(storageProfile?.geoRedundantBackup == "Enabled")
                     {
-                        var mbsDifference = storageProfile.storageMB - int.Parse(this.change.sku?.size!);
-                        var sizeInGbs = mbsDifference / 1024d;
-                        cost = item.retailPrice * sizeInGbs;
+                        cost = item.retailPrice * base.IncludeUsagePattern("Microsoft_DBforPostgreSQL_servers_Backup_Storage", usagePatterns, 0) * 2;
+                    }
+                    else
+                    {
+                        cost = item.retailPrice * base.IncludeUsagePattern("Microsoft_DBforPostgreSQL_servers_Backup_Storage", usagePatterns, 0);
                     }
                 }
             }
