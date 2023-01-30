@@ -1,11 +1,12 @@
 ﻿using ACE;
 using ACE.Calculation;
-using ACE.WhatIf;
 using Microsoft.Extensions.Logging;
 using System.Collections.Concurrent;
 using System.Net;
 using System.Text;
 using System.Text.Json;
+
+namespace ACE.WhatIf;
 
 internal class WhatIfProcessor
 {
@@ -40,7 +41,7 @@ internal class WhatIfProcessor
         {
             if (change.resourceId == null)
             {
-                this.logger.LogError("Couldn't find resource ID");
+                logger.LogError("Couldn't find resource ID");
                 continue;
             }
 
@@ -56,14 +57,14 @@ internal class WhatIfProcessor
         double totalCost = 0;
         double delta = 0;
 
-        this.logger.LogInformation("Estimations:");
-        this.logger.LogInformation("");
+        logger.LogInformation("Estimations:");
+        logger.LogInformation("");
 
         var resources = new List<EstimatedResourceData>();
         var unsupportedResources = new List<CommonResourceIdentifier>();
         var freeResources = new Dictionary<CommonResourceIdentifier, WhatIfChangeType?>();
 
-        foreach (WhatIfChange change in this.changes)
+        foreach (WhatIfChange change in changes)
         {
             if (change.resourceId == null)
             {
@@ -393,51 +394,51 @@ internal class WhatIfProcessor
 
         if (resources.Count == 0)
         {
-            this.logger.AddEstimatorMessage("No resource available for estimation.");
-            this.logger.LogInformation("");
-            this.logger.LogInformation("-------------------------------");
-            this.logger.LogInformation("");
+            logger.AddEstimatorMessage("No resource available for estimation.");
+            logger.LogInformation("");
+            logger.LogInformation("-------------------------------");
+            logger.LogInformation("");
         }
 
         if (freeResources.Count > 0)
         {
-            this.logger.LogInformation("Free resources:");
-            this.logger.LogInformation("");
+            logger.LogInformation("Free resources:");
+            logger.LogInformation("");
 
             foreach (var resource in freeResources)
             {
                 ReportResourceWithoutCost(resource.Key, resource.Value);
             }
 
-            this.logger.LogInformation("");
-            this.logger.LogInformation("-------------------------------");
-            this.logger.LogInformation("");
+            logger.LogInformation("");
+            logger.LogInformation("-------------------------------");
+            logger.LogInformation("");
         }
 
         if (unsupportedResources.Count > 0)
         {
-            this.logger.LogInformation("Unsupported resources:");
-            this.logger.LogInformation("");
+            logger.LogInformation("Unsupported resources:");
+            logger.LogInformation("");
             ReportUnsupportedResources(unsupportedResources);
-            this.logger.LogInformation("");
-            this.logger.LogInformation("-------------------------------");
-            this.logger.LogInformation("");
+            logger.LogInformation("");
+            logger.LogInformation("-------------------------------");
+            logger.LogInformation("");
         }
 
-        this.logger.LogInformation("Summary:");
-        this.logger.LogInformation("");
-        this.logger.AddEstimatorMessage("Total cost: {0} {1}", totalCost.ToString("N2"), this.currency);
-        this.logger.AddEstimatorMessage("Delta: {0}{1} {2}", sign, delta.ToString("N2"), this.currency);
-        this.logger.LogInformation("");
+        logger.LogInformation("Summary:");
+        logger.LogInformation("");
+        logger.AddEstimatorMessage("Total cost: {0} {1}", totalCost.ToString("N2"), currency);
+        logger.AddEstimatorMessage("Delta: {0}{1} {2}", sign, delta.ToString("N2"), currency);
+        logger.LogInformation("");
 
-        return new EstimationOutput(totalCost, delta, resources, currency, this.changes.Length, unsupportedResources.Count);
+        return new EstimationOutput(totalCost, delta, resources, currency, changes.Length, unsupportedResources.Count);
     }
 
     private void ReportUnsupportedResources(List<CommonResourceIdentifier> unsupportedResources)
     {
         foreach (var resource in unsupportedResources)
         {
-            this.logger.AddEstimatorMessage("{0} [{1}]", resource.GetName(), resource.GetResourceType());
+            logger.AddEstimatorMessage("{0} [{1}]", resource.GetName(), resource.GetResourceType());
         }
     }
 
@@ -451,43 +452,43 @@ internal class WhatIfProcessor
 
         if (data == null || data.Items == null)
         {
-            this.logger.LogWarning("Got no records for {type} from Retail API", id.GetResourceType());
-            this.logger.LogInformation("");
+            logger.LogWarning("Got no records for {type} from Retail API", id.GetResourceType());
+            logger.LogInformation("");
 
             return null;
         }
 
-        if (change.resourceId == null || (change.after == null && change.before == null))
+        if (change.resourceId == null || change.after == null && change.before == null)
         {
-            this.logger.LogError("No data available for WhatIf operation.");
+            logger.LogError("No data available for WhatIf operation.");
             return null;
         }
 
         var desiredState = change.after ?? change.before;
         if (desiredState == null)
         {
-            this.logger.LogError("No data available for WhatIf operation.");
+            logger.LogError("No data available for WhatIf operation.");
             return null;
         }
 
         if (Activator.CreateInstance(typeof(TCalculation), new object[] { data.Items, id, desiredState }) is not TCalculation estimation)
         {
-            this.logger.LogError("Couldn't create an instance of {type}.", typeof(TCalculation));
+            logger.LogError("Couldn't create an instance of {type}.", typeof(TCalculation));
             return null;
         }
 
-        var summary = estimation.GetTotalCost(this.changes, this.template?.Metadata?.UsagePatterns);
+        var summary = estimation.GetTotalCost(changes, template?.Metadata?.UsagePatterns);
 
         double? delta = null;
         if (change.before != null)
         {
             if (Activator.CreateInstance(typeof(TCalculation), new object[] { data.Items, id, desiredState }) is not TCalculation previousStateEstimation)
             {
-                this.logger.LogError("Couldn't create an instance of {type}.", typeof(TCalculation));
+                logger.LogError("Couldn't create an instance of {type}.", typeof(TCalculation));
             }
             else
             {
-                var previousSummary = previousStateEstimation.GetTotalCost(this.changes, this.template?.Metadata?.UsagePatterns);
+                var previousSummary = previousStateEstimation.GetTotalCost(changes, template?.Metadata?.UsagePatterns);
                 delta = summary.TotalCost - previousSummary.TotalCost;
             }
         }
@@ -501,7 +502,7 @@ internal class WhatIfProcessor
         var desiredState = change.after ?? change.before;
         if (desiredState == null || change.resourceId == null)
         {
-            this.logger.LogError("Couldn't determine desired state for {type}.", typeof(T));
+            logger.LogError("Couldn't determine desired state for {type}.", typeof(T));
             return null;
         }
 
@@ -513,21 +514,21 @@ internal class WhatIfProcessor
             }
             catch (ArgumentException ex)
             {
-                this.logger.LogError("Couldn't process two resources with the same resource ID - {message}", ex.Message);
+                logger.LogError("Couldn't process two resources with the same resource ID - {message}", ex.Message);
                 return null;
             }
         }
 
-        if (Activator.CreateInstance(typeof(T), new object[] { change, id, logger, this.currency, this.changes }) is not T query)
+        if (Activator.CreateInstance(typeof(T), new object[] { change, id, logger, currency, changes }) is not T query)
         {
-            this.logger.LogError("Couldn't create an instance of {type}.", typeof(T));
+            logger.LogError("Couldn't create an instance of {type}.", typeof(T));
             return null;
         }
 
         var location = desiredState.location ?? parentResourceToLocation[childParentMap[id.ToString()]];
         if (location == null)
         {
-            this.logger.LogError("Resources without location are not supported.");
+            logger.LogError("Resources without location are not supported.");
             return null;
         }
 
@@ -537,13 +538,13 @@ internal class WhatIfProcessor
             url = query.GetQueryUrl(location);
             if (url == null)
             {
-                this.logger.LogError("URL generated for {type} is null.", typeof(T));
+                logger.LogError("URL generated for {type} is null.", typeof(T));
                 return null;
             }
         }
         catch (KeyNotFoundException)
         {
-            this.logger.LogWarning("{name} ({type}) [SKU is not yet supported - {sku}]", id.GetName(), id.GetResourceType(), desiredState.sku?.name);
+            logger.LogWarning("{name} ({type}) [SKU is not yet supported - {sku}]", id.GetName(), id.GetResourceType(), desiredState.sku?.name);
             return null;
         }
 
@@ -551,7 +552,7 @@ internal class WhatIfProcessor
         var data = await TryGetCachedResultForUrl(url);
         if (data == null || data.Items == null)
         {
-            this.logger.LogWarning("Data for {resourceType} is not available.", id.GetResourceType());
+            logger.LogWarning("Data for {resourceType} is not available.", id.GetResourceType());
             return null;
         }
 
@@ -564,7 +565,7 @@ internal class WhatIfProcessor
         var urlHash = Convert.ToBase64String(Encoding.UTF8.GetBytes(url));
         if (cachedResults.TryGetValue(urlHash, out var previousResponse))
         {
-            this.logger.LogDebug("Getting Retail API data for {url} from cache.", url);
+            logger.LogDebug("Getting Retail API data for {url} from cache.", url);
             data = previousResponse;
         }
         else
@@ -598,9 +599,9 @@ internal class WhatIfProcessor
 
     private RetailAPIResponse? GetFakeRetailAPIResponse<T>(WhatIfChange change, CommonResourceIdentifier id) where T : BaseRetailQuery, IRetailQuery
     {
-        if (Activator.CreateInstance(typeof(T), new object[] { change, id, logger, this.currency, this.changes }) is not T query)
+        if (Activator.CreateInstance(typeof(T), new object[] { change, id, logger, currency, changes }) is not T query)
         {
-            this.logger.LogError("Couldn't create an instance of {type}.", typeof(T));
+            logger.LogError("Couldn't create an instance of {type}.", typeof(T));
             return null;
         }
 
@@ -610,7 +611,7 @@ internal class WhatIfProcessor
     private string FindParentId(CommonResourceIdentifier id)
     {
         var currentParent = id.GetParent();
-        
+
         if (currentParent?.GetName() == null)
         {
             throw new Exception("Couldn't find resource parent.");
@@ -640,65 +641,65 @@ internal class WhatIfProcessor
         var deltaSign = delta == null ? "+" : delta == 0 ? "" : "-";
         delta = delta == null ? summary.TotalCost : 0;
 
-        this.logger.AddEstimatorMessageSensibleToChange(changeType, "{0}", id.GetName());
-        this.logger.AddEstimatorMessageSubsection("Type: {0}", id.GetResourceType());
-        this.logger.AddEstimatorMessageSubsection("Location: {0}", location);
-        this.logger.AddEstimatorMessageSubsection("Total cost: {0} {1}", summary.TotalCost.ToString("N2"), this.currency);
-        this.logger.AddEstimatorMessageSubsection("Delta: {0} {1}", $"{deltaSign}{delta.GetValueOrDefault().ToString("N2")}", this.currency);
+        logger.AddEstimatorMessageSensibleToChange(changeType, "{0}", id.GetName());
+        logger.AddEstimatorMessageSubsection("Type: {0}", id.GetResourceType());
+        logger.AddEstimatorMessageSubsection("Location: {0}", location);
+        logger.AddEstimatorMessageSubsection("Total cost: {0} {1}", summary.TotalCost.ToString("N2"), currency);
+        logger.AddEstimatorMessageSubsection("Delta: {0} {1}", $"{deltaSign}{delta.GetValueOrDefault().ToString("N2")}", currency);
 
-        if (this.disableDetailedMetrics == false)
+        if (disableDetailedMetrics == false)
         {
             ReportAggregatedMetrics(summary);
             ReportUsedMetrics(items);
         }
 
-        this.logger.LogInformation("");
-        this.logger.LogInformation("-------------------------------");
-        this.logger.LogInformation("");
+        logger.LogInformation("");
+        logger.LogInformation("-------------------------------");
+        logger.LogInformation("");
     }
 
     private void ReportAggregatedMetrics(TotalCostSummary summary)
     {
-        this.logger.LogInformation("");
-        this.logger.LogInformation("Aggregated metrics:");
-        this.logger.LogInformation("");
+        logger.LogInformation("");
+        logger.LogInformation("Aggregated metrics:");
+        logger.LogInformation("");
 
         if (summary.DetailedCost.Count == 0)
         {
-            this.logger.LogInformation("No metrics available.");
+            logger.LogInformation("No metrics available.");
             return;
         }
 
         foreach (var metric in summary.DetailedCost)
         {
-            this.logger.LogInformation("-> {metricName} [{cost} {currency}]", metric.Key, metric.Value, this.currency);
+            logger.LogInformation("-> {metricName} [{cost} {currency}]", metric.Key, metric.Value, currency);
         }
     }
 
     private void ReportUsedMetrics(IOrderedEnumerable<RetailItem> items)
     {
-        this.logger.LogInformation("");
-        this.logger.LogInformation("Used metrics:");
-        this.logger.LogInformation("");
+        logger.LogInformation("");
+        logger.LogInformation("Used metrics:");
+        logger.LogInformation("");
 
         if (items.Any())
         {
             foreach (var item in items)
             {
-                this.logger.LogInformation("-> {skuName} | {productName} | {meterName} | {retailPrice} for {measure}", item.skuName, item.productName, item.meterName, item.retailPrice, item.unitOfMeasure);
+                logger.LogInformation("-> {skuName} | {productName} | {meterName} | {retailPrice} for {measure}", item.skuName, item.productName, item.meterName, item.retailPrice, item.unitOfMeasure);
             }
         }
         else
         {
-            this.logger.LogInformation("No metrics available.");
+            logger.LogInformation("No metrics available.");
         }
     }
 
     private EstimatedResourceData ReportResourceWithoutCost(CommonResourceIdentifier id, WhatIfChangeType? changeType)
     {
-        this.logger.AddEstimatorMessageSensibleToChange(changeType, "{0}", id.GetName());
-        this.logger.AddEstimatorMessageSubsection("Type: {0}", id.GetResourceType());
-        this.logger.LogInformation("");
+        logger.AddEstimatorMessageSensibleToChange(changeType, "{0}", id.GetName());
+        logger.AddEstimatorMessageSubsection("Type: {0}", id.GetResourceType());
+        logger.LogInformation("");
 
         return new EstimatedResourceData(0, 0, id);
     }

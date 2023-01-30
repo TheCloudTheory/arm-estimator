@@ -1,4 +1,6 @@
-﻿namespace ACE.Calculation;
+﻿using ACE.WhatIf;
+
+namespace ACE.Calculation;
 
 internal interface IEstimationCalculation
 {

@@ -9,7 +9,7 @@ namespace arm_estimator_tests.Bicep
         [TestCase("Disabled", 70.603000000000009d)]
         [TestCase("Enabled", 82.503d)]
         [Parallelizable(ParallelScope.All)]
-        public async Task PostgreSQL_WhenCalculationIsPerformedWithBackupUsagePattern_ItShouldBeCalculatedCorrectly(string geoRedundantBackup, decimal cost)
+        public async Task PostgreSQL_WhenCalculationIsPerformedWithBackupUsagePattern_ItShouldBeCalculatedCorrectly(string geoRedundantBackup, double cost)
         {
             var outputFilename = $"ace_test_{DateTime.Now.Ticks}";
             var exitCode = await Program.Main(new[] {

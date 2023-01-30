@@ -1,4 +1,6 @@
-﻿namespace ACE;
+﻿using ACE.WhatIf;
+
+namespace ACE;
 
 internal class EstimateOptions
 {

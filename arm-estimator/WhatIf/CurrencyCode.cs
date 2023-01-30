@@ -1,4 +1,6 @@
-﻿public enum CurrencyCode
+﻿namespace ACE.WhatIf;
+
+public enum CurrencyCode
 {
     USD,
     AUD,

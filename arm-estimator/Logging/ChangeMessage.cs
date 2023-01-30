@@ -1,4 +1,6 @@
-﻿internal class ChangeMessage
+﻿using ACE.WhatIf;
+
+internal class ChangeMessage
 {
     public ChangeMessage(WhatIfChangeType changeType, string message)
     {
