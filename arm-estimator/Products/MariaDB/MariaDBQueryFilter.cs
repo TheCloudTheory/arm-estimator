@@ -27,10 +27,11 @@ internal class MariaDBQueryFilter : IQueryFilter
         var tierId = skuParts[0];
         var familyId = skuParts[1];
         var cores = skuParts[2];
-        string? skuProductName = null;
-        string? storageSkuName = null;
 
-        if(tierId == "B")
+        string? skuProductName;
+        string? storageSkuName;
+
+        if (tierId == "B")
         {
             skuProductName = "Basic";
             storageSkuName = "Basic";
@@ -52,18 +53,15 @@ internal class MariaDBQueryFilter : IQueryFilter
         if (this.afterState.properties != null && this.afterState.properties.ContainsKey("storageProfile"))
         {
             var storageProfile = ((JsonElement)this.afterState.properties["storageProfile"]).Deserialize<MariaDBStorageProfile>();
-            if(storageProfile != null)
+            if (storageProfile != null)
             {
-                if(this.afterState.sku?.size != null && storageProfile.storageMB > int.Parse(this.afterState.sku?.size!))
+                var backupSku = "Backup LRS";
+                if (storageProfile.geoRedundantBackup != null && storageProfile.geoRedundantBackup == "Enabled")
                 {
-                    var backupSku = "Backup LRS";
-                    if (storageProfile.geoRedundantBackup != null && storageProfile.geoRedundantBackup == "Enabled")
-                    {
-                        backupSku = "Backup GRS";
-                    }
-
-                    return $"serviceId eq '{ServiceId}' and ((armRegionName eq '{location}' and skuName eq '{skuName}' and productName eq '{productName}') or (armRegionName eq '{location}' and skuName eq '{storageSkuName}') or (armRegionName eq '{location}' and skuName eq '{backupSku}'))";
+                    backupSku = "Backup GRS";
                 }
+
+                return $"serviceId eq '{ServiceId}' and ((armRegionName eq '{location}' and skuName eq '{skuName}' and productName eq '{productName}') or (armRegionName eq '{location}' and skuName eq '{storageSkuName}') or (armRegionName eq '{location}' and skuName eq '{backupSku}'))";
             }
         }
 
