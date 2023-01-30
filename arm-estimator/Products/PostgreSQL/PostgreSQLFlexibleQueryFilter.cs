@@ -53,31 +53,22 @@ internal class PostgreSQLFlexibleQueryFilter : IQueryFilter
             skuProductName = $"Memory Optimized\u00A0{familyId}\u00A0";
             storageProductName = "Az DB for PostgreSQL Flexible Server Storage";
 
-            if(familyId == "Edsv4")
+            if (familyId == "Edsv4")
             {
                 productName = $"Azure\u00A0Database for PostgreSQL Flexible Server {skuProductName}Series Compute";
             }
             else
             {
                 productName = $"Azure\u00A0Database for PostgreSQL Flexible Server\u00A0{skuProductName}Series Compute";
-            }           
+            }
         }
 
         if (this.afterState.properties != null && this.afterState.properties.ContainsKey("storageProfile"))
         {
             var storageProfile = ((JsonElement)this.afterState.properties["storageProfile"]).Deserialize<PostgreSQLStorageProfile>();
-            if(storageProfile != null)
+            if (storageProfile != null)
             {
-                if(this.afterState.sku?.size != null && storageProfile.storageMB > int.Parse(this.afterState.sku?.size!))
-                {
-                    var backupSku = "Backup LRS";
-                    if (storageProfile.geoRedundantBackup != null && storageProfile.geoRedundantBackup == "Enabled")
-                    {
-                        backupSku = "Backup GRS";
-                    }
-
-                    return $"serviceId eq '{ServiceId}' and ((armRegionName eq '{location}' and skuName eq '{skuName}' and productName eq '{productName}') or (armRegionName eq '{location}' and skuName eq '{storageProductName}') or (armRegionName eq '{location}' and skuName eq '{backupSku}'))";
-                }
+                return $"serviceId eq '{ServiceId}' and ((armRegionName eq '{location}' and skuName eq '{skuName}' and productName eq '{productName}') or (armRegionName eq '{location}' and productName eq '{storageProductName}') or (armRegionName eq '{location}' and skuName eq 'Backup Storage LRS'))";
             }
         }
 

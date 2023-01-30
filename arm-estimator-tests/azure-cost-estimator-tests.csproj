@@ -148,6 +148,9 @@
     <None Update="templates\bicep\usagePatterns\mariadb.bicep">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="templates\bicep\usagePatterns\postgresql.bicep">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="templates\bicep\usagePatterns\sql.bicep">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

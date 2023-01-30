@@ -52,18 +52,15 @@ internal class PostgreSQLQueryFilter : IQueryFilter
         if (this.afterState.properties != null && this.afterState.properties.ContainsKey("storageProfile"))
         {
             var storageProfile = ((JsonElement)this.afterState.properties["storageProfile"]).Deserialize<PostgreSQLStorageProfile>();
-            if(storageProfile != null)
+            if (storageProfile != null)
             {
-                if(this.afterState.sku?.size != null && storageProfile.storageMB > int.Parse(this.afterState.sku?.size!))
+                var backupSku = "Backup LRS";
+                if (storageProfile.geoRedundantBackup != null && storageProfile.geoRedundantBackup == "Enabled")
                 {
-                    var backupSku = "Backup LRS";
-                    if (storageProfile.geoRedundantBackup != null && storageProfile.geoRedundantBackup == "Enabled")
-                    {
-                        backupSku = "Backup GRS";
-                    }
-
-                    return $"serviceId eq '{ServiceId}' and ((armRegionName eq '{location}' and skuName eq '{skuName}' and productName eq '{productName}') or (armRegionName eq '{location}' and skuName eq '{storageProductName}') or (armRegionName eq '{location}' and skuName eq '{backupSku}'))";
+                    backupSku = "Backup GRS";
                 }
+
+                return $"serviceId eq '{ServiceId}' and ((armRegionName eq '{location}' and skuName eq '{skuName}' and productName eq '{productName}') or (armRegionName eq '{location}' and productName eq '{storageProductName}') or (armRegionName eq '{location}' and skuName eq '{backupSku}' and productName eq 'Azure Database for PostgreSQL Single Server - Backup Storage'))";
             }
         }
 
