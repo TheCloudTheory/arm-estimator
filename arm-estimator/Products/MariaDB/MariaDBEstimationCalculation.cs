@@ -31,7 +31,8 @@ internal class MariaDBEstimationCalculation : BaseEstimation, IEstimationCalcula
             }
             else if (item.meterName == "Data Stored"
                 || item.meterName == "General Purpose Data Stored"
-                || item.meterName == "Perf Optimized Data Stored")
+                || item.meterName == "Perf Optimized Data Stored"
+                || item.meterName == "Basic Data Stored")
             {
                 if (this.change.sku?.size != null)
                 {
@@ -45,16 +46,7 @@ internal class MariaDBEstimationCalculation : BaseEstimation, IEstimationCalcula
             }
             else if (item.meterName == "Backup LRS Data Stored" || item.meterName == "Backup GRS Data Stored")
             {
-                var storageProfile = ((JsonElement)this.change.properties!["storageProfile"]).Deserialize<MariaDBStorageProfile>();
-                if (storageProfile != null)
-                {
-                    if (this.change.sku?.size != null && storageProfile.storageMB > int.Parse(this.change.sku?.size!))
-                    {
-                        var mbsDifference = storageProfile.storageMB - int.Parse(this.change.sku?.size!);
-                        var sizeInGbs = mbsDifference / 1024d;
-                        cost = item.retailPrice * sizeInGbs;
-                    }
-                }
+                cost = item.retailPrice * base.IncludeUsagePattern("Microsoft_DBforMariaDB_servers_Backup_Storage", usagePatterns, 0);
             }
             else
             {
