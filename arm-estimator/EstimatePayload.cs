@@ -8,10 +8,17 @@ namespace ACE;
 internal class EstimatePayload
 {
     public EstimatePayloadProperties properties { get; }
+    public string? location { get; }
 
     public EstimatePayload(string template, DeploymentMode deploymentMode, string parameters)
     {
         properties = new EstimatePayloadProperties(template, deploymentMode, parameters);
+    }
+
+    public EstimatePayload(string template, DeploymentMode deploymentMode, string parameters, string? location)
+    {
+        properties = new EstimatePayloadProperties(template, deploymentMode, parameters);
+        this.location = location;
     }
 }
 

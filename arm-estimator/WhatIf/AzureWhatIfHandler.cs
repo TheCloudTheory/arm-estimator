@@ -20,6 +20,7 @@ internal class AzureWhatIfHandler
     private readonly string parameters;
     private readonly ILogger logger;
     private readonly CommandType commandType;
+    private readonly string? location;
 
     public AzureWhatIfHandler(string scopeId,
                               string? resourceGroupName,
@@ -27,7 +28,8 @@ internal class AzureWhatIfHandler
                               DeploymentMode deploymentMode,
                               string parameters,
                               ILogger logger,
-                              CommandType commandType)
+                              CommandType commandType,
+                              string? location)
     {
         this.scopeId = scopeId;
         this.resourceGroupName = resourceGroupName;
@@ -36,6 +38,7 @@ internal class AzureWhatIfHandler
         this.parameters = parameters;
         this.logger = logger;
         this.commandType = commandType;
+        this.location = location;
     }
 
     public async Task<WhatIfResponse?> GetResponseWithRetries()
@@ -86,10 +89,23 @@ internal class AzureWhatIfHandler
     {
         var token = GetToken();
         var request = new HttpRequestMessage(HttpMethod.Post, CreateUrlBasedOnScope());
-        var templateContent = JsonSerializer.Serialize(new EstimatePayload(this.template, this.deploymentMode, this.parameters), new JsonSerializerOptions()
+
+        string? templateContent;
+        if(this.commandType == CommandType.ResourceGroup)
         {
-            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
-        });
+            templateContent = JsonSerializer.Serialize(new EstimatePayload(this.template, this.deploymentMode, this.parameters), new JsonSerializerOptions()
+            {
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+            });
+        }
+        else
+        {
+            templateContent = JsonSerializer.Serialize(new EstimatePayload(this.template, this.deploymentMode, this.parameters, this.location), new JsonSerializerOptions()
+            {
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+            });
+        }
+
         request.Content = new StringContent(templateContent, Encoding.UTF8, "application/json");
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
