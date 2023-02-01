@@ -35,8 +35,11 @@ namespace arm_estimator_tests.Bicep
             });
 
             Assert.That(output, Is.Not.Null);
-            Assert.That(output.TotalCost, Is.EqualTo(5.0979999999999999d));
-            Assert.That(output.TotalResourceCount, Is.EqualTo(2));
+            Assert.Multiple(() =>
+            {
+                Assert.That(output.TotalCost, Is.EqualTo(5.0979999999999999d));
+                Assert.That(output.TotalResourceCount, Is.EqualTo(2));
+            });
         }
 
         [Test]
@@ -63,11 +66,15 @@ namespace arm_estimator_tests.Bicep
             });
 
             Assert.That(output, Is.Not.Null);
-            Assert.That(output.TotalCost, Is.EqualTo(0));
-            Assert.That(output.TotalResourceCount, Is.EqualTo(1));
+            Assert.Multiple(() =>
+            {
+                Assert.That(output.TotalCost, Is.EqualTo(0));
+                Assert.That(output.TotalResourceCount, Is.EqualTo(1));
+            });
         }
 
         [Test]
+        [Ignore("This test requires elevated access in Azure AD tenant. Run it manually with properly configured access.")]
         [Parallelizable(ParallelScope.Self)]
         public async Task Scope_WhenEstimationIsPerfomedOnTenantLevel_ItShouldWorkCorrectly()
         {
@@ -90,8 +97,11 @@ namespace arm_estimator_tests.Bicep
             });
 
             Assert.That(output, Is.Not.Null);
-            Assert.That(output.TotalCost, Is.EqualTo(5.0979999999999999d));
-            Assert.That(output.TotalResourceCount, Is.EqualTo(2));
+            Assert.Multiple(() =>
+            {
+                Assert.That(output.TotalCost, Is.EqualTo(0));
+                Assert.That(output.TotalResourceCount, Is.EqualTo(1));
+            });
         }
     }
 }
