@@ -121,6 +121,21 @@
     <None Update="templates\bicep\redis\redis-enterprise.bicep">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="templates\bicep\scopes\management-group.bicep">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="templates\bicep\scopes\modules\acr.bicep">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="templates\bicep\scopes\modules\role-assignment.bicep">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="templates\bicep\scopes\subscription.bicep">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="templates\bicep\scopes\tenant.bicep">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="templates\bicep\securestring.bicep">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

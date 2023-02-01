@@ -19,7 +19,7 @@ public class Program
         var susbcriptionIdArg = new Argument<string>("subscription-id", "Subscription ID");
         var resourceGroupArg = new Argument<string>("resource-group", "Resource group name");
         var managementGroupArg = new Argument<string>("management-group", "Management group name");
-        var tenantArg = new Argument<string>("tenant", "Tenant name");
+        var locationArg = new Argument<string>("location", "Deployment location");
 
         var deploymentModeOption = new Option<DeploymentMode>("--mode", () => { return DeploymentMode.Incremental; }, "Deployment mode");
         var thresholdOption = new Option<int>("--threshold", () => { return -1; }, "Estimation threshold");
@@ -55,7 +55,7 @@ public class Program
 
         rootCommand.SetHandler(async (file, subscription, resourceGroup, options) =>
         {
-            var exitCode = await Estimate(file, subscription, resourceGroup, options, CommandType.ResourceGroup);
+            var exitCode = await Estimate(file, subscription, resourceGroup, null, options, CommandType.ResourceGroup);
             if (exitCode != 0)
             {
                 throw new Exception();
@@ -82,10 +82,11 @@ public class Program
         var subscriptionCommand = new Command("sub", "Calculate estimation for subscription");
         subscriptionCommand.AddArgument(templateFileArg);
         subscriptionCommand.AddArgument(susbcriptionIdArg);
+        subscriptionCommand.AddArgument(locationArg);
 
-        subscriptionCommand.SetHandler(async (file, subscription, options) =>
+        subscriptionCommand.SetHandler(async (file, subscription, location, options) =>
         {
-            var exitCode = await Estimate(file, subscription, null, options, CommandType.Subscription);
+            var exitCode = await Estimate(file, subscription, null, location, options, CommandType.Subscription);
             if (exitCode != 0)
             {
                 throw new Exception();
@@ -93,6 +94,7 @@ public class Program
         },
             templateFileArg,
             susbcriptionIdArg,
+            locationArg,
             new EstimateOptionsBinder(
                 deploymentModeOption,
                 thresholdOption,
@@ -111,17 +113,19 @@ public class Program
         var managementGroupCommand = new Command("mg", "Calculate estimation for management group");
         managementGroupCommand.AddArgument(templateFileArg);
         managementGroupCommand.AddArgument(managementGroupArg);
+        managementGroupCommand.AddArgument(locationArg);
 
-        managementGroupCommand.SetHandler(async (file, managementGroup, options) =>
+        managementGroupCommand.SetHandler(async (file, managementGroup, location, options) =>
         {
-            var exitCode = await Estimate(file, managementGroup, null, options, CommandType.ManagementGroup);
+            var exitCode = await Estimate(file, managementGroup, null, location, options, CommandType.ManagementGroup);
             if (exitCode != 0)
             {
                 throw new Exception();
             }
         },
             templateFileArg,
-            susbcriptionIdArg,
+            managementGroupArg,
+            locationArg,
             new EstimateOptionsBinder(
                 deploymentModeOption,
                 thresholdOption,
@@ -139,18 +143,18 @@ public class Program
 
         var tenantCommand = new Command("tenant", "Calculate estimation for tenant");
         tenantCommand.AddArgument(templateFileArg);
-        tenantCommand.AddArgument(managementGroupArg);
+        tenantCommand.AddArgument(locationArg);
 
-        tenantCommand.SetHandler(async (file, tenant, options) =>
+        tenantCommand.SetHandler(async (file, location, options) =>
         {
-            var exitCode = await Estimate(file, tenant, null, options, CommandType.Tenant);
+            var exitCode = await Estimate(file, "<tenant>", null, location, options, CommandType.Tenant);
             if (exitCode != 0)
             {
                 throw new Exception();
             }
         },
             templateFileArg,
-            susbcriptionIdArg,
+            locationArg,
             new EstimateOptionsBinder(
                 deploymentModeOption,
                 thresholdOption,
@@ -173,7 +177,12 @@ public class Program
         return await rootCommand.InvokeAsync(args);
     }
 
-    private static async Task<int> Estimate(FileInfo templateFile, string scopeId, string? resourceGroupName, EstimateOptions options, CommandType commandType)
+    private static async Task<int> Estimate(FileInfo templateFile,
+                                            string scopeId,
+                                            string? resourceGroupName,
+                                            string? location,
+                                            EstimateOptions options,
+                                            CommandType commandType)
     {
         using (var loggerFactory = LoggerFactory.Create(builder =>
         {
@@ -215,7 +224,7 @@ public class Program
                 parser.ParseInlineParameters(out parameters);
             }
 
-            var whatIfParser = new WhatIfParser(templateType, scopeId, resourceGroupName, template, options.Mode, parameters, logger, commandType);
+            var whatIfParser = new WhatIfParser(templateType, scopeId, resourceGroupName, template, options.Mode, parameters, logger, commandType, location);
             var whatIfData = await whatIfParser.GetWhatIfData();
             if (whatIfData == null)
             {

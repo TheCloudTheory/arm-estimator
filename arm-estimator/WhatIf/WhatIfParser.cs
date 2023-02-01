@@ -13,6 +13,7 @@ internal class WhatIfParser
     private readonly string parameters;
     private readonly ILogger<Program> logger;
     private readonly CommandType commandType;
+    private readonly string? location;
 
     public WhatIfParser(
         TemplateType templateType,
@@ -22,7 +23,8 @@ internal class WhatIfParser
         DeploymentMode mode,
         string parameters,
         ILogger<Program> logger,
-        CommandType commandType)
+        CommandType commandType,
+        string? location)
     {
         this.templateType = templateType;
         this.scopeId = scopeId;
@@ -32,6 +34,7 @@ internal class WhatIfParser
         this.parameters = parameters;
         this.logger = logger;
         this.commandType = commandType;
+        this.location = location;
     }
 
     public async Task<WhatIfResponse?> GetWhatIfData()
@@ -45,7 +48,8 @@ internal class WhatIfParser
                 this.mode, 
                 this.parameters, 
                 this.logger,
-                this.commandType);
+                this.commandType,
+                this.location);
 
             return await handler.GetResponseWithRetries();
         }
