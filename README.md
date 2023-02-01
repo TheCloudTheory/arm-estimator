@@ -30,6 +30,7 @@ ACE follows a concept of [_running cost as architecture fitness function_](https
 * Supports 17 different currencies
 * Allows for generating output as an artifact for further processing
 * Ability to consume custom usage patterns for enhancing calculations
+* Multiple deployment scopes support (resource group / subscription / management group / tenant)
 
 ## Documentation
 Check [wiki](https://github.com/TheCloudTheory/arm-estimator/wiki/About-wiki) for detailed information about installation, usage and available features
