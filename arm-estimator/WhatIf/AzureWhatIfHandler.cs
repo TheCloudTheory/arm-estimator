@@ -13,26 +13,29 @@ internal class AzureWhatIfHandler
 {
     private static readonly Lazy<HttpClient> httpClient = new(() => new HttpClient());
 
-    private readonly string subscriptionId;
-    private readonly string resourceGroupName;
+    private readonly string scopeId;
+    private readonly string? resourceGroupName;
     private readonly string template;
     private readonly DeploymentMode deploymentMode;
     private readonly string parameters;
     private readonly ILogger logger;
+    private readonly CommandType commandType;
 
-    public AzureWhatIfHandler(string subscriptionId,
-                              string resourceGroupName,
+    public AzureWhatIfHandler(string scopeId,
+                              string? resourceGroupName,
                               string template,
                               DeploymentMode deploymentMode,
                               string parameters,
-                              ILogger logger)
+                              ILogger logger,
+                              CommandType commandType)
     {
-        this.subscriptionId = subscriptionId;
+        this.scopeId = scopeId;
         this.resourceGroupName = resourceGroupName;
         this.template = template;
         this.deploymentMode = deploymentMode;
         this.parameters = parameters;
         this.logger = logger;
+        this.commandType = commandType;
     }
 
     public async Task<WhatIfResponse?> GetResponseWithRetries()
@@ -82,7 +85,7 @@ internal class AzureWhatIfHandler
     private async Task<HttpResponseMessage> SendInitialRequest()
     {
         var token = GetToken();
-        var request = new HttpRequestMessage(HttpMethod.Post, $"https://management.azure.com/subscriptions/{this.subscriptionId}/resourcegroups/{this.resourceGroupName}/providers/Microsoft.Resources/deployments/arm-estimator/whatIf?api-version=2021-04-01");
+        var request = new HttpRequestMessage(HttpMethod.Post, CreateUrlBasedOnScope());
         var templateContent = JsonSerializer.Serialize(new EstimatePayload(this.template, this.deploymentMode, this.parameters), new JsonSerializerOptions()
         {
             Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
@@ -92,6 +95,18 @@ internal class AzureWhatIfHandler
 
         var response = await httpClient.Value.SendAsync(request);
         return response;
+    }
+
+    private string CreateUrlBasedOnScope()
+    {
+        return this.commandType switch
+        {
+            CommandType.ResourceGroup => $"https://management.azure.com/subscriptions/{this.scopeId}/resourcegroups/{this.resourceGroupName}/providers/Microsoft.Resources/deployments/arm-estimator/whatIf?api-version=2021-04-01",
+            CommandType.Subscription => $"https://management.azure.com/subscriptions/{this.scopeId}/providers/Microsoft.Resources/deployments/arm-estimator/whatIf?api-version=2021-04-01",
+            CommandType.ManagementGroup => $"https://management.azure.com/providers/Microsoft.Management/managementGroups/{this.scopeId}/providers/Microsoft.Resources/deployments/arm-estimator/whatIf?api-version=2021-04-01",
+            CommandType.Tenant => $"https://management.azure.com/providers/Microsoft.Resources/deployments/arm-estimator/whatIf?api-version=2021-04-01",
+            _ => $"https://management.azure.com/subscriptions/{this.scopeId}/resourcegroups/{this.resourceGroupName}/providers/Microsoft.Resources/deployments/arm-estimator/whatIf?api-version=2021-04-01",
+        };
     }
 
     private static async Task<HttpResponseMessage> SendAndWaitForResponse(Uri location)
