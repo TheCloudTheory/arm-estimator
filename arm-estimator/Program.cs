@@ -18,6 +18,9 @@ public class Program
         var templateFileArg = new Argument<FileInfo>("template-file", "Template file to analyze");
         var susbcriptionIdArg = new Argument<string>("subscription-id", "Subscription ID");
         var resourceGroupArg = new Argument<string>("resource-group", "Resource group name");
+        var managementGroupArg = new Argument<string>("management-group", "Management group name");
+        var tenantArg = new Argument<string>("tenant", "Tenant name");
+
         var deploymentModeOption = new Option<DeploymentMode>("--mode", () => { return DeploymentMode.Incremental; }, "Deployment mode");
         var thresholdOption = new Option<int>("--threshold", () => { return -1; }, "Estimation threshold");
         var parametersOption = new Option<FileInfo?>("--parameters", () => { return null; }, "Path to a file containing values of template parameters");
@@ -31,28 +34,28 @@ public class Program
         var inlineOptions = new Option<IEnumerable<string>>("--inline", () => { return Enumerable.Empty<string>(); }, "List of inline parameters");
         var dryRunOption = new Option<bool>("--dry-run", () => { return false; }, "Run template validation only");
 
-        var command = new RootCommand("ACE (Azure Cost Estimator)")
-        {
-            deploymentModeOption,
-            thresholdOption,
-            parametersOption,
-            currencyOption,
-            jsonOutputOption,
-            silentOption,
-            stdoutOption,
-            disableDetailsOption,
-            jsonOutputFilenameOption,
-            htmlOutputOption,
-            inlineOptions,
-            dryRunOption
-        };
+        var rootCommand = new RootCommand("ACE (Azure Cost Estimator)");
 
-        command.AddArgument(templateFileArg);
-        command.AddArgument(susbcriptionIdArg);
-        command.AddArgument(resourceGroupArg);
-        command.SetHandler(async (file, subscription, resourceGroup, options) =>
+        rootCommand.AddGlobalOption(deploymentModeOption);
+        rootCommand.AddGlobalOption(thresholdOption);
+        rootCommand.AddGlobalOption(parametersOption);
+        rootCommand.AddGlobalOption(currencyOption);
+        rootCommand.AddGlobalOption(jsonOutputOption);
+        rootCommand.AddGlobalOption(silentOption);
+        rootCommand.AddGlobalOption(stdoutOption);
+        rootCommand.AddGlobalOption(disableDetailsOption);
+        rootCommand.AddGlobalOption(jsonOutputFilenameOption);
+        rootCommand.AddGlobalOption(htmlOutputOption);
+        rootCommand.AddGlobalOption(inlineOptions);
+        rootCommand.AddGlobalOption(dryRunOption);
+
+        rootCommand.AddArgument(templateFileArg);
+        rootCommand.AddArgument(susbcriptionIdArg);
+        rootCommand.AddArgument(resourceGroupArg);
+
+        rootCommand.SetHandler(async (file, subscription, resourceGroup, options) =>
         {
-            var exitCode = await Estimate(file, subscription, resourceGroup, options);
+            var exitCode = await Estimate(file, subscription, resourceGroup, options, CommandType.ResourceGroup);
             if (exitCode != 0)
             {
                 throw new Exception();
@@ -74,12 +77,103 @@ public class Program
                 htmlOutputOption,
                 inlineOptions,
                 dryRunOption
-            ));
+        ));
 
-        return await command.InvokeAsync(args);
+        var subscriptionCommand = new Command("sub", "Calculate estimation for subscription");
+        subscriptionCommand.AddArgument(templateFileArg);
+        subscriptionCommand.AddArgument(susbcriptionIdArg);
+
+        subscriptionCommand.SetHandler(async (file, subscription, options) =>
+        {
+            var exitCode = await Estimate(file, subscription, null, options, CommandType.Subscription);
+            if (exitCode != 0)
+            {
+                throw new Exception();
+            }
+        },
+            templateFileArg,
+            susbcriptionIdArg,
+            new EstimateOptionsBinder(
+                deploymentModeOption,
+                thresholdOption,
+                parametersOption,
+                currencyOption,
+                jsonOutputOption,
+                silentOption,
+                stdoutOption,
+                disableDetailsOption,
+                jsonOutputFilenameOption,
+                htmlOutputOption,
+                inlineOptions,
+                dryRunOption
+        ));
+
+        var managementGroupCommand = new Command("mg", "Calculate estimation for management group");
+        managementGroupCommand.AddArgument(templateFileArg);
+        managementGroupCommand.AddArgument(managementGroupArg);
+
+        managementGroupCommand.SetHandler(async (file, managementGroup, options) =>
+        {
+            var exitCode = await Estimate(file, managementGroup, null, options, CommandType.ManagementGroup);
+            if (exitCode != 0)
+            {
+                throw new Exception();
+            }
+        },
+            templateFileArg,
+            susbcriptionIdArg,
+            new EstimateOptionsBinder(
+                deploymentModeOption,
+                thresholdOption,
+                parametersOption,
+                currencyOption,
+                jsonOutputOption,
+                silentOption,
+                stdoutOption,
+                disableDetailsOption,
+                jsonOutputFilenameOption,
+                htmlOutputOption,
+                inlineOptions,
+                dryRunOption
+        ));
+
+        var tenantCommand = new Command("tenant", "Calculate estimation for tenant");
+        tenantCommand.AddArgument(templateFileArg);
+        tenantCommand.AddArgument(managementGroupArg);
+
+        tenantCommand.SetHandler(async (file, tenant, options) =>
+        {
+            var exitCode = await Estimate(file, tenant, null, options, CommandType.Tenant);
+            if (exitCode != 0)
+            {
+                throw new Exception();
+            }
+        },
+            templateFileArg,
+            susbcriptionIdArg,
+            new EstimateOptionsBinder(
+                deploymentModeOption,
+                thresholdOption,
+                parametersOption,
+                currencyOption,
+                jsonOutputOption,
+                silentOption,
+                stdoutOption,
+                disableDetailsOption,
+                jsonOutputFilenameOption,
+                htmlOutputOption,
+                inlineOptions,
+                dryRunOption
+        ));
+
+        rootCommand.AddCommand(subscriptionCommand);
+        rootCommand.AddCommand(managementGroupCommand);
+        rootCommand.AddCommand(tenantCommand);
+
+        return await rootCommand.InvokeAsync(args);
     }
 
-    private static async Task<int> Estimate(FileInfo templateFile, string subscriptionId, string resourceGroupName, EstimateOptions options)
+    private static async Task<int> Estimate(FileInfo templateFile, string scopeId, string? resourceGroupName, EstimateOptions options, CommandType commandType)
     {
         using (var loggerFactory = LoggerFactory.Create(builder =>
         {
@@ -90,7 +184,7 @@ public class Program
             var logger = loggerFactory.CreateLogger<Program>();
 
             DisplayWelcomeScreen(logger);
-            DisplayUsedSettings(templateFile, subscriptionId, resourceGroupName, logger, options);
+            DisplayUsedSettings(templateFile, scopeId, resourceGroupName, logger, options, commandType);
 
             var template = GetTemplate(templateFile, logger, out var templateType);
             if (template == null)
@@ -121,7 +215,7 @@ public class Program
                 parser.ParseInlineParameters(out parameters);
             }
 
-            var whatIfParser = new WhatIfParser(templateType, subscriptionId, resourceGroupName, template, options.Mode, parameters, logger);
+            var whatIfParser = new WhatIfParser(templateType, scopeId, resourceGroupName, template, options.Mode, parameters, logger, commandType);
             var whatIfData = await whatIfParser.GetWhatIfData();
             if (whatIfData == null)
             {
@@ -243,12 +337,29 @@ public class Program
         logger.LogInformation("");
     }
 
-    private static void DisplayUsedSettings(FileInfo templateFile, string subscriptionId, string resourceGroupName, ILogger<Program> logger, EstimateOptions options)
+    private static void DisplayUsedSettings(FileInfo templateFile, string scopeId, string? resourceGroupName, ILogger<Program> logger, EstimateOptions options, CommandType commandType)
     {
         logger.LogInformation("Run configuration:");
         logger.LogInformation("");
-        logger.AddEstimatorMessage("SubscriptionId: {0}", subscriptionId);
-        logger.AddEstimatorMessage("Resource group: {0}", resourceGroupName);
+        logger.AddEstimatorMessage("Scope: {0}", commandType.ToString());
+
+        switch (commandType)
+        {
+            case CommandType.ResourceGroup:
+                logger.AddEstimatorMessage("Susbcription Id: {0}", scopeId);
+                logger.AddEstimatorMessage("Resource group: {0}", resourceGroupName);
+                break;
+            case CommandType.Subscription:
+                logger.AddEstimatorMessage("Susbcription Id: {0}", scopeId);
+                break;
+            case CommandType.ManagementGroup:
+                logger.AddEstimatorMessage("Management Group Id: {0}", scopeId);
+                break;
+            case CommandType.Tenant:
+                logger.AddEstimatorMessage("Tenant Id: {0}", scopeId);
+                break;
+        }
+        
         logger.AddEstimatorMessage("Template file: {0}", templateFile);
         logger.AddEstimatorMessage("Deployment mode: {0}", options.Mode);
         logger.AddEstimatorMessage("Threshold: {0}", options.Threshold == -1 ? "Not Set" : options.Threshold.ToString());

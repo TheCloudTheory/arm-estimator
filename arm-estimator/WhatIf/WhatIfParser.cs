@@ -6,29 +6,32 @@ namespace ACE.WhatIf;
 internal class WhatIfParser
 {
     private readonly TemplateType templateType;
-    private readonly string subscriptionId;
-    private readonly string resourceGroupName;
+    private readonly string scopeId;
+    private readonly string? resourceGroupName;
     private readonly string template;
     private readonly DeploymentMode mode;
     private readonly string parameters;
     private readonly ILogger<Program> logger;
+    private readonly CommandType commandType;
 
     public WhatIfParser(
         TemplateType templateType,
-        string subscriptionId,
-        string resourceGroupName,
+        string scopeId,
+        string? resourceGroupName,
         string template,
         DeploymentMode mode,
         string parameters,
-        ILogger<Program> logger)
+        ILogger<Program> logger,
+        CommandType commandType)
     {
         this.templateType = templateType;
-        this.subscriptionId = subscriptionId;
+        this.scopeId = scopeId;
         this.resourceGroupName = resourceGroupName;
         this.template = template;
         this.mode = mode;
         this.parameters = parameters;
         this.logger = logger;
+        this.commandType = commandType;
     }
 
     public async Task<WhatIfResponse?> GetWhatIfData()
@@ -36,12 +39,13 @@ internal class WhatIfParser
         if(this.templateType == TemplateType.ArmTemplateOrBicep)
         {
             var handler = new AzureWhatIfHandler(
-                this.subscriptionId, 
+                this.scopeId, 
                 this.resourceGroupName, 
                 this.template, 
                 this.mode, 
                 this.parameters, 
-                this.logger);
+                this.logger,
+                this.commandType);
 
             return await handler.GetResponseWithRetries();
         }
