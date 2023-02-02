@@ -1,5 +1,4 @@
 ﻿using ACE.WhatIf;
-using Azure.Core;
 using Microsoft.Extensions.Logging;
 
 internal class ChaosRetailQuery : BaseRetailQuery, IRetailQuery

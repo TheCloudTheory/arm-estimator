@@ -1,5 +1,5 @@
-﻿using ACE;
-using ACE.Calculation;
+﻿using ACE.Calculation;
+using ACE.Extensions;
 using Microsoft.Extensions.Logging;
 using System.Collections.Concurrent;
 using System.Net;
@@ -11,9 +11,8 @@ namespace ACE.WhatIf;
 internal class WhatIfProcessor
 {
     private static readonly Lazy<HttpClient> httpClient = new(() => new HttpClient());
-    private static readonly Dictionary<string, string> parentResourceToLocation = new();
     private static readonly ConcurrentDictionary<string, RetailAPIResponse> cachedResults = new();
-    private static readonly Dictionary<string, string> childParentMap = new();
+    private static readonly Dictionary<string, string> resourceIdToLocationMap = new();
 
     private readonly ILogger logger;
     private readonly WhatIfChange[] changes;
@@ -29,26 +28,66 @@ internal class WhatIfProcessor
         this.disableDetailedMetrics = disableDetailedMetrics;
         this.template = template;
 
-        PreprocessResources(changes);
+        ReconcileResources();
     }
 
     /// <summary>
-    /// Populate resources with their parents
+    /// This method maps resources to their locations. As it's easier said than done,
+    /// short clarification.
+    /// 
+    /// Some resources aren't defining location on their own. Instead, they rely on location
+    /// provided by their parent. This is exactly what it's being done here - we iterate
+    /// over detected changes and try to find a parent going up by the hierarchy. Note,
+    /// that this method is not ideal - if template contains a child resource only, it'll
+    /// assume location of the resource group.
     /// </summary>
-    private void PreprocessResources(WhatIfChange[] changes)
+    private void ReconcileResources()
     {
-        foreach (var change in changes)
+        foreach (var change in this.changes)
         {
-            if (change.resourceId == null)
+            var actualChange = change.GetChange();
+            if (actualChange == null || change.resourceId == null)
             {
-                logger.LogError("Couldn't find resource ID");
+                this.logger.LogWarning("[Reconcile] Skipping resource because it's missing required data.");
                 continue;
             }
 
-            var id = new CommonResourceIdentifier(change.resourceId);
-            var parentId = FindParentId(id);
+            if(actualChange.location != null)
+            {
+                resourceIdToLocationMap.Add(change.resourceId, actualChange.location);
+                continue;
+            }
 
-            childParentMap[id.ToString()] = parentId;
+            string? location = null;
+            var resourceId = change.resourceId;
+            while (location == null)
+            {
+                var id = new CommonResourceIdentifier(resourceId);
+                var parent = id.GetParent();
+
+                if(parent == null)
+                {
+                    this.logger.LogWarning("[Reconcile] Skipping resource because it doesn't have a parent to get a location from.");
+                    break;
+                }
+
+                var parentChange = this.changes.SingleOrDefault(_ => _.resourceId == parent.ToString());
+                if (parentChange == null)
+                {
+                    resourceId = parent.ToString();
+                    continue;
+                }
+
+                actualChange = parentChange.GetChange();
+                if (actualChange != null && actualChange.location != null)
+                {
+                    location = actualChange.location;
+                    resourceIdToLocationMap.Add(change.resourceId, location);
+                    break;
+                }
+
+                resourceId = parent.ToString();
+            }
         }
     }
 
@@ -64,7 +103,7 @@ internal class WhatIfProcessor
         var unsupportedResources = new List<CommonResourceIdentifier>();
         var freeResources = new Dictionary<CommonResourceIdentifier, WhatIfChangeType?>();
 
-        foreach (WhatIfChange change in changes)
+        foreach (WhatIfChange change in this.changes)
         {
             if (change.resourceId == null)
             {
@@ -506,26 +545,13 @@ internal class WhatIfProcessor
             return null;
         }
 
-        if (desiredState.location != null)
-        {
-            try
-            {
-                parentResourceToLocation.Add(change.resourceId, desiredState.location);
-            }
-            catch (ArgumentException ex)
-            {
-                logger.LogError("Couldn't process two resources with the same resource ID - {message}", ex.Message);
-                return null;
-            }
-        }
-
         if (Activator.CreateInstance(typeof(T), new object[] { change, id, logger, currency, changes }) is not T query)
         {
             logger.LogError("Couldn't create an instance of {type}.", typeof(T));
             return null;
         }
 
-        var location = desiredState.location ?? parentResourceToLocation[childParentMap[id.ToString()]];
+        var location = resourceIdToLocationMap[id.ToString()];
         if (location == null)
         {
             logger.LogError("Resources without location are not supported.");
@@ -606,18 +632,6 @@ internal class WhatIfProcessor
         }
 
         return query.GetFakeResponse();
-    }
-
-    private string FindParentId(CommonResourceIdentifier id)
-    {
-        var currentParent = id.GetParent();
-
-        if (currentParent?.GetName() == null)
-        {
-            throw new Exception("Couldn't find resource parent.");
-        }
-
-        return currentParent.ToString();
     }
 
     private async Task<HttpResponseMessage> GetRetailDataResponse(string url)
