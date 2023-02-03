@@ -1,5 +1,4 @@
 ﻿using ACE;
-using System.Text.Json;
 
 namespace arm_estimator_tests
 {
@@ -17,16 +16,6 @@ namespace arm_estimator_tests
             });
 
             Assert.That(exitCode, Is.EqualTo(0));
-
-            //var outputFile = File.ReadAllText($"{outputFilename}.json");
-            //var output = JsonSerializer.Deserialize<EstimationOutput>(outputFile, new JsonSerializerOptions()
-            //{
-            //    PropertyNameCaseInsensitive = true
-            //});
-
-            //Assert.That(output, Is.Not.Null);
-            //Assert.That(output.TotalCost, Is.EqualTo(totalValue));
-            //Assert.That(output.Delta, Is.EqualTo(deltaValue));
         }
     }
 }
