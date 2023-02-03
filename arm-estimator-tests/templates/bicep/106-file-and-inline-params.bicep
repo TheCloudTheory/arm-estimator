@@ -1,12 +1,13 @@
 ﻿param dbName string
 param location string
 param sku string
+param serverName string
 
 @secure()
 param adminPassword string
 
 resource dbserver 'Microsoft.Sql/servers@2021-11-01-preview' = {
-  name: 'sqlserver'
+  name: serverName
   location: location
   properties: {
     administratorLogin: 'adminace'

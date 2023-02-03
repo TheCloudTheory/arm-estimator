@@ -6,6 +6,7 @@ namespace arm_estimator_tests
     internal class ParametersTests
     {
         [Test]
+        [Parallelizable(ParallelScope.Self)]
         public async Task WhenSecureStringIsProvidedInline_ItShouldBeUsedInEstimate()
         {
             var outputFilename = $"ace_test_{DateTime.Now.Ticks}";
@@ -17,7 +18,11 @@ namespace arm_estimator_tests
                 "--jsonOutputFilename",
                 outputFilename,
                 "--inline",
-                "adminPassword=verysecretpassword123"
+                "adminPassword=verysecretpassword123",
+                "--inline",
+                $"dbName=db{DateTime.Now.Ticks}",
+                "--inline",
+                $"serverName=svr{DateTime.Now.Ticks}"
             });
 
             Assert.That(exitCode, Is.EqualTo(0));
@@ -33,6 +38,7 @@ namespace arm_estimator_tests
         }
 
         [Test]
+        [Parallelizable(ParallelScope.Self)]
         public async Task WhenMultipleParamsAreUsedInline_TheyShouldBeUsedInEstimate()
         {
             var outputFilename = $"ace_test_{DateTime.Now.Ticks}";
@@ -52,7 +58,11 @@ namespace arm_estimator_tests
                 "--inline",
                 "singleLineObject={\"name\": \"test name\", \"id\": \"123-abc\", \"isCurrent\": true, \"tier\": 1}",
                 "--inline",
-                "exampleArray=[\"1\", \"2\", \"3\"]"
+                "exampleArray=[\"1\", \"2\", \"3\"]",
+                "--inline",
+                $"dbName=dbi{DateTime.Now.Ticks}",
+                "--inline",
+                $"serverName=svri{DateTime.Now.Ticks}"
             });
 
             Assert.That(exitCode, Is.EqualTo(0));
@@ -68,6 +78,7 @@ namespace arm_estimator_tests
         }
 
         [Test]
+        [Parallelizable(ParallelScope.Self)]
         public async Task WhenBothParametersFileAndInlineParametersAreUsed_TheyShouldBeUsedInEstimate()
         {
             var outputFilename = $"ace_test_{DateTime.Now.Ticks}";
@@ -81,7 +92,9 @@ namespace arm_estimator_tests
                 "--parameters",
                 "templates/106-file-and-inline-params.parameters.json",
                 "--inline",
-                "adminPassword=verysecretpassword123"
+                "adminPassword=verysecretpassword123",
+                "--inline",
+                $"serverName=svrbo{DateTime.Now.Ticks}"
             });
 
             Assert.That(exitCode, Is.EqualTo(0));
@@ -97,6 +110,7 @@ namespace arm_estimator_tests
         }
 
         [Test]
+        [Parallelizable(ParallelScope.Self)]
         public async Task WhenBothParametersFileAndInlineParametersAreUsed_TheyShouldMergeCleanly()
         {
             var outputFilename = $"ace_test_{DateTime.Now.Ticks}";
@@ -110,7 +124,9 @@ namespace arm_estimator_tests
                 "--parameters",
                 "templates/106-file-and-inline-params.parameters.json",
                 "--inline",
-                "dbName=anOverridenDbName",
+                $"dbName=dbo{DateTime.Now.Ticks}",
+                "--inline",
+                $"serverName=svro{DateTime.Now.Ticks}",
                 "--inline",
                 "adminPassword=verysecretpassword123"
             });
@@ -128,6 +144,7 @@ namespace arm_estimator_tests
         }
 
         [Test]
+        [Parallelizable(ParallelScope.Self)]
         public async Task WhenDryRunIsEnabled_EstimationShouldNotBePerformed()
         {
             var outputFilename = $"ace_test_{DateTime.Now.Ticks}";
@@ -141,7 +158,9 @@ namespace arm_estimator_tests
                 "--parameters",
                 "templates/106-file-and-inline-params.parameters.json",
                 "--inline",
-                "dbName=dryrundb",
+                $"dbName=dryrundb{DateTime.Now.Ticks}",
+                "--inline",
+                $"serverName=svrd{DateTime.Now.Ticks}",
                 "--inline",
                 "adminPassword=verysecretpassword123",
                 "--dry-run"
