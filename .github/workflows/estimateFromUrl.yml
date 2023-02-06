@@ -95,7 +95,7 @@ jobs:
         ACEZIP="arm-estimator-linux-x64-${{steps.downloadACE.outputs.tag_name}}.zip"
         echo $ACEZIP
         unzip $ACEZIP
-        chmod +x ./arm-estimator
+        chmod +x ./azure-cost-estimator
 
     - uses: azure/login@v1.4.6
       name: Login to Azure
