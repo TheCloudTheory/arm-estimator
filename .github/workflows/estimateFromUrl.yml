@@ -132,7 +132,7 @@ jobs:
         fi
         
         echo "Estimating template ${{ steps.armassets.outputs.template }} with params file ${{ steps.armassets.outputs.params }} and inline params $templateParamsInlined - deploying into rg ${{ inputs.rg }}"
-        ./arm-estimator ${{ steps.armassets.outputs.template }} ${{ secrets.AZURE_SUBSCRIPTION_ID }} ${{ inputs.rg }} --parameters ${{ steps.armassets.outputs.params }} $templateParamsInlined --generateJsonOutput --jsonOutputFilename estimate
+        ./azure-cost-estimator ${{ steps.armassets.outputs.template }} ${{ secrets.AZURE_SUBSCRIPTION_ID }} ${{ inputs.rg }} --parameters ${{ steps.armassets.outputs.params }} $templateParamsInlined --generateJsonOutput --jsonOutputFilename estimate
         
         ls
         
