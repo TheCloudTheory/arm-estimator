@@ -16,7 +16,7 @@ on:
         description: 'Ace version tag'
         required: false
         type: string
-        default: 1.1-beta2
+        default: '1.1'
       templateFileURL:
         description: 'Template file URL'
         required: true
