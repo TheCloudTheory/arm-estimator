@@ -15,7 +15,8 @@ internal class EstimateOptions
                            string? jsonOutputFilename,
                            bool shouldGenerateHtmlOutput,
                            IEnumerable<string>? inlineParameters,
-                           bool dryRunOnly)
+                           bool dryRunOnly,
+                           string? htmlOutputFilename)
     {
         Mode = mode;
         Threshold = threshold;
@@ -29,6 +30,7 @@ internal class EstimateOptions
         ShouldGenerateHtmlOutput = shouldGenerateHtmlOutput;
         InlineParameters = inlineParameters;
         DryRunOnly = dryRunOnly;
+        HtmlOutputFilename = htmlOutputFilename;
     }
 
     public DeploymentMode Mode { get; }
@@ -43,4 +45,5 @@ internal class EstimateOptions
     public bool ShouldGenerateHtmlOutput { get; }
     public IEnumerable<string>? InlineParameters { get; }
     public bool DryRunOnly { get; }
+    public string? HtmlOutputFilename { get; }
 }

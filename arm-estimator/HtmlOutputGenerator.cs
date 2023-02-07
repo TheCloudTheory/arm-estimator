@@ -9,9 +9,12 @@ internal class HtmlOutputGenerator
     private readonly EstimationOutput output;
     private readonly ILogger<Program> logger;
 
-    public HtmlOutputGenerator(EstimationOutput output, ILogger<Program> logger)
+    public HtmlOutputGenerator(EstimationOutput output, ILogger<Program> logger, string? htmlOutputFilename)
     {
-        fileName = $"ace_estimation_{DateTime.UtcNow:yyyyMMddHHmmss}.html";
+        this.fileName = string.IsNullOrEmpty(htmlOutputFilename) ? 
+            $"ace_estimation_{DateTime.UtcNow:yyyyMMddHHmmss}.html" :
+            $"{htmlOutputFilename}.html";
+
         this.output = output;
         this.logger = logger;
     }

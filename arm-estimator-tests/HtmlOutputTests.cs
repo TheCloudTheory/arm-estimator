@@ -14,10 +14,15 @@ namespace arm_estimator_tests
                 "arm-estimator-tests-rg",
                 "--generateHtmlOutput",
                 "--inline",
-                $"acrName=acr{DateTime.Now.Ticks}"
+                $"acrName=acr{DateTime.Now.Ticks}",
+                "--htmlOutputFilename",
+                $"{outputFilename}"
             });
 
             Assert.That(exitCode, Is.EqualTo(0));
+
+            var outputFile = File.Exists($"{outputFilename}.html");
+            Assert.That(outputFile, Is.True);
         }
     }
 }

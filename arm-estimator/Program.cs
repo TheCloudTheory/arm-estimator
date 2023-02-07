@@ -33,6 +33,7 @@ public class Program
         var htmlOutputOption = new Option<bool>("--generateHtmlOutput", () => { return false; }, "Should generate HTML output");
         var inlineOptions = new Option<IEnumerable<string>>("--inline", () => { return Enumerable.Empty<string>(); }, "List of inline parameters");
         var dryRunOption = new Option<bool>("--dry-run", () => { return false; }, "Run template validation only");
+        var htmlOutputFilenameOption = new Option<string?>("--htmlOutputFilename", () => { return null; }, "Sets HTML output filename");
 
         var rootCommand = new RootCommand("ACE (Azure Cost Estimator)");
 
@@ -48,6 +49,7 @@ public class Program
         rootCommand.AddGlobalOption(htmlOutputOption);
         rootCommand.AddGlobalOption(inlineOptions);
         rootCommand.AddGlobalOption(dryRunOption);
+        rootCommand.AddGlobalOption(htmlOutputFilenameOption);
 
         rootCommand.AddArgument(templateFileArg);
         rootCommand.AddArgument(susbcriptionIdArg);
@@ -76,7 +78,8 @@ public class Program
                 jsonOutputFilenameOption,
                 htmlOutputOption,
                 inlineOptions,
-                dryRunOption
+                dryRunOption,
+                htmlOutputFilenameOption
         ));
 
         var subscriptionCommand = new Command("sub", "Calculate estimation for subscription");
@@ -107,7 +110,8 @@ public class Program
                 jsonOutputFilenameOption,
                 htmlOutputOption,
                 inlineOptions,
-                dryRunOption
+                dryRunOption,
+                htmlOutputFilenameOption
         ));
 
         var managementGroupCommand = new Command("mg", "Calculate estimation for management group");
@@ -138,7 +142,8 @@ public class Program
                 jsonOutputFilenameOption,
                 htmlOutputOption,
                 inlineOptions,
-                dryRunOption
+                dryRunOption,
+                htmlOutputFilenameOption
         ));
 
         var tenantCommand = new Command("tenant", "Calculate estimation for tenant");
@@ -167,7 +172,8 @@ public class Program
                 jsonOutputFilenameOption,
                 htmlOutputOption,
                 inlineOptions,
-                dryRunOption
+                dryRunOption,
+                htmlOutputFilenameOption
         ));
 
         rootCommand.AddCommand(subscriptionCommand);
@@ -312,7 +318,7 @@ public class Program
 
             if (options.ShouldGenerateHtmlOutput)
             {
-                var generator = new HtmlOutputGenerator(output, logger);
+                var generator = new HtmlOutputGenerator(output, logger, options.HtmlOutputFilename);
                 generator.Generate();
             }
         }
@@ -379,6 +385,7 @@ public class Program
         logger.AddEstimatorMessage("Redirect stdout: {0}", options.Stdout);
         logger.AddEstimatorMessage("Disabled detailed metrics: {0}", options.DisableDetailedMetrics);
         logger.AddEstimatorMessage("Generate HTML output: {0}", options.ShouldGenerateHtmlOutput);
+        logger.AddEstimatorMessage("HTML output filename: {0}", string.IsNullOrEmpty(options.HtmlOutputFilename) ? "Not Set" : options.HtmlOutputFilename + ".html");
         logger.AddEstimatorMessage("Dry run enabled: {0}", options.DryRunOnly);
         logger.LogInformation("");
         logger.LogInformation("------------------------------");
