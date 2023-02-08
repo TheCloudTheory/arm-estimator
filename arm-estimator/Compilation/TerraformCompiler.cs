@@ -1,11 +1,25 @@
 ﻿using Microsoft.Extensions.Logging;
-using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace ACE.Compilation
 {
     internal class TerraformCompiler : ICompiler
     {
+        public struct GoString
+        {
+            public string msg;
+            public long len;
+            public GoString(string msg, long len)
+            {
+                this.msg = msg;
+                this.len = len;
+            }
+        }
+
         private readonly ILogger<Program> logger;
+
+        [DllImport("ace-terraform-parser.dll")]
+        public static extern void GenerateParsedPlan(GoString workingDir, GoString planFile);
 
         public TerraformCompiler(ILogger<Program> logger)
         {
@@ -14,100 +28,20 @@ namespace ACE.Compilation
 
         public string? Compile(FileInfo templateFile)
         {
-            InitializeProviders(templateFile);
-            BuildPlan(templateFile);
+            var workingDirectory = templateFile.Directory.FullName;
+            var planFile = $"{templateFile.Directory}{Path.DirectorySeparatorChar}tfplan";
 
-            using (var process = new Process())
-            {
-                process.StartInfo.FileName = "terraform";
-                process.StartInfo.UseShellExecute = false;
-                process.StartInfo.CreateNoWindow = false;
-                process.StartInfo.Arguments = $"show -json tfplan";
-                process.StartInfo.RedirectStandardOutput = true;
-                process.StartInfo.RedirectStandardError = true;
-                process.StartInfo.WorkingDirectory = templateFile.DirectoryName;
+            this.logger.LogInformation("Starting parsing using embedded Go parser.");
 
-                string? error = null;
-                process.ErrorDataReceived += new DataReceivedEventHandler((sender, e) => { error += e.Data; });
+            TerraformCompiler.GenerateParsedPlan(
+                new GoString(workingDirectory, workingDirectory.Length),
+                new GoString(planFile, planFile.Length));
 
-                if(error != null)
-                {
-                    this.logger.LogError("{error}", error);
-                    return null;
-                }
+            this.logger.LogInformation("Parsing completed.");
+            this.logger.LogInformation("");
 
-                process.Start();
-                process.BeginErrorReadLine();
-                var template = process.StandardOutput.ReadToEnd();
-                process.WaitForExit();
-
-                return template;
-            }
-        }
-
-        private void InitializeProviders(FileInfo templateFile)
-        {
-            using (var process = new Process())
-            {
-                process.StartInfo.FileName = "terraform";
-                process.StartInfo.UseShellExecute = false;
-                process.StartInfo.CreateNoWindow = false;
-                process.StartInfo.Arguments = $"init";
-                process.StartInfo.RedirectStandardOutput = true;
-                process.StartInfo.RedirectStandardError = true;
-                process.StartInfo.WorkingDirectory = templateFile.DirectoryName;
-
-                string? error = null;
-                process.ErrorDataReceived += new DataReceivedEventHandler((sender, e) => { error += e.Data; });
-
-                if (error != null)
-                {
-                    this.logger.LogError("{error}", error);
-                }
-
-                process.Start();
-                process.BeginErrorReadLine();
-
-                var output = process.StandardOutput.ReadToEnd();
-                if(output != null)
-                {
-                    this.logger.LogInformation(output);
-                }
-
-                process.WaitForExit();
-            }
-        }
-
-        private void BuildPlan(FileInfo templateFile)
-        {
-            using (var process = new Process())
-            {
-                process.StartInfo.FileName = "terraform";
-                process.StartInfo.UseShellExecute = false;
-                process.StartInfo.CreateNoWindow = false;
-                process.StartInfo.Arguments = $"plan -out tfplan -no-color";
-                process.StartInfo.RedirectStandardOutput = true;
-                process.StartInfo.RedirectStandardError = true;
-                process.StartInfo.WorkingDirectory = templateFile.DirectoryName;
-
-                string? error = null;
-                process.ErrorDataReceived += new DataReceivedEventHandler((sender, e) => { error += e.Data; });
-
-                if (error != null)
-                {
-                    this.logger.LogError("{error}", error);
-                }
-
-                process.Start();
-                process.BeginErrorReadLine();
-
-                var output = process.StandardOutput.ReadToEnd();
-                if (output != null)
-                {
-                    this.logger.LogInformation(output);
-                }
-                process.WaitForExit();
-            }
+            var template = File.ReadAllText("ace-terraform-parsed-plan.json");
+            return template;
         }
     }
 }

@@ -11,6 +11,7 @@
 	<AssemblyVersion></AssemblyVersion>
 	<FileVersion></FileVersion>
 	<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+	<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,8 +25,11 @@
 
   <ItemGroup>
     <None Update="Html\GeneratorTemplate.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+	<None Include="..\ace-terraform-parser\ace-terraform-parser.dll">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</None>
   </ItemGroup>
 
 </Project>

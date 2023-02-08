@@ -1,0 +1,1 @@
+go build -o ace-terraform-parser.dll -buildmode=c-shared parser.go
