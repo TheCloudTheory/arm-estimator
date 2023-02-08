@@ -34,7 +34,7 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     - name: ListFiles
-      run: ls -la
+      run: ls -la ./arm-estimator/bin/Debug/net6.0
     - name: Test
       run: dotnet test --no-build --verbosity normal --logger "trx;logfilename=testResults.trx" --filter "FullyQualifiedName=arm_estimator_tests.Terraform.BasicTests.TF_WhenCalculationIsPerformed_ItShouldGiveCorrectValue"
     - name: Publish Test Results
