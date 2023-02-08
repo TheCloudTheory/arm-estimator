@@ -5,3 +5,6 @@
 *.user
 **/node_modules/**
 **/dist/**
+**/.terraform
+**/.terraform.lock.hcl
+**/tfplan
