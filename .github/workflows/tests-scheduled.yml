@@ -11,6 +11,7 @@ env:
   ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
   ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
   ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+  LD_DEBUG: all
 
 jobs:
   buildAndTest:
@@ -34,7 +35,7 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     - name: Test
-      run: dotnet test --no-build --verbosity normal --logger "trx;logfilename=testResults.trx"
+      run: dotnet test --no-build --verbosity normal --logger "trx;logfilename=testResults.trx" --filter "FullyQualifiedName=arm_estimator_tests.Terraform.BasicTests.TF_WhenCalculationIsPerformed_ItShouldGiveCorrectValue"
     - name: Publish Test Results
       uses: EnricoMi/publish-unit-test-result-action@v2
       if: always()
