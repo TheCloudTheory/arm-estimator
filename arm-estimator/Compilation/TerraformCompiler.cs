@@ -36,6 +36,12 @@ namespace ACE.Compilation
             var workingDirectory = templateFile.Directory.FullName;
             var planFile = $"{templateFile.Directory}{Path.DirectorySeparatorChar}tfplan";
 
+            if(File.Exists(planFile) == false)
+            {
+                this.logger.LogError("Couldn't parse Terraform plan file because it doesn't exist. Make sure you have 'tfplan' file created in the Terraform directory.");
+                return null;
+            }
+
             this.logger.LogInformation("Starting parsing using embedded Go parser.");
 
             TerraformCompiler.GenerateParsedPlan(
