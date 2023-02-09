@@ -19,7 +19,7 @@ jobs:
     - uses: actions/upload-artifact@v3
       with:
         name: ace-terraform-parser-windows
-        path: ace-terraform-parser-windows.dll
+        path: ace-terraform-parser/ace-terraform-parser-windows.dll
   publishLinux:
     runs-on: ubuntu-latest
     defaults:
@@ -32,4 +32,4 @@ jobs:
     - uses: actions/upload-artifact@v3
       with:
         name: ace-terraform-parser-linux
-        path: ace-terraform-parser-linux.dll
+        path: ./ace-terraform-parser/ace-terraform-parser-linux.dll
