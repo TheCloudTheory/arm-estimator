@@ -11,8 +11,11 @@ jobs:
         working-directory: ace-terraform-parser
     steps:
     - uses: actions/checkout@v1
+    - uses: actions/setup-go@v3
+      with:
+        go-version: '^1.18.0'
     - name: Publish
-      run: go build -o ace-terraform-parser.dll -buildmode=c-shared parser.go
+      run: go build -o ace-terraform-parser-windows.dll -buildmode=c-shared parser.go
   publishLinux:
     runs-on: ubuntu-latest
     defaults:
@@ -21,4 +24,4 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Publish
-      run: go build -o ace-terraform-parser.dll -buildmode=c-shared parser.go
+      run: go build -o ace-terraform-parser-linux.dll -buildmode=c-shared parser.go
