@@ -18,7 +18,12 @@ namespace ACE.Compilation
 
         private readonly ILogger<Program> logger;
 
-        [DllImport("ace-terraform-parser.dll")]
+#if Linux
+        [DllImport("ace-terraform-parser-linux.dll")]
+#endif
+#if Windows
+        [DllImport("ace-terraform-parser-windows.dll")]
+#endif
         public static extern void GenerateParsedPlan(GoString workingDir, GoString planFile);
 
         public TerraformCompiler(ILogger<Program> logger)
