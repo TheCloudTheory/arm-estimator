@@ -44,6 +44,8 @@ namespace ACE.Compilation
 
             this.logger.LogInformation("Parsing completed.");
             this.logger.LogInformation("");
+            this.logger.LogInformation("------------------------------");
+            this.logger.LogInformation("");
 
             var template = File.ReadAllText("ace-terraform-parsed-plan.json");
             return template;

@@ -8,6 +8,7 @@ namespace arm_estimator_tests.Terraform
         [Test]
         //[Ignore("Test fails for GitHub Actions due to curly braces escaping mechanism.")]
         [Parallelizable(ParallelScope.Self)]
+        [Category("Terraform")]
         public async Task TF_WhenCalculationIsPerformed_ItShouldGiveCorrectValue()
         {
             var outputFilename = $"ace_test_{DateTime.Now.Ticks}";
