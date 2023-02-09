@@ -10,6 +10,7 @@ jobs:
       run:
         working-directory: ace-terraform-parser
     steps:
+    - uses: actions/checkout@v1
     - name: Publish
       run: go build -o ace-terraform-parser.dll -buildmode=c-shared parser.go
   publishLinux:
@@ -18,5 +19,6 @@ jobs:
       run:
         working-directory: ./ace-terraform-parser
     steps:
+    - uses: actions/checkout@v1
     - name: Publish
       run: go build -o ace-terraform-parser.dll -buildmode=c-shared parser.go
