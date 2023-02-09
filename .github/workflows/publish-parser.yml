@@ -8,12 +8,12 @@ jobs:
     runs-on: windows-latest
     defaults:
       run:
-        working-directory: ./ace-terraform-parser
+        working-directory: ace-terraform-parser
     steps:
     - name: Publish
       run: go build -o ace-terraform-parser.dll -buildmode=c-shared parser.go
   publishLinux:
-    runs-on: linux-latest
+    runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ./ace-terraform-parser
