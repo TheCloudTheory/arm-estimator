@@ -135,7 +135,7 @@ namespace arm_estimator_tests
             });
 
             Assert.That(output, Is.Not.Null);
-            Assert.That(output.TotalCost, Is.EqualTo(totalValue));
+            Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(totalValue));
         }
 
         [Test]
@@ -264,7 +264,7 @@ namespace arm_estimator_tests
             });
 
             Assert.That(output, Is.Not.Null);
-            Assert.That(output.TotalCost, Is.EqualTo(totalValue));
+            Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(totalValue));
         }
 
         [Test]
@@ -290,7 +290,7 @@ namespace arm_estimator_tests
             });
 
             Assert.That(output, Is.Not.Null);
-            Assert.That(output.TotalCost, Is.EqualTo(211.69999999999999d));
+            Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(211.69999999999999d));
             Assert.That(output.TotalResourceCount, Is.EqualTo(4));
         }
 
@@ -317,7 +317,7 @@ namespace arm_estimator_tests
             });
 
             Assert.That(output, Is.Not.Null);
-            Assert.That(output.TotalCost, Is.EqualTo(43.799999999999997d));
+            Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(43.799999999999997d));
             Assert.That(output.TotalResourceCount, Is.EqualTo(1));
         }
     }

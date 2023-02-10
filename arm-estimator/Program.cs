@@ -279,7 +279,7 @@ public class Program
             var output = await new WhatIfProcessor(logger, whatIfData.properties.changes, options.Currency, options.DisableDetailedMetrics, parser.Template).Process();
             GenerateOutputIfNeeded(options, output, logger);
 
-            if (options.Threshold != -1 && output.TotalCost > options.Threshold)
+            if (options.Threshold != -1 && output.TotalCost.OriginalValue > options.Threshold)
             {
                 logger.LogError("Estimated cost [{totalCost} USD] exceeds configured threshold [{threshold} USD].", output.TotalCost, options.Threshold);
                 return 1;

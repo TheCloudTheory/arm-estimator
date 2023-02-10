@@ -410,16 +410,16 @@ internal class WhatIfProcessor
             if (resource == null) continue;
             if (change.changeType != WhatIfChangeType.Delete)
             {
-                totalCost += resource.TotalCost;
+                totalCost += resource.TotalCost.OriginalValue;
             }
 
             if (change.changeType == WhatIfChangeType.Create)
             {
-                delta += resource.TotalCost;
+                delta += resource.TotalCost.OriginalValue;
             }
             else if (change.changeType == WhatIfChangeType.Delete)
             {
-                delta -= resource.TotalCost;
+                delta -= resource.TotalCost.OriginalValue;
             }
 
             resources.Add(resource);

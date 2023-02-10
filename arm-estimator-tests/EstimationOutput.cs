@@ -1,11 +1,12 @@
-﻿using System.Text.Json.Serialization;
+﻿using ACE;
+using System.Text.Json.Serialization;
 
 namespace arm_estimator_tests
 {
-    public class EstimationOutput
+    internal class EstimationOutput
     {
-        public double TotalCost { get; set; }
-        public double Delta { get; set; }
+        public HumanFriendlyCost TotalCost { get; set; }
+        public HumanFriendlyCost Delta { get; set; }
         public IEnumerable<EstimatedResourceData> Resources { get; set; }
         public string Currency { get; set; }
         public int TotalResourceCount { get; set; }
@@ -19,11 +20,11 @@ namespace arm_estimator_tests
 
     }
 
-    public class EstimatedResourceData
+    internal class EstimatedResourceData
     {
         public string Id { get; set; }
-        public double TotalCost { get; set; }
-        public double Delta { get; set; }
+        public HumanFriendlyCost TotalCost { get; set; }
+        public HumanFriendlyCost Delta { get; set; }
 
         [JsonConstructor]
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
