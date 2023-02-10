@@ -50,13 +50,18 @@ namespace ACE.Compilation
 
             if(File.Exists("ace-terraform-parser.log"))
             {
-                this.logger.LogInformation("Parsing completed with errors:");
-                this.logger.LogError("Error: {error}", File.ReadAllText("ace-terraform-parser.log"));
-                this.logger.LogInformation("");
-                this.logger.LogInformation("------------------------------");
-                this.logger.LogInformation("");
+                var content = File.ReadAllText("ace-terraform-parser.log");
+                if(string.IsNullOrEmpty(content) == false)
+                {
+                    this.logger.LogInformation("Parsing completed with errors:");
+                    this.logger.LogError("Error: {error}", content);
+                    this.logger.LogInformation("");
+                    this.logger.LogInformation("------------------------------");
+                    this.logger.LogInformation("");
 
-                return null;
+                    return null;
+                }
+                
             }
 
             this.logger.LogInformation("Parsing completed.");
