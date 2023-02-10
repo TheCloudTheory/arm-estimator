@@ -44,6 +44,11 @@ func GenerateParsedPlan(workingDir string, planFile string) {
 		return
 	}
 
+	if err := logFile.Close(); err != nil {
+		logFile.WriteString(fmt.Sprintf("error closing log file: %s", err))
+		return
+	}
+
 	os.WriteFile("ace-terraform-parsed-plan.json", ret, 0644)
 }
 
