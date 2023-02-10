@@ -48,6 +48,17 @@ namespace ACE.Compilation
                 new GoString(workingDirectory, workingDirectory.Length),
                 new GoString(planFile, planFile.Length));
 
+            if(File.Exists("ace-terraform-parser.log"))
+            {
+                this.logger.LogInformation("Parsing completed with errors:");
+                this.logger.LogError("Error: {error}", File.ReadAllText("ace-terraform-parser.log"));
+                this.logger.LogInformation("");
+                this.logger.LogInformation("------------------------------");
+                this.logger.LogInformation("");
+
+                return null;
+            }
+
             this.logger.LogInformation("Parsing completed.");
             this.logger.LogInformation("");
             this.logger.LogInformation("------------------------------");
