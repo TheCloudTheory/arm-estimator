@@ -1,6 +1,6 @@
 package main
 
-//import "C"
+import "C"
 
 import (
 	"context"
