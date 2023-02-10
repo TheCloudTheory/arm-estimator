@@ -2,10 +2,10 @@
 
 namespace ACE;
 
-public class EstimationOutput
+internal class EstimationOutput
 {
-    public double TotalCost { get; }
-    public double Delta { get; }
+    public HumanFriendlyCost TotalCost { get; }
+    public HumanFriendlyCost Delta { get; }
     public IEnumerable<EstimatedResourceData> Resources { get; }
     public string Currency { get; }
     public int TotalResourceCount { get; }
@@ -19,8 +19,8 @@ public class EstimationOutput
                               int totalResourcesCount,
                               int skippedResourcesCount)
     {
-        TotalCost = totalCost;
-        Delta = delta;
+        TotalCost = new HumanFriendlyCost(totalCost);
+        Delta = new HumanFriendlyCost(delta);
         Resources = resources;
         Currency = currency.ToString();
         TotalResourceCount = totalResourcesCount;
@@ -29,16 +29,16 @@ public class EstimationOutput
     }
 }
 
-public class EstimatedResourceData
+internal class EstimatedResourceData
 {
     public string Id { get; }
-    public double TotalCost { get; }
-    public double Delta { get; }
+    public HumanFriendlyCost TotalCost { get; }
+    public HumanFriendlyCost Delta { get; }
 
     public EstimatedResourceData(double totalCost, double? delta, CommonResourceIdentifier id)
     {
-        TotalCost = totalCost;
-        Delta = delta == null ? totalCost : 0;
+        TotalCost = new HumanFriendlyCost(totalCost);
+        Delta = delta == null ? new HumanFriendlyCost(totalCost) : new HumanFriendlyCost(0);
         Id = id.ToString();
     }
 }

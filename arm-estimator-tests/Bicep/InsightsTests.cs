@@ -44,7 +44,7 @@ namespace arm_estimator_tests.Bicep
             });
 
             Assert.That(output, Is.Not.Null);
-            Assert.That(output.TotalCost, Is.EqualTo(18.486359999999998d));
+            Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(18.486359999999998d));
             Assert.That(output.TotalResourceCount, Is.EqualTo(5));
         }
     }
