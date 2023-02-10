@@ -214,20 +214,23 @@ public class Program
                 parameters = Regex.Replace(File.ReadAllText(options.ParametersFile.FullName), @"\s+", string.Empty);
             }
 
-            TemplateParser parser;
-            try
+            TemplateParser? parser = null;
+            if(templateType == TemplateType.ArmTemplateOrBicep)
             {
-                parser = new TemplateParser(template, parameters, options.InlineParameters, logger);
-            }
-            catch (JsonException ex)
-            {
-                logger.LogError("Couldn't parse the following template - {template}. Error: {error}", template, ex.Message);
-                return 1;
-            }
+                try
+                {
+                    parser = new TemplateParser(template, parameters, options.InlineParameters, logger);
+                }
+                catch (JsonException ex)
+                {
+                    logger.LogError("Couldn't parse the following template - {template}. Error: {error}", template, ex.Message);
+                    return 1;
+                }
 
-            if (options.InlineParameters != null && options.InlineParameters.Any())
-            {
-                parser.ParseInlineParameters(out parameters);
+                if (options.InlineParameters != null && options.InlineParameters.Any())
+                {
+                    parser.ParseInlineParameters(out parameters);
+                }
             }
 
             var whatIfParser = new WhatIfParser(templateType, scopeId, resourceGroupName, template, options.Mode, parameters, logger, commandType, location);
@@ -276,7 +279,7 @@ public class Program
                 return 0;
             }
 
-            var output = await new WhatIfProcessor(logger, whatIfData.properties.changes, options.Currency, options.DisableDetailedMetrics, parser.Template).Process();
+            var output = await new WhatIfProcessor(logger, whatIfData.properties.changes, options.Currency, options.DisableDetailedMetrics, parser?.Template).Process();
             GenerateOutputIfNeeded(options, output, logger);
 
             if (options.Threshold != -1 && output.TotalCost.OriginalValue > options.Threshold)
@@ -410,8 +413,8 @@ public class Program
                 continue;
             }
 
-            var id = new ResourceIdentifier(change.resourceId);
-            logger.AddEstimatorMessageSensibleToChange(change.changeType, "{0} [{1}]", id.Name, id.ResourceType);
+            var id = new CommonResourceIdentifier(change.resourceId);
+            logger.AddEstimatorMessageSensibleToChange(change.changeType, "{0} [{1}]", id.GetName(), id.GetResourceType());
         }
     }
 }

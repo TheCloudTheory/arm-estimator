@@ -44,6 +44,7 @@ internal class TerraformTemplateParser
 
         return new WhatIfChange()
         {
+            changeType = DetermineChangeType(change),
             resourceId = $"terraform.{change.Type}.{change.Name}.{change.Change.After["location"]}.{change.Change.After["name"]}",
             after = new WhatIfAfterBeforeChange()
             {
@@ -53,6 +54,21 @@ internal class TerraformTemplateParser
                 sku = CreateSkuObjectIfProvided(change.Change)
             }
         };
+    }
+
+    /// <summary>
+    /// Maps Terraform action to What If change type for compatibility
+    /// </summary>
+    private static WhatIfChangeType? DetermineChangeType(ResourceChange change)
+    {
+        if (change.Change == null) return null;
+        if (change.Change.Actions == null) return null;
+
+        var action = change.Change.Actions.FirstOrDefault();
+        if (action == null) return null;
+
+        if (action == "create") return WhatIfChangeType.Create;
+        return null;
     }
 
     private WhatIfSku? CreateSkuObjectIfProvided(ResourceChangeData? data)

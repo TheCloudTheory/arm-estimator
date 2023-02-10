@@ -22,6 +22,9 @@ internal class ResourceChange
 
 internal class ResourceChangeData
 {
+    [JsonPropertyName("actions")]
+    public string[]? Actions { get; set; }
+
     [JsonPropertyName("before")]
     public IDictionary<string, object>? Before { get; set; }
 
