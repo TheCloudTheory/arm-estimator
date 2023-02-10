@@ -20,6 +20,8 @@ jobs:
         creds: ${{ secrets.SP_CREDS }}
     - name: HashiCorp - Setup Terraform
       uses: hashicorp/setup-terraform@v2.0.3
+      with:
+        terraform_wrapper: false
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
       with:
