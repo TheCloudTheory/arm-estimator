@@ -115,7 +115,7 @@ internal class TemplateParser
             case "array":
                 return JsonSerializer.Deserialize(value, typeof(object))!;
             default:
-                throw new TemplateParsingException($"Couldn't parse {name} as parameter - unsupported type.");
+                throw new TemplateParsingException($"Couldn't parse {name} as parameter - unsupported type {parameterSchema.Type}.");
         }
     }
 }
