@@ -110,7 +110,11 @@ internal class TemplateParser
                 return JsonSerializer.Deserialize(value, typeof(object))!;
             case "secureObject":
                 return JsonSerializer.Deserialize(value, typeof(object))!;
+            case "secureobject":
+                return JsonSerializer.Deserialize(value, typeof(object))!;
             case "secureString":
+                return value;
+            case "securestring":
                 return value;
             case "array":
                 return JsonSerializer.Deserialize(value, typeof(object))!;
