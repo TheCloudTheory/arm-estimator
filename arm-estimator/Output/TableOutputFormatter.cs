@@ -1,4 +1,5 @@
 ﻿using ACE.Calculation;
+using ACE.Extensions;
 using ACE.WhatIf;
 using Spectre.Console;
 
@@ -62,7 +63,10 @@ namespace ACE.Output
 
             foreach(var resource in freeResources)
             {
-                this.freeResourcesTable.AddRow(resource.Value.ToString(), resource.Key.GetName(), resource.Key.GetResourceType());
+                this.freeResourcesTable.AddRow(
+                    resource.Value.ToString().GetValueOrNotAvailable(),
+                    resource.Key.GetName(), 
+                    resource.Key.GetResourceType().GetValueOrNotAvailable());
             }
 
             AnsiConsole.Write(this.freeResourcesTable);
@@ -79,10 +83,10 @@ namespace ACE.Output
             delta = delta == null ? summary.TotalCost : 0;
 
             this.estimationsTable.AddRow(
-                changeType.ToString(), 
+                changeType.ToString().GetValueOrNotAvailable(), 
                 id.GetName(), 
-                id.GetResourceType(), 
-                location, 
+                id.GetResourceType().GetValueOrNotAvailable(), 
+                location.GetValueOrNotAvailable(), 
                 $"{summary.TotalCost}" +
                 $" {this.currency}", 
                 $"{deltaSign}{delta} {this.currency}");
