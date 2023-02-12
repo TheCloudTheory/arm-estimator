@@ -1,5 +1,6 @@
 ﻿using ACE.WhatIf;
 using Microsoft.Extensions.Logging;
+using Spectre.Console;
 
 internal class EstimatorLogger : ILogger
 {
@@ -19,15 +20,13 @@ internal class EstimatorLogger : ILogger
 
         if(exception != null)
         {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine(exception.ToString());
-            Console.ResetColor();
+            AnsiConsole.WriteException(exception);
         }
         else
         {
             if(typeof(TState) == typeof(NonSilentMessage))
             {
-                Console.WriteLine(formatter(state, exception));
+                AnsiConsole.WriteLine(formatter(state, exception));
                 return;
             }
 

@@ -73,7 +73,7 @@ internal class TerraformTemplateParser
 
     private WhatIfSku? CreateSkuObjectIfProvided(ResourceChangeData? data)
     {
-        if(data == null)
+        if(data == null || data.After == null)
         {
             return null;
         }

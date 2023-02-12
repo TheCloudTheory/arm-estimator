@@ -1,4 +1,5 @@
-﻿using ACE.WhatIf;
+﻿using ACE.Output;
+using ACE.WhatIf;
 
 namespace ACE;
 
@@ -16,7 +17,8 @@ internal class EstimateOptions
                            bool shouldGenerateHtmlOutput,
                            IEnumerable<string>? inlineParameters,
                            bool dryRunOnly,
-                           string? htmlOutputFilename)
+                           string? htmlOutputFilename,
+                           OutputFormat outputFormat)
     {
         Mode = mode;
         Threshold = threshold;
@@ -31,6 +33,7 @@ internal class EstimateOptions
         InlineParameters = inlineParameters;
         DryRunOnly = dryRunOnly;
         HtmlOutputFilename = htmlOutputFilename;
+        OutputFormat = outputFormat;
     }
 
     public DeploymentMode Mode { get; }
@@ -46,4 +49,5 @@ internal class EstimateOptions
     public IEnumerable<string>? InlineParameters { get; }
     public bool DryRunOnly { get; }
     public string? HtmlOutputFilename { get; }
+    public OutputFormat OutputFormat { get; }
 }

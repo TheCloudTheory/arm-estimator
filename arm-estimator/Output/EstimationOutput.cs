@@ -1,6 +1,6 @@
 ﻿using ACE.WhatIf;
 
-namespace ACE;
+namespace ACE.Output;
 
 internal class EstimationOutput
 {
