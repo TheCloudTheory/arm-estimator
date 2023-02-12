@@ -1,5 +1,6 @@
 ﻿using ACE.Calculation;
 using ACE.Extensions;
+using ACE.Output;
 using Microsoft.Extensions.Logging;
 using System.Collections.Concurrent;
 using System.Net;
@@ -19,14 +20,21 @@ internal class WhatIfProcessor
     private readonly CurrencyCode currency;
     private readonly bool disableDetailedMetrics;
     private readonly TemplateSchema? template;
+    private readonly IOutputFormatter outputFormatter;
 
-    public WhatIfProcessor(ILogger logger, WhatIfChange[] changes, CurrencyCode currency, bool disableDetailedMetrics, TemplateSchema? template)
+    public WhatIfProcessor(ILogger logger,
+                           WhatIfChange[] changes,
+                           CurrencyCode currency,
+                           bool disableDetailedMetrics,
+                           TemplateSchema? template,
+                           OutputFormat outputFormat)
     {
         this.logger = logger;
         this.changes = changes;
         this.currency = currency;
         this.disableDetailedMetrics = disableDetailedMetrics;
         this.template = template;
+        this.outputFormatter = new OutputGenerator(outputFormat, logger, currency, disableDetailedMetrics).GetFormatter();
 
         ReconcileResources();
     }
@@ -96,8 +104,7 @@ internal class WhatIfProcessor
         double totalCost = 0;
         double delta = 0;
 
-        logger.LogInformation("Estimations:");
-        logger.LogInformation("");
+        this.outputFormatter.BeginEstimationsBlock();
 
         var resources = new List<EstimatedResourceData>();
         var unsupportedResources = new List<CommonResourceIdentifier>();
@@ -439,19 +446,11 @@ internal class WhatIfProcessor
             logger.LogInformation("");
         }
 
+        this.outputFormatter.EndEstimationsBlock();
+
         if (freeResources.Count > 0)
         {
-            logger.LogInformation("Free resources:");
-            logger.LogInformation("");
-
-            foreach (var resource in freeResources)
-            {
-                ReportResourceWithoutCost(resource.Key, resource.Value);
-            }
-
-            logger.LogInformation("");
-            logger.LogInformation("-------------------------------");
-            logger.LogInformation("");
+            this.outputFormatter.RenderFreeResourcesBlock(freeResources);         
         }
 
         if (unsupportedResources.Count > 0)
@@ -532,7 +531,7 @@ internal class WhatIfProcessor
             }
         }
 
-        ReportEstimationToConsole(id, estimation.GetItems(), summary, change.changeType, delta, data.Items?.FirstOrDefault()?.location);
+        this.outputFormatter.ReportEstimationToConsole(id, estimation.GetItems(), summary, change.changeType, delta, data.Items?.FirstOrDefault()?.location);
         return new EstimatedResourceData(summary.TotalCost, delta, id);
     }
 
@@ -648,73 +647,5 @@ internal class WhatIfProcessor
             response.EnsureSuccessStatusCode();
             return response;
         }
-    }
-
-    private void ReportEstimationToConsole(CommonResourceIdentifier id, IOrderedEnumerable<RetailItem> items, TotalCostSummary summary, WhatIfChangeType? changeType, double? delta, string? location)
-    {
-        var deltaSign = delta == null ? "+" : delta == 0 ? "" : "-";
-        delta = delta == null ? summary.TotalCost : 0;
-
-        logger.AddEstimatorMessageSensibleToChange(changeType, "{0}", id.GetName());
-        logger.AddEstimatorMessageSubsection("Type: {0}", id.GetResourceType());
-        logger.AddEstimatorMessageSubsection("Location: {0}", location);
-        logger.AddEstimatorMessageSubsection("Total cost: {0} {1}", summary.TotalCost.ToString("N2"), currency);
-        logger.AddEstimatorMessageSubsection("Delta: {0} {1}", $"{deltaSign}{delta.GetValueOrDefault().ToString("N2")}", currency);
-
-        if (disableDetailedMetrics == false)
-        {
-            ReportAggregatedMetrics(summary);
-            ReportUsedMetrics(items);
-        }
-
-        logger.LogInformation("");
-        logger.LogInformation("-------------------------------");
-        logger.LogInformation("");
-    }
-
-    private void ReportAggregatedMetrics(TotalCostSummary summary)
-    {
-        logger.LogInformation("");
-        logger.LogInformation("Aggregated metrics:");
-        logger.LogInformation("");
-
-        if (summary.DetailedCost.Count == 0)
-        {
-            logger.LogInformation("No metrics available.");
-            return;
-        }
-
-        foreach (var metric in summary.DetailedCost)
-        {
-            logger.LogInformation("-> {metricName} [{cost} {currency}]", metric.Key, metric.Value, currency);
-        }
-    }
-
-    private void ReportUsedMetrics(IOrderedEnumerable<RetailItem> items)
-    {
-        logger.LogInformation("");
-        logger.LogInformation("Used metrics:");
-        logger.LogInformation("");
-
-        if (items.Any())
-        {
-            foreach (var item in items)
-            {
-                logger.LogInformation("-> {skuName} | {productName} | {meterName} | {retailPrice} for {measure}", item.skuName, item.productName, item.meterName, item.retailPrice, item.unitOfMeasure);
-            }
-        }
-        else
-        {
-            logger.LogInformation("No metrics available.");
-        }
-    }
-
-    private EstimatedResourceData ReportResourceWithoutCost(CommonResourceIdentifier id, WhatIfChangeType? changeType)
-    {
-        logger.AddEstimatorMessageSensibleToChange(changeType, "{0}", id.GetName());
-        logger.AddEstimatorMessageSubsection("Type: {0}", id.GetResourceType());
-        logger.LogInformation("");
-
-        return new EstimatedResourceData(0, 0, id);
     }
 }

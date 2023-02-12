@@ -1,4 +1,5 @@
-﻿using ACE.WhatIf;
+﻿using ACE.Output;
+using ACE.WhatIf;
 using System.CommandLine;
 using System.CommandLine.Binding;
 
@@ -19,6 +20,7 @@ internal class EstimateOptionsBinder : BinderBase<EstimateOptions>
     private readonly Option<IEnumerable<string>> inlineParameters;
     private readonly Option<bool> dryRunOnly;
     private readonly Option<string?> htmlOutputFilename;
+    private readonly Option<OutputFormat> outputFormat;
 
     public EstimateOptionsBinder(Option<DeploymentMode> mode,
                                  Option<int> threshold,
@@ -32,7 +34,8 @@ internal class EstimateOptionsBinder : BinderBase<EstimateOptions>
                                  Option<bool> generateHtmlOutput,
                                  Option<IEnumerable<string>> inlineParameters,
                                  Option<bool> dryRunOnly,
-                                 Option<string?> htmlOutputFilenameOption)
+                                 Option<string?> htmlOutputFilenameOption,
+                                 Option<OutputFormat> outputFormat)
     {
         this.mode = mode;
         this.threshold = threshold;
@@ -47,6 +50,7 @@ internal class EstimateOptionsBinder : BinderBase<EstimateOptions>
         this.inlineParameters = inlineParameters;
         this.dryRunOnly = dryRunOnly;
         this.htmlOutputFilename = htmlOutputFilenameOption;
+        this.outputFormat = outputFormat;
     }
 
     protected override EstimateOptions GetBoundValue(BindingContext bindingContext)
@@ -64,7 +68,8 @@ internal class EstimateOptionsBinder : BinderBase<EstimateOptions>
             bindingContext.ParseResult.GetValueForOption(generateHtmlOutput),
             bindingContext.ParseResult.GetValueForOption(inlineParameters),
             bindingContext.ParseResult.GetValueForOption(dryRunOnly),
-            bindingContext.ParseResult.GetValueForOption(htmlOutputFilename)
+            bindingContext.ParseResult.GetValueForOption(htmlOutputFilename),
+            bindingContext.ParseResult.GetValueForOption(outputFormat)
             );
     }
 }
