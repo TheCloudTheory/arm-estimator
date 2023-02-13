@@ -2,7 +2,20 @@
 
 namespace ACE.WhatIf;
 
-public class CommonResourceIdentifier
+/// <summary>
+/// This class represents a common ID to be used for estimations and output
+/// based on the template type. There're actually two different IDs, which
+/// are handled by that class:
+/// - common Resource ID used by ARM
+/// - artificial ID generated on-the-fly for Terraform.
+/// 
+/// Reason for this is quite straightforward - Terraform most of the cases
+/// cannot provide Resource ID as it's known for it only after apply. Therefore
+/// we need to introduce a layer of abstraction over a standard ID and ensure
+/// each resource ID (no matter which tool was used under the hood) behaves
+/// the same way.
+/// </summary>
+internal class CommonResourceIdentifier
 {
     private readonly CommonResourceIdentifierType type;
     private readonly ResourceIdentifier? azureResourceIdentifier;
@@ -29,7 +42,7 @@ public class CommonResourceIdentifier
             return this.azureResourceIdentifier!.Name;
         }
 
-        return this.otherResourceIdentifier!.Split('.')[3];
+        return this.otherResourceIdentifier!.Split('.')[4];
     }
 
     public string? GetResourceType()
