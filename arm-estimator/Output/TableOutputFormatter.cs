@@ -9,6 +9,7 @@ namespace ACE.Output
     {
         private readonly Table estimationsTable;
         private readonly Table freeResourcesTable;
+        private readonly Table unsupportedResourcesTable;
         private readonly CurrencyCode currency;
 
         public TableOutputFormatter(CurrencyCode currency)
@@ -23,8 +24,14 @@ namespace ACE.Output
                 Title = new TableTitle("Free Resources")
             };
 
+            this.unsupportedResourcesTable = new Table
+            {
+                Title = new TableTitle("Unsupported Resources")
+            };
+
             estimationsTable.Expand();
             freeResourcesTable.Expand();
+            unsupportedResourcesTable.Expand();
 
             this.currency = currency;
         }
@@ -70,6 +77,24 @@ namespace ACE.Output
             }
 
             AnsiConsole.Write(this.freeResourcesTable);
+        }
+
+        public void RenderUnsupportedResourcesBlock(List<CommonResourceIdentifier> unsupportedResources)
+        {
+            this.unsupportedResourcesTable.AddColumn("Resource name");
+            this.unsupportedResourcesTable.AddColumn("Resource type");
+
+            this.unsupportedResourcesTable.Columns[0].NoWrap();
+            this.unsupportedResourcesTable.Columns[1].NoWrap();
+
+            foreach (var resource in unsupportedResources)
+            {
+                this.unsupportedResourcesTable.AddRow(
+                    resource.GetName(),
+                    resource.GetResourceType().GetValueOrNotAvailable());
+            }
+
+            AnsiConsole.Write(this.unsupportedResourcesTable);
         }
 
         public void ReportEstimationToConsole(CommonResourceIdentifier id,

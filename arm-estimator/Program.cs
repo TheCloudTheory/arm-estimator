@@ -1,7 +1,6 @@
 ﻿using ACE.Compilation;
 using ACE.Output;
 using ACE.WhatIf;
-using Azure.Core;
 using Microsoft.Extensions.Logging;
 using System.CommandLine;
 using System.Reflection;

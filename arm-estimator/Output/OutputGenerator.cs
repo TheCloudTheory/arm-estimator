@@ -3,6 +3,9 @@ using Microsoft.Extensions.Logging;
 
 namespace ACE.Output
 {
+    /// <summary>
+    /// Defines used output formatter based on selected output format type
+    /// </summary>
     internal class OutputGenerator
     {
         private readonly IOutputFormatter formatter;

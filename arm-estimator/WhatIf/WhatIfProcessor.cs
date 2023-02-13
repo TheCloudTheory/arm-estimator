@@ -455,12 +455,7 @@ internal class WhatIfProcessor
 
         if (unsupportedResources.Count > 0)
         {
-            logger.LogInformation("Unsupported resources:");
-            logger.LogInformation("");
-            ReportUnsupportedResources(unsupportedResources);
-            logger.LogInformation("");
-            logger.LogInformation("-------------------------------");
-            logger.LogInformation("");
+            this.outputFormatter.RenderUnsupportedResourcesBlock(unsupportedResources);
         }
 
         logger.LogInformation("Summary:");
@@ -470,14 +465,6 @@ internal class WhatIfProcessor
         logger.LogInformation("");
 
         return new EstimationOutput(totalCost, delta, resources, currency, changes.Length, unsupportedResources.Count);
-    }
-
-    private void ReportUnsupportedResources(List<CommonResourceIdentifier> unsupportedResources)
-    {
-        foreach (var resource in unsupportedResources)
-        {
-            logger.AddEstimatorMessage("{0} [{1}]", resource.GetName(), resource.GetResourceType());
-        }
     }
 
     private async Task<EstimatedResourceData?> Calculate<TQuery, TCalculation>(WhatIfChange change, CommonResourceIdentifier id, bool? useFakeApiResponse = null)

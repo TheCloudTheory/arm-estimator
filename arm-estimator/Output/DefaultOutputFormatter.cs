@@ -117,5 +117,23 @@ namespace ACE.Output
                 this.logger.LogInformation("No metrics available.");
             }
         }
+
+        public void RenderUnsupportedResourcesBlock(List<CommonResourceIdentifier> unsupportedResources)
+        {
+            this.logger.LogInformation("Unsupported resources:");
+            this.logger.LogInformation("");
+            ReportUnsupportedResources(unsupportedResources);
+            this.logger.LogInformation("");
+            this.logger.LogInformation("-------------------------------");
+            this.logger.LogInformation("");
+        }
+
+        private void ReportUnsupportedResources(List<CommonResourceIdentifier> unsupportedResources)
+        {
+            foreach (var resource in unsupportedResources)
+            {
+                this.logger.AddEstimatorMessage("{0} [{1}]", resource.GetName(), resource.GetResourceType());
+            }
+        }
     }
 }
