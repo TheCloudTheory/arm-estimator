@@ -3,6 +3,9 @@ using System.Text;
 
 namespace ACE.Output
 {
+    /// <summary>
+    /// Implementation of a table, which can be rendered as one of the possible output formats.
+    /// </summary>
     internal class ConsoleTable
     {
         private readonly string title;
@@ -18,6 +21,10 @@ namespace ACE.Output
             this.logger = logger;
         }
 
+        /// <summary>
+        /// Adds a table row to render when Draw() method is called
+        /// </summary>
+        /// <param name="values">Values of a row represented as array of columns.</param>
         public void AddRow(string[] values)
         {
             rows.Add(values);

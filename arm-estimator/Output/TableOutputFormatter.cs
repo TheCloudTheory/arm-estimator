@@ -2,15 +2,14 @@
 using ACE.Extensions;
 using ACE.WhatIf;
 using Microsoft.Extensions.Logging;
-using Spectre.Console;
 
 namespace ACE.Output
 {
     internal class TableOutputFormatter : IOutputFormatter
     {
         private readonly ConsoleTable estimationsTable;
-        private readonly Table freeResourcesTable;
-        private readonly Table unsupportedResourcesTable;
+        private readonly ConsoleTable freeResourcesTable;
+        private readonly ConsoleTable unsupportedResourcesTable;
         private readonly CurrencyCode currency;
 
         public TableOutputFormatter(CurrencyCode currency, ILogger logger)
@@ -25,15 +24,18 @@ namespace ACE.Output
                 "Delta"
             }, logger);
 
-            this.freeResourcesTable = new Table
+            this.freeResourcesTable = new ConsoleTable("Free Resources", new[]
             {
-                Title = new TableTitle("Free Resources")
-            };
+                "Change type",
+                "Resource name",
+                "Resource type"
+            }, logger);
 
-            this.unsupportedResourcesTable = new Table
+            this.unsupportedResourcesTable = new ConsoleTable("Unsupported Resources", new[]
             {
-                Title = new TableTitle("Unsupported Resources")
-            };
+                "Resource name",
+                "Resource type"
+            }, logger);
 
             this.currency = currency;
         }
@@ -49,34 +51,27 @@ namespace ACE.Output
 
         public void RenderFreeResourcesBlock(Dictionary<CommonResourceIdentifier, WhatIfChangeType?> freeResources)
         {
-            this.freeResourcesTable.AddColumn("Change type");
-            this.freeResourcesTable.AddColumn("Resource name");
-            this.freeResourcesTable.AddColumn("Resource type");
-
             foreach(var resource in freeResources)
             {
-                this.freeResourcesTable.AddRow(
+                this.freeResourcesTable.AddRow(new[] {
                     resource.Value.ToString().GetValueOrNotAvailable(),
-                    resource.Key.GetName(), 
-                    resource.Key.GetResourceType().GetValueOrNotAvailable());
+                    resource.Key.GetName(),
+                    resource.Key.GetResourceType().GetValueOrNotAvailable()});
             }
 
-            AnsiConsole.Write(this.freeResourcesTable);
+            this.freeResourcesTable.Draw();
         }
 
         public void RenderUnsupportedResourcesBlock(List<CommonResourceIdentifier> unsupportedResources)
         {
-            this.unsupportedResourcesTable.AddColumn("Resource name");
-            this.unsupportedResourcesTable.AddColumn("Resource type");
-
             foreach (var resource in unsupportedResources)
             {
-                this.unsupportedResourcesTable.AddRow(
+                this.unsupportedResourcesTable.AddRow(new[] {
                     resource.GetName(),
-                    resource.GetResourceType().GetValueOrNotAvailable());
+                    resource.GetResourceType().GetValueOrNotAvailable() });
             }
 
-            AnsiConsole.Write(this.unsupportedResourcesTable);
+            this.unsupportedResourcesTable.Draw();
         }
 
         public void ReportEstimationToConsole(CommonResourceIdentifier id,
