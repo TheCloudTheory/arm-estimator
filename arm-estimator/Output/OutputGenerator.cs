@@ -22,7 +22,7 @@ namespace ACE.Output
             }
             else
             {
-                this.formatter = new TableOutputFormatter(currency);
+                this.formatter = new TableOutputFormatter(currency, logger);
             }
         }
 

@@ -58,5 +58,28 @@ namespace arm_estimator_tests
 
             Assert.That(exitCode, Is.EqualTo(0));
         }
+
+        [Test]
+        [Parallelizable(ParallelScope.Self)]
+        public async Task WhenTableOutputIsUsedInComplexTemplate_ItShouldWorkWithoutError()
+        {
+            var outputFilename = $"ace_test_{DateTime.Now.Ticks}";
+            var exitCode = await Program.Main(new[] {
+                "templates/bicep/backup/backup-redundancy.bicep",
+                "cf70b558-b930-45e4-9048-ebcefb926adf",
+                "arm-estimator-tests-rg",
+                "--generateJsonOutput",
+                "--jsonOutputFilename",
+                outputFilename,
+                "--inline",
+                $"resourceNamePrefix=otr{DateTime.Now.Ticks}",
+                 "--inline",
+                $"redundancyMode=LocallyRedundant",
+                "--outputFormat",
+                "Table"
+            });
+
+            Assert.That(exitCode, Is.EqualTo(0));
+        }
     }
 }

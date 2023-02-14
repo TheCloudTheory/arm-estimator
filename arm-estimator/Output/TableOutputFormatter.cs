@@ -1,23 +1,29 @@
 ﻿using ACE.Calculation;
 using ACE.Extensions;
 using ACE.WhatIf;
+using Microsoft.Extensions.Logging;
 using Spectre.Console;
 
 namespace ACE.Output
 {
     internal class TableOutputFormatter : IOutputFormatter
     {
-        private readonly Table estimationsTable;
+        private readonly ConsoleTable estimationsTable;
         private readonly Table freeResourcesTable;
         private readonly Table unsupportedResourcesTable;
         private readonly CurrencyCode currency;
 
-        public TableOutputFormatter(CurrencyCode currency)
+        public TableOutputFormatter(CurrencyCode currency, ILogger logger)
         {
-            this.estimationsTable = new Table
+            this.estimationsTable = new ConsoleTable("Estimation", new[]
             {
-                Title = new TableTitle("Estimations")
-            };
+                "Change type",
+                "Resource name",
+                "Resource type",
+                "Location",
+                "Total cost",
+                "Delta"
+            }, logger);
 
             this.freeResourcesTable = new Table
             {
@@ -29,33 +35,16 @@ namespace ACE.Output
                 Title = new TableTitle("Unsupported Resources")
             };
 
-            estimationsTable.Expand();
-            freeResourcesTable.Expand();
-            unsupportedResourcesTable.Expand();
-
             this.currency = currency;
         }
 
         public void BeginEstimationsBlock()
         {
-            this.estimationsTable.AddColumn("Change type");
-            this.estimationsTable.AddColumn("Resource name");
-            this.estimationsTable.AddColumn("Resource type");
-            this.estimationsTable.AddColumn("Location");
-            this.estimationsTable.AddColumn("Total cost");
-            this.estimationsTable.AddColumn("Delta");
-
-            estimationsTable.Columns[0].NoWrap();
-            estimationsTable.Columns[1].NoWrap();
-            estimationsTable.Columns[2].NoWrap();
-            estimationsTable.Columns[3].NoWrap();
-            estimationsTable.Columns[4].NoWrap();
-            estimationsTable.Columns[5].NoWrap();
         }
 
         public void EndEstimationsBlock()
         {
-            AnsiConsole.Write(this.estimationsTable);
+            this.estimationsTable.Draw();
         }
 
         public void RenderFreeResourcesBlock(Dictionary<CommonResourceIdentifier, WhatIfChangeType?> freeResources)
@@ -63,10 +52,6 @@ namespace ACE.Output
             this.freeResourcesTable.AddColumn("Change type");
             this.freeResourcesTable.AddColumn("Resource name");
             this.freeResourcesTable.AddColumn("Resource type");
-
-            this.freeResourcesTable.Columns[0].NoWrap();
-            this.freeResourcesTable.Columns[1].NoWrap();
-            this.freeResourcesTable.Columns[2].NoWrap();
 
             foreach(var resource in freeResources)
             {
@@ -83,9 +68,6 @@ namespace ACE.Output
         {
             this.unsupportedResourcesTable.AddColumn("Resource name");
             this.unsupportedResourcesTable.AddColumn("Resource type");
-
-            this.unsupportedResourcesTable.Columns[0].NoWrap();
-            this.unsupportedResourcesTable.Columns[1].NoWrap();
 
             foreach (var resource in unsupportedResources)
             {
@@ -107,14 +89,14 @@ namespace ACE.Output
             var deltaSign = delta == null ? "+" : delta == 0 ? "" : "-";
             delta = delta == null ? summary.TotalCost : 0;
 
-            this.estimationsTable.AddRow(
-                changeType.ToString().GetValueOrNotAvailable(), 
-                id.GetName(), 
-                id.GetResourceType().GetValueOrNotAvailable(), 
-                location.GetValueOrNotAvailable(), 
+            this.estimationsTable.AddRow(new[] {
+                changeType.ToString().GetValueOrNotAvailable(),
+                id.GetName(),
+                id.GetResourceType().GetValueOrNotAvailable(),
+                location.GetValueOrNotAvailable(),
                 $"{summary.TotalCost}" +
-                $" {this.currency}", 
-                $"{deltaSign}{delta} {this.currency}");
+                $" {this.currency}",
+                $"{deltaSign}{delta} {this.currency}"});
         }
     }
 }
