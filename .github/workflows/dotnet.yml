@@ -1,4 +1,4 @@
-name: .NET
+name: Publish ACE packages
 
 on: [workflow_dispatch]
 
@@ -25,6 +25,8 @@ jobs:
       run: dotnet publish -p:PublishProfile=win-x64
     - name: Publish Linux
       run: dotnet publish -p:PublishProfile=linux-x64
+    - name: Publish macOS
+      run: dotnet publish -p:PublishProfile=osx-x64
     - name: Upload Windows artifact
       uses: actions/upload-artifact@v3.1.0
       with:
@@ -35,4 +37,9 @@ jobs:
       with:
         name: linux-64
         path: $GITHUB_WORKSPACE/arm-estimator/bin/Release/net6.0/publish/linux-64
+    - name: Upload MacOS artifact
+      uses: actions/upload-artifact@v3.1.0
+      with:
+        name: osx-64
+        path: $GITHUB_WORKSPACE/arm-estimator/bin/Release/net6.0/publish/osx-64
       
