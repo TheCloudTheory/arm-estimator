@@ -30,6 +30,9 @@ namespace ACE.Output
             rows.Add(values);
         }
 
+        /// <summary>
+        /// Draw a table based on provided headers and rows. 
+        /// </summary>
         public void Draw()
         {
             CalculateColumnsWidth();
@@ -38,6 +41,14 @@ namespace ACE.Output
             DrawRows();
         }
 
+        /// <summary>
+        /// As width of headers will most probably differ from width of rows,
+        /// it's required to find max widths for each column and save them
+        /// for table rendering. Here logic is quite simple - find width
+        /// of each header and then find max width of a row column. If header
+        /// is bigger than max value of a row column, use its width. Otherwise,
+        /// use the found value.
+        /// </summary>
         private void CalculateColumnsWidth()
         {
             for(var i = 0; i < this.headers.Length; i++)
@@ -56,6 +67,10 @@ namespace ACE.Output
             }
         }
 
+        /// <summary>
+        /// Draw a table header containing both title of a table and
+        /// header columns.
+        /// </summary>
         private void DrawHeader()
         {
             DrawTitle();
@@ -77,6 +92,9 @@ namespace ACE.Output
             DrawBorder('├', '┤', '┼');
         }
 
+        /// <summary>
+        /// Draw title of a table. Here's one gotcha - it may be impossible to divide 
+        /// </summary>
         private void DrawTitle()
         {
             var totalTableWidth = this.maxColumnsWidth.Sum(_ => _.Value) + this.headers.Length - 1;
