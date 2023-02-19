@@ -1,4 +1,5 @@
-﻿using Azure.Core;
+﻿using ACE.Caching;
+using Azure.Core;
 using Azure.Identity;
 using Microsoft.Extensions.Logging;
 using System.Net;
@@ -21,6 +22,7 @@ internal class AzureWhatIfHandler
     private readonly ILogger logger;
     private readonly CommandType commandType;
     private readonly string? location;
+    private readonly LocalCacheHandler? cache;
 
     public AzureWhatIfHandler(string scopeId,
                               string? resourceGroupName,
@@ -29,7 +31,8 @@ internal class AzureWhatIfHandler
                               string parameters,
                               ILogger logger,
                               CommandType commandType,
-                              string? location)
+                              string? location,
+                              bool disableCache)
     {
         this.scopeId = scopeId;
         this.resourceGroupName = resourceGroupName;
@@ -39,12 +42,33 @@ internal class AzureWhatIfHandler
         this.logger = logger;
         this.commandType = commandType;
         this.location = location;
+
+        if(disableCache == false)
+        {
+            this.cache = new LocalCacheHandler(scopeId, resourceGroupName, template, parameters);
+        }
     }
 
     public async Task<WhatIfResponse?> GetResponseWithRetries()
     {
         this.logger.LogInformation("What If status:");
         this.logger.LogInformation("");
+
+        if(this.cache != null)
+        {
+            var cachedResponse = this.cache.GetCachedData();
+            if(cachedResponse != null)
+            {
+                this.logger.AddEstimatorMessage("What If data loaded from cache.");
+                return cachedResponse;
+            }
+
+            this.logger.AddEstimatorMessage("Cache miss for What If data.");
+        }
+        else
+        {
+            this.logger.AddEstimatorMessage("Cache is disabled.");
+        }
         
         var response = await SendInitialRequest();
         if(response.IsSuccessStatusCode == false)
@@ -82,6 +106,12 @@ internal class AzureWhatIfHandler
 #endif
 
         var data = JsonSerializer.Deserialize<WhatIfResponse>(await response.Content.ReadAsStreamAsync());
+        if(this.cache != null && data != null)
+        {
+            this.logger.AddEstimatorMessage("Saving What If response to cache.");
+            this.cache.SaveData(data);
+        }
+
         return data;
     }
 
