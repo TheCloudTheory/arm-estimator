@@ -18,7 +18,8 @@ internal class EstimateOptions
                            IEnumerable<string>? inlineParameters,
                            bool dryRunOnly,
                            string? htmlOutputFilename,
-                           OutputFormat outputFormat)
+                           OutputFormat outputFormat,
+                           bool disableCache)
     {
         Mode = mode;
         Threshold = threshold;
@@ -34,6 +35,7 @@ internal class EstimateOptions
         DryRunOnly = dryRunOnly;
         HtmlOutputFilename = htmlOutputFilename;
         OutputFormat = outputFormat;
+        DisableCache = disableCache;
     }
 
     public DeploymentMode Mode { get; }
@@ -50,4 +52,5 @@ internal class EstimateOptions
     public bool DryRunOnly { get; }
     public string? HtmlOutputFilename { get; }
     public OutputFormat OutputFormat { get; }
+    public bool DisableCache { get; }
 }

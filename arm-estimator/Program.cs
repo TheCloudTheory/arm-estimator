@@ -4,6 +4,7 @@ using ACE.WhatIf;
 using Microsoft.Extensions.Logging;
 using System.CommandLine;
 using System.Reflection;
+using System.Reflection.Metadata.Ecma335;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 
@@ -35,6 +36,7 @@ public class Program
         var dryRunOption = new Option<bool>("--dry-run", () => { return false; }, "Run template validation only");
         var htmlOutputFilenameOption = new Option<string?>("--htmlOutputFilename", () => { return null; }, "Sets HTML output filename");
         var outputFormatOption = new Option<OutputFormat>("--outputFormat", () => { return OutputFormat.Default; }, "Sets output format");
+        var disableCacheOption = new Option<bool>("--disable-cache", () => false, "Disables in-built cache mechanism");
 
         var rootCommand = new RootCommand("ACE (Azure Cost Estimator)");
 
@@ -52,6 +54,7 @@ public class Program
         rootCommand.AddGlobalOption(dryRunOption);
         rootCommand.AddGlobalOption(htmlOutputFilenameOption);
         rootCommand.AddGlobalOption(outputFormatOption);
+        rootCommand.AddGlobalOption(disableCacheOption);
 
         rootCommand.AddArgument(templateFileArg);
         rootCommand.AddArgument(susbcriptionIdArg);
@@ -82,7 +85,8 @@ public class Program
                 inlineOptions,
                 dryRunOption,
                 htmlOutputFilenameOption,
-                outputFormatOption
+                outputFormatOption,
+                disableCacheOption
         ));
 
         var subscriptionCommand = new Command("sub", "Calculate estimation for subscription");
@@ -115,7 +119,8 @@ public class Program
                 inlineOptions,
                 dryRunOption,
                 htmlOutputFilenameOption,
-                outputFormatOption
+                outputFormatOption,
+                disableCacheOption
         ));
 
         var managementGroupCommand = new Command("mg", "Calculate estimation for management group");
@@ -148,7 +153,8 @@ public class Program
                 inlineOptions,
                 dryRunOption,
                 htmlOutputFilenameOption,
-                outputFormatOption
+                outputFormatOption,
+                disableCacheOption
         ));
 
         var tenantCommand = new Command("tenant", "Calculate estimation for tenant");
@@ -179,7 +185,8 @@ public class Program
                 inlineOptions,
                 dryRunOption,
                 htmlOutputFilenameOption,
-                outputFormatOption
+                outputFormatOption,
+                disableCacheOption
         ));
 
         rootCommand.AddCommand(subscriptionCommand);
@@ -239,7 +246,7 @@ public class Program
                 }
             }
 
-            var whatIfParser = new WhatIfParser(templateType, scopeId, resourceGroupName, template, options.Mode, parameters, logger, commandType, location);
+            var whatIfParser = new WhatIfParser(templateType, scopeId, resourceGroupName, template, options.Mode, parameters, logger, commandType, location, options.DisableCache);
             var whatIfData = await whatIfParser.GetWhatIfData();
             if (whatIfData == null)
             {
@@ -401,6 +408,7 @@ public class Program
         logger.AddEstimatorMessage("Generate HTML output: {0}", options.ShouldGenerateHtmlOutput);
         logger.AddEstimatorMessage("HTML output filename: {0}", string.IsNullOrEmpty(options.HtmlOutputFilename) ? "Not Set" : options.HtmlOutputFilename + ".html");
         logger.AddEstimatorMessage("Dry run enabled: {0}", options.DryRunOnly);
+        logger.AddEstimatorMessage("Cache disabled: {0}", options.DisableCache);
         logger.LogInformation("");
         logger.LogInformation("------------------------------");
         logger.LogInformation("");

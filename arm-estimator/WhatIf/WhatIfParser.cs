@@ -14,6 +14,7 @@ internal class WhatIfParser
     private readonly ILogger<Program> logger;
     private readonly CommandType commandType;
     private readonly string? location;
+    private readonly bool disableCache;
 
     public WhatIfParser(
         TemplateType templateType,
@@ -24,7 +25,8 @@ internal class WhatIfParser
         string parameters,
         ILogger<Program> logger,
         CommandType commandType,
-        string? location)
+        string? location,
+        bool disableCache)
     {
         this.templateType = templateType;
         this.scopeId = scopeId;
@@ -35,6 +37,7 @@ internal class WhatIfParser
         this.logger = logger;
         this.commandType = commandType;
         this.location = location;
+        this.disableCache = disableCache;
     }
 
     public async Task<WhatIfResponse?> GetWhatIfData()
@@ -49,7 +52,8 @@ internal class WhatIfParser
                 this.parameters, 
                 this.logger,
                 this.commandType,
-                this.location);
+                this.location,
+                this.disableCache);
 
             return await handler.GetResponseWithRetries();
         }
