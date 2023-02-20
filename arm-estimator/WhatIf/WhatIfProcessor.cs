@@ -62,7 +62,11 @@ internal class WhatIfProcessor
 
             if(actualChange.location != null)
             {
-                resourceIdToLocationMap.Add(change.resourceId, actualChange.location);
+                if(resourceIdToLocationMap.ContainsKey(change.resourceId) == false)
+                {
+                    resourceIdToLocationMap.Add(change.resourceId, actualChange.location);
+                }
+                
                 continue;
             }
 
