@@ -1,6 +1,10 @@
 name: Publish ACE packages
 
-on: [workflow_dispatch]
+on: 
+  workflow_dispatch:
+  push:
+    tags:
+      - '*'
 
 defaults:
  run:
