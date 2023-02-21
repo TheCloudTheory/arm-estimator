@@ -30,16 +30,16 @@ jobs:
     - name: Upload Windows artifact
       uses: actions/upload-artifact@v3.1.0
       with:
-        name: win-64
-        path: ${{ github.workspace }}/arm-estimator/bin/Release/net6.0/publish/win-64
+        name: win-x64
+        path: ${{ github.workspace }}/arm-estimator/bin/Release/net6.0/publish/win-x64
     - name: Upload Linux artifact
       uses: actions/upload-artifact@v3.1.0
       with:
-        name: linux-64
-        path: ${{ github.workspace }}/arm-estimator/bin/Release/net6.0/publish/linux-64
+        name: linux-x64
+        path: ${{ github.workspace }}/arm-estimator/bin/Release/net6.0/publish/linux-x64
     - name: Upload MacOS artifact
       uses: actions/upload-artifact@v3.1.0
       with:
-        name: osx-64
-        path: ${{ github.workspace }}/arm-estimator/bin/Release/net6.0/publish/osx-64
+        name: osx-x64
+        path: ${{ github.workspace }}/arm-estimator/bin/Release/net6.0/publish/osx-x64
       
