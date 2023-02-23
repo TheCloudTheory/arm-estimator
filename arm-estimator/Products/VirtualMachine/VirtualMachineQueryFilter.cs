@@ -48,6 +48,15 @@ internal class VirtualMachineQueryFilter : IQueryFilter
             return null;
         }
 
+        if(this.afterState.properties != null && this.afterState.properties.ContainsKey("priority"))
+        {
+            var priority = this.afterState.properties["priority"].ToString();
+            if(priority == "Low")
+            {
+                skuName += " Low Priority";
+            }
+        }
+
         return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and skuName eq '{skuName}' and productName eq '{productName}'";
     }
 
