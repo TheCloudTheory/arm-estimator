@@ -50,8 +50,8 @@ internal class VirtualMachineQueryFilter : IQueryFilter
 
         if(this.afterState.properties != null && this.afterState.properties.ContainsKey("priority"))
         {
-            var priority = this.afterState.properties["priority"].ToString();
-            if(priority == "Low")
+            var priority = this.afterState.properties["priority"]?.ToString();
+            if(priority != null && priority == "Low")
             {
                 skuName += " Low Priority";
             }
