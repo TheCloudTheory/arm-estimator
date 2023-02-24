@@ -6,14 +6,14 @@ resource vmss 'Microsoft.Compute/virtualMachineScaleSets@2022-08-01' = {
   location: rgLocation
   sku: {
     capacity: 3
-    name: 'Standard_A0'
+    name: 'Standard_A1_v2'
     tier: 'Standard'
   }
   properties: {
     virtualMachineProfile: {   
       osProfile: { 
         adminPassword: '123454567'
-        adminUsername: adminUsername   
+        adminUsername: adminUsername 
       }
       storageProfile: {
         imageReference: {
@@ -23,6 +23,7 @@ resource vmss 'Microsoft.Compute/virtualMachineScaleSets@2022-08-01' = {
           version: 'latest'
         }
       }
+      priority: 'Low'
     }
   }
 }

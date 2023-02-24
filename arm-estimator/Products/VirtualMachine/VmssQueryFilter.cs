@@ -28,7 +28,13 @@ internal class VmssQueryFilter : IQueryFilter
             return null;
         }
 
-        var vmProfile = ((JsonElement)this.afterState.properties["virtualMachineProfile"]).Deserialize<VirtualMachineProfile>();
+        if(this.afterState.properties["virtualMachineProfile"] == null)
+        {
+            this.logger.LogError("Can't create a filter for VMSS when VM profile is unavailable.");
+            return null;
+        }
+
+        var vmProfile = ((JsonElement)this.afterState.properties["virtualMachineProfile"]!).Deserialize<VirtualMachineProfile>();
         if (vmProfile == null)
         {
             this.logger.LogError("Can't create a filter for VMSS when VM profile is unavailable.");
@@ -38,12 +44,13 @@ internal class VmssQueryFilter : IQueryFilter
         var vmFilter = new VirtualMachineQueryFilter(new WhatIfAfterBeforeChange()
         {
             sku = sku,
-            properties = new Dictionary<string, object>()
+            properties = new Dictionary<string, object?>()
             {
                 { "hardwareProfile", JsonSerializer.SerializeToElement(new VirtualMachineHardwareProfile() {
                     vmSize = sku.name
                 }) },
-                { "storageProfile", JsonSerializer.SerializeToElement(vmProfile.storageProfile) }
+                { "storageProfile", JsonSerializer.SerializeToElement(vmProfile.storageProfile) },
+                { "priority", vmProfile.priority }
             }
         }, this.logger).GetFiltersBasedOnDesiredState(location);
 

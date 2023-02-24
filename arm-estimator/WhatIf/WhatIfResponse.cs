@@ -50,7 +50,7 @@ internal class WhatIfAfterBeforeChange
     public string? location { get; set; }
     public WhatIfSku? sku { get; set; }
     public string? kind { get; set; }
-    public IDictionary<string, object>? properties { get; set; }
+    public IDictionary<string, object?>? properties { get; set; }
     public string? type { get; set; }
     public OmsPlan? plan { get; set; }
 
