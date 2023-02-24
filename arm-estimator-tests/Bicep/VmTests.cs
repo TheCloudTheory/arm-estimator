@@ -321,5 +321,66 @@ namespace arm_estimator_tests.Bicep
             Assert.That(output, Is.Not.Null);
             Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(totalValue));
         }
+
+        [Test]
+        [TestCase("Standard_A1_v2", 5.8399999999999999d)]
+        [TestCase("Standard_A2_v2", 12.41d)]
+        [TestCase("Standard_A2m_v2", 18.25d)]
+        [TestCase("Standard_D2a_v4", 16.789999999999999d)]
+        [TestCase("Standard_D2ads_v5", 18.25d)]
+        [TestCase("Standard_D2as_v4", 16.789999999999999d)]
+        [TestCase("Standard_D2as_v5", 15.183999999999999d)]
+        [TestCase("Standard_DC2ads_v5", 20.074999999999999d)]
+        [TestCase("Standard_DC2as_v5", 16.716999999999999d)]
+        [TestCase("Standard_DC1ds_v3", 19.855999999999998d)]
+        [TestCase("Standard_DC2ds_v3", 39.711999999999996d)]
+        [TestCase("Standard_DC1s_v2", 16.789999999999999d)]
+        [TestCase("Standard_DC2s_v2", 33.579999999999998d)]
+        [TestCase("Standard_DC1s_v3", 16.789999999999999d)]
+        [TestCase("Standard_DC2s_v3", 33.579999999999998d)]
+        [TestCase("Standard_D2d_v4", 19.855999999999998d)]
+        [TestCase("Standard_D2ds_v4", 19.855999999999998d)]
+        [TestCase("Standard_D2ds_v5", 19.855999999999998d)]
+        [TestCase("Standard_D2d_v5", 19.855999999999998d)]
+        [TestCase("Standard_D1s", 12.263999999999999d)]
+        [TestCase("Standard_D2s", 24.527999999999999d)]
+        [TestCase("Standard_DS1_v2", 9.927999999999999d)]
+        [TestCase("Standard_DS2_v2", 19.710000000000001d)]
+        [TestCase("Standard_D2s_v3", 17.52d)]
+        [TestCase("Standard_D2s_v4", 16.789999999999999d)]
+        [TestCase("Standard_D2s_v5", 16.789999999999999d)]
+        [TestCase("Standard_D1_v2", 9.927999999999999d)]
+        [TestCase("Standard_D2_v2", 19.710000000000001d)]
+        [TestCase("Standard_D2_v3", 17.52d)]
+        [TestCase("Standard_D2_v4", 16.789999999999999d)]
+        [TestCase("Standard_D2_v5", 16.789999999999999d)]
+        [Parallelizable(ParallelScope.All)]
+        public async Task ResourceEstimation_ShouldBeCalculatedCorrectlyForVirtualMachineLowPriority_Linux(string vmSize, double totalValue)
+        {
+            var outputFilename = $"ace_test_{DateTime.Now.Ticks}";
+            var exitCode = await Program.Main(new[] {
+                "templates/bicep/vm/vm-linux-low.bicep",
+                "cf70b558-b930-45e4-9048-ebcefb926adf",
+                "arm-estimator-tests-rg",
+                "--generateJsonOutput",
+                "--jsonOutputFilename",
+                outputFilename,
+                "--inline",
+                $"vmSize={vmSize}",
+                "--inline",
+                $"vmName={vmSize}"
+            });
+
+            Assert.That(exitCode, Is.EqualTo(0));
+
+            var outputFile = File.ReadAllText($"{outputFilename}.json");
+            var output = JsonSerializer.Deserialize<EstimationOutput>(outputFile, new JsonSerializerOptions()
+            {
+                PropertyNameCaseInsensitive = true
+            });
+
+            Assert.That(output, Is.Not.Null);
+            Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(totalValue));
+        }
     }
 }
