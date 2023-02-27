@@ -19,12 +19,12 @@ export class CodelensProvider implements vscode.CodeLensProvider {
 
         const regex = new RegExp(this.regex);
         const text = document.getText();
-        const aceConfiguration = vscode.workspace.getConfiguration('azure-cost-estimator')
+        const aceConfiguration = vscode.workspace.getConfiguration('azure-cost-estimator');
         const aceLocation = aceConfiguration.get('ace.location');
         const subscriptionId = aceConfiguration.get('ace.subscriptionId');
         const resourceGroupName = aceConfiguration.get('ace.resourceGroupName');
 
-        if(aceLocation == '' || subscriptionId == '' || resourceGroupName == '')
+        if(aceLocation === '' || subscriptionId === '' || resourceGroupName === '')
         {
             vscode.window.showWarningMessage("Azure Cost Estimator configuration is not complete.");
             return new Promise(() => this.codeLenses);

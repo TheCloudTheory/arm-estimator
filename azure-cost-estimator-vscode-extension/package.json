@@ -20,17 +20,17 @@
       "properties": {
         "ace.location": {
           "type": "string",
-          "default": "",
+          "default": "D:\\TheCloudTheory\\Projekty\\arm-estimator\\arm-estimator\\arm-estimator\\bin\\Debug\\net6.0\\azure-cost-estimator.exe",
           "description": "Full path to the location where Azure Cost Estimator is downloaded"
         },
         "ace.subscriptionId": {
           "type": "string",
-          "default": "",
+          "default": "cf70b558-b930-45e4-9048-ebcefb926adf",
           "description": "Subscription Id to use for estimations"
         },
         "ace.resourceGroupName": {
           "type": "string",
-          "default": "",
+          "default": "arm-estimator-tests-rg",
           "description": "Resource group to use for estimations"
         }
       }
@@ -47,9 +47,8 @@
     "views": {
       "azure-cost-estimator": [
         {
-          "id": "mainView",
-          "name": "Azure Cost Estimator",
-          "icon": "media/main-icon.svg",
+          "id": "azure-cost-estimator:estimations",
+          "name": "Estimations",
           "contextualTitle": "Azure Cost Estimator"
         }
       ]

@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { AzureCostEstimatorDataProvider } from './AzureCostEstimatorDataProvider';
 import { CodelensProvider } from './CodeLensProvider';
 
 export function activate(context: vscode.ExtensionContext) {
@@ -7,12 +8,10 @@ export function activate(context: vscode.ExtensionContext) {
 
 	const codelensProvider = new CodelensProvider();
 	vscode.languages.registerCodeLensProvider({ pattern: '**/*.bicep' }, codelensProvider);
-
-	let statusBar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
-	statusBar.text = 'ACE: Idle';
-	statusBar.show();
-	
-	context.subscriptions.push(statusBar);
+	vscode.window.registerTreeDataProvider(
+		'azure-cost-estimator:estimations',
+		new AzureCostEstimatorDataProvider()
+	);
 }
 
 export function deactivate() { }
