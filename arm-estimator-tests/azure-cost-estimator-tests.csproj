@@ -184,10 +184,16 @@
     <None Update="templates\bicep\vm\vm-linux-low.bicep">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="templates\bicep\vm\vm-linux-spot.bicep">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="templates\bicep\vm\vm-linux.bicep">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="templates\bicep\vm\vm-windows-low.bicep">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="templates\bicep\vm\vm-windows-spot.bicep">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="templates\bicep\vm\vm-windows.bicep">
