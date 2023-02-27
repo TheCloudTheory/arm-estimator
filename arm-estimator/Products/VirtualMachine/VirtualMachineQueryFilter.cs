@@ -20,15 +20,15 @@ internal class VirtualMachineQueryFilter : IQueryFilter
         string? vmSize = null;
         bool? isWindows = true;
 
-        if(this.afterState.properties != null && this.afterState.properties.ContainsKey("hardwareProfile"))
+        if (this.afterState.properties != null && this.afterState.properties.ContainsKey("hardwareProfile") && this.afterState.properties["hardwareProfile"] != null)
         {
-            var hardwareProfile = ((JsonElement)this.afterState.properties["hardwareProfile"]).Deserialize<VirtualMachineHardwareProfile>();
+            var hardwareProfile = ((JsonElement)this.afterState.properties["hardwareProfile"]!).Deserialize<VirtualMachineHardwareProfile>();
             vmSize = hardwareProfile?.vmSize;
         }
 
-        if (this.afterState.properties != null && this.afterState.properties.ContainsKey("storageProfile"))
+        if (this.afterState.properties != null && this.afterState.properties.ContainsKey("storageProfile") && this.afterState.properties["storageProfile"] != null)
         {
-            var storageProfile = ((JsonElement)this.afterState.properties["storageProfile"]).Deserialize<VirtualMachineStorageProfile>();
+            var storageProfile = ((JsonElement)this.afterState.properties["storageProfile"]!).Deserialize<VirtualMachineStorageProfile>();
             isWindows = storageProfile?.imageReference?.offer?.Contains("Windows");
         }
 
@@ -54,6 +54,11 @@ internal class VirtualMachineQueryFilter : IQueryFilter
             if(priority != null && priority == "Low")
             {
                 skuName += " Low Priority";
+            }
+
+            if (priority != null && priority == "Spot")
+            {
+                skuName += " Spot";
             }
         }
 

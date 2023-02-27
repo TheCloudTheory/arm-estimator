@@ -382,5 +382,127 @@ namespace arm_estimator_tests.Bicep
             Assert.That(output, Is.Not.Null);
             Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(totalValue));
         }
+
+        [Test]
+        [TestCase("Standard_A1_v2", 6.5262000000000002d)]
+        [TestCase("Standard_A2_v2", 13.684579999999999d)]
+        [TestCase("Standard_A2m_v2", 19.789570000000001d)]
+        [TestCase("Standard_D2a_v4", 20.399850000000001d)]
+        [TestCase("Standard_D2ads_v5", 21.10868d)]
+        [TestCase("Standard_D2as_v4", 20.399850000000001d)]
+        [TestCase("Standard_D2as_v5", 19.066140000000001d)]
+        [TestCase("Standard_DC2ads_v5", 67.159999999999997d)]
+        [TestCase("Standard_DC2as_v5", 60.152000000000001d)]
+        [TestCase("Standard_DC1ds_v3", 53.144000000000005d)]
+        [TestCase("Standard_DC2ds_v3", 106.28800000000001d)]
+        [TestCase("Standard_DC1s_v2", 12.72974d)]
+        [TestCase("Standard_DC2s_v2", 25.458750000000002d)]
+        [TestCase("Standard_DC1s_v3", 47.012d)]
+        [TestCase("Standard_DC2s_v3", 94.024000000000001d)]
+        [TestCase("Standard_D2d_v4", 26.164659999999998d)]
+        [TestCase("Standard_D2ds_v4", 26.164659999999998d)]
+        [TestCase("Standard_D2ds_v5", 22.450420000000001d)]
+        [TestCase("Standard_D2d_v5", 22.450420000000001d)]
+        [TestCase("Standard_D1s", 12.17348d)]
+        [TestCase("Standard_D2s", 24.428720000000002d)]
+        [TestCase("Standard_DS1_v2", 14.440860000000001d)]
+        [TestCase("Standard_DS2_v2", 28.882450000000002d)]
+        [TestCase("Standard_D2s_v3", 22.316099999999999d)]
+        [TestCase("Standard_D2s_v4", 23.754200000000001d)]
+        [TestCase("Standard_D2s_v5", 20.38233d)]
+        [TestCase("Standard_D1_v2", 14.440860000000001d)]
+        [TestCase("Standard_D2_v2", 28.882450000000002d)]
+        [TestCase("Standard_D2_v3", 22.316099999999999d)]
+        [TestCase("Standard_D2_v4", 23.754200000000001d)]
+        [TestCase("Standard_D2_v5", 20.38233d)]
+        [Parallelizable(ParallelScope.All)]
+        public async Task ResourceEstimation_ShouldBeCalculatedCorrectlyForVirtualMachineSpot_Windows(string vmSize, double totalValue)
+        {
+            var outputFilename = $"ace_test_{DateTime.Now.Ticks}";
+            var exitCode = await Program.Main(new[] {
+                "templates/bicep/vm/vm-windows-spot.bicep",
+                "cf70b558-b930-45e4-9048-ebcefb926adf",
+                "arm-estimator-tests-rg",
+                "--generateJsonOutput",
+                "--jsonOutputFilename",
+                outputFilename,
+                "--inline",
+                $"vmSize={vmSize}",
+                "--inline",
+                $"vmName={vmSize}"
+            });
+
+            Assert.That(exitCode, Is.EqualTo(0));
+
+            var outputFile = File.ReadAllText($"{outputFilename}.json");
+            var output = JsonSerializer.Deserialize<EstimationOutput>(outputFile, new JsonSerializerOptions()
+            {
+                PropertyNameCaseInsensitive = true
+            });
+
+            Assert.That(output, Is.Not.Null);
+            Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(totalValue));
+        }
+
+        [Test]
+        [TestCase("Standard_A1_v2", 3.36822d)]
+        [TestCase("Standard_A2_v2", 7.1474299999999999d)]
+        [TestCase("Standard_A2m_v2", 10.18788d)]
+        [TestCase("Standard_D2a_v4", 8.3949999999999996d)]
+        [TestCase("Standard_D2ads_v5", 9.125d)]
+        [TestCase("Standard_D2as_v4", 8.3949999999999996d)]
+        [TestCase("Standard_D2as_v5", 7.5919999999999996d)]
+        [TestCase("Standard_DC2ads_v5", 40.295999999999999d)]
+        [TestCase("Standard_DC2as_v5", 33.288000000000004d)]
+        [TestCase("Standard_DC1ds_v3", 39.711999999999996d)]
+        [TestCase("Standard_DC2ds_v3", 79.423999999999992d)]
+        [TestCase("Standard_DC1s_v2", 8.3949999999999996d)]
+        [TestCase("Standard_DC2s_v2", 16.789999999999999d)]
+        [TestCase("Standard_DC1s_v3", 33.579999999999998d)]
+        [TestCase("Standard_DC2s_v3", 67.159999999999997d)]
+        [TestCase("Standard_D2d_v4", 12.05011d)]
+        [TestCase("Standard_D2ds_v4", 12.05011d)]
+        [TestCase("Standard_D2ds_v5", 10.338990000000001d)]
+        [TestCase("Standard_D2d_v5", 10.338990000000001d)]
+        [TestCase("Standard_D1s", 6.1319999999999997d)]
+        [TestCase("Standard_D2s", 12.263999999999999d)]
+        [TestCase("Standard_DS1_v2", 5.8925599999999996d)]
+        [TestCase("Standard_DS2_v2", 11.802639999999998d)]
+        [TestCase("Standard_D2s_v3", 9.858649999999999d)]
+        [TestCase("Standard_D2s_v4", 10.18934d)]
+        [TestCase("Standard_D2s_v5", 8.7424800000000005d)]
+        [TestCase("Standard_D1_v2", 5.8925599999999996d)]
+        [TestCase("Standard_D2_v2", 11.802639999999998d)]
+        [TestCase("Standard_D2_v3", 9.858649999999999d)]
+        [TestCase("Standard_D2_v4", 10.18934d)]
+        [TestCase("Standard_D2_v5", 8.7424800000000005d)]
+        [Parallelizable(ParallelScope.All)]
+        public async Task ResourceEstimation_ShouldBeCalculatedCorrectlyForVirtualMachineSpot_Linux(string vmSize, double totalValue)
+        {
+            var outputFilename = $"ace_test_{DateTime.Now.Ticks}";
+            var exitCode = await Program.Main(new[] {
+                "templates/bicep/vm/vm-linux-spot.bicep",
+                "cf70b558-b930-45e4-9048-ebcefb926adf",
+                "arm-estimator-tests-rg",
+                "--generateJsonOutput",
+                "--jsonOutputFilename",
+                outputFilename,
+                "--inline",
+                $"vmSize={vmSize}",
+                "--inline",
+                $"vmName={vmSize}"
+            });
+
+            Assert.That(exitCode, Is.EqualTo(0));
+
+            var outputFile = File.ReadAllText($"{outputFilename}.json");
+            var output = JsonSerializer.Deserialize<EstimationOutput>(outputFile, new JsonSerializerOptions()
+            {
+                PropertyNameCaseInsensitive = true
+            });
+
+            Assert.That(output, Is.Not.Null);
+            Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(totalValue));
+        }
     }
 }
