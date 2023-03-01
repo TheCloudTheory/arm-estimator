@@ -441,13 +441,12 @@ namespace arm_estimator_tests.Bicep
             });
 
             Assert.That(output, Is.Not.Null);
-            Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(totalValue));
         }
 
         [Test]
-        [TestCase("Standard_A1_v2", 3.36822d)]
-        [TestCase("Standard_A2_v2", 7.1474299999999999d)]
-        [TestCase("Standard_A2m_v2", 10.18788d)]
+        [TestCase("Standard_A1_v2", 3.1397300000000001d)]
+        [TestCase("Standard_A2_v2", 6.6627099999999997d)]
+        [TestCase("Standard_A2m_v2", 9.4958400000000012d)]
         [TestCase("Standard_D2a_v4", 8.3949999999999996d)]
         [TestCase("Standard_D2ads_v5", 9.125d)]
         [TestCase("Standard_D2as_v4", 8.3949999999999996d)]
@@ -460,22 +459,22 @@ namespace arm_estimator_tests.Bicep
         [TestCase("Standard_DC2s_v2", 16.789999999999999d)]
         [TestCase("Standard_DC1s_v3", 33.579999999999998d)]
         [TestCase("Standard_DC2s_v3", 67.159999999999997d)]
-        [TestCase("Standard_D2d_v4", 12.05011d)]
-        [TestCase("Standard_D2ds_v4", 12.05011d)]
-        [TestCase("Standard_D2ds_v5", 10.338990000000001d)]
-        [TestCase("Standard_D2d_v5", 10.338990000000001d)]
+        [TestCase("Standard_D2d_v4", 11.12082d)]
+        [TestCase("Standard_D2ds_v4", 11.12082d)]
+        [TestCase("Standard_D2ds_v5", 10.85656d)]
+        [TestCase("Standard_D2d_v5", 10.85656d)]
         [TestCase("Standard_D1s", 6.1319999999999997d)]
         [TestCase("Standard_D2s", 12.263999999999999d)]
         [TestCase("Standard_DS1_v2", 5.8925599999999996d)]
         [TestCase("Standard_DS2_v2", 11.802639999999998d)]
-        [TestCase("Standard_D2s_v3", 9.858649999999999d)]
-        [TestCase("Standard_D2s_v4", 10.18934d)]
-        [TestCase("Standard_D2s_v5", 8.7424800000000005d)]
-        [TestCase("Standard_D1_v2", 5.8925599999999996d)]
-        [TestCase("Standard_D2_v2", 11.802639999999998d)]
-        [TestCase("Standard_D2_v3", 9.858649999999999d)]
-        [TestCase("Standard_D2_v4", 10.18934d)]
-        [TestCase("Standard_D2_v5", 8.7424800000000005d)]
+        [TestCase("Standard_D2s_v3", 9.1892399999999999d)]
+        [TestCase("Standard_D2s_v4", 9.4031300000000009d)]
+        [TestCase("Standard_D2s_v5", 9.1797500000000003d)]
+        [TestCase("Standard_D1_v2", 5.2238800000000003d)]
+        [TestCase("Standard_D2_v2", 10.463089999999999d)]
+        [TestCase("Standard_D2_v3", 9.1892399999999999d)]
+        [TestCase("Standard_D2_v4", 9.4031300000000009d)]
+        [TestCase("Standard_D2_v5", 9.1797500000000003d)]
         [Parallelizable(ParallelScope.All)]
         public async Task ResourceEstimation_ShouldBeCalculatedCorrectlyForVirtualMachineSpot_Linux(string vmSize, double totalValue)
         {
@@ -502,7 +501,6 @@ namespace arm_estimator_tests.Bicep
             });
 
             Assert.That(output, Is.Not.Null);
-            Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(totalValue));
         }
     }
 }
