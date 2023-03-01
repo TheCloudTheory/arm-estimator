@@ -16,6 +16,7 @@
   "main": "./dist/extension.js",
   "contributes": {
     "configuration": {
+      "id": "aceExtensionConfiguration",
       "title": "Azure Cost Estimator",
       "properties": {
         "ace.location": {
