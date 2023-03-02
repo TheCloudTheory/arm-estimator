@@ -53,7 +53,26 @@
           "contextualTitle": "Azure Cost Estimator"
         }
       ]
-    }
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "azure-cost-estimator.refreshEntry",
+          "when": "view == azure-cost-estimator",
+          "group": "navigation"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "azure-cost-estimator.refreshEntry",
+        "title": "Refresh",
+        "icon": {
+          "light": "resources/light/refresh.svg",
+          "dark": "resources/dark/refresh.svg"
+        }
+      }
+    ],
   },
   "scripts": {
     "vscode:prepublish": "npm run package",

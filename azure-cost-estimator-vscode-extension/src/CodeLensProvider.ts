@@ -17,36 +17,32 @@ export class CodelensProvider implements vscode.CodeLensProvider {
         this.runner = new AzureCostEstimatorRunner();
     }
 
-    provideCodeLenses(document: vscode.TextDocument, token: vscode.CancellationToken): Promise<vscode.CodeLens[]> {
+    async provideCodeLenses(document: vscode.TextDocument, token: vscode.CancellationToken): Promise<vscode.CodeLens[]> {
         this.codeLenses = [];
 
-        // const regex = new RegExp(this.regex);
-        // const text = document.getText();
+        const result = await this.runner.run(document.fileName);
+        console.log(result);
+        this.generateCodeLens(document);
+        return this.codeLenses;
+    }
 
-        return this.runner.run(document.fileName);
+    private generateCodeLens(document: vscode.TextDocument)
+    {
+        const regex = new RegExp(this.regex);
+        const text = document.getText();
 
-        // process.stdout?.on('data', data => {
-        //     let matches;
-        //     while ((matches = regex.exec(text)) !== null) {
-        //         const line = document.lineAt(document.positionAt(matches.index).line);
-        //         const indexOf = line.text.indexOf(matches[0]);
-        //         const position = new vscode.Position(line.lineNumber, indexOf);
-        //         const range = document.getWordRangeAtPosition(position, new RegExp(this.regex));
+        let matches;
+        while ((matches = regex.exec(text)) !== null) {
+            const line = document.lineAt(document.positionAt(matches.index).line);
+            const indexOf = line.text.indexOf(matches[0]);
+            const position = new vscode.Position(line.lineNumber, indexOf);
+            const range = document.getWordRangeAtPosition(position, new RegExp(this.regex));
 
-        //         if (range) {
-        //             const codeLens = new AzureCostEstimatorCodeLens(30.56, range);
-        //             this.codeLenses.push(codeLens);
-        //         }
-        //     }
-        // });
-
-        // return this.createPromiseFromChildProcess(process).then(result => {
-        //     console.log("Successfully generated estimation.");
-        //     return this.codeLenses;
-        // }, error => {
-        //     console.log("There was an error when generating estimation.");
-        //     return this.codeLenses;
-        // });
+            if (range) {
+                const codeLens = new AzureCostEstimatorCodeLens(30.56, range);
+                this.codeLenses.push(codeLens);
+            }
+        }
     }
 
     resolveCodeLens(codeLens: vscode.CodeLens, token: vscode.CancellationToken) {
@@ -68,12 +64,5 @@ export class CodelensProvider implements vscode.CodeLensProvider {
 
             return codeLens;
         }
-    }
-
-    private createPromiseFromChildProcess(process: ChildProcess) {
-        return new Promise((resolve, reject)  => {
-            process.addListener("error", reject);
-            process.addListener("exit", resolve);
-        });
     }
 }
