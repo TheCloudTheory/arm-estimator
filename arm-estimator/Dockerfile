@@ -3,13 +3,13 @@ WORKDIR /app
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["arm-estimator/azure-cost-estimator.csproj", "ace/"]
+COPY ./arm-estimator ./ace
+COPY ./ace-terraform-parser ./ace-terraform-parser
 RUN dotnet restore "ace/azure-cost-estimator.csproj"
-COPY . .
-WORKDIR "/src/ace"
-RUN dotnet build "azure-cost-estimator.csproj" -c Release -o /app/build
+RUN dotnet build "ace/azure-cost-estimator.csproj" -c Release -o /app/build --no-restore
 
 FROM build AS publish
+WORKDIR /src/ace
 RUN dotnet publish "azure-cost-estimator.csproj" -c Release -o /app/publish -p:PublishSingleFile=false
 
 FROM base AS final
