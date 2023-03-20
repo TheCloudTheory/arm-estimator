@@ -43,6 +43,7 @@ namespace ACE.Compilation
                 process.StartInfo.Arguments = arguments;
                 process.StartInfo.RedirectStandardOutput = true;
                 process.StartInfo.RedirectStandardError = true;
+                process.StartInfo.WorkingDirectory = Directory.GetCurrentDirectory();
 
                 string? error = null;
                 process.ErrorDataReceived += new DataReceivedEventHandler((sender, e) => { error += e.Data; });
