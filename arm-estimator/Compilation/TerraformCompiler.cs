@@ -24,6 +24,9 @@ namespace ACE.Compilation
 #if Windows
         [DllImport("ace-terraform-parser-windows.dll")]
 #endif
+#if MacOs
+        [DllImport("ace-terraform-parser-macos.dll")]
+#endif
         public static extern void GenerateParsedPlan(GoString workingDir, GoString planFile);
 
         public TerraformCompiler(ILogger<Program> logger)
