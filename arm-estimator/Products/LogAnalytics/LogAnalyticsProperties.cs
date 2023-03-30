@@ -9,5 +9,5 @@ internal class LogAnalyticsProperties
 internal class WorkspaceCapping
 {
     [JsonPropertyName("dailyQuotaGb")]
-    public int DailyQuotaGB { get; set; }
+    public double DailyQuotaGB { get; set; }
 }
