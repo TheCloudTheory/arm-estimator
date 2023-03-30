@@ -115,6 +115,9 @@
     <None Update="templates\bicep\insights\diagnostic-settings.bicep">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="templates\bicep\loganalytics\bug-180.bicep">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="templates\bicep\metadata-template.bicep">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
