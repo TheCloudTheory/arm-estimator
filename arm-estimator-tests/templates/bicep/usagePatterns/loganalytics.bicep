@@ -26,3 +26,16 @@ resource la2 'Microsoft.OperationalInsights/workspaces@2022-10-01' = {
     }
   }
 }
+
+resource la3 'Microsoft.OperationalInsights/workspaces@2022-10-01' = {
+  name: 'usagepattern-la-cost-less-capping'
+  location: rgLocation
+  properties: {
+    sku: {
+      name: 'PerGB2018'
+    }
+    workspaceCapping: {
+      dailyQuotaGb: json('0.023')
+    }
+  }
+}

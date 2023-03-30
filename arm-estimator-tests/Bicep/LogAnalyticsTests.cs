@@ -55,8 +55,8 @@ namespace arm_estimator_tests.Bicep
             });
 
             Assert.That(output, Is.Not.Null);
-            Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(574.25999999999999d));
-            Assert.That(output.TotalResourceCount, Is.EqualTo(2));
+            Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(564.45310000000006d));
+            Assert.That(output.TotalResourceCount, Is.EqualTo(3));
         }
     }
 }
