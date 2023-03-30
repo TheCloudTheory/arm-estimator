@@ -13,7 +13,8 @@
 	<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 	<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	<IsWindows Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' == 'true'">true</IsWindows>
-	<IsLinux Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' == 'true'">true</IsLinux>
+	  <IsLinux Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' == 'true'">true</IsLinux>
+	  <IsMacOs Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' == 'true'">true</IsMacOs>
   </PropertyGroup>
 
 	<PropertyGroup Condition="'$(IsWindows)'=='true'">
@@ -21,6 +22,9 @@
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(IsLinux)'=='true'">
 		<DefineConstants>Linux</DefineConstants>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(IsMacOs)'=='true'">
+		<DefineConstants>MacOs</DefineConstants>
 	</PropertyGroup>
 
   <ItemGroup>

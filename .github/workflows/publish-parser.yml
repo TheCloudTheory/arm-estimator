@@ -2,7 +2,7 @@ name: Publish Terraform parser
 
 on:
   workflow_dispatch:
-  
+
 jobs:
   publishWindows:
     runs-on: windows-latest
@@ -33,3 +33,16 @@ jobs:
       with:
         name: ace-terraform-parser-linux
         path: ./ace-terraform-parser/ace-terraform-parser-linux.dll
+  publishMacOs:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./ace-terraform-parser
+    steps:
+    - uses: actions/checkout@v1
+    - name: Publish
+      run: go build -o ace-terraform-parser-macos.dll -buildmode=c-shared parser.go
+    - uses: actions/upload-artifact@v3
+      with:
+        name: ace-terraform-parser-macos
+        path: ./ace-terraform-parser/ace-terraform-parser-macos.dll
