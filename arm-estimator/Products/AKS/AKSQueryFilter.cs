@@ -18,17 +18,10 @@ internal class AKSQueryFilter : IQueryFilter
     public string? GetFiltersBasedOnDesiredState(string location)
     {
         var sku = this.afterState.sku;
-        if (sku == null)
-        {
-            this.logger.LogError("Can't create a filter for Azure Kubernetes Service when SKU is unavailable.");
-            return null;
-        }
+        sku ??= new WhatIfSku();
 
         var tier = sku.tier;
-        if (tier == null)
-        {
-            tier = "Free";
-        }
+        tier ??= "Free";
 
         var filters = new List<string>();
         var properties = JsonSerializer.Deserialize<AKSProperties>(JsonSerializer.Serialize(this.afterState.properties));
