@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using ACE.Compilation;
+using System.Text.Json.Serialization;
 
 namespace ACE.WhatIf;
 
@@ -7,6 +8,7 @@ internal class WhatIfResponse
     public string? status { get; set; }
     public WhatIfError? error { get; set; }
     public WhatIfProperties? properties { get; set; }
+    public TemplateType? TemplateType { get; set; }
 }
 
 internal class WhatIfError
@@ -53,7 +55,6 @@ internal class WhatIfAfterBeforeChange
     public IDictionary<string, object?>? properties { get; set; }
     public string? type { get; set; }
     public OmsPlan? plan { get; set; }
-
 }
 
 internal class OmsPlan

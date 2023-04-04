@@ -31,7 +31,7 @@ internal class AKSRetailQuery : BaseRetailQuery, IRetailQuery
             this.logger.LogError("Couldn't determine after / before state.");
             return null;
         }
-
+        
         var filter = new AKSQueryFilter(change, this.logger).GetFiltersBasedOnDesiredState(location);
         if (filter == "SKIP") return filter;
 

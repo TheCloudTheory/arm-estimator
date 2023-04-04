@@ -1,4 +1,5 @@
 ﻿using ACE.Calculation;
+using ACE.Compilation;
 using ACE.Extensions;
 using ACE.Output;
 using Microsoft.Extensions.Logging;
@@ -18,8 +19,8 @@ internal class WhatIfProcessor
     private readonly ILogger logger;
     private readonly WhatIfChange[] changes;
     private readonly CurrencyCode currency;
-    private readonly bool disableDetailedMetrics;
     private readonly TemplateSchema? template;
+    private readonly TemplateType templateType;
     private readonly IOutputFormatter outputFormatter;
 
     public WhatIfProcessor(ILogger logger,
@@ -27,13 +28,14 @@ internal class WhatIfProcessor
                            CurrencyCode currency,
                            bool disableDetailedMetrics,
                            TemplateSchema? template,
-                           OutputFormat outputFormat)
+                           OutputFormat outputFormat,
+                           TemplateType templateType)
     {
         this.logger = logger;
         this.changes = changes;
         this.currency = currency;
-        this.disableDetailedMetrics = disableDetailedMetrics;
         this.template = template;
+        this.templateType = templateType;
         this.outputFormatter = new OutputGenerator(outputFormat, logger, currency, disableDetailedMetrics).GetFormatter();
 
         ReconcileResources();

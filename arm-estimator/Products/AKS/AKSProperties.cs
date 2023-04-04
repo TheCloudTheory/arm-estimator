@@ -3,20 +3,40 @@
 internal class AKSProperties
 {
     [JsonPropertyName("agentPoolProfiles")]
-    public AgentPoolProfile[]? AgentPoolProfiles { get; set; }
+    public AgentPoolProfile[]? AgentPoolProfiles_ARM { get; set; }
+
+    [JsonPropertyName("default_node_pool")]
+    public AgentPoolProfile_TF[]? AgentPoolProfiles_TF { get; set; }
+
+    public AgentPoolProfile[]? AgentPoolProfiles => AgentPoolProfiles_ARM == null ? AgentPoolProfiles_TF : AgentPoolProfiles_ARM;
 }
 
 internal class AgentPoolProfile
 {
     [JsonPropertyName("count")]
-    public int Count { get; set; }
+    public virtual int Count { get; set; }
 
     [JsonPropertyName("osType")]
-    public string? OsType { get; set; }
+    public virtual string? OsType { get; set; }
 
     [JsonPropertyName("type")]
-    public string? Type { get; set; }
+    public virtual string? Type { get; set; }
 
     [JsonPropertyName("vmSize")]
-    public string? VmSize { get; set; }
+    public virtual string? VmSize { get; set; }
+}
+
+internal class AgentPoolProfile_TF : AgentPoolProfile
+{
+    [JsonPropertyName("node_count")]
+    public override int Count { get; set; }
+
+    [JsonPropertyName("os_sku")]
+    public override string? OsType { get; set; } = "Linux";
+
+    [JsonPropertyName("type")]
+    public override string? Type { get; set; }
+
+    [JsonPropertyName("vm_size")]
+    public override string? VmSize { get; set; }
 }

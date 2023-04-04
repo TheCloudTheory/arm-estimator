@@ -297,7 +297,8 @@ public class Program
                                                    options.Currency,
                                                    options.DisableDetailedMetrics,
                                                    parser?.Template,
-                                                   options.OutputFormat).Process();
+                                                   options.OutputFormat,
+                                                   templateType).Process();
             GenerateOutputIfNeeded(options, output, logger);
 
             if (options.Threshold != -1 && output.TotalCost.OriginalValue > options.Threshold)

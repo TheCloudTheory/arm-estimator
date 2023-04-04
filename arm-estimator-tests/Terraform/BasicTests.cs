@@ -62,8 +62,8 @@ namespace arm_estimator_tests.Terraform
             });
 
             Assert.That(output, Is.Not.Null);
-            Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(5.0979999999999999d));
-            Assert.That(output.TotalResourceCount, Is.EqualTo(3));
+            Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(99.280000000000001d));
+            Assert.That(output.TotalResourceCount, Is.EqualTo(2));
         }
 
         private void InitializeAndCreateTerraformPlan(string workingDirectory)
