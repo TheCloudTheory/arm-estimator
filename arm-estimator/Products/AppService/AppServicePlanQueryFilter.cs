@@ -48,7 +48,7 @@ internal class AppServicePlanQueryFilter : IQueryFilter
         var isLinuxPlan = false;
         if (this.afterState.properties != null && this.afterState.properties.ContainsKey("reserved"))
         {
-            var isReserved = this.afterState.properties["reserved"].ToString();
+            var isReserved = this.afterState.properties["reserved"]!.ToString();
             if (isReserved != null)
             {
                 isLinuxPlan = bool.Parse(isReserved);

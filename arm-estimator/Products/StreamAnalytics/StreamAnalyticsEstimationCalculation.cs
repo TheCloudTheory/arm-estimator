@@ -31,7 +31,7 @@ internal class StreamAnalyticsEstimationCalculation : BaseEstimation, IEstimatio
         {
             if(this.change.properties != null && this.change.properties.ContainsKey("transformation"))
             {
-                var transformation = ((JsonElement)this.change.properties["transformation"]).Deserialize<StreamAnalyticsJobTransformation>();
+                var transformation = ((JsonElement)this.change.properties["transformation"]!).Deserialize<StreamAnalyticsJobTransformation>();
                 if(transformation != null)
                 {
                     capacity = transformation.properties?.streamingUnits;

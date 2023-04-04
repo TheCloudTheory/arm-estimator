@@ -22,7 +22,7 @@ internal class StreamAnalyticsQueryFilter : IQueryFilter
         {
             if(this.afterState.properties != null && this.afterState.properties.ContainsKey("sku"))
             {
-                var skuData = ((JsonElement)this.afterState.properties["sku"]).Deserialize<Dictionary<string, object>>();
+                var skuData = ((JsonElement)this.afterState.properties["sku"]!).Deserialize<Dictionary<string, object>>();
                 if(skuData != null)
                 {
                     sku = skuData["name"].ToString();

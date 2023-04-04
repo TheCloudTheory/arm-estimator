@@ -24,7 +24,7 @@ internal class LogAnalyticsEstimationCalculation : BaseEstimation, IEstimationCa
         double? dailyQuota = null;
         if (this.change.properties != null && this.change.properties.ContainsKey("workspaceCapping"))
         {
-            var cappingProperties = ((JsonElement)this.change.properties["workspaceCapping"]).Deserialize<WorkspaceCapping>();
+            var cappingProperties = ((JsonElement)this.change.properties["workspaceCapping"]!).Deserialize<WorkspaceCapping>();
             dailyQuota = cappingProperties?.DailyQuotaGB;
         }
         

@@ -45,12 +45,12 @@ internal class TerraformTemplateParser
         return new WhatIfChange()
         {
             changeType = DetermineChangeType(change),
-            resourceId = $"terraform.{change.Type}.{change.Name}.{change.Change.After["location"]}.{change.Change.After["name"]}",
+            resourceId = $"terraform.{change.Type}.{change.Name}.{change.Change?.After!["location"]}.{change.Change?.After!["name"]}",
             after = new WhatIfAfterBeforeChange()
             {
                 type = change.Type,
-                location = change.Change.After["location"].ToString(),
-                properties = change.Change.After,
+                location = change.Change?.After!["location"].ToString(),
+                properties = change.Change?.After,
                 sku = CreateSkuObjectIfProvided(change.Change)
             }
         };

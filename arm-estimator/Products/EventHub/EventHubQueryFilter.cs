@@ -31,7 +31,7 @@ internal class EventHubQueryFilter : IQueryFilter
             var properties = this.afterState.properties;
             if(properties != null && properties.ContainsKey("captureDescription"))
             {
-                var capture = ((JsonElement)properties["captureDescription"]).Deserialize<Dictionary<string, object>>();
+                var capture = ((JsonElement)properties["captureDescription"]!).Deserialize<Dictionary<string, object>>();
                 if(capture != null && capture.ContainsKey("enabled"))
                 {
                     var captureValue = capture["enabled"].ToString() ?? "false";

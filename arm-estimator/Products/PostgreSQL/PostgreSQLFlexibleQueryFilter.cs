@@ -66,7 +66,7 @@ internal class PostgreSQLFlexibleQueryFilter : IQueryFilter
 
         if (this.afterState.properties != null && this.afterState.properties.ContainsKey("storageProfile"))
         {
-            var storageProfile = ((JsonElement)this.afterState.properties["storageProfile"]).Deserialize<PostgreSQLStorageProfile>();
+            var storageProfile = ((JsonElement)this.afterState.properties["storageProfile"]!).Deserialize<PostgreSQLStorageProfile>();
             if (storageProfile != null)
             {
                 return $"serviceId eq '{ServiceId}' and ((armRegionName eq '{location}' and skuName eq '{skuName}' and productName eq '{productName}') or (armRegionName eq '{location}' and productName eq '{storageProductName}') or (armRegionName eq '{location}' and skuName eq 'Backup Storage LRS'))";

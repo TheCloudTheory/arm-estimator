@@ -38,7 +38,7 @@ internal class VNetRetailQuery : BaseRetailQuery, IRetailQuery
 
         if (properties.ContainsKey("virtualNetworkPeerings"))
         {
-            var peerings = ((JsonElement)properties["virtualNetworkPeerings"]).Deserialize<Peering[]>();
+            var peerings = ((JsonElement)properties["virtualNetworkPeerings"]!).Deserialize<Peering[]>();
             if (peerings == null)
             {
                 this.logger.LogError("Couldn't deserialize VNet peerings");

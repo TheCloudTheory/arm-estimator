@@ -18,7 +18,7 @@ internal class FirewallQueryFilter : IQueryFilter
         var skuName = "Standard";
         if (this.afterState.properties != null && this.afterState.properties.ContainsKey("sku"))
         {
-            var sku = ((JsonElement)this.afterState.properties["sku"]).Deserialize<FirewallSkuData>();
+            var sku = ((JsonElement)this.afterState.properties["sku"]!).Deserialize<FirewallSkuData>();
             if(sku?.tier != null)
             {
                 skuName = sku.tier;

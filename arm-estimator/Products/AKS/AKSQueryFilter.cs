@@ -39,7 +39,7 @@ internal class AKSQueryFilter : IQueryFilter
                             name = profile.VmSize,
                             tier = profile.VmSize!.Split('_')[0]
                         },
-                        properties = new Dictionary<string, object>()
+                        properties = new Dictionary<string, object?>()
                         {
                             {
                                 "virtualMachineProfile", JsonSerializer.SerializeToElement(new VirtualMachineProfile()

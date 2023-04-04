@@ -46,7 +46,7 @@ internal class PostgreSQLFlexibleEstimationCalculation : BaseEstimation, IEstima
             {
                 if(this.change.properties != null && this.change.properties.ContainsKey("storageProfile"))
                 {
-                    var storageProfile = ((JsonElement)this.change.properties["storageProfile"]).Deserialize<PostgreSQLStorageProfile>();
+                    var storageProfile = ((JsonElement)this.change.properties["storageProfile"]!).Deserialize<PostgreSQLStorageProfile>();
                     if(storageProfile?.geoRedundantBackup == "Enabled")
                     {
                         cost = item.retailPrice * base.IncludeUsagePattern("Microsoft_DBforPostgreSQL_servers_Backup_Storage", usagePatterns, 0) * 2;

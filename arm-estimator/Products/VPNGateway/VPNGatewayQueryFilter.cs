@@ -21,7 +21,7 @@ internal class VPNGatewayQueryFilter : IQueryFilter
         string? sku = null;
         if (this.afterState.properties != null && this.afterState.properties.ContainsKey("sku"))
         {
-            var skuData = ((JsonElement)this.afterState.properties["sku"]).Deserialize<Dictionary<string, string>>();
+            var skuData = ((JsonElement)this.afterState.properties["sku"]!).Deserialize<Dictionary<string, string>>();
             if (skuData != null && skuData.ContainsKey("name"))
             {
                 sku = skuData["name"];

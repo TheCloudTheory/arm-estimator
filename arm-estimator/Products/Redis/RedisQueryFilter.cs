@@ -23,7 +23,7 @@ internal class RedisQueryFilter : IQueryFilter
             return null;
         }
 
-        var skuData = ((JsonElement)this.afterState.properties["sku"]).Deserialize<RedisSkuData>();
+        var skuData = ((JsonElement)this.afterState.properties["sku"]!).Deserialize<RedisSkuData>();
         if(skuData == null)
         {
             this.logger.LogError("Can't create a filter for Redis when SKU data cannot be obtained.");

@@ -52,7 +52,7 @@ internal class PostgreSQLQueryFilter : IQueryFilter
 
         if (this.afterState.properties != null && this.afterState.properties.ContainsKey("storageProfile"))
         {
-            var storageProfile = ((JsonElement)this.afterState.properties["storageProfile"]).Deserialize<PostgreSQLStorageProfile>();
+            var storageProfile = ((JsonElement)this.afterState.properties["storageProfile"]!).Deserialize<PostgreSQLStorageProfile>();
             if (storageProfile != null)
             {
                 var backupSku = "Backup LRS";

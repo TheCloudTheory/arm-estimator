@@ -53,7 +53,7 @@ internal class MariaDBQueryFilter : IQueryFilter
 
         if (this.afterState.properties != null && this.afterState.properties.ContainsKey("storageProfile"))
         {
-            var storageProfile = ((JsonElement)this.afterState.properties["storageProfile"]).Deserialize<MariaDBStorageProfile>();
+            var storageProfile = ((JsonElement)this.afterState.properties["storageProfile"]!).Deserialize<MariaDBStorageProfile>();
             if (storageProfile != null)
             {
                 var backupSku = "Backup LRS";

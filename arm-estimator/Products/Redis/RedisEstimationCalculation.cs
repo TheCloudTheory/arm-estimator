@@ -19,7 +19,7 @@ internal class RedisEstimationCalculation : BaseEstimation, IEstimationCalculati
     {
         double? estimatedCost = 0;
         var items = GetItems();
-        var skuData = ((JsonElement)this.change.properties!["sku"]).Deserialize<RedisSkuData>();
+        var skuData = ((JsonElement)this.change.properties!["sku"]!).Deserialize<RedisSkuData>();
         var shardCount = 1;
         var summary = new TotalCostSummary();
 
@@ -27,7 +27,7 @@ internal class RedisEstimationCalculation : BaseEstimation, IEstimationCalculati
         {
             if (this.change.properties != null && this.change.properties.ContainsKey("shardCount"))
             {
-                _ = int.TryParse(this.change.properties["shardCount"].ToString(), out shardCount);
+                _ = int.TryParse(this.change.properties["shardCount"]!.ToString(), out shardCount);
             }
         }
 
@@ -37,11 +37,11 @@ internal class RedisEstimationCalculation : BaseEstimation, IEstimationCalculati
         {
             if (this.change.properties.TryGetValue("replicasPerMaster", out var replicasCount))
             {
-                replicas = int.Parse(replicasCount.ToString()!);
+                replicas = int.Parse(replicasCount!.ToString()!);
             }
             else if (this.change.properties.TryGetValue("replicasPerMaster", out replicasCount))
             {
-                replicas = int.Parse(replicasCount.ToString()!);
+                replicas = int.Parse(replicasCount!.ToString()!);
             }
         }
 

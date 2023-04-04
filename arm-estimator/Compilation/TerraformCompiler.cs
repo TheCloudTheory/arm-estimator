@@ -33,7 +33,9 @@ namespace ACE.Compilation
 
         public string? Compile(FileInfo templateFile)
         {
-            var workingDirectory = templateFile.Directory.FullName;
+            var workingDirectory = templateFile.Directory?.FullName;
+            ArgumentNullException.ThrowIfNull(workingDirectory, nameof(workingDirectory));
+
             var planFile = $"{templateFile.Directory}{Path.DirectorySeparatorChar}tfplan";
 
             if(File.Exists(planFile) == false)

@@ -22,7 +22,7 @@ internal class KeyVaultQueryFilter : IQueryFilter
         {
             if(this.afterState.properties != null && this.afterState.properties.ContainsKey("sku"))
             {
-                var skuData = ((JsonElement)this.afterState.properties["sku"]).Deserialize<Dictionary<string, string>>();
+                var skuData = ((JsonElement)this.afterState.properties["sku"]!).Deserialize<Dictionary<string, string>>();
                 if(skuData != null && skuData.ContainsKey("name"))
                 {
                     sku = skuData["name"];
