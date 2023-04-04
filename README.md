@@ -37,58 +37,58 @@ Check [wiki](https://github.com/TheCloudTheory/arm-estimator/wiki/About-wiki) fo
 
 ## Services support
 Services not listed are considered TBD. Below list represents the latest commit available, which isn't always aligned with the most recent release.
-Service|Support level|More information
-----|----|----
-Active Directory B2C|Not Supported|-
-Active Directory Domain Services|Not Supported|-
-Advanced Data Security|Not Supported|-
-Advanced Threat Protection|Not Supported|-
-AKS|In development|Supports only VMSS agent pools
-APIM|Stable|-
-App Configuration|Stable|-
-Application Gateway|Stable|-
-Application Insights|In development|Supports classic mode, doesn't support Enteprise Nodes and Multi-step Web Test
-Analysis Services|Stable|-
-ASR|In progress|Doesn't support recovery to customer-owned sites
-Automation Account|Stable|Supports Process Automation only
-Azure App Service|In development|Supports Azure App Service Plans (without Isolated tiers) and Azure Functions (Consumption / Premium / App Service Plan)
-Azure Firewall|Stable|-
-Availability Set|Stable|-
-Backup|Stable|-
-Bastion|Stable|-
-Bot Service|Stable|-
-Chaos Studio|Stable|-
-Cognitive Search|In development|Doesn't support Document Cracking / Semantic Search / Custom Entity Skills Text Records
-Confidential Ledger|Stable|Official pricing will be available September 2022
-Container Apps|Stable|-
-Container Registry|Stable|-
-Cosmos DB|In development|Supports only single-region writes with manual throughput provisioning
-Data Factory|In Development|Doesn't support IR and SSIS
-Event Hub|Stable|-
-Event Grid|Stable|-
-Health Bot|Stable|-
-Key Vault|Stable|Doesn't support Azure Dedicated HSM
-Log Analytics|In development|Estimations doesn't include commitment tiers & logs retention
-Logic Apps|In development|Doesn't support ISE scale units
-Maria DB|Stable|-
-Monitor|In development|Alerts estimations doesn't include frequency / metrics count
-Network Interface|Stable|-
-Network Security Group|Stable|-
-PostgreSQL|Stable|Doesn't include `Hyperscale` being part of Cosmos DB
-Public IP Address|Stable|-
-Public IP Address Prefixes|Stable|-
-Redis|Stable|-
-Sentinel|In development|Estimations doesn't include commitment tiers
-Service Bus|Stable|Doesn't support Hybrid Connections and WCF Relay
-SignalR|Stable|-
-SQL Database|Stable|-
-Storage Account|In development|Supports only StorageV2 (without File Service & Data Lake Storage)
-Stream Analytics|Stable|Stream Analytics on Edge requires separate estimation
-Time Series|Stable|-
-Virtual Machine|Stable|Supports Ax, Bx and Dx VM families
-VMSS|Stable|Supports the same VM families as Virtual Machines
-Virtual Network|Stable|-
-VPN Gateway|Stable|-
+Service|Support level|Terraform support|More information
+----|----|----|----
+Active Directory B2C|Not Supported|Not Supported|-
+Active Directory Domain Services|Not Supported|Not Supported|-
+Advanced Data Security|Not Supported|Not Supported|-
+Advanced Threat Protection|Not Supported|Not Supported|-
+AKS|Stable|Supported|Supports only VMSS agent pools
+APIM|Stable|Supported|-
+App Configuration|Stable|Not Supported|-
+Application Gateway|Stable|Not Supported|-
+Application Insights|In development|Not Supported|Supports classic mode, doesn't support Enteprise Nodes and Multi-step Web Test
+Analysis Services|Stable|Supported|-
+ASR|In progress|Not Supported|Doesn't support recovery to customer-owned sites
+Automation Account|Stable|Not Supported|Supports Process Automation only
+Azure App Service|In development|Not Supported|Supports Azure App Service Plans (without Isolated tiers) and Azure Functions (Consumption / Premium / App Service Plan)
+Azure Firewall|Stable|Not Supported|-
+Availability Set|Stable|Not Supported|-
+Backup|Stable|Not Supported|-
+Bastion|Stable|Not Supported|-
+Bot Service|Stable|Not Supported|-
+Chaos Studio|Stable|Not Supported|-
+Cognitive Search|In development|Not Supported|Doesn't support Document Cracking / Semantic Search / Custom Entity Skills Text Records
+Confidential Ledger|Stable|Not Supported|-
+Container Apps|Stable|Not Supported|-
+Container Registry|Stable|Supported|-
+Cosmos DB|In development|Not Supported|Supports only single-region writes with manual throughput provisioning
+Data Factory|In Development|Not Supported|Doesn't support IR and SSIS
+Event Hub|Stable|Not Supported|-
+Event Grid|Stable|Not Supported|-
+Health Bot|Stable|Not Supported|-
+Key Vault|Stable|Not Supported|Doesn't support Azure Dedicated HSM
+Log Analytics|In development|Not Supported|Estimations doesn't include commitment tiers & logs retention
+Logic Apps|In development|Not Supported|Doesn't support ISE scale units
+Maria DB|Stable|Not Supported|-
+Monitor|In development|Not Supported|Alerts estimations doesn't include frequency / metrics count
+Network Interface|Stable|Not Supported|-
+Network Security Group|Stable|Not Supported|-
+PostgreSQL|Stable|Not Supported|Doesn't include `Hyperscale` being part of Cosmos DB
+Public IP Address|Stable|Not Supported|-
+Public IP Address Prefixes|Stable|Not Supported|-
+Redis|Stable|Not Supported|-
+Sentinel|In development|Not Supported|Estimations doesn't include commitment tiers
+Service Bus|Stable|Not Supported|Doesn't support Hybrid Connections and WCF Relay
+SignalR|Stable|Not Supported|-
+SQL Database|Stable|Not Supported|-
+Storage Account|In development|Not Supported|Supports only StorageV2 (without File Service & Data Lake Storage)
+Stream Analytics|Stable|Not Supported|Stream Analytics on Edge requires separate estimation
+Time Series|Stable|Not Supported|-
+Virtual Machine|Stable|Not Supported|Supports Ax, Bx and Dx VM families
+VMSS|Stable|Not Supported|Supports the same VM families as Virtual Machines
+Virtual Network|Stable|Not Supported|-
+VPN Gateway|Stable|Not Supported|-
 
 ## Contributions
 Contributions are more than welcome!
