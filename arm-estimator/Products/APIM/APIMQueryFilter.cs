@@ -24,13 +24,18 @@ internal class APIMQueryFilter : IQueryFilter
             sku = "Gateway";
         }
 
-        if (sku == null)
+        if (sku == null && this.afterState.properties?.ContainsKey("sku_name") == false)
         {
             this.logger.LogError("Can't create a filter for API Management Service when SKU is unavailable.");
             return null;
         }
+        else
+        {
+            var skuName = this.afterState.properties!["sku_name"];
+            sku = skuName!.ToString()!.Split('_')[0];
+        }
 
-        var skuNames = APIMSupportedData.SkuToSkuNameMap[sku];
+        var skuNames = APIMSupportedData.SkuToSkuNameMap[sku!];
         var skuNamesFilter = string.Join(" or ", skuNames.Select(_ => $"skuName eq '{_}'"));
 
         return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and ({skuNamesFilter})";

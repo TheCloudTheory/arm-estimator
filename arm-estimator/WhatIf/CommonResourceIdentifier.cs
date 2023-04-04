@@ -66,6 +66,7 @@ internal class CommonResourceIdentifier
             "azurerm_container_registry" => "Microsoft.ContainerRegistry/registries",
             "azurerm_kubernetes_cluster" => "Microsoft.ContainerService/managedClusters",
             "azurerm_analysis_services_server" => "Microsoft.AnalysisServices/servers",
+            "azurerm_api_management" => "Microsoft.ApiManagement/service",
             _ => null,
         };
     }
