@@ -45,7 +45,7 @@ Advanced Data Security|Not Supported|Not Supported|-
 Advanced Threat Protection|Not Supported|Not Supported|-
 AKS|Stable|Supported|Supports only VMSS agent pools
 APIM|Stable|Supported|-
-App Configuration|Stable|Not Supported|-
+App Configuration|Stable|Supported|-
 Application Gateway|Stable|Supported|-
 Application Insights|In development|Not Supported|Supports classic mode, doesn't support Enteprise Nodes and Multi-step Web Test
 Analysis Services|Stable|Supported|-
