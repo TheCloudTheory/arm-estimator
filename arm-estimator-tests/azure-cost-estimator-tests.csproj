@@ -316,6 +316,9 @@
     <None Update="templates\terraform\appconfiguration\main.tf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="templates\terraform\applicationgateway\main.tf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="templates\terraform\main.tf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

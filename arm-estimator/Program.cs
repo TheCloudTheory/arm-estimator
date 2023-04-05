@@ -4,7 +4,6 @@ using ACE.WhatIf;
 using Microsoft.Extensions.Logging;
 using System.CommandLine;
 using System.Reflection;
-using System.Reflection.Metadata.Ecma335;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 
@@ -297,8 +296,7 @@ public class Program
                                                    options.Currency,
                                                    options.DisableDetailedMetrics,
                                                    parser?.Template,
-                                                   options.OutputFormat,
-                                                   templateType).Process();
+                                                   options.OutputFormat).Process();
             GenerateOutputIfNeeded(options, output, logger);
 
             if (options.Threshold != -1 && output.TotalCost.OriginalValue > options.Threshold)

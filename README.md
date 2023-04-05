@@ -13,7 +13,7 @@ Infrastructure-as-Code (IaC) makes things even more difficult - it solves the pr
 ACE follows a concept of [_running cost as architecture fitness function_](https://www.thoughtworks.com/radar/techniques/run-cost-as-architecture-fitness-function). You can make it an integral part of your CICD pipeline and quickly gather information of how much you're going to spend.
 
 ## Main features
-* Supports 47 Azure services (~85 resource types)
+* Supports 48 Azure services (~86 resource types)
 * Native support for Bicep & ARM Templates
 * Detailed output containing information about cost of your infrastructure and metrics used for calculation
 * Seamless integration with ARM Templates and Bicep (with a little help of Bicep CLI)
@@ -46,7 +46,7 @@ Advanced Threat Protection|Not Supported|Not Supported|-
 AKS|Stable|Supported|Supports only VMSS agent pools
 APIM|Stable|Supported|-
 App Configuration|Stable|Not Supported|-
-Application Gateway|Stable|Not Supported|-
+Application Gateway|Stable|Supported|-
 Application Insights|In development|Not Supported|Supports classic mode, doesn't support Enteprise Nodes and Multi-step Web Test
 Analysis Services|Stable|Supported|-
 ASR|In progress|Not Supported|Doesn't support recovery to customer-owned sites
@@ -87,7 +87,7 @@ Stream Analytics|Stable|Not Supported|Stream Analytics on Edge requires separate
 Time Series|Stable|Not Supported|-
 Virtual Machine|Stable|Not Supported|Supports Ax, Bx and Dx VM families
 VMSS|Stable|Not Supported|Supports the same VM families as Virtual Machines
-Virtual Network|Stable|Not Supported|-
+Virtual Network|Stable|Supported|-
 VPN Gateway|Stable|Not Supported|-
 
 ## Contributions

@@ -35,7 +35,13 @@ internal class ApplicationGatewayQueryFilter : IQueryFilter
             return null;
         }
 
-        var sku = ((JsonElement)skuData).Deserialize<Dictionary<string, object>>();
+        var skuElement = (JsonElement)skuData;
+        if(skuElement.ValueKind == JsonValueKind.Array)
+        {
+            skuElement = skuElement[0];
+        }
+
+        var sku = skuElement.Deserialize<Dictionary<string, object>>();
         if (sku == null)
         {
             this.logger.LogError("Can't create a filter for Application Gateway when SKU is invalid.");

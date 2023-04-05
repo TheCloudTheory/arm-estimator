@@ -20,7 +20,6 @@ internal class WhatIfProcessor
     private readonly WhatIfChange[] changes;
     private readonly CurrencyCode currency;
     private readonly TemplateSchema? template;
-    private readonly TemplateType templateType;
     private readonly IOutputFormatter outputFormatter;
 
     public WhatIfProcessor(ILogger logger,
@@ -28,14 +27,12 @@ internal class WhatIfProcessor
                            CurrencyCode currency,
                            bool disableDetailedMetrics,
                            TemplateSchema? template,
-                           OutputFormat outputFormat,
-                           TemplateType templateType)
+                           OutputFormat outputFormat)
     {
         this.logger = logger;
         this.changes = changes;
         this.currency = currency;
         this.template = template;
-        this.templateType = templateType;
         this.outputFormatter = new OutputGenerator(outputFormat, logger, currency, disableDetailedMetrics).GetFormatter();
 
         ReconcileResources();
@@ -410,6 +407,10 @@ internal class WhatIfProcessor
                     break;
                 case "Microsoft.Cache/redisEnterprise":
                     resource = await Calculate<RedisEnterpriseRetailQuery, RedisEnterpriseEstimationCalculation>(change, id);
+                    break;
+                case "Microsoft.Network/virtualNetworks/subnets":
+                    resource = new EstimatedResourceData(0, 0, id);
+                    freeResources.Add(id, change.changeType);
                     break;
                 default:
                     if (id?.GetName() != null)

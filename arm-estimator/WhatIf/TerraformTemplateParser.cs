@@ -27,33 +27,61 @@ internal class TerraformTemplateParser
         {
             properties = new WhatIfProperties()
             {
-                changes = data.Changes?.Select(DefineWhatIfChange).ToArray()
+                changes = data.Changes?.Select(c => DefineWhatIfChange(c, data)).ToArray()
             }
         };
 
         return whatIf;
     }
 
-    private WhatIfChange? DefineWhatIfChange(ResourceChange change)
+    private WhatIfChange DefineWhatIfChange(ResourceChange change, TerraformData data)
     {
-        if(change.Change == null)
+        if (change.Change == null)
         {
-            this.logger.LogError($"Couldn't procees data for {change.Type}.{change.Name}");
-            return null;
+            this.logger.LogError("Couldn't procees data for {type}.{name}", change.Type, change.Name);
+            return new WhatIfChange();
         }
 
         return new WhatIfChange()
         {
             changeType = DetermineChangeType(change),
-            resourceId = $"terraform.{change.Type}.{change.Name}.{change.Change?.After!["location"]}.{change.Change?.After!["name"]}",
+            resourceId = $"terraform{DetermineParent(change, data)}.{change.Type}.{change.Name}.{GetLocation(change)}.{change.Change?.After!["name"]}",
             after = new WhatIfAfterBeforeChange()
             {
                 type = change.Type,
-                location = change.Change?.After!["location"].ToString(),
+                location = GetLocation(change),
                 properties = change.Change?.After,
                 sku = CreateSkuObjectIfProvided(change.Change)
             }
         };
+    }
+
+    private static string? DetermineParent(ResourceChange change, TerraformData data)
+    {
+        var parentRef = data.Configuration?.RootModule?.Resources?.FirstOrDefault(_ => _.Name == change.Name && _.Type == change.Type)?.Expressions?.ResourceGroup?.References?[1];
+        if(parentRef == null)
+        {
+            return null;
+        }
+
+        var refParts = parentRef.Split('.');
+        var parent = data.Changes?.FirstOrDefault(_ => _.Name == refParts[1] && _.Type == refParts[0]);
+        if(parent == null)
+        {
+            return null;
+        }
+
+        return $".{parent.Type}.{parent.Name}.{GetLocation(parent)}.{parent.Change?.After!["name"]}";
+    }
+
+    private static string? GetLocation(ResourceChange change)
+    {
+        if(change.Change != null && change.Change.After != null && change.Change.After.ContainsKey("location"))
+        {
+            return change.Change?.After!["location"].ToString();
+        }
+
+        return null;
     }
 
     /// <summary>
@@ -83,7 +111,18 @@ internal class TerraformTemplateParser
             return null;
         }
 
-        var skuData = data.After["sku"];
+        var skuData = (JsonElement)data.After["sku"];
+
+        // For some resources, SKU is represented as Array containing single
+        // SKU object. As calculation of some resources (like AppGW) assumes,
+        // that SKU is an object (thus it's being deserialized to IDictionary<string, object>),
+        // we need to extract SKU value from the array.
+        if(skuData.ValueKind == JsonValueKind.Array)
+        {
+            var sku = skuData[0].Deserialize<WhatIfSku>();
+            return sku;
+        }
+
         return new WhatIfSku()
         {
             name = skuData.ToString()

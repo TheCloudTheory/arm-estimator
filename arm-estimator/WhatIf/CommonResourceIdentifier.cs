@@ -57,7 +57,8 @@ internal class CommonResourceIdentifier
 
     private string? GetResourceTypeBasedOnTerraformIdentifier()
     {
-        var tfType = this.otherResourceIdentifier!.Split('.')[1];
+        var parts = this.otherResourceIdentifier!.Split('.');
+        var tfType = parts.Length > 5 ? parts[5] : parts[1];
 
         return tfType switch
         {
@@ -68,6 +69,9 @@ internal class CommonResourceIdentifier
             "azurerm_analysis_services_server" => "Microsoft.AnalysisServices/servers",
             "azurerm_api_management" => "Microsoft.ApiManagement/service",
             "azurerm_app_configuration" => "Microsoft.AppConfiguration/configurationStores",
+            "azurerm_application_gateway" => "Microsoft.Network/applicationGateways",
+            "azurerm_public_ip" => "Microsoft.Network/publicIPAddresses",
+            "azurerm_subnet" => "Microsoft.Network/virtualNetworks/subnets",
             _ => null,
         };
     }
@@ -81,7 +85,8 @@ internal class CommonResourceIdentifier
             return new CommonResourceIdentifier(this.azureResourceIdentifier!.Parent!);
         }
 
-        return new CommonResourceIdentifier("terraform.azurerm_resource_group.ace_reserved.parent");
+        var parts = this.otherResourceIdentifier!.Split('.');
+        return new CommonResourceIdentifier($"terraform.{parts[1]}.{parts[2]}.{parts[3]}.{parts[4]}");
     }
 
     public string? GetLocation()
@@ -91,7 +96,7 @@ internal class CommonResourceIdentifier
             return this.azureResourceIdentifier!.Location;
         }
 
-        return this.otherResourceIdentifier!.Split('.')[2];
+        return this.otherResourceIdentifier!.Split('.')[7];
     }
 
     public override string ToString()

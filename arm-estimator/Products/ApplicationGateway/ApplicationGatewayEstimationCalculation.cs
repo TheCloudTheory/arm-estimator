@@ -27,7 +27,13 @@ internal class ApplicationGatewayEstimationCalculation : BaseEstimation, IEstima
             var skuData = this.change.properties["sku"];
             if(skuData != null)
             {
-                var sku = ((JsonElement)skuData).Deserialize<Dictionary<string, object>>();
+                var skuElement = (JsonElement)skuData;
+                if(skuElement.ValueKind == JsonValueKind.Array)
+                {
+                    skuElement = skuElement[0];
+                }
+
+                var sku = skuElement.Deserialize<Dictionary<string, object>>();
                 if(sku != null && sku.ContainsKey("capacity"))
                 {
                     var skuCapacity = sku["capacity"]?.ToString();
