@@ -51,7 +51,7 @@ Application Insights|Stable|Supported|Supports classic mode, doesn't support Ent
 Analysis Services|Stable|Supported|-
 ASR|In progress|Not Supported|Doesn't support recovery to customer-owned sites
 Automation Account|Stable|Not Supported|Supports Process Automation only
-Azure App Service|In development|Not Supported|Supports Azure App Service Plans (without Isolated tiers) and Azure Functions (Consumption / Premium / App Service Plan)
+Azure App Service|Stable|Supported|Supports Azure App Service Plans (without Isolated tiers) and Azure Functions (Consumption / Premium / App Service Plan)
 Azure Firewall|Stable|Not Supported|-
 Availability Set|Stable|Not Supported|-
 Backup|Stable|Not Supported|-
