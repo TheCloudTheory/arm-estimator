@@ -45,7 +45,7 @@ on:
         description: 'Ace version tag'
         required: false
         type: string
-        default: 1.1-beta2
+        default: 1.2-beta3
       templateFileURL:
         description: 'Template file URL'
         required: true
@@ -87,12 +87,12 @@ jobs:
         #latest: ${{ inputs.aceVersion == 'latest' }}
         #tag: ${{ (inputs.aceVersion != 'latest' && inputs.aceVersion) || '' }}
         tag: ${{ inputs.aceVersion }}
-        fileName: "arm-estimator-linux-x64*.zip"
+        fileName: "ace-linux-x64*.zip"
         
     - name: Unzip and prepare ACE
       run: |
         echo ${{steps.downloadACE.outputs.tag_name}}
-        ACEZIP="arm-estimator-linux-x64-${{steps.downloadACE.outputs.tag_name}}.zip"
+        ACEZIP="ace-linux-x64.zip"
         echo $ACEZIP
         unzip $ACEZIP
         chmod +x ./azure-cost-estimator
