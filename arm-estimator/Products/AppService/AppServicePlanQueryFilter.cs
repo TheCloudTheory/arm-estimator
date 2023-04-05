@@ -14,7 +14,7 @@ internal class AppServicePlanQueryFilter : IQueryFilter
 
     public string? GetFiltersBasedOnDesiredState(string location)
     {
-        var sku = this.afterState.sku?.name;
+        var sku = this.afterState.sku?.name ?? this.afterState.sku?.size;
         if (sku == null)
         {
             this.logger.LogError("Can't create a filter for App Service Plan when SKU is unavailable.");
@@ -48,7 +48,7 @@ internal class AppServicePlanQueryFilter : IQueryFilter
         var isLinuxPlan = false;
         if (this.afterState.properties != null && this.afterState.properties.ContainsKey("reserved"))
         {
-            var isReserved = this.afterState.properties["reserved"]!.ToString();
+            var isReserved = this.afterState.properties["reserved"]?.ToString();
             if (isReserved != null)
             {
                 isLinuxPlan = bool.Parse(isReserved);

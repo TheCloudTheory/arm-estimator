@@ -66,22 +66,22 @@ internal class AppServicePlanEstimationCalculation : BaseEstimation, IEstimation
             {
                 cost = item.retailPrice * HoursInMonth * capacity;
             }
-            else if (item.meterName == "Shared"
+            else if (item.meterName == "Shared App"
                 || item.meterName == "B1"
                 || item.meterName == "B2"
                 || item.meterName == "B3"
-                || item.meterName == "S1"
-                || item.meterName == "S2"
-                || item.meterName == "S3"
-                || item.meterName == "P1"
-                || item.meterName == "P2"
-                || item.meterName == "P3"
-                || item.meterName == "P1 v2"
-                || item.meterName == "P2 v2"
-                || item.meterName == "P3 v2"
-                || item.meterName == "P1 v3"
-                || item.meterName == "P2 v3"
-                || item.meterName == "P3 v3"
+                || item.meterName == "S1 App"
+                || item.meterName == "S2 App"
+                || item.meterName == "S3 App"
+                || item.meterName == "P1 App"
+                || item.meterName == "P2 App"
+                || item.meterName == "P3 App"
+                || item.meterName == "P1 v2 App"
+                || item.meterName == "P2 v2 App"
+                || item.meterName == "P3 v2 App"
+                || item.meterName == "P1 v3 App"
+                || item.meterName == "P2 v3 App"
+                || item.meterName == "P3 v3 App"
                 )
             {
                 cost = item.retailPrice * HoursInMonth * capacity;

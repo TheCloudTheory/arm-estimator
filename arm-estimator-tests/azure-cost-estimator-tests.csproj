@@ -322,6 +322,9 @@
     <None Update="templates\terraform\applicationinsights\main.tf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="templates\terraform\appservice\main.tf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="templates\terraform\main.tf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
