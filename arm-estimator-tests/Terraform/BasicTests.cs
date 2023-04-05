@@ -7,15 +7,22 @@ namespace arm_estimator_tests.Terraform
     internal class BasicTests
     {
         [Test]
-        [Parallelizable(ParallelScope.Self)]
+        [TestCase("templates/terraform", 5.0979999999999999d, 3)]
+        [TestCase("templates/terraform/aks", 99.280000000000001d, 2)]
+        [TestCase("templates/terraform/analysisservice", 591.30000000000007d, 2)]
+        [TestCase("templates/terraform/apim", 48.033999999999999d, 2)]
+        [TestCase("templates/terraform/appconfiguration", 2.52d, 3)]
+        [TestCase("templates/terraform/applicationgateway", 40.888000000000005d, 6)]
+        [TestCase("templates/terraform/applicationinsights", 5.4199999999999999d, 2)]
+        [Parallelizable(ParallelScope.All)]
         [Category("Terraform")]
-        public async Task TF_WhenCalculationIsPerformed_ItShouldGiveCorrectValue()
+        public async Task TF_WhenCalculationIsPerformed_ItShouldGiveCorrectValue(string path, double cost, int numberOfResources)
         {
-            InitializeAndCreateTerraformPlan("templates/terraform");
+            InitializeAndCreateTerraformPlan(path);
 
             var outputFilename = $"ace_test_{DateTime.Now.Ticks}";
             var exitCode = await Program.Main(new[] {
-                "templates/terraform/main.tf",
+                $"{path}/main.tf",
                 "cf70b558-b930-45e4-9048-ebcefb926adf",
                 "arm-estimator-tests-rg",
                 "--generateJsonOutput",
@@ -32,158 +39,8 @@ namespace arm_estimator_tests.Terraform
             });
 
             Assert.That(output, Is.Not.Null);
-            Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(5.0979999999999999d));
-            Assert.That(output.TotalResourceCount, Is.EqualTo(3));
-        }
-
-        [Test]
-        [Parallelizable(ParallelScope.Self)]
-        [Category("Terraform")]
-        public async Task TF_WhenCalculationIsPerformedForAks_ItShouldGiveCorrectValue()
-        {
-            InitializeAndCreateTerraformPlan("templates/terraform/aks");
-
-            var outputFilename = $"ace_test_{DateTime.Now.Ticks}";
-            var exitCode = await Program.Main(new[] {
-                "templates/terraform/aks/main.tf",
-                "cf70b558-b930-45e4-9048-ebcefb926adf",
-                "arm-estimator-tests-rg",
-                "--generateJsonOutput",
-                "--jsonOutputFilename",
-                outputFilename
-            });
-
-            Assert.That(exitCode, Is.EqualTo(0));
-
-            var outputFile = File.ReadAllText($"{outputFilename}.json");
-            var output = JsonSerializer.Deserialize<EstimationOutput>(outputFile, new JsonSerializerOptions()
-            {
-                PropertyNameCaseInsensitive = true
-            });
-
-            Assert.That(output, Is.Not.Null);
-            Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(99.280000000000001d));
-            Assert.That(output.TotalResourceCount, Is.EqualTo(2));
-        }
-
-        [Test]
-        [Parallelizable(ParallelScope.Self)]
-        [Category("Terraform")]
-        public async Task TF_WhenCalculationIsPerformedForAnalysisService_ItShouldGiveCorrectValue()
-        {
-            InitializeAndCreateTerraformPlan("templates/terraform/analysisservice");
-
-            var outputFilename = $"ace_test_{DateTime.Now.Ticks}";
-            var exitCode = await Program.Main(new[] {
-                "templates/terraform/analysisservice/main.tf",
-                "cf70b558-b930-45e4-9048-ebcefb926adf",
-                "arm-estimator-tests-rg",
-                "--generateJsonOutput",
-                "--jsonOutputFilename",
-                outputFilename
-            });
-
-            Assert.That(exitCode, Is.EqualTo(0));
-
-            var outputFile = File.ReadAllText($"{outputFilename}.json");
-            var output = JsonSerializer.Deserialize<EstimationOutput>(outputFile, new JsonSerializerOptions()
-            {
-                PropertyNameCaseInsensitive = true
-            });
-
-            Assert.That(output, Is.Not.Null);
-            Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(591.30000000000007d));
-            Assert.That(output.TotalResourceCount, Is.EqualTo(2));
-        }
-
-        [Test]
-        [Parallelizable(ParallelScope.Self)]
-        [Category("Terraform")]
-        public async Task TF_WhenCalculationIsPerformedForAPIM_ItShouldGiveCorrectValue()
-        {
-            InitializeAndCreateTerraformPlan("templates/terraform/apim");
-
-            var outputFilename = $"ace_test_{DateTime.Now.Ticks}";
-            var exitCode = await Program.Main(new[] {
-                "templates/terraform/apim/main.tf",
-                "cf70b558-b930-45e4-9048-ebcefb926adf",
-                "arm-estimator-tests-rg",
-                "--generateJsonOutput",
-                "--jsonOutputFilename",
-                outputFilename
-            });
-
-            Assert.That(exitCode, Is.EqualTo(0));
-
-            var outputFile = File.ReadAllText($"{outputFilename}.json");
-            var output = JsonSerializer.Deserialize<EstimationOutput>(outputFile, new JsonSerializerOptions()
-            {
-                PropertyNameCaseInsensitive = true
-            });
-
-            Assert.That(output, Is.Not.Null);
-            Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(48.033999999999999d));
-            Assert.That(output.TotalResourceCount, Is.EqualTo(2));
-        }
-
-        [Test]
-        [Parallelizable(ParallelScope.Self)]
-        [Category("Terraform")]
-        public async Task TF_WhenCalculationIsPerformedForAppConfiguration_ItShouldGiveCorrectValue()
-        {
-            InitializeAndCreateTerraformPlan("templates/terraform/appconfiguration");
-
-            var outputFilename = $"ace_test_{DateTime.Now.Ticks}";
-            var exitCode = await Program.Main(new[] {
-                "templates/terraform/appconfiguration/main.tf",
-                "cf70b558-b930-45e4-9048-ebcefb926adf",
-                "arm-estimator-tests-rg",
-                "--generateJsonOutput",
-                "--jsonOutputFilename",
-                outputFilename
-            });
-
-            Assert.That(exitCode, Is.EqualTo(0));
-
-            var outputFile = File.ReadAllText($"{outputFilename}.json");
-            var output = JsonSerializer.Deserialize<EstimationOutput>(outputFile, new JsonSerializerOptions()
-            {
-                PropertyNameCaseInsensitive = true
-            });
-
-            Assert.That(output, Is.Not.Null);
-            Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(2.52d));
-            Assert.That(output.TotalResourceCount, Is.EqualTo(3));
-        }
-
-        [Test]
-        [Parallelizable(ParallelScope.Self)]
-        [Category("Terraform")]
-        public async Task TF_WhenCalculationIsPerformedForAppGW_ItShouldGiveCorrectValue()
-        {
-            InitializeAndCreateTerraformPlan("templates/terraform/applicationgateway");
-
-            var outputFilename = $"ace_test_{DateTime.Now.Ticks}";
-            var exitCode = await Program.Main(new[] {
-                "templates/terraform/applicationgateway/main.tf",
-                "cf70b558-b930-45e4-9048-ebcefb926adf",
-                "arm-estimator-tests-rg",
-                "--generateJsonOutput",
-                "--jsonOutputFilename",
-                outputFilename
-            });
-
-            Assert.That(exitCode, Is.EqualTo(0));
-
-            var outputFile = File.ReadAllText($"{outputFilename}.json");
-            var output = JsonSerializer.Deserialize<EstimationOutput>(outputFile, new JsonSerializerOptions()
-            {
-                PropertyNameCaseInsensitive = true
-            });
-
-            Assert.That(output, Is.Not.Null);
-            Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(40.888000000000005d));
-            Assert.That(output.TotalResourceCount, Is.EqualTo(6));
+            Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(cost));
+            Assert.That(output.TotalResourceCount, Is.EqualTo(numberOfResources));
         }
 
         private void InitializeAndCreateTerraformPlan(string workingDirectory)

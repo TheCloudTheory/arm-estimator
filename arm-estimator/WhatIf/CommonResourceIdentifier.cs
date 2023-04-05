@@ -72,6 +72,7 @@ internal class CommonResourceIdentifier
             "azurerm_application_gateway" => "Microsoft.Network/applicationGateways",
             "azurerm_public_ip" => "Microsoft.Network/publicIPAddresses",
             "azurerm_subnet" => "Microsoft.Network/virtualNetworks/subnets",
+            "azurerm_application_insights" => "Microsoft.Insights/components",
             _ => null,
         };
     }
