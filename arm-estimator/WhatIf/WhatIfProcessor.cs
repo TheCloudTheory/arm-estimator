@@ -609,6 +609,7 @@ internal class WhatIfProcessor
 
             if (data != null)
             {
+                data.Items = data.Items?.Distinct(new RetailAPIEqualityComparer()).ToArray();
                 cachedResults.GetOrAdd(urlHash, data);
             }
         }
