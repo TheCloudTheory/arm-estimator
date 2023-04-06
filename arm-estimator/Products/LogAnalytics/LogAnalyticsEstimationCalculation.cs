@@ -28,7 +28,6 @@ internal class LogAnalyticsEstimationCalculation : BaseEstimation, IEstimationCa
             dailyQuota = cappingProperties?.DailyQuotaGB;
         }
         
-
         foreach (var item in items)
         {
             double? cost = 0;
@@ -37,13 +36,13 @@ internal class LogAnalyticsEstimationCalculation : BaseEstimation, IEstimationCa
             {
                 cost = item.retailPrice * 30;
             }
-            else if (item.meterName == "Pay-as-you-go Data Ingestion" && dailyQuota != null)
+            else if (item.meterName == "Pay-as-you-go Data Analyzed" && dailyQuota != null)
             {
                 // Remember, that first 5GBs are free
                 var baseCost = item.retailPrice * 30 * dailyQuota - (5 * item.retailPrice);
                 cost = baseCost < 0 ? 0 : baseCost;
             }
-            else if (item.meterName == "Pay-as-you-go Data Ingestion" && dailyQuota == null)
+            else if (item.meterName == "Pay-as-you-go Data Analyzed" && dailyQuota == null)
             {
                 // Remember, that first 5GBs are free
                 var baseCost = item.retailPrice * base.IncludeUsagePattern("Microsoft_OperationalInsights_workspaces_Paug_Data_Ingestion", usagePatterns, 1) - (5 * item.retailPrice);
