@@ -151,6 +151,9 @@
     <None Update="templates\bicep\sql\sqldatabase-additional-storage.bicep">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="templates\bicep\sql\sqldatabase-vcore-usage.bicep">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="templates\bicep\sql\sqldatabase-vcore.bicep">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

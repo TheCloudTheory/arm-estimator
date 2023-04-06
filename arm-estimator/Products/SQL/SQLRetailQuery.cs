@@ -1,5 +1,4 @@
 ﻿using ACE.WhatIf;
-using Azure.Core;
 using Microsoft.Extensions.Logging;
 
 internal class SQLRetailQuery : BaseRetailQuery, IRetailQuery
@@ -21,7 +20,7 @@ internal class SQLRetailQuery : BaseRetailQuery, IRetailQuery
             return null;
         }
 
-        var change = this.change.after == null ? this.change.before : this.change.after;
+        var change = this.change.after ?? this.change.before;
         if (change == null)
         {
             this.logger.LogError("Couldn't determine after / before state.");
