@@ -13,7 +13,7 @@ namespace arm_estimator_tests.Terraform
         [TestCase("templates/terraform/apim", 48.033999999999999d, 2)]
         [TestCase("templates/terraform/appconfiguration", 2.52d, 3)]
         [TestCase("templates/terraform/applicationgateway", 40.888000000000005d, 6)]
-        [TestCase("templates/terraform/applicationinsights", 2.4299999999999997d, 2)]
+        [TestCase("templates/terraform/applicationinsights", 5.4199999999999999d, 2)]
         [TestCase("templates/terraform/appservice", 73.0d, 3)]
         [Parallelizable(ParallelScope.All)]
         [Category("Terraform")]
