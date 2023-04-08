@@ -187,6 +187,9 @@
     <None Update="templates\bicep\vm\a-series-windows.bicep">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="templates\bicep\vm\vm-full.bicep">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="templates\bicep\vm\vm-linux-low.bicep">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

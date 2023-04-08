@@ -502,5 +502,38 @@ namespace arm_estimator_tests.Bicep
 
             Assert.That(output, Is.Not.Null);
         }
+
+        [Test]
+        [TestCase("Standard_A1_v2", 54.86d)]
+        [Parallelizable(ParallelScope.All)]
+        public async Task VM_ShouldBeCalculatedCorrectlyForVirtualMachine_WithManagedDiskInferred(string vmSize, double totalValue)
+        {
+            var outputFilename = $"ace_test_{DateTime.Now.Ticks}";
+            var exitCode = await Program.Main(new[] {
+                "templates/bicep/vm/vm-full.bicep",
+                "cf70b558-b930-45e4-9048-ebcefb926adf",
+                "arm-estimator-tests-rg",
+                "--generateJsonOutput",
+                "--jsonOutputFilename",
+                outputFilename,
+                "--inline",
+                $"vmSize={vmSize}",
+                "--inline",
+                $"vmName={vmSize}",
+                "--inline",
+                $"nicName=nic{DateTime.Now.Ticks}"
+            });
+
+            Assert.That(exitCode, Is.EqualTo(0));
+
+            var outputFile = File.ReadAllText($"{outputFilename}.json");
+            var output = JsonSerializer.Deserialize<EstimationOutput>(outputFile, new JsonSerializerOptions()
+            {
+                PropertyNameCaseInsensitive = true
+            });
+
+            Assert.That(output, Is.Not.Null);
+            Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(totalValue));
+        }
     }
 }

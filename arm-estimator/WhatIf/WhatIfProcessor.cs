@@ -1,7 +1,7 @@
 ﻿using ACE.Calculation;
-using ACE.Compilation;
 using ACE.Extensions;
 using ACE.Output;
+using ACE.ResourceManager;
 using Microsoft.Extensions.Logging;
 using System.Collections.Concurrent;
 using System.Net;
@@ -36,6 +36,7 @@ internal class WhatIfProcessor
         this.outputFormatter = new OutputGenerator(outputFormat, logger, currency, disableDetailedMetrics).GetFormatter();
 
         ReconcileResources();
+        BuildVMCapabilitiesIfNeeded();
     }
 
     /// <summary>
@@ -99,6 +100,29 @@ internal class WhatIfProcessor
 
                 resourceId = parent.ToString();
             }
+        }
+    }
+
+    private void BuildVMCapabilitiesIfNeeded()
+    {
+        var vmChanges = this.changes.Where(_ => new CommonResourceIdentifier(_.resourceId!).GetResourceType() == "Microsoft.Compute/virtualMachines");
+        if(vmChanges != null && vmChanges.Any())
+        {
+            this.logger.AddEstimatorMessage("Changes contain VM resource - attempting to build capabilities cache.");
+
+            var location = vmChanges.First().GetChange()?.location;
+            if(location == null)
+            {
+                this.logger.LogError("Couldn't find location to build VM capabilities cache.");
+                return;
+            }
+
+            CapabilitiesCache.InitializeVirtualMachineCapabilities(location);
+
+            this.logger.AddEstimatorMessage("Capabilities cache initialized.");
+            logger.LogInformation("");
+            logger.LogInformation("-------------------------------");
+            logger.LogInformation("");
         }
     }
 
