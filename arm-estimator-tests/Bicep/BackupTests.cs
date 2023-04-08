@@ -6,10 +6,10 @@ namespace arm_estimator_tests.Bicep
     internal class BackupTests
     {
         [Test]
-        [TestCase("GeoRedundant", 113.48479999999999d)]
-        [TestCase("LocallyRedundant", 113.4624d)]
-        [TestCase("ZoneRedundant", 113.468d)]
-        [TestCase("ReadAccessGeoZoneRedundant", 113.4969d)]
+        [TestCase("GeoRedundant", 132.6848d)]
+        [TestCase("LocallyRedundant", 132.66239999999999d)]
+        [TestCase("ZoneRedundant", 132.66800000000001d)]
+        [TestCase("ReadAccessGeoZoneRedundant", 132.6969d)]
         [Parallelizable(ParallelScope.All)]
         public async Task Backup_WhenRedundancyModeIsProvided_ItShouldBeCorrectlyEstimated(string mode, double cost)
         {
