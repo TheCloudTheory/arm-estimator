@@ -1,13 +1,15 @@
 ﻿using Azure.Identity;
 using Azure.ResourceManager;
 using Azure.ResourceManager.Compute;
+using System.Collections.Concurrent;
 
 namespace ACE.ResourceManager;
 
 internal class CapabilitiesCache
 {
-    private static readonly Dictionary<string, string> VMSkuOSVhdSize = new Dictionary<string, string>();
-    private static readonly Dictionary<string, string> VMSkuPremiumEnabled = new Dictionary<string, string>();
+    private static readonly ConcurrentDictionary<string, string> _VMSkuPremiumEnabled = new();
+
+    public static IReadOnlyDictionary<string, string> VMSkuPremiumEnabled => _VMSkuPremiumEnabled;
 
     /// <summary>
     /// This method initializes capabilities cache for VMs. That cache is used when calculating 
@@ -31,11 +33,9 @@ internal class CapabilitiesCache
         {
             if (sku.ResourceType != "virtualMachines") continue;
 
-            var osVhdSize = sku.Capabilities.Single(_ => _.Name == "OSVhdSizeMB");
             var isPremiumEnabled = sku.Capabilities.Single(_ => _.Name == "PremiumIO");
 
-            VMSkuOSVhdSize.Add(sku.Name, osVhdSize.Value);
-            VMSkuPremiumEnabled.Add(sku.Name, isPremiumEnabled.Value);
+            _VMSkuPremiumEnabled.TryAdd(sku.Name, isPremiumEnabled.Value);
         }
     }
 }

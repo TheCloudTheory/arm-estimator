@@ -504,7 +504,8 @@ namespace arm_estimator_tests.Bicep
         }
 
         [Test]
-        [TestCase("Standard_A1_v2", 54.86d)]
+        [TestCase("Standard_A1_v2", 54.859999999999999d)]
+        [TestCase("Standard_B1s", 33.359999999999999d)]
         [Parallelizable(ParallelScope.All)]
         public async Task VM_ShouldBeCalculatedCorrectlyForVirtualMachine_WithManagedDiskInferred(string vmSize, double totalValue)
         {

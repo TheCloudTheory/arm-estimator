@@ -1,6 +1,5 @@
 ﻿using ACE.Calculation;
 using ACE.WhatIf;
-using Azure.Core;
 
 internal class VirtualMachineEstimationCalculation : BaseEstimation, IEstimationCalculation
 {
@@ -22,7 +21,15 @@ internal class VirtualMachineEstimationCalculation : BaseEstimation, IEstimation
 
         foreach (var item in items)
         {
-            var cost = item.retailPrice * HoursInMonth;
+            double? cost;
+            if(item.meterName == "E10 Disks" || item.meterName == "P10 LRS Disk")
+            {
+                cost = item.retailPrice;
+            }
+            else
+            {
+                cost = item.retailPrice * HoursInMonth;
+            }
 
             estimatedCost += cost;
             if (summary.DetailedCost.ContainsKey(item.meterName!))
