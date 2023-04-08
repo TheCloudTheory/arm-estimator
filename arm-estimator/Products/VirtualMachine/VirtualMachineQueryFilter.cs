@@ -1,10 +1,12 @@
-﻿using ACE.WhatIf;
+﻿using ACE.ResourceManager;
+using ACE.WhatIf;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
 
 internal class VirtualMachineQueryFilter : IQueryFilter
 {
     private const string ServiceId = "DZH313Z7MMC8";
+    private const string DiskServiceId = "DZH317F1HKN0";
 
     private readonly WhatIfAfterBeforeChange afterState;
     private readonly ILogger logger;
@@ -48,7 +50,21 @@ internal class VirtualMachineQueryFilter : IQueryFilter
             return null;
         }
 
-        if(this.afterState.properties != null && this.afterState.properties.ContainsKey("priority"))
+        string? diskFilter = null;
+        if(CapabilitiesCache.VMSkuPremiumEnabled.TryGetValue(vmSize, out var isPremiumDisk) == false)
+        {
+            this.logger.LogWarning("Couldn't load capability for {size} - estimation will be performed without VM disk included.", vmSize);
+        }
+        else
+        {
+            var diskMeterName = bool.Parse(isPremiumDisk) ? "P10 LRS Disk" : "E10 Disks";
+            var diskSkuName = bool.Parse(isPremiumDisk) ? "P10 LRS" : "E10 LRS";
+            var diskProductName = bool.Parse(isPremiumDisk) ? "Premium SSD Managed Disks" : "Standard SSD Managed Disks";
+
+            diskFilter = $"serviceId eq '{DiskServiceId}' and armRegionName eq '{location}' and skuName eq '{diskSkuName}' and meterName eq '{diskMeterName}' and productName eq '{diskProductName}'";
+        }
+
+        if (this.afterState.properties != null && this.afterState.properties.ContainsKey("priority"))
         {
             var priority = this.afterState.properties["priority"]?.ToString();
             if(priority != null && priority == "Low")
@@ -62,7 +78,12 @@ internal class VirtualMachineQueryFilter : IQueryFilter
             }
         }
 
-        return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and skuName eq '{skuName}' and productName eq '{productName}'";
+        if(diskFilter == null)
+        {
+            return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and skuName eq '{skuName}' and productName eq '{productName}'";
+        }
+
+        return $"(serviceId eq '{ServiceId}' and armRegionName eq '{location}' and skuName eq '{skuName}' and productName eq '{productName}') or ({diskFilter})";
     }
 
     internal static void DefineVmParameteres(string os, string vmSize, out string? productName, out string? skuName)
