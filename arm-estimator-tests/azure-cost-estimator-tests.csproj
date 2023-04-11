@@ -94,6 +94,9 @@
     <None Update="templates\bicep\acr.bicep">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="templates\bicep\aks\aks.bicep">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="templates\bicep\asr.bicep">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
