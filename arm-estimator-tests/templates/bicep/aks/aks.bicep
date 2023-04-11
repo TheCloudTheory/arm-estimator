@@ -18,7 +18,7 @@ param osDiskSizeGB int = 0
 param agentCount int = 3
 
 @description('The size of the Virtual Machine.')
-param agentVMSize string = 'standard_d2s_v3'
+param agentVMSize string = 'Standard_D2s_v3'
 
 @description('User name for the Linux Virtual Machines.')
 param linuxAdminUsername string
@@ -42,6 +42,7 @@ resource aks 'Microsoft.ContainerService/managedClusters@2022-05-02-preview' = {
         vmSize: agentVMSize
         osType: 'Linux'
         mode: 'System'
+        type: 'VirtualMachineScaleSets'
       }
     ]
     linuxProfile: {

@@ -1,6 +1,5 @@
 ﻿using ACE.Calculation;
 using ACE.WhatIf;
-using Azure.Core;
 using System.Text.Json;
 
 internal class AKSEstimationCalculation : BaseEstimation, IEstimationCalculation
@@ -41,6 +40,25 @@ internal class AKSEstimationCalculation : BaseEstimation, IEstimationCalculation
                         {
                             var agentCount = pool.Count;
                             cost = item.retailPrice * HoursInMonth * agentCount;
+
+                            // When there's more than a single agent pool, once found,
+                            // break the loop so another item can be processed
+                            break;
+                        }
+                    }
+                }
+            }
+            else if (item.productName != null && item.productName.Contains("Managed Disk"))
+            {
+                if (properties != null && properties.AgentPoolProfiles != null)
+                {
+                    foreach (var pool in properties.AgentPoolProfiles)
+                    {
+                        var diskType = VirtualMachineQueryFilter.DetermineDiskType(pool.VmSize!);
+                        if (diskType == item.productName)
+                        {
+                            var agentCount = pool.Count;
+                            cost = item.retailPrice * agentCount;
 
                             // When there's more than a single agent pool, once found,
                             // break the loop so another item can be processed

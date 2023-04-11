@@ -881,4 +881,17 @@ internal class VirtualMachineQueryFilter : IQueryFilter
             }
         }
     }
+
+    internal static string? DetermineDiskType(string vmSize)
+    {
+        if (CapabilitiesCache.VMSkuPremiumEnabled.TryGetValue(vmSize, out var isPremiumDisk) == false)
+        {
+            return null;
+        }
+        else
+        {
+            var diskProductName = bool.Parse(isPremiumDisk) ? "Premium SSD Managed Disks" : "Standard SSD Managed Disks";
+            return diskProductName;
+        }
+    }
 }
