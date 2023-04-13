@@ -106,8 +106,10 @@ internal class WhatIfProcessor
     private void BuildVMCapabilitiesIfNeeded()
     {
         var vmChanges = this.changes.Where(_ => new CommonResourceIdentifier(_.resourceId!).GetResourceType() == "Microsoft.Compute/virtualMachines" 
-        || new CommonResourceIdentifier(_.resourceId!).GetResourceType() == "Microsoft.ContainerService/managedClusters");
-        if(vmChanges != null && vmChanges.Any())
+        || new CommonResourceIdentifier(_.resourceId!).GetResourceType() == "Microsoft.ContainerService/managedClusters"
+        || new CommonResourceIdentifier(_.resourceId!).GetResourceType() == "Microsoft.Compute/virtualMachineScaleSets");
+
+        if (vmChanges != null && vmChanges.Any())
         {
             this.logger.AddEstimatorMessage("Changes contain VM resource - attempting to build capabilities cache.");
 

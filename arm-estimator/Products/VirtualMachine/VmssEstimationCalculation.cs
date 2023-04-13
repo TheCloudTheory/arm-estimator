@@ -1,6 +1,5 @@
 ﻿using ACE.Calculation;
 using ACE.WhatIf;
-using Azure.Core;
 
 internal class VmssEstimationCalculation : BaseEstimation, IEstimationCalculation
 {
@@ -22,7 +21,15 @@ internal class VmssEstimationCalculation : BaseEstimation, IEstimationCalculatio
 
         foreach (var item in items)
         {
-            var cost = item.retailPrice * HoursInMonth * this.change.sku!.capacity;
+            double? cost;
+            if(item.productName != null && item.productName.Contains("Managed Disk"))
+            {
+                cost = item.retailPrice * this.change.sku!.capacity;
+            }
+            else
+            {
+                cost = item.retailPrice * HoursInMonth * this.change.sku!.capacity;
+            }
 
             estimatedCost += cost;
             if (summary.DetailedCost.ContainsKey(item.meterName!))

@@ -6,7 +6,7 @@ resource vmss 'Microsoft.Compute/virtualMachineScaleSets@2022-08-01' = {
   location: rgLocation
   sku: {
     capacity: 3
-    name: 'Standard_A0'
+    name: 'Standard_B1s'
     tier: 'Standard'
   }
   properties: {
