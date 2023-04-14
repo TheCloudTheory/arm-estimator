@@ -34,7 +34,7 @@ jobs:
         name: ace-terraform-parser-linux
         path: ./ace-terraform-parser/ace-terraform-parser-linux.dll
   publishMacOs:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     defaults:
       run:
         working-directory: ./ace-terraform-parser
