@@ -45,9 +45,13 @@ internal class SQLEstimationCalculation : BaseEstimation, IEstimationCalculation
             {
                 cost = item.retailPrice * (730 / 24d);
             }
-            else if (item.meterName == "vCore")
+            else if (item.meterName == "vCore" )
             {
                 cost = item.retailPrice * HoursInMonth + AddHybridBenefitCostIfNeeded(this.change.sku!.name!, usagePatterns);
+            }
+            else if (item.meterName == "Zone Redundancy vCore")
+            {
+                cost = item.retailPrice * HoursInMonth * 2.6667 + AddHybridBenefitCostIfNeeded(this.change.sku!.name!, usagePatterns);
             }
             else if (item.meterName == "Data Stored")
             {
