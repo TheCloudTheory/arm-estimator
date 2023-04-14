@@ -34,6 +34,12 @@ internal class SQLQueryFilter : IQueryFilter
         {
             // It's vCore model we're talking about here
             sku = $"{skuParts[2]} vCore";
+
+            if(IsZoneRedundantDatabase())
+            {
+                sku += " Zone Redundancy";
+            }
+
             return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and ((skuName eq '{sku}' and productName eq 'SQL Database Single/Elastic Pool General Purpose - Compute Gen5') or (productName eq 'SQL Database Single/Elastic Pool General Purpose - Storage' and meterName eq 'General Purpose Data Stored'))";
         }
 
@@ -48,6 +54,15 @@ internal class SQLQueryFilter : IQueryFilter
         }
 
         return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and skuName eq '{sku}'";
+    }
+
+    private bool IsZoneRedundantDatabase()
+    {
+        if (this.afterState.properties == null) return false;
+        if (this.afterState.properties.ContainsKey("zoneRedundant") == false) return false;
+
+        var isZrs = bool.Parse(this.afterState.properties["zoneRedundant"]!.ToString()!);
+        return isZrs;
     }
 
     private bool IsStandardTierWithAdditionalStorageTier(string sku)
