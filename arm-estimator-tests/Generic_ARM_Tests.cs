@@ -12,18 +12,18 @@ namespace arm_estimator_tests
 
         [Test]
         [TestCase("templates/acr.json", 75.294000000000011d, 75.294000000000011d)]
-        [TestCase("templates/alert.json", 13.499999999999998d, 13.499999999999998d)]
+        [TestCase("templates/alert.json", 13.599999999999998d, 13.599999999999998d)]
         [TestCase("templates/analysisservices.json", 14389.759999999998, 14389.759999999998)]
         [TestCase("templates/mariadb.json", 19526.757600000001d, 19526.757600000001d)]
-        [TestCase("templates/automation.json", 6.2300000000000004d, 6.2300000000000004d)]
+        [TestCase("templates/automation.json", 4.7699999999999996d, 4.7699999999999996d)]
         [TestCase("templates/redis.json", 12339.190000000001, 12339.190000000001)]
         [TestCase("templates/azure_firewall.json", 2197.348, 2197.348)]
         [TestCase("templates/frontdoor.json", 0.0, 0.0)] // Not supported yet
         [TestCase("templates/azuresqlmi.json", 0.0, 0.0)] // Not supported yet
         [TestCase("templates/mysqldb.json", 0.0, 0.0)] // Not supported yet
         [TestCase("templates/postgresql.json", 10191.206299999998d, 10191.206299999998d)]
-        [TestCase("templates/servicebus.json", 687.13693000000001d, 687.13693000000001d)]
-        [TestCase("templates/datafactory.json", 189.01646000000002d, 189.01646000000002d)]
+        [TestCase("templates/servicebus.json", 686.95193000000006d, 686.95193000000006d)]
+        [TestCase("templates/datafactory.json", 189.01566000000003d, 189.01566000000003d)]
         [TestCase("templates/appgw.json", 1598.7744d, 1598.7744d)]
         [Parallelizable(ParallelScope.All)]
         public async Task ResourceEstimation_ShouldBeCalculatedCorrectly(string templatePath, double totalValue, double deltaValue)
