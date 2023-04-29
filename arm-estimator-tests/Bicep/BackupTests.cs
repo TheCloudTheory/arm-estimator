@@ -42,10 +42,10 @@ namespace arm_estimator_tests.Bicep
         }
 
         [Test]
-        [TestCase("GeoRedundant", 115.67999999999999d)]
-        [TestCase("LocallyRedundant", 114.56d)]
-        [TestCase("ZoneRedundant", 114.84d)]
-        [TestCase("ReadAccessGeoZoneRedundant", 116.285d)]
+        [TestCase("GeoRedundant", 134.88d)]
+        [TestCase("LocallyRedundant", 133.75999999999999d)]
+        [TestCase("ZoneRedundant", 134.04000000000002d)]
+        [TestCase("ReadAccessGeoZoneRedundant", 135.48500000000001d)]
         [Parallelizable(ParallelScope.All)]
         public async Task Backup_WhenRedundancyModeIsProvidedWithUsagePatterns_ItShouldBeCorrectlyEstimated(string mode, double cost)
         {

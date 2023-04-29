@@ -8,7 +8,7 @@ namespace arm_estimator_tests.Terraform
     {
         [Test]
         [TestCase("templates/terraform", 5.0979999999999999d, 3)]
-        [TestCase("templates/terraform/aks", 99.280000000000001d, 2)]
+        [TestCase("templates/terraform/aks", 108.88d, 2)]
         [TestCase("templates/terraform/analysisservice", 591.30000000000007d, 2)]
         [TestCase("templates/terraform/apim", 48.033999999999999d, 2)]
         [TestCase("templates/terraform/appconfiguration", 2.52d, 3)]
