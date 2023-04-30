@@ -1,6 +1,6 @@
 # ACE (Azure Cost Estimator) ![](https://img.shields.io/github/v/release/thecloudtheory/arm-estimator?include_prereleases&style=flat-square) ![](https://img.shields.io/github/actions/workflow/status/thecloudtheory/arm-estimator/tests-scheduled.yml?style=flat-square)
 ![arm-estimator-demo](docs/logo.png)
-Automated cost estimation of your Azure infrastructure made easy. Works with ARM Templates and Bicep.
+Automated cost estimation of your Azure infrastructure made easy. Works with ARM Templates, Bicep and Terraform.
 
 ## Demo
 [![asciicast](https://asciinema.org/a/jqYCjfu18ZbMaGdbsuMtPYuc5.svg)](https://asciinema.org/a/jqYCjfu18ZbMaGdbsuMtPYuc5)
@@ -14,7 +14,7 @@ ACE follows a concept of [_running cost as architecture fitness function_](https
 
 ## Main features
 * Supports 48 Azure services (~86 resource types)
-* Native support for Bicep & ARM Templates
+* Native support for Bicep, ARM Templates and Terraform
 * Detailed output containing information about cost of your infrastructure and metrics used for calculation
 * Seamless integration with ARM Templates and Bicep (with a little help of Bicep CLI)
 * Always fresh data thanks to direct calls to Azure Retail API
