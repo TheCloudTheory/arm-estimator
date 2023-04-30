@@ -637,7 +637,13 @@ internal class WhatIfProcessor
 
             if (data != null)
             {
-                data.Items = data.Items?.Distinct(new RetailAPIEqualityComparer()).ToArray();
+                // The fact, that we're ordering by retailPrice is not random here.
+                // We want to deduplicate records, but for some scenarios order will
+                // matter (for example ACR, where Retail API returns two the same metrics
+                // for Tasks, which have everything the same but the price. If we keep
+                // random order, Distinct() method here will remove non-zero price what's
+                // not we want.
+                data.Items = data.Items?.OrderByDescending(_ => _.retailPrice).Distinct(new RetailAPIEqualityComparer()).ToArray();
                 cachedResults.GetOrAdd(urlHash, data);
             }
         }
