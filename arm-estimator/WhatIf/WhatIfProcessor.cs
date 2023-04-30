@@ -638,7 +638,7 @@ internal class WhatIfProcessor
             if (data != null)
             {
                 // The fact, that we're ordering by retailPrice is not random here.
-                // We want to deduplicate records, but for some scenarios order will
+                // We want to deduplicate records, but for some scenarios the order will
                 // matter (for example ACR, where Retail API returns two the same metrics
                 // for Tasks, which have everything the same but the price. If we keep
                 // random order, Distinct() method here will remove non-zero price what's
