@@ -340,6 +340,9 @@
     <None Update="templates\terraform\appservice\main.tf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="templates\terraform\asr\main.tf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="templates\terraform\main.tf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

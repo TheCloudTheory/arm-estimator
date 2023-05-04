@@ -75,6 +75,16 @@ internal class CommonResourceIdentifier
             "azurerm_application_insights" => "Microsoft.Insights/components",
             "azurerm_app_service_plan" => "Microsoft.Web/serverfarms",
             "azurerm_app_service" => "Microsoft.Web/sites",
+            "azurerm_virtual_machine" => "Microsoft.Compute/virtualMachines",
+            "azurerm_recovery_services_vault" => "Microsoft.RecoveryServices/vaults",
+            "azurerm_site_recovery_fabric" => "Microsoft.RecoveryServices/vaults/replicationFabrics",
+            "azurerm_site_recovery_protection_container" => "Microsoft.RecoveryServices/vaults/backupFabrics/protectionContainers/protectedItems",
+            "azurerm_site_recovery_replication_policy" => "Microsoft.RecoveryServices/vaults/replicationPolicies",
+            "azurerm_site_recovery_protection_container_mapping" => "Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers/replicationProtectionContainerMappings",
+            "azurerm_site_recovery_network_mapping" => "Microsoft.RecoveryServices/vaults/replicationFabrics/replicationNetworks/replicationNetworkMappings",
+            "azurerm_storage_account" => "Microsoft.Storage/storageAccounts",
+            "azurerm_network_interface" => "Microsoft.Network/networkInterfaces",
+            "azurerm_site_recovery_replicated_vm" => "Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers/replicationProtectedItems",
             _ => null,
         };
     }
