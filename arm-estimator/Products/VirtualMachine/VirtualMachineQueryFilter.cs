@@ -28,6 +28,12 @@ internal class VirtualMachineQueryFilter : IQueryFilter
             vmSize = hardwareProfile?.vmSize;
         }
 
+        if (this.afterState.properties != null && this.afterState.properties.ContainsKey("vm_size") && this.afterState.properties["vm_size"] != null)
+        {
+            var hardwareProfile = (JsonElement)this.afterState.properties["vm_size"]!;
+            vmSize = hardwareProfile.ToString();
+        }
+
         if (this.afterState.properties != null && this.afterState.properties.ContainsKey("storageProfile") && this.afterState.properties["storageProfile"] != null)
         {
             var storageProfile = ((JsonElement)this.afterState.properties["storageProfile"]!).Deserialize<VirtualMachineStorageProfile>();

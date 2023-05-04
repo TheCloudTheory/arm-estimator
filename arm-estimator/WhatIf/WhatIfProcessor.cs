@@ -440,6 +440,10 @@ internal class WhatIfProcessor
                     resource = new EstimatedResourceData(0, 0, id);
                     freeResources.Add(id, change.changeType);
                     break;
+                case "Microsoft.Resources/resourceGroups":
+                    resource = new EstimatedResourceData(0, 0, id);
+                    freeResources.Add(id, change.changeType);
+                    break;
                 default:
                     if (id?.GetName() != null)
                     {

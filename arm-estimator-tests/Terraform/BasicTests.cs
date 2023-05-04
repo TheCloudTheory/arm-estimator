@@ -15,7 +15,7 @@ namespace arm_estimator_tests.Terraform
         [TestCase("templates/terraform/applicationgateway", 40.888000000000005d, 6)]
         [TestCase("templates/terraform/applicationinsights", 5.4199999999999999d, 2)]
         [TestCase("templates/terraform/appservice", 73.0d, 3)]
-        [TestCase("templates/terraform/asr", 73.0d, 3)]
+        [TestCase("templates/terraform/asr", 56.860759999999999d, 20)]
         [Parallelizable(ParallelScope.All)]
         [Category("Terraform")]
         public async Task TF_WhenCalculationIsPerformed_ItShouldGiveCorrectValue(string path, double cost, int numberOfResources)

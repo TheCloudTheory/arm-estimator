@@ -108,6 +108,17 @@ internal class TerraformTemplateParser
 
         if(data.After.ContainsKey("sku") == false)
         {
+            // We may need to fall back to other ways of determining SKU of a resource.
+            // Unfortunately TF uses different ways of describing it, so we need to do
+            // that in per-resource manner.
+            if(data.After.ContainsKey("account_tier") && data.After.ContainsKey("account_replication_type"))
+            {
+                return new WhatIfSku()
+                {
+                    name = $"{data.After["account_tier"]}_{data.After["account_replication_type"]}"
+                };
+            }
+
             return null;
         }
 
