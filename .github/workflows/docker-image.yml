@@ -1,9 +1,24 @@
 name: Build & Push Docker image
 
-on: [workflow_dispatch]
+on: 
+  workflow_dispatch: 
+    inputs:
+      imageTag:
+        description: 'Tag to be used for the Docker image'
+        required: true
+        type: string
+  workflow_call:
+    inputs:
+      imageTag:
+        description: 'Tag to be used for the Docker image'
+        required: true
+        type: string
+        default: 'latest'
+  push:
+    branches: [ "main", Main ]
 
 env:
-  TAG: 1.2
+  TAG: ${{ inputs.imageTag }}
 
 jobs:
   build:
