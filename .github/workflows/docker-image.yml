@@ -7,13 +7,7 @@ on:
         description: 'Tag to be used for the Docker image'
         required: true
         type: string
-  workflow_call:
-    inputs:
-      imageTag:
-        description: 'Tag to be used for the Docker image'
-        required: true
-        type: string
-        default: 'latest'
+        
   push:
     branches: [ "main", Main ]
 
@@ -27,7 +21,11 @@ jobs:
     - uses: actions/checkout@v3
     - name: Login to DockerHub
       run: docker login -u thecloudtheory -p ${{ secrets.DOCKER_HUB_KEY }}
-    - name: Build the Docker image
+    - name: Build the Docker image (latest)
+      if: ${{ env.TAG == '' }}
+      run: docker build . --file ./arm-estimator/Dockerfile --tag thecloudtheory/azure-cost-estimator:latest
+    - name: Build the Docker image (tag)
+      if: ${{ env.TAG != '' }}
       run: docker build . --file ./arm-estimator/Dockerfile --tag thecloudtheory/azure-cost-estimator:$TAG
     - name: Tag latest
       run: docker tag thecloudtheory/azure-cost-estimator:$TAG thecloudtheory/azure-cost-estimator:latest
