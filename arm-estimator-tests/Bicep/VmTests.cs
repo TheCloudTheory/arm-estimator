@@ -73,7 +73,7 @@ namespace arm_estimator_tests.Bicep
         [TestCase("Standard_D8as_v4", 626.11999999999989d)]
         [TestCase("Standard_D8as_v5", 594.0d)]
         [TestCase("Standard_DC2ads_v5", 189.58000000000001d)]
-        [TestCase("Standard_DC8ads_v5", 655.31999999999994d)]
+        [TestCase("Standard_DC8ads_v5", 691.81999999999994d)]
         [TestCase("Standard_DC2as_v5", 172.06d)]
         [TestCase("Standard_DC8as_v5", 624.65999999999997d)]
         [TestCase("Standard_DC1ds_v3", 154.53999999999999d)]
