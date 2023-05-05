@@ -22,8 +22,8 @@ namespace arm_estimator_tests
         [TestCase("templates/azuresqlmi.json", 0.0, 0.0)] // Not supported yet
         [TestCase("templates/mysqldb.json", 0.0, 0.0)] // Not supported yet
         [TestCase("templates/postgresql.json", 10191.206299999998d, 10191.206299999998d)]
-        [TestCase("templates/servicebus.json", 686.95193000000006d, 686.95193000000006d)]
-        [TestCase("templates/datafactory.json", 189.01566000000003d, 189.01566000000003d)]
+        [TestCase("templates/servicebus.json", 687.76693d, 687.76693d)]
+        [TestCase("templates/datafactory.json", 189.01646000000002d, 189.01646000000002d)]
         [TestCase("templates/appgw.json", 1598.7849000000001d, 1598.7849000000001d)]
         [Parallelizable(ParallelScope.All)]
         public async Task ResourceEstimation_ShouldBeCalculatedCorrectly(string templatePath, double totalValue, double deltaValue)

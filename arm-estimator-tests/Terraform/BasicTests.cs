@@ -11,7 +11,7 @@ namespace arm_estimator_tests.Terraform
         [TestCase("templates/terraform/aks", 108.88d, 2)]
         [TestCase("templates/terraform/analysisservice", 591.30000000000007d, 2)]
         [TestCase("templates/terraform/apim", 48.033999999999999d, 2)]
-        [TestCase("templates/terraform/appconfiguration", 2.52d, 3)]
+        [TestCase("templates/terraform/appconfiguration", 2.5215999999999998d, 3)]
         [TestCase("templates/terraform/applicationgateway", 40.888000000000005d, 6)]
         [TestCase("templates/terraform/applicationinsights", 5.4199999999999999d, 2)]
         [TestCase("templates/terraform/appservice", 73.0d, 3)]

@@ -129,7 +129,7 @@ namespace arm_estimator_tests.Bicep
             });
 
             Assert.That(output, Is.Not.Null);
-            Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(totalValue));
+            Assert.That(output!.TotalCost.OriginalValue, Is.EqualTo(totalValue));
         }
 
         [Test]
@@ -190,7 +190,7 @@ namespace arm_estimator_tests.Bicep
             });
 
             Assert.That(output, Is.Not.Null);
-            Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(totalValue));
+            Assert.That(output!.TotalCost.OriginalValue, Is.EqualTo(totalValue));
         }
 
         [Test]
@@ -319,7 +319,7 @@ namespace arm_estimator_tests.Bicep
             });
 
             Assert.That(output, Is.Not.Null);
-            Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(totalValue));
+            Assert.That(output!.TotalCost.OriginalValue, Is.EqualTo(totalValue));
         }
 
         [Test]
@@ -380,7 +380,7 @@ namespace arm_estimator_tests.Bicep
             });
 
             Assert.That(output, Is.Not.Null);
-            Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(totalValue));
+            Assert.That(output!.TotalCost.OriginalValue, Is.EqualTo(totalValue));
         }
 
         [Test]
@@ -534,7 +534,7 @@ namespace arm_estimator_tests.Bicep
             });
 
             Assert.That(output, Is.Not.Null);
-            Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(totalValue));
+            Assert.That(output!.TotalCost.OriginalValue, Is.EqualTo(totalValue));
         }
     }
 }
