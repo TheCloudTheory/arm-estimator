@@ -28,8 +28,11 @@ jobs:
       if: ${{ env.TAG != '' }}
       run: docker build . --file ./arm-estimator/Dockerfile --tag thecloudtheory/azure-cost-estimator:$TAG
     - name: Tag latest
+      if: ${{ env.TAG != '' }}
       run: docker tag thecloudtheory/azure-cost-estimator:$TAG thecloudtheory/azure-cost-estimator:latest
     - name: Push the Docker image
+      if: ${{ env.TAG != '' }}
       run: docker push thecloudtheory/azure-cost-estimator:$TAG
     - name: Push the Docker image (latest)
+      if: ${{ env.TAG == '' }}
       run: docker push thecloudtheory/azure-cost-estimator:latest
