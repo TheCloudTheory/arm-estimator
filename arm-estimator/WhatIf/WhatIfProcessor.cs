@@ -17,6 +17,8 @@ internal class WhatIfProcessor
     private static readonly ConcurrentDictionary<string, RetailAPIResponse> cachedResults = new();
     private static readonly Dictionary<string, string> resourceIdToLocationMap = new();
 
+    internal static CapabilitiesCache? cache;
+
     private readonly ILogger logger;
     private readonly WhatIfChange[] changes;
     private readonly CurrencyCode currency;
@@ -121,7 +123,8 @@ internal class WhatIfProcessor
                 return;
             }
 
-            CapabilitiesCache.InitializeVirtualMachineCapabilities(location);
+            WhatIfProcessor.cache = new CapabilitiesCache();
+            WhatIfProcessor.cache.InitializeVirtualMachineCapabilities(location);
 
             this.logger.AddEstimatorMessage("Capabilities cache initialized.");
             logger.LogInformation("");
