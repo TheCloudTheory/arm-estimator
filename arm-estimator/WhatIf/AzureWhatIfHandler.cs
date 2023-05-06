@@ -56,7 +56,7 @@ internal class AzureWhatIfHandler
 
         if(this.cache != null)
         {
-            var cachedResponse = this.cache.GetCachedData();
+            var cachedResponse = this.cache.GetCachedData<WhatIfResponse>();
             if(cachedResponse != null)
             {
                 this.logger.AddEstimatorMessage("What If data loaded from cache.");

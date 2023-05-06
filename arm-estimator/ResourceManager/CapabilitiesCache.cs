@@ -1,15 +1,18 @@
-﻿using Azure.Identity;
+﻿using ACE.Caching;
+using Azure.Identity;
 using Azure.ResourceManager;
 using Azure.ResourceManager.Compute;
-using System.Collections.Concurrent;
 
 namespace ACE.ResourceManager;
 
 internal class CapabilitiesCache
 {
-    private static readonly ConcurrentDictionary<string, string> _VMSkuPremiumEnabled = new();
+    private readonly LocalCacheHandler cache;
 
-    public static IReadOnlyDictionary<string, string> VMSkuPremiumEnabled => _VMSkuPremiumEnabled;
+    public CapabilitiesCache()
+    {
+        this.cache = new LocalCacheHandler();
+    }
 
     /// <summary>
     /// This method initializes capabilities cache for VMs. That cache is used when calculating 
@@ -23,11 +26,17 @@ internal class CapabilitiesCache
     /// to remember, that Azure chooses disks with the best performance, i.e. if VM supports
     /// Premium SSD, inferred disk type will be exactly that.
     /// </summary>
-    public static void InitializeVirtualMachineCapabilities(string location)
+    public void InitializeVirtualMachineCapabilities(string location)
     {
+        if(this.cache.CacheFileExists())
+        {
+            return;
+        }
+
         var credentials = new DefaultAzureCredential();
         var client = new ArmClient(credentials);
         var defaultSubscription = client.GetDefaultSubscription();
+        var vmSkuPremiumEnabled = new Dictionary<string, string>();
         
         foreach (var sku in defaultSubscription.GetComputeResourceSkus(filter: $"location eq '{location}'"))
         {
@@ -35,7 +44,14 @@ internal class CapabilitiesCache
 
             var isPremiumEnabled = sku.Capabilities.Single(_ => _.Name == "PremiumIO");
 
-            _VMSkuPremiumEnabled.TryAdd(sku.Name, isPremiumEnabled.Value);
+            vmSkuPremiumEnabled.Add(sku.Name, isPremiumEnabled.Value);
         }
+
+        this.cache.SaveData(vmSkuPremiumEnabled);
+    }
+
+    public Dictionary<string, string>? GetCapabilities()
+    {
+        return this.cache.GetCachedData<Dictionary<string, string>>();
     }
 }

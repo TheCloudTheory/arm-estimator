@@ -10,11 +10,13 @@ internal class VirtualMachineQueryFilter : IQueryFilter
 
     private readonly WhatIfAfterBeforeChange afterState;
     private readonly ILogger logger;
+    private readonly CapabilitiesCache cache;
 
     public VirtualMachineQueryFilter(WhatIfAfterBeforeChange afterState, ILogger logger)
     {
         this.afterState = afterState;
         this.logger = logger;
+        this.cache = new CapabilitiesCache();
     }
 
     public string? GetFiltersBasedOnDesiredState(string location)
@@ -57,12 +59,13 @@ internal class VirtualMachineQueryFilter : IQueryFilter
         }
 
         string? diskFilter = null;
-        if(CapabilitiesCache.VMSkuPremiumEnabled.TryGetValue(vmSize, out var isPremiumDisk) == false)
+        if(WhatIfProcessor.cache?.GetCapabilities()?.ContainsKey(vmSize) == false)
         {
             this.logger.LogWarning("Couldn't load capability for {size} - estimation will be performed without VM disk included.", vmSize);
         }
         else
         {
+            var isPremiumDisk = WhatIfProcessor.cache?.GetCapabilities()![vmSize]!;
             var diskMeterName = bool.Parse(isPremiumDisk) ? "P10 LRS Disk" : "E10 Disks";
             var diskSkuName = bool.Parse(isPremiumDisk) ? "P10 LRS" : "E10 LRS";
             var diskProductName = bool.Parse(isPremiumDisk) ? "Premium SSD Managed Disks" : "Standard SSD Managed Disks";
@@ -890,12 +893,13 @@ internal class VirtualMachineQueryFilter : IQueryFilter
 
     internal static string? DetermineDiskType(string vmSize)
     {
-        if (CapabilitiesCache.VMSkuPremiumEnabled.TryGetValue(vmSize, out var isPremiumDisk) == false)
+        if (WhatIfProcessor.cache?.GetCapabilities()?.ContainsKey(vmSize) == false)
         {
             return null;
         }
         else
         {
+            var isPremiumDisk = WhatIfProcessor.cache?.GetCapabilities()![vmSize]!;
             var diskProductName = bool.Parse(isPremiumDisk) ? "Premium SSD Managed Disks" : "Standard SSD Managed Disks";
             return diskProductName;
         }
