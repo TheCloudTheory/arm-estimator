@@ -30,7 +30,7 @@ internal class AutomationAccountEstimationCalculation : BaseEstimation, IEstimat
             }
             else if (item.meterName == "Basic Runtime")
             {
-                cost = item.retailPrice * 500; // Give it the same amount as free tier
+                cost = item.retailPrice;
             }
             else
             {
