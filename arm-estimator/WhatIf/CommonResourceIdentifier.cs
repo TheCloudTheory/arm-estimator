@@ -85,6 +85,7 @@ internal class CommonResourceIdentifier
             "azurerm_storage_account" => "Microsoft.Storage/storageAccounts",
             "azurerm_network_interface" => "Microsoft.Network/networkInterfaces",
             "azurerm_site_recovery_replicated_vm" => "Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers/replicationProtectedItems",
+            "azurerm_automation_account" => "Microsoft.Automation/automationAccounts",
             _ => null,
         };
     }

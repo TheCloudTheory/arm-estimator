@@ -50,7 +50,7 @@ Application Gateway|Stable|Supported|-
 Application Insights|Stable|Supported|Supports classic mode, doesn't support Enteprise Nodes and Multi-step Web Test
 Analysis Services|Stable|Supported|-
 ASR|Stable|Supported|Doesn't support recovery to customer-owned sites
-Automation Account|Stable|Not Supported|Supports Process Automation only
+Automation Account|Stable|Supported|Supports Process Automation only
 Azure App Service|Stable|Supported|Supports Azure App Service Plans (without Isolated tiers) and Azure Functions (Consumption / Premium / App Service Plan)
 Azure Firewall|Stable|Not Supported|-
 Availability Set|Stable|Not Supported|-

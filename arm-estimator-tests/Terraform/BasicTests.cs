@@ -16,6 +16,7 @@ namespace arm_estimator_tests.Terraform
         [TestCase("templates/terraform/applicationinsights", 5.4199999999999999d, 2)]
         [TestCase("templates/terraform/appservice", 73.0d, 3)]
         [TestCase("templates/terraform/asr", 56.860759999999999d, 20)]
+        [TestCase("templates/terraform/automation", 1.462d, 2)]
         [Parallelizable(ParallelScope.All)]
         [Category("Terraform")]
         public async Task TF_WhenCalculationIsPerformed_ItShouldGiveCorrectValue(string path, double cost, int numberOfResources)
@@ -41,8 +42,8 @@ namespace arm_estimator_tests.Terraform
             });
 
             Assert.That(output, Is.Not.Null);
-            Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(cost));
-            Assert.That(output.TotalResourceCount, Is.EqualTo(numberOfResources));
+            Assert.That(output?.TotalCost.OriginalValue, Is.EqualTo(cost));
+            Assert.That(output?.TotalResourceCount, Is.EqualTo(numberOfResources));
         }
 
         private void InitializeAndCreateTerraformPlan(string workingDirectory)
