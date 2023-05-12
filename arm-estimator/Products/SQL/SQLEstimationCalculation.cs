@@ -78,7 +78,7 @@ internal class SQLEstimationCalculation : BaseEstimation, IEstimationCalculation
                 if (usagePatterns != null && usagePatterns.ContainsKey("Microsoft_Sql_servers_databases_vCore_Storage"))
                 {
                     var definedSize = int.Parse(usagePatterns["Microsoft_Sql_servers_databases_vCore_Storage"]);
-                    cost = item.retailPrice * definedSize;
+                    cost = (item.retailPrice * definedSize) + (item.retailPrice * definedSize * 0.3); // Includes average log size
                 }
                 else
                 {

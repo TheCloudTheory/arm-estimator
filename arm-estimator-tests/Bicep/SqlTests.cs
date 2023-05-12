@@ -55,20 +55,20 @@ namespace arm_estimator_tests.Bicep
         }
 
         [Test]
-        [TestCase("GP_Gen5_2", 390.41093999999998d)]
-        [TestCase("GP_Gen5_4", 780.82187999999996d)]
-        [TestCase("GP_Gen5_6", 1171.2328199999999d)]
-        [TestCase("GP_Gen5_8", 1561.6437599999999d)]
-        [TestCase("GP_Gen5_10", 1952.0547000000001d)]
-        [TestCase("GP_Gen5_12", 2342.4656399999999d)]
-        [TestCase("GP_Gen5_14", 2732.8765799999996d)]
-        [TestCase("GP_Gen5_16", 3123.2875199999999d)]
-        [TestCase("GP_Gen5_18", 3513.6984599999996d)]
-        [TestCase("GP_Gen5_20", 3904.1094000000003d)]
-        [TestCase("GP_Gen5_24", 4684.9312799999998d)]
-        [TestCase("GP_Gen5_32", 6246.5750399999997d)]
-        [TestCase("GP_Gen5_40", 7808.2188000000006d)]
-        [TestCase("GP_Gen5_80", 15616.437600000001d)]
+        [TestCase("GP_Gen5_2", 390.54778999999996d)]
+        [TestCase("GP_Gen5_4", 780.95872999999995d)]
+        [TestCase("GP_Gen5_6", 1171.36967d)]
+        [TestCase("GP_Gen5_8", 1561.78061d)]
+        [TestCase("GP_Gen5_10", 1952.1915500000002d)]
+        [TestCase("GP_Gen5_12", 2342.6024899999998d)]
+        [TestCase("GP_Gen5_14", 2733.0134299999995d)]
+        [TestCase("GP_Gen5_16", 3123.4243699999997d)]
+        [TestCase("GP_Gen5_18", 3513.8353099999995d)]
+        [TestCase("GP_Gen5_20", 3904.2462500000001d)]
+        [TestCase("GP_Gen5_24", 4685.0681299999997d)]
+        [TestCase("GP_Gen5_32", 6246.7118899999996d)]
+        [TestCase("GP_Gen5_40", 7808.3556500000004d)]
+        [TestCase("GP_Gen5_80", 15616.574450000002d)]
         [Parallelizable(ParallelScope.All)]
         public async Task SQLDatabase_WhenGivenVCoreIsProvided_ItShouldBeCorrectlyEstimated(string sku, double cost)
         {
@@ -127,7 +127,7 @@ namespace arm_estimator_tests.Bicep
             });
 
             Assert.That(output, Is.Not.Null);
-            Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(537.09083586599991d));
+            Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(537.22768586599989d));
             Assert.That(output.TotalResourceCount, Is.EqualTo(2));
         }
 
@@ -160,7 +160,7 @@ namespace arm_estimator_tests.Bicep
             });
 
             Assert.That(output, Is.Not.Null);
-            Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(244.46093999999999d));
+            Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(244.59779d));
             Assert.That(output.TotalResourceCount, Is.EqualTo(2));
         }
 
@@ -242,7 +242,7 @@ namespace arm_estimator_tests.Bicep
             Assert.That(output, Is.Not.Null);
             Assert.Multiple(() =>
             {
-                Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(404.09593999999998d));
+                Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(408.20143999999999d));
                 Assert.That(output.TotalResourceCount, Is.EqualTo(2));
             });
         }
