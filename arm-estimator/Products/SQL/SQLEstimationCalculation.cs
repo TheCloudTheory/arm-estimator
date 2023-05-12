@@ -80,6 +80,10 @@ internal class SQLEstimationCalculation : BaseEstimation, IEstimationCalculation
                     var definedSize = int.Parse(usagePatterns["Microsoft_Sql_servers_databases_vCore_Storage"]);
                     cost = item.retailPrice * definedSize;
                 }
+                else
+                {
+                    cost = item.retailPrice;
+                }
             }
             else
             {
