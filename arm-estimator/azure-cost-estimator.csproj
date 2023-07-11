@@ -47,6 +47,9 @@
 	<None Include="..\ace-terraform-parser\ace-terraform-parser-windows.dll">
 		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	</None>
+	<None Include="..\ace-terraform-parser\ace-terraform-parser-macos.dll">
+		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</None>
   </ItemGroup>
 
 </Project>
