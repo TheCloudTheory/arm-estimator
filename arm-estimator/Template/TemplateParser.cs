@@ -4,14 +4,17 @@ using System.Text.Json;
 
 internal class TemplateParser
 {
-    public TemplateSchema? Template { get; private set; }
+    public TemplateSchema Template { get; private set; }
     private readonly string parameters;
     private readonly IEnumerable<string>? inlineParameters;
     private readonly ILogger logger;
 
     public TemplateParser(string template, string parameters, IEnumerable<string>? inlineParameters, ILogger logger)
     {
-        Template = JsonSerializer.Deserialize<TemplateSchema>(template);
+        var t = JsonSerializer.Deserialize<TemplateSchema>(template);
+        if (t == null) throw new InvalidOperationException("Couldn't parse given template.");
+
+        Template = t;
 
         this.parameters = parameters;
         this.inlineParameters = inlineParameters;

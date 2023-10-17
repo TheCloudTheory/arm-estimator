@@ -1,10 +1,9 @@
 ﻿using ACE.WhatIf;
-using Azure.Core;
 using Microsoft.Extensions.Logging;
 
 internal class PublicIPPrefixRetailQuery : BaseRetailQuery, IRetailQuery
 {
-    public PublicIPPrefixRetailQuery(WhatIfChange change, CommonResourceIdentifier id, ILogger logger, CurrencyCode currency, WhatIfChange[] changes) : base(change, id, logger, currency, changes)
+    public PublicIPPrefixRetailQuery(WhatIfChange change, CommonResourceIdentifier id, ILogger logger, CurrencyCode currency, WhatIfChange[] changes, TemplateSchema template) : base(change, id, logger, currency, changes, template)
     {
     }
 

@@ -4,7 +4,13 @@ using Microsoft.Extensions.Logging;
 
 internal class ServiceBusRetailQuery : BaseRetailQuery, IRetailQuery
 {
-    public ServiceBusRetailQuery(WhatIfChange change, CommonResourceIdentifier id, ILogger logger, CurrencyCode currency, WhatIfChange[] changes) : base(change, id, logger, currency, changes)
+    public ServiceBusRetailQuery(WhatIfChange change,
+                                 CommonResourceIdentifier id,
+                                 ILogger logger,
+                                 CurrencyCode currency,
+                                 WhatIfChange[] changes,
+                                 TemplateSchema template) 
+        : base(change, id, logger, currency, changes, template)
     {
     }
 
@@ -22,7 +28,7 @@ internal class ServiceBusRetailQuery : BaseRetailQuery, IRetailQuery
         }
 
         var change = this.change.after ?? this.change.before;
-        if(change == null)
+        if (change == null)
         {
             this.logger.LogError("Couldn't determine after / before state.");
             return null;

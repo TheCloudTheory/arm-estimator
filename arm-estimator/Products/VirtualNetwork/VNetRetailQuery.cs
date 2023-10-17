@@ -10,8 +10,9 @@ internal class VNetRetailQuery : BaseRetailQuery, IRetailQuery
                            CommonResourceIdentifier id,
                            ILogger logger,
                            CurrencyCode currency,
-                           WhatIfChange[] changes)
-        : base(change, id, logger, currency, changes)
+                           WhatIfChange[] changes,
+                           TemplateSchema template)
+        : base(change, id, logger, currency, changes, template)
     {
     }
 

@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 
 internal class PostgreSQLFlexibleRetailQuery : BaseRetailQuery, IRetailQuery
 {
-    public PostgreSQLFlexibleRetailQuery(WhatIfChange change, CommonResourceIdentifier id, ILogger logger, CurrencyCode currency, WhatIfChange[] changes) : base(change, id, logger, currency, changes)
+    public PostgreSQLFlexibleRetailQuery(WhatIfChange change, CommonResourceIdentifier id, ILogger logger, CurrencyCode currency, WhatIfChange[] changes, TemplateSchema template) : base(change, id, logger, currency, changes, template)
     {
     }
 

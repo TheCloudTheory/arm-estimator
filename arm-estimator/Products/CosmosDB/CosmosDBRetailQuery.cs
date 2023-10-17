@@ -4,7 +4,8 @@ using Microsoft.Extensions.Logging;
 
 internal class CosmosDBRetailQuery : BaseRetailQuery, IRetailQuery
 {
-    public CosmosDBRetailQuery(WhatIfChange change, CommonResourceIdentifier id, ILogger logger, CurrencyCode currency, WhatIfChange[] changes) : base(change, id, logger, currency, changes)
+    public CosmosDBRetailQuery(WhatIfChange change, CommonResourceIdentifier id, ILogger logger, CurrencyCode currency, WhatIfChange[] changes, TemplateSchema template) 
+        : base(change, id, logger, currency, changes, template)
     {
     }
 

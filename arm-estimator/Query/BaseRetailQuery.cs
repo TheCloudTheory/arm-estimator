@@ -9,12 +9,14 @@ internal abstract class BaseRetailQuery
     protected readonly string baseQuery;
     protected readonly CurrencyCode currency;
     protected readonly WhatIfChange[] changes;
+    private readonly TemplateSchema template;
 
     public BaseRetailQuery(WhatIfChange change,
                            CommonResourceIdentifier id,
                            ILogger logger,
                            CurrencyCode currency,
-                           WhatIfChange[] changes)
+                           WhatIfChange[] changes,
+                           TemplateSchema template)
     {
         this.change = change;
         this.id = id;
@@ -22,6 +24,7 @@ internal abstract class BaseRetailQuery
         this.baseQuery = $"https://prices.azure.com/api/retail/prices?currencyCode='{currency}'&$filter=priceType eq 'Consumption' and ";
         this.currency = currency;
         this.changes = changes;
+        this.template = template;
     }
 
     public string? GetLocation()
