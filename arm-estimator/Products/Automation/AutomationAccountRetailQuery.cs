@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 
 internal class AutomationAccountRetailQuery : BaseRetailQuery, IRetailQuery
 {
-    public AutomationAccountRetailQuery(WhatIfChange change, CommonResourceIdentifier id, ILogger logger, CurrencyCode currency, WhatIfChange[] changes) : base(change, id, logger, currency, changes)
+    public AutomationAccountRetailQuery(WhatIfChange change, CommonResourceIdentifier id, ILogger logger, CurrencyCode currency, WhatIfChange[] changes, TemplateSchema template) : base(change, id, logger, currency, changes, template)
     {
     }
 

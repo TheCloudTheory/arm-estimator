@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 
 internal class VirtualMachineRetailQuery : BaseRetailQuery, IRetailQuery
 {
-    public VirtualMachineRetailQuery(WhatIfChange change, CommonResourceIdentifier id, ILogger logger, CurrencyCode currency, WhatIfChange[] changes) : base(change, id, logger, currency, changes)
+    public VirtualMachineRetailQuery(WhatIfChange change, CommonResourceIdentifier id, ILogger logger, CurrencyCode currency, WhatIfChange[] changes, TemplateSchema template) : base(change, id, logger, currency, changes, template)
     {
     }
 

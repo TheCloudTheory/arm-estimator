@@ -22,14 +22,14 @@ internal class WhatIfProcessor
     private readonly ILogger logger;
     private readonly WhatIfChange[] changes;
     private readonly CurrencyCode currency;
-    private readonly TemplateSchema? template;
+    private readonly TemplateSchema template;
     private readonly IOutputFormatter outputFormatter;
 
     public WhatIfProcessor(ILogger logger,
                            WhatIfChange[] changes,
                            CurrencyCode currency,
                            bool disableDetailedMetrics,
-                           TemplateSchema? template,
+                           TemplateSchema template,
                            OutputFormat outputFormat)
     {
         this.logger = logger;
@@ -573,7 +573,7 @@ internal class WhatIfProcessor
             return null;
         }
 
-        if (Activator.CreateInstance(typeof(T), new object[] { change, id, logger, currency, changes }) is not T query)
+        if (Activator.CreateInstance(typeof(T), new object[] { change, id, logger, currency, changes, this.template }) is not T query)
         {
             logger.LogError("Couldn't create an instance of {type}.", typeof(T));
             return null;
@@ -660,7 +660,7 @@ internal class WhatIfProcessor
 
     private RetailAPIResponse? GetFakeRetailAPIResponse<T>(WhatIfChange change, CommonResourceIdentifier id) where T : BaseRetailQuery, IRetailQuery
     {
-        if (Activator.CreateInstance(typeof(T), new object[] { change, id, logger, currency, changes }) is not T query)
+        if (Activator.CreateInstance(typeof(T), new object[] { change, id, logger, currency, changes, this.template }) is not T query)
         {
             logger.LogError("Couldn't create an instance of {type}.", typeof(T));
             return null;

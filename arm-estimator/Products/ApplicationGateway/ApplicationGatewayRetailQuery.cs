@@ -4,7 +4,8 @@ using Microsoft.Extensions.Logging;
 
 internal class ApplicationGatewayRetailQuery : BaseRetailQuery, IRetailQuery
 {
-    public ApplicationGatewayRetailQuery(WhatIfChange change, CommonResourceIdentifier id, ILogger logger, CurrencyCode currency, WhatIfChange[] changes) : base(change, id, logger, currency, changes)
+    public ApplicationGatewayRetailQuery(WhatIfChange change, CommonResourceIdentifier id, ILogger logger, CurrencyCode currency, WhatIfChange[] changes, TemplateSchema template) 
+        : base(change, id, logger, currency, changes, template)
     {
     }
 
