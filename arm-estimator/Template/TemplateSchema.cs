@@ -21,7 +21,9 @@ internal class MetadataSchema
 internal class TemplateParameter
 {
     [JsonPropertyName("type")]
-    public string? Type { get; set; } = null!;
+    public string Type { get; set; } = null!;
+
+    public object? Value { get; set; }
 }
 
 internal class SpecialCaseResourceSchema
