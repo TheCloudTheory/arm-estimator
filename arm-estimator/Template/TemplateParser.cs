@@ -5,7 +5,7 @@ using System.Text.Json;
 internal class TemplateParser
 {
     public TemplateSchema Template { get; private set; }
-    private readonly string parameters;
+    private readonly ParametersSchema? parameters;
     private readonly IEnumerable<string>? inlineParameters;
     private readonly ILogger logger;
 
@@ -16,15 +16,64 @@ internal class TemplateParser
 
         Template = t;
 
-        this.parameters = parameters;
+        this.parameters = JsonSerializer.Deserialize<ParametersSchema>(parameters);
         this.inlineParameters = inlineParameters;
         this.logger = logger;
+
+        MaterializeFunctionsInsideTemplate();
+    }
+
+    private void MaterializeFunctionsInsideTemplate()
+    {
+        if(Template.SpecialCaseResources == null) return;
+
+        foreach(var specialCaseResource in Template.SpecialCaseResources)
+        {
+            if(specialCaseResource.Properties.VirtualNetworkPeerings != null)
+            {
+                foreach(var peering in specialCaseResource.Properties.VirtualNetworkPeerings)
+                {
+                    if (peering == null) continue;
+
+                    var peeringId = peering.Id.Replace("[", string.Empty);
+                    peeringId = peeringId.Replace("]", string.Empty);
+
+                    if(peeringId.StartsWith("resourceId"))
+                    {
+                        var resourceId = ParseResourceIdFunction(peeringId);
+                        peering.Id = resourceId;
+                    }
+                }
+            }
+        }
+    }
+
+    private string ParseResourceIdFunction(string value)
+    {
+        // Remove unnecessary characters from the string, so we end up with 
+        // something like 'Microsoft.Network/virtualNetworks', parameters('vnetName2')
+        value = value.Replace("resourceId(", string.Empty);
+        value = value[..^1];
+
+        var parts = value.Split(',');
+        var resourceType = parts[0].Replace("'", string.Empty);
+        if (parts.Length == 2)
+        {
+            // If we have two elements in an array, it means that resourceId() is performed for the same
+            // resource group as deployment. This is the simplest scenario, but we still need to extend
+            // the identifier fully as resourceId() would so the rest of the code can make correct
+            // assumptions
+            var resourceName = parts[1].Trim();
+            return $"/subscriptions/.../resourceGroup/.../{resourceType}/{resourceName}";
+        }
+
+        this.logger.LogWarning("ACE doesn't support parsing resourceId() if resource outside of template.");
+        return $"/subscriptions/.../resourceGroup/.../NOT_SUPPORTED";
     }
 
     public void ParseInlineParameters(out string parameters)
     {
-        var parsedParameters = JsonSerializer.Deserialize<ParametersSchema>(this.parameters);
-        if (parsedParameters != null)
+        if (this.parameters != null)
         {
             if(this.Template == null)
             {
@@ -53,18 +102,20 @@ internal class TemplateParser
                 var parameterValue = keyValue[1];
                 var value = ParseParamaterByTheirType(parameterName, parameterValue);
 
-                parsedParameters.Parameters ??= new Dictionary<string, Parameter>();
-                if (parsedParameters.Parameters.ContainsKey(parameterName))
+                this.parameters.Parameters ??= new Dictionary<string, Parameter>();
+                if (this.parameters.Parameters.ContainsKey(parameterName))
                 {
-                    parsedParameters.Parameters[parameterName].Value = value;
+                    this.parameters.Parameters[parameterName].Value = value;
                 }
                 else
                 {
-                    parsedParameters.Parameters.Add(parameterName, new Parameter() { Value = value });
+                    this.parameters.Parameters.Add(parameterName, new Parameter() { Value = value });
                 }
             }
 
-            parameters = JsonSerializer.Serialize(parsedParameters, new JsonSerializerOptions()
+            this.MaterializeFunctionsInsideTemplate();
+
+            parameters = JsonSerializer.Serialize(this.parameters, new JsonSerializerOptions()
             {
                 WriteIndented = false,
                 Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
