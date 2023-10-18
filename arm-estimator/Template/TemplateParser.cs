@@ -7,9 +7,11 @@ internal class TemplateParser
     public TemplateSchema Template { get; private set; }
     private readonly ParametersSchema? parameters;
     private readonly IEnumerable<string>? inlineParameters;
+    private readonly string scopeId;
+    private readonly string? resourceGroupName;
     private readonly ILogger logger;
 
-    public TemplateParser(string template, string parameters, IEnumerable<string>? inlineParameters, ILogger logger)
+    public TemplateParser(string template, string parameters, IEnumerable<string>? inlineParameters, string scopeId, string? resourceGroupName, ILogger logger)
     {
         var t = JsonSerializer.Deserialize<TemplateSchema>(template);
         if (t == null) throw new InvalidOperationException("Couldn't parse given template.");
@@ -18,12 +20,12 @@ internal class TemplateParser
 
         this.parameters = JsonSerializer.Deserialize<ParametersSchema>(parameters);
         this.inlineParameters = inlineParameters;
+        this.scopeId = scopeId;
+        this.resourceGroupName = resourceGroupName;
         this.logger = logger;
-
-        MaterializeFunctionsInsideTemplate();
     }
 
-    private void MaterializeFunctionsInsideTemplate()
+    internal void MaterializeFunctionsInsideTemplate()
     {
         if(Template.SpecialCaseResources == null) return;
 
@@ -63,15 +65,37 @@ internal class TemplateParser
             // resource group as deployment. This is the simplest scenario, but we still need to extend
             // the identifier fully as resourceId() would so the rest of the code can make correct
             // assumptions
-            var resourceName = parts[1].Trim();
-            return $"/subscriptions/.../resourceGroup/.../{resourceType}/{resourceName}";
+            var resourceName = ParseResourceName(parts[1]);
+            return $"/subscriptions/{this.scopeId}/resourceGroups/{this.resourceGroupName}/providers/{resourceType}/{resourceName}";
         }
 
         this.logger.LogWarning("ACE doesn't support parsing resourceId() if resource outside of template.");
-        return $"/subscriptions/.../resourceGroup/.../NOT_SUPPORTED";
+        return $"/subscriptions/{this.scopeId}/resourceGroups/providers/{this.resourceGroupName}NOT_SUPPORTED";
     }
 
-    public void ParseInlineParameters(out string parameters)
+    private string ParseResourceName(string value)
+    {
+        var name = value.Trim();
+        if(name.StartsWith("parameters("))
+        {
+            name = name.Replace("parameters(", string.Empty);
+            name = name[..^1];
+            name = name.Replace("'", string.Empty);
+
+            // Now we have name of a parameter which can be used to extract its value
+            if(this.parameters == null || this.parameters.Parameters == null)
+            {
+                this.logger.LogError("ACE tried to parse identifier of a resource for non-existing parameters. This indicates bug or invalid state of an object processed.");
+                return string.Empty;
+            }
+
+            return this.parameters.Parameters[name].Value!.ToString()!;
+        }
+
+        return name;
+    }
+
+    public void ParseParametersAndMaterializeFunctions(out string parameters)
     {
         if (this.parameters != null)
         {
