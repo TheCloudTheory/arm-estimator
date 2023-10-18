@@ -38,7 +38,7 @@ internal class VNetRetailQuery : BaseRetailQuery, IRetailQuery
             return null;
         }
 
-        if (properties.ContainsKey("virtualNetworkPeerings"))
+        if (properties.ContainsKey("virtualNetworkPeerings") && this.template.SpecialCaseResources != null)
         {
             var peerings = ((JsonElement)properties["virtualNetworkPeerings"]!).Deserialize<Peering[]>();
             if (peerings == null)
@@ -52,7 +52,7 @@ internal class VNetRetailQuery : BaseRetailQuery, IRetailQuery
                 this.logger.LogWarning("ACE currently doesn't support calculating VNet peerings cost for other currency than USD. Make appropriate adjustment to reflect real cost of this service.");
             }
 
-            var peeringType = DecidePeeringType(peerings);
+            var peeringType = DecidePeeringType();
 
             if (peeringType == PeeringType.InterRegion)
             {
@@ -152,12 +152,18 @@ internal class VNetRetailQuery : BaseRetailQuery, IRetailQuery
         };
     }
 
-    private PeeringType DecidePeeringType(Peering[] peerings)
+    private PeeringType DecidePeeringType()
     {
         var peeringTypes = new List<PeeringType>();
-        foreach (var peering in peerings)
+        var resourcesWithPeerings = this.template.SpecialCaseResources!.Where(resource => resource.Properties.VirtualNetworkPeerings != null);
+        if(resourcesWithPeerings == null || resourcesWithPeerings.Any() == false)
         {
-            var remoteVNet = base.changes.SingleOrDefault(c => c.resourceId == peering.Id);
+            throw new InvalidOperationException("Cannot decide peering type for the current configuration.");
+        }
+
+        foreach (var peering in resourcesWithPeerings)
+        {
+            var remoteVNet = base.changes.SingleOrDefault(c => peering.Properties.VirtualNetworkPeerings!.Any(peering => peering.Id == c.resourceId));
             if (remoteVNet == null)
             {
                 this.logger.LogWarning("Couldn't determine remote VNet for peering. Assuming it's Inter-Region.");

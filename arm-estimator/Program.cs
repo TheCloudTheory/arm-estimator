@@ -231,7 +231,7 @@ public class Program
             {
                 try
                 {
-                    parser = new TemplateParser(template, parameters, options.InlineParameters, logger);
+                    parser = new TemplateParser(template, parameters, options.InlineParameters, scopeId, resourceGroupName, logger);
                 }
                 catch (JsonException ex)
                 {
@@ -241,7 +241,11 @@ public class Program
 
                 if (options.InlineParameters != null && options.InlineParameters.Any())
                 {
-                    parser.ParseInlineParameters(out parameters);
+                    parser.ParseParametersAndMaterializeFunctions(out parameters);
+                }
+                else
+                {
+                    parser.MaterializeFunctionsInsideTemplate();
                 }
             }
 

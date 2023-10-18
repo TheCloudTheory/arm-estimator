@@ -9,7 +9,7 @@ internal abstract class BaseRetailQuery
     protected readonly string baseQuery;
     protected readonly CurrencyCode currency;
     protected readonly WhatIfChange[] changes;
-    private readonly TemplateSchema template;
+    protected readonly TemplateSchema template;
 
     public BaseRetailQuery(WhatIfChange change,
                            CommonResourceIdentifier id,
