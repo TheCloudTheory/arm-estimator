@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -34,7 +34,7 @@
 	<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="6.0.0" />
 	<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.15.1" />
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
-    <PackageReference Include="Azure.Identity" Version="1.6.0" />
+    <PackageReference Include="Azure.Identity" Version="1.10.2" />
   </ItemGroup>
 
   <ItemGroup>
