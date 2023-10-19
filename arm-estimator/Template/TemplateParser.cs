@@ -13,9 +13,7 @@ internal class TemplateParser
 
     public TemplateParser(string template, string parameters, IEnumerable<string>? inlineParameters, string scopeId, string? resourceGroupName, ILogger logger)
     {
-        var t = JsonSerializer.Deserialize<TemplateSchema>(template);
-        if (t == null) throw new InvalidOperationException("Couldn't parse given template.");
-
+        var t = JsonSerializer.Deserialize<TemplateSchema>(template) ?? throw new InvalidOperationException("Couldn't parse given template.");
         Template = t;
 
         this.parameters = JsonSerializer.Deserialize<ParametersSchema>(parameters);
@@ -31,6 +29,7 @@ internal class TemplateParser
 
         foreach(var specialCaseResource in Template.SpecialCaseResources)
         {
+            if(specialCaseResource.Properties == null) continue;
             if(specialCaseResource.Properties.VirtualNetworkPeerings != null)
             {
                 foreach(var peering in specialCaseResource.Properties.VirtualNetworkPeerings)
