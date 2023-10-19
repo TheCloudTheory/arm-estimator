@@ -188,6 +188,9 @@ internal class WhatIfProcessor
                 case "Microsoft.Sql/servers/databases":
                     resource = await Calculate<SQLRetailQuery, SQLEstimationCalculation>(change, id);
                     break;
+                case "Microsoft.Sql/servers/elasticPools":
+                    resource = await Calculate<SQLElasticPoolRetailQuery, SQLElasticPoolEstimationCalculation>(change, id);
+                    break;
                 case "Microsoft.ApiManagement/service":
                     resource = await Calculate<APIMRetailQuery, APIMEstimationCalculation>(change, id);
                     break;

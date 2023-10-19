@@ -246,5 +246,43 @@ namespace arm_estimator_tests.Bicep
                 Assert.That(output.TotalResourceCount, Is.EqualTo(2));
             });
         }
+
+        [Test]
+        [TestCase("Basic", 50, 72.6d)]
+        [TestCase("Standard", 50, 108.75d)]
+        [TestCase("Premium", 125, 675.0d)]
+        [Parallelizable(ParallelScope.All)]
+        public async Task SQLDatabase_WhenGivenSkuIsProvidedForElasticPool_ItShouldBeCorrectlyEstimated(string sku, int capacity, double cost)
+        {
+            var outputFilename = $"ace_test_{DateTime.Now.Ticks}";
+            var exitCode = await Program.Main(new[] {
+                "templates/bicep/sql/sqldatabase-elasticpool.bicep",
+                "cf70b558-b930-45e4-9048-ebcefb926adf",
+                "arm-estimator-tests-rg",
+                "--generateJsonOutput",
+                "--jsonOutputFilename",
+                outputFilename,
+                "--inline",
+                $"serverName=svr{DateTime.Now.Ticks}",
+                "--inline",
+                $"dbName=db{DateTime.Now.Ticks}",
+                "--inline",
+                $"elasticPoolSku={sku}",
+                "--inline",
+                $"elasticPoolCapacity={capacity}"
+            });
+
+            Assert.That(exitCode, Is.EqualTo(0));
+
+            var outputFile = File.ReadAllText($"{outputFilename}.json");
+            var output = JsonSerializer.Deserialize<EstimationOutput>(outputFile, new JsonSerializerOptions()
+            {
+                PropertyNameCaseInsensitive = true
+            });
+
+            Assert.That(output, Is.Not.Null);
+            Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(cost));
+            Assert.That(output.TotalResourceCount, Is.EqualTo(3));
+        }
     }
 }

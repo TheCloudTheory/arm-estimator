@@ -166,6 +166,9 @@
     <None Update="templates\bicep\sql\sqldatabase.bicep">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="templates\bicep\sql\sqldatabase-elasticpool.bicep">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="templates\bicep\storage.bicep">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
