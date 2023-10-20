@@ -13,27 +13,32 @@ namespace ACE.Compilation
             this.logger = logger;
         }
 
-        public string? Compile(FileInfo templateFile)
+        public string? Compile(FileInfo templateFile, CancellationToken token)
         {
             string? template;
 
             try
             {
+                if(token.IsCancellationRequested)
+                {
+                    return null;
+                }
+
                 this.logger.AddEstimatorMessage("Attempting to compile Bicep file using Bicep CLI.");
-                CompileBicepWith("bicep", $"build {templateFile} --stdout", logger, out template);
+                CompileBicepWith("bicep", $"build {templateFile} --stdout", token, logger, out template);
             }
             catch (Win32Exception)
             {
                 // First compilation may not work if Bicep CLI is not installed directly,
                 // try to use Azure CLI instead
                 this.logger.AddEstimatorMessage("Compilation failed, attempting to compile Bicep file using Azure CLI.");
-                CompileBicepWith("az", $"bicep build --file {templateFile} --stdout", logger, out template);
+                CompileBicepWith("az", $"bicep build --file {templateFile} --stdout", token, logger, out template);
             }
 
             return template;
         }
 
-        private static void CompileBicepWith(string fileName, string arguments, ILogger logger, out string? template)
+        private static void CompileBicepWith(string fileName, string arguments, CancellationToken token, ILogger logger, out string? template)
         {
             using (var process = new Process())
             {
@@ -52,6 +57,12 @@ namespace ACE.Compilation
                 process.BeginErrorReadLine();
                 template = process.StandardOutput.ReadToEnd();
                 process.WaitForExit();
+
+                if (token.IsCancellationRequested)
+                {
+                    template = null;
+                    return;
+                }
 
                 if (string.IsNullOrWhiteSpace(template))
                 {

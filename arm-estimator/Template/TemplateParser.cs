@@ -23,8 +23,9 @@ internal class TemplateParser
         this.logger = logger;
     }
 
-    internal void MaterializeFunctionsInsideTemplate()
+    internal void MaterializeFunctionsInsideTemplate(CancellationToken token)
     {
+        if(token.IsCancellationRequested) return;
         if(Template.SpecialCaseResources == null) return;
 
         foreach(var specialCaseResource in Template.SpecialCaseResources)
@@ -94,8 +95,14 @@ internal class TemplateParser
         return name;
     }
 
-    public void ParseParametersAndMaterializeFunctions(out string parameters)
+    public void ParseParametersAndMaterializeFunctions(out string parameters, CancellationToken token)
     {
+        if(token.IsCancellationRequested)
+        {
+            parameters = "{}";
+            return;
+        }
+
         if (this.parameters != null)
         {
             if(this.Template == null)
@@ -136,7 +143,7 @@ internal class TemplateParser
                 }
             }
 
-            this.MaterializeFunctionsInsideTemplate();
+            this.MaterializeFunctionsInsideTemplate(token);
 
             parameters = JsonSerializer.Serialize(this.parameters, new JsonSerializerOptions()
             {

@@ -12,9 +12,17 @@ namespace ACE;
 public class Program
 {
     private static string? GetInformationalVersion() => Assembly.GetEntryAssembly()?.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
+    private static readonly CancellationTokenSource _cancellationTokenSource = new();
 
     public static async Task<int> Main(string[] args)
     {
+        Console.CancelKeyPress += (sender, eventArgs) =>
+        {
+            Console.WriteLine("Received cancellation signal, exiting...");
+            _cancellationTokenSource.Cancel();
+            eventArgs.Cancel = true;
+        };
+
         var templateFileArg = new Argument<FileInfo>("template-file", "Template file to analyze");
         var susbcriptionIdArg = new Argument<string>("subscription-id", "Subscription ID");
         var resourceGroupArg = new Argument<string>("resource-group", "Resource group name");
@@ -227,7 +235,7 @@ public class Program
             }
 
             TemplateParser? parser = null;
-            if(templateType == TemplateType.ArmTemplateOrBicep)
+            if (templateType == TemplateType.ArmTemplateOrBicep)
             {
                 try
                 {
@@ -241,16 +249,16 @@ public class Program
 
                 if (options.InlineParameters != null && options.InlineParameters.Any())
                 {
-                    parser.ParseParametersAndMaterializeFunctions(out parameters);
+                    parser.ParseParametersAndMaterializeFunctions(out parameters, _cancellationTokenSource.Token);
                 }
                 else
                 {
-                    parser.MaterializeFunctionsInsideTemplate();
+                    parser.MaterializeFunctionsInsideTemplate(_cancellationTokenSource.Token);
                 }
             }
 
             var whatIfParser = new WhatIfParser(templateType, scopeId, resourceGroupName, template, options.Mode, parameters, logger, commandType, location, options.DisableCache);
-            var whatIfData = await whatIfParser.GetWhatIfData();
+            var whatIfData = await whatIfParser.GetWhatIfData(_cancellationTokenSource.Token);
             if (whatIfData == null)
             {
                 logger.LogError("Couldn't fetch data for What If request.");
@@ -300,7 +308,8 @@ public class Program
                                                    options.Currency,
                                                    options.DisableDetailedMetrics,
                                                    parser?.Template,
-                                                   options.OutputFormat).Process();
+                                                   options.OutputFormat,
+                                                   _cancellationTokenSource.Token).Process(_cancellationTokenSource.Token);
             GenerateOutputIfNeeded(options, output, logger);
 
             if (options.Threshold != -1 && output.TotalCost.OriginalValue > options.Threshold)
@@ -318,7 +327,7 @@ public class Program
         var compiler = new TemplateCompiler(templateFile, logger);
         templateType = compiler.TemplateType;
 
-        return compiler.Compile();
+        return compiler.Compile(_cancellationTokenSource.Token);
     }
 
     private static void GenerateOutputIfNeeded(EstimateOptions options, EstimationOutput output, ILogger<Program> logger)
@@ -398,7 +407,7 @@ public class Program
                 logger.AddEstimatorMessage("Tenant Id: {0}", scopeId);
                 break;
         }
-        
+
         logger.AddEstimatorMessage("Template file: {0}", templateFile);
         logger.AddEstimatorMessage("Deployment mode: {0}", options.Mode);
         logger.AddEstimatorMessage("Threshold: {0}", options.Threshold == -1 ? "Not Set" : options.Threshold.ToString());

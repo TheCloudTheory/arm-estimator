@@ -34,10 +34,15 @@ namespace ACE.Compilation
             this.logger = logger;
         }
 
-        public string? Compile(FileInfo templateFile)
+        public string? Compile(FileInfo templateFile, CancellationToken token)
         {
             var workingDirectory = templateFile.Directory?.FullName;
             ArgumentNullException.ThrowIfNull(workingDirectory, nameof(workingDirectory));
+
+            if(token.IsCancellationRequested)
+            {
+                return null;
+            }
 
             var planFile = $"{templateFile.Directory}{Path.DirectorySeparatorChar}tfplan";
 

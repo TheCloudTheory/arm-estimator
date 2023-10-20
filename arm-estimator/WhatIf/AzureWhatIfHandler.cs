@@ -49,8 +49,10 @@ internal class AzureWhatIfHandler
         }
     }
 
-    public async Task<WhatIfResponse?> GetResponseWithRetries()
+    public async Task<WhatIfResponse?> GetResponseWithRetries(CancellationToken token)
     {
+        if(token.IsCancellationRequested) return null;
+
         this.logger.LogInformation("What If status:");
         this.logger.LogInformation("");
 
@@ -70,11 +72,11 @@ internal class AzureWhatIfHandler
             this.logger.AddEstimatorMessage("Cache is disabled.");
         }
         
-        var response = await SendInitialRequest();
+        var response = await SendInitialRequest(token);
         if(response.IsSuccessStatusCode == false)
         {
-            var result = await response.Content.ReadAsStringAsync();
-            this.logger.LogError(result);
+            var result = await response.Content.ReadAsStringAsync(token);
+            this.logger.LogError("{result}", result);
 
             return null;
         }
@@ -88,16 +90,11 @@ internal class AzureWhatIfHandler
             var retryAfter = retryAfterHeader == null ? TimeSpan.FromSeconds(15) : retryAfterHeader.Delta;
 
             this.logger.AddEstimatorMessage("Waiting for response from What If API.");
-            await Task.Delay(retryAfter.HasValue ? retryAfter.Value.Seconds * 1000 : 15000);
+            await Task.Delay(retryAfter.HasValue ? retryAfter.Value.Seconds * 1000 : 15000, token);
 
-            var location = response.Headers.Location;
+            var location = response.Headers.Location ?? throw new Exception("Location header can't be null when awaiting response.");
+            response = await SendAndWaitForResponse(location, token);
 
-            if(location == null)
-            {
-                throw new Exception("Location header can't be null when awaiting response.");
-            }
-
-            response = await SendAndWaitForResponse(location);
             currentRetry++;
         }
 
@@ -115,9 +112,9 @@ internal class AzureWhatIfHandler
         return data;
     }
 
-    private async Task<HttpResponseMessage> SendInitialRequest()
+    private async Task<HttpResponseMessage> SendInitialRequest(CancellationToken cancellationToken)
     {
-        var token = GetToken();
+        var token = GetToken(cancellationToken);
         var request = new HttpRequestMessage(HttpMethod.Post, CreateUrlBasedOnScope());
 
         string? templateContent;
@@ -139,7 +136,7 @@ internal class AzureWhatIfHandler
         request.Content = new StringContent(templateContent, Encoding.UTF8, "application/json");
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-        var response = await httpClient.Value.SendAsync(request);
+        var response = await httpClient.Value.SendAsync(request, cancellationToken);
         return response;
     }
 
@@ -155,19 +152,19 @@ internal class AzureWhatIfHandler
         };
     }
 
-    private static async Task<HttpResponseMessage> SendAndWaitForResponse(Uri location)
+    private static async Task<HttpResponseMessage> SendAndWaitForResponse(Uri location, CancellationToken cancellationToken)
     {
-        var token = GetToken();
+        var token = GetToken(cancellationToken);
         var request = new HttpRequestMessage(HttpMethod.Get, location);
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-        var response = await httpClient.Value.SendAsync(request);
+        var response = await httpClient.Value.SendAsync(request, cancellationToken);
         response.EnsureSuccessStatusCode();
 
         return response;
     }
 
-    private static string GetToken()
+    private static string GetToken(CancellationToken cancellationToken)
     {
         var options = new DefaultAzureCredentialOptions()
         {
@@ -175,7 +172,7 @@ internal class AzureWhatIfHandler
             ExcludeVisualStudioCredential = true
         };
 
-        var token = new DefaultAzureCredential(options).GetToken(new TokenRequestContext(new[] { "https://management.azure.com/.default" }), CancellationToken.None).Token;
+        var token = new DefaultAzureCredential(options).GetToken(new TokenRequestContext(new[] { "https://management.azure.com/.default" }), cancellationToken).Token;
         return token;
     }
 }

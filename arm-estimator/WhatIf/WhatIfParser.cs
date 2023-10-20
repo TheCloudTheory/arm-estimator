@@ -40,7 +40,7 @@ internal class WhatIfParser
         this.disableCache = disableCache;
     }
 
-    public async Task<WhatIfResponse?> GetWhatIfData()
+    public async Task<WhatIfResponse?> GetWhatIfData(CancellationToken token)
     {
         if(this.templateType == TemplateType.ArmTemplateOrBicep)
         {
@@ -55,13 +55,13 @@ internal class WhatIfParser
                 this.location,
                 this.disableCache);
 
-            return await handler.GetResponseWithRetries();
+            return await handler.GetResponseWithRetries(token);
         }
 
         if(this.templateType == TemplateType.Terraform)
         {
             var parser = new TerraformTemplateParser(this.template, this.logger);
-            return parser.GetConfigurationAsWhatIfData();
+            return parser.GetConfigurationAsWhatIfData(token);
         }
 
         return null;
