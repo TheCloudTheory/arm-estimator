@@ -86,6 +86,11 @@ namespace arm_estimator_tests.Terraform
                 process.BeginErrorReadLine();
                 process.WaitForExit();
 
+                if(string.IsNullOrEmpty(error) == false)
+                {
+                    Console.WriteLine(error);
+                }
+
                 Assert.That(string.IsNullOrEmpty(error), Is.True);
             }
         }
