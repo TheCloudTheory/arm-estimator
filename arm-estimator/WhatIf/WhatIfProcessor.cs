@@ -30,7 +30,8 @@ internal class WhatIfProcessor
                            CurrencyCode currency,
                            bool disableDetailedMetrics,
                            TemplateSchema template,
-                           OutputFormat outputFormat)
+                           OutputFormat outputFormat,
+                           CancellationToken token)
     {
         this.logger = logger;
         this.changes = changes;
@@ -38,8 +39,8 @@ internal class WhatIfProcessor
         this.template = template;
         this.outputFormatter = new OutputGenerator(outputFormat, logger, currency, disableDetailedMetrics).GetFormatter();
 
-        ReconcileResources();
-        BuildVMCapabilitiesIfNeeded();
+        ReconcileResources(token);
+        BuildVMCapabilitiesIfNeeded(token);
     }
 
     /// <summary>
@@ -52,10 +53,12 @@ internal class WhatIfProcessor
     /// that this method is not ideal - if template contains a child resource only, it'll
     /// assume location of the resource group.
     /// </summary>
-    private void ReconcileResources()
+    private void ReconcileResources(CancellationToken token)
     {
         foreach (var change in this.changes)
         {
+            if (token.IsCancellationRequested) return;
+            
             var actualChange = change.GetChange();
             if (actualChange == null || change.resourceId == null)
             {
@@ -106,8 +109,10 @@ internal class WhatIfProcessor
         }
     }
 
-    private void BuildVMCapabilitiesIfNeeded()
+    private void BuildVMCapabilitiesIfNeeded(CancellationToken token)
     {
+        if (token.IsCancellationRequested) return;
+
         var vmChanges = this.changes.Where(_ => new CommonResourceIdentifier(_.resourceId!).GetResourceType() == "Microsoft.Compute/virtualMachines" 
         || new CommonResourceIdentifier(_.resourceId!).GetResourceType() == "Microsoft.ContainerService/managedClusters"
         || new CommonResourceIdentifier(_.resourceId!).GetResourceType() == "Microsoft.Compute/virtualMachineScaleSets");
@@ -124,7 +129,7 @@ internal class WhatIfProcessor
             }
 
             WhatIfProcessor.cache = new CapabilitiesCache();
-            WhatIfProcessor.cache.InitializeVirtualMachineCapabilities(location);
+            WhatIfProcessor.cache.InitializeVirtualMachineCapabilities(location, token);
 
             this.logger.AddEstimatorMessage("Capabilities cache initialized.");
             logger.LogInformation("");
@@ -133,8 +138,13 @@ internal class WhatIfProcessor
         }
     }
 
-    public async Task<EstimationOutput> Process()
+    public async Task<EstimationOutput> Process(CancellationToken token)
     {
+        if (token.IsCancellationRequested)
+        {
+            return new EstimationOutput(0, 0, new List<EstimatedResourceData>(), this.currency, 0, 0);
+        }
+
         double totalCost = 0;
         double delta = 0;
 
@@ -146,6 +156,11 @@ internal class WhatIfProcessor
 
         foreach (WhatIfChange change in this.changes)
         {
+            if (token.IsCancellationRequested)
+            {
+                return new EstimationOutput(0, 0, new List<EstimatedResourceData>(), this.currency, 0, 0);
+            }
+
             if (change.resourceId == null)
             {
                 logger.LogWarning("Ignoring resource with empty resource ID");
@@ -163,138 +178,138 @@ internal class WhatIfProcessor
             switch (id?.GetResourceType())
             {
                 case "Microsoft.Storage/storageAccounts":
-                    resource = await Calculate<StorageAccountRetailQuery, StorageAccountEstimationCalculation>(change, id);
+                    resource = await Calculate<StorageAccountRetailQuery, StorageAccountEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.ContainerRegistry/registries":
-                    resource = await Calculate<ContainerRegistryRetailQuery, ContainerRegistryEstimationCalculation>(change, id);
+                    resource = await Calculate<ContainerRegistryRetailQuery, ContainerRegistryEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.Web/serverfarms":
-                    resource = await Calculate<AppServicePlanRetailQuery, AppServicePlanEstimationCalculation>(change, id);
+                    resource = await Calculate<AppServicePlanRetailQuery, AppServicePlanEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.Web/sites":
                     resource = new EstimatedResourceData(0, 0, id);
                     freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.ContainerService/managedClusters":
-                    resource = await Calculate<AKSRetailQuery, AKSEstimationCalculation>(change, id);
+                    resource = await Calculate<AKSRetailQuery, AKSEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.App/containerApps":
-                    resource = await Calculate<ContainerAppsRetailQuery, ContainerAppsEstimationCalculation>(change, id);
+                    resource = await Calculate<ContainerAppsRetailQuery, ContainerAppsEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.Sql/servers":
                     resource = new EstimatedResourceData(0, 0, id);
                     freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.Sql/servers/databases":
-                    resource = await Calculate<SQLRetailQuery, SQLEstimationCalculation>(change, id);
+                    resource = await Calculate<SQLRetailQuery, SQLEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.Sql/servers/elasticPools":
-                    resource = await Calculate<SQLElasticPoolRetailQuery, SQLElasticPoolEstimationCalculation>(change, id);
+                    resource = await Calculate<SQLElasticPoolRetailQuery, SQLElasticPoolEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.ApiManagement/service":
-                    resource = await Calculate<APIMRetailQuery, APIMEstimationCalculation>(change, id);
+                    resource = await Calculate<APIMRetailQuery, APIMEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.ApiManagement/service/gateways":
-                    resource = await Calculate<APIMRetailQuery, APIMEstimationCalculation>(change, id);
+                    resource = await Calculate<APIMRetailQuery, APIMEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.AppConfiguration/configurationStores":
-                    resource = await Calculate<AppConfigurationRetailQuery, AppConfigurationEstimationCalculation>(change, id);
+                    resource = await Calculate<AppConfigurationRetailQuery, AppConfigurationEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.Network/applicationGateways":
-                    resource = await Calculate<ApplicationGatewayRetailQuery, ApplicationGatewayEstimationCalculation>(change, id);
+                    resource = await Calculate<ApplicationGatewayRetailQuery, ApplicationGatewayEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.Insights/components":
-                    resource = await Calculate<ApplicationInsightsRetailQuery, ApplicationInsightsEstimationCalculation>(change, id);
+                    resource = await Calculate<ApplicationInsightsRetailQuery, ApplicationInsightsEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.AnalysisServices/servers":
-                    resource = await Calculate<AnalysisServicesRetailQuery, AnalysisServicesEstimationCalculation>(change, id);
+                    resource = await Calculate<AnalysisServicesRetailQuery, AnalysisServicesEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.Network/bastionHosts":
-                    resource = await Calculate<BastionRetailQuery, BastionEstimationCalculation>(change, id);
+                    resource = await Calculate<BastionRetailQuery, BastionEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.BotService/botServices":
-                    resource = await Calculate<BotServiceRetailQuery, BotServiceEstimationCalculation>(change, id);
+                    resource = await Calculate<BotServiceRetailQuery, BotServiceEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.HealthBot/healthBots":
-                    resource = await Calculate<HealthBotServiceRetailQuery, HealthBotServiceEstimationCalculation>(change, id);
+                    resource = await Calculate<HealthBotServiceRetailQuery, HealthBotServiceEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.Chaos/experiments":
-                    resource = await Calculate<ChaosRetailQuery, ChaosEstimationCalculation>(change, id);
+                    resource = await Calculate<ChaosRetailQuery, ChaosEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.Search/searchServices":
-                    resource = await Calculate<CognitiveSearchRetailQuery, CognitiveSearchEstimationCalculation>(change, id);
+                    resource = await Calculate<CognitiveSearchRetailQuery, CognitiveSearchEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.ConfidentialLedger/ledgers":
-                    resource = await Calculate<ConfidentialLedgerRetailQuery, ConfidentialLedgerEstimationCalculation>(change, id);
+                    resource = await Calculate<ConfidentialLedgerRetailQuery, ConfidentialLedgerEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.DocumentDB/databaseAccounts":
-                    resource = await Calculate<CosmosDBRetailQuery, CosmosDBEstimationCalculation>(change, id);
+                    resource = await Calculate<CosmosDBRetailQuery, CosmosDBEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.DocumentDB/databaseAccounts/sqlDatabases":
-                    resource = await Calculate<CosmosDBRetailQuery, CosmosDBEstimationCalculation>(change, id);
+                    resource = await Calculate<CosmosDBRetailQuery, CosmosDBEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers":
-                    resource = await Calculate<CosmosDBRetailQuery, CosmosDBEstimationCalculation>(change, id);
+                    resource = await Calculate<CosmosDBRetailQuery, CosmosDBEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.EventHub/namespaces":
-                    resource = await Calculate<EventHubRetailQuery, EventHubEstimationCalculation>(change, id);
+                    resource = await Calculate<EventHubRetailQuery, EventHubEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.EventHub/namespaces/eventhubs":
-                    resource = await Calculate<EventHubRetailQuery, EventHubEstimationCalculation>(change, id);
+                    resource = await Calculate<EventHubRetailQuery, EventHubEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.EventHub/clusters":
-                    resource = await Calculate<EventHubRetailQuery, EventHubEstimationCalculation>(change, id);
+                    resource = await Calculate<EventHubRetailQuery, EventHubEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.StreamAnalytics/clusters":
-                    resource = await Calculate<StreamAnalyticsRetailQuery, StreamAnalyticsEstimationCalculation>(change, id);
+                    resource = await Calculate<StreamAnalyticsRetailQuery, StreamAnalyticsEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.StreamAnalytics/streamingjobs":
-                    resource = await Calculate<StreamAnalyticsRetailQuery, StreamAnalyticsEstimationCalculation>(change, id);
+                    resource = await Calculate<StreamAnalyticsRetailQuery, StreamAnalyticsEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.KeyVault/vaults":
-                    resource = await Calculate<KeyVaultRetailQuery, KeyVaultEstimationCalculation>(change, id);
+                    resource = await Calculate<KeyVaultRetailQuery, KeyVaultEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.KeyVault/managedHSMs":
-                    resource = await Calculate<KeyVaultRetailQuery, KeyVaultEstimationCalculation>(change, id);
+                    resource = await Calculate<KeyVaultRetailQuery, KeyVaultEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.Network/virtualNetworkGateways":
-                    resource = await Calculate<VPNGatewayRetailQuery, VPNGatewayEstimationCalculation>(change, id);
+                    resource = await Calculate<VPNGatewayRetailQuery, VPNGatewayEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.SignalRService/signalR":
-                    resource = await Calculate<SignalRRetailQuery, SignalREstimationCalculation>(change, id);
+                    resource = await Calculate<SignalRRetailQuery, SignalREstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.TimeSeriesInsights/environments":
-                    resource = await Calculate<TimeSeriesRetailQuery, TimeSeriesEstimationCalculation>(change, id);
+                    resource = await Calculate<TimeSeriesRetailQuery, TimeSeriesEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.Logic/workflows":
-                    resource = await Calculate<LogicAppsRetailQuery, LogicAppsEstimationCalculation>(change, id);
+                    resource = await Calculate<LogicAppsRetailQuery, LogicAppsEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.Logic/integrationAccounts":
-                    resource = await Calculate<LogicAppsRetailQuery, LogicAppsEstimationCalculation>(change, id);
+                    resource = await Calculate<LogicAppsRetailQuery, LogicAppsEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.EventGrid/systemTopics":
-                    resource = await Calculate<EventGridRetailQuery, EventGridEstimationCalculation>(change, id);
+                    resource = await Calculate<EventGridRetailQuery, EventGridEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.EventGrid/topics":
-                    resource = await Calculate<EventGridRetailQuery, EventGridEstimationCalculation>(change, id);
+                    resource = await Calculate<EventGridRetailQuery, EventGridEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.EventGrid/eventSubscriptions":
-                    resource = await Calculate<EventGridRetailQuery, EventGridEstimationCalculation>(change, id);
+                    resource = await Calculate<EventGridRetailQuery, EventGridEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.Compute/virtualMachines":
-                    resource = await Calculate<VirtualMachineRetailQuery, VirtualMachineEstimationCalculation>(change, id);
+                    resource = await Calculate<VirtualMachineRetailQuery, VirtualMachineEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.Network/publicIPPrefixes":
-                    resource = await Calculate<PublicIPPrefixRetailQuery, PublicIPPrefixEstimationCalculation>(change, id);
+                    resource = await Calculate<PublicIPPrefixRetailQuery, PublicIPPrefixEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.Network/publicIPAddresses":
-                    resource = await Calculate<PublicIPRetailQuery, PublicIPEstimationCalculation>(change, id);
+                    resource = await Calculate<PublicIPRetailQuery, PublicIPEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.OperationalInsights/workspaces":
-                    resource = await Calculate<LogAnalyticsRetailQuery, LogAnalyticsEstimationCalculation>(change, id);
+                    resource = await Calculate<LogAnalyticsRetailQuery, LogAnalyticsEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.OperationsManagement/solutions":
-                    resource = await Calculate<LogAnalyticsRetailQuery, LogAnalyticsEstimationCalculation>(change, id);
+                    resource = await Calculate<LogAnalyticsRetailQuery, LogAnalyticsEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.Network/networkInterfaces":
                     resource = new EstimatedResourceData(0, 0, id);
@@ -305,17 +320,17 @@ internal class WhatIfProcessor
                     freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.Network/virtualNetworks":
-                    resource = await Calculate<VNetRetailQuery, VNetEstimationCalculation>(change, id, true);
+                    resource = await Calculate<VNetRetailQuery, VNetEstimationCalculation>(change, id, token, true);
                     break;
                 case "Microsoft.RecoveryServices/vaults/backupPolicies":
                     resource = new EstimatedResourceData(0, 0, id);
                     freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.RecoveryServices/vaults":
-                    resource = await Calculate<RecoveryServicesRetailQuery, RecoveryServicesEstimationCalculation>(change, id);
+                    resource = await Calculate<RecoveryServicesRetailQuery, RecoveryServicesEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.RecoveryServices/vaults/backupFabrics/protectionContainers/protectedItems":
-                    resource = await Calculate<RecoveryServicesProtectedItemRetailQuery, RecoveryServicesProtectedItemEstimationCalculation>(change, id);
+                    resource = await Calculate<RecoveryServicesProtectedItemRetailQuery, RecoveryServicesProtectedItemEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.RecoveryServices/vaults/replicationFabrics":
                     resource = new EstimatedResourceData(0, 0, id);
@@ -334,7 +349,7 @@ internal class WhatIfProcessor
                     freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers/replicationProtectedItems":
-                    resource = await Calculate<AzureSiteRecoveryRetailQuery, AzureSiteRecoveryEstimationCalculation>(change, id);
+                    resource = await Calculate<AzureSiteRecoveryRetailQuery, AzureSiteRecoveryEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.RecoveryServices/vaults/replicationPolicies":
                     resource = new EstimatedResourceData(0, 0, id);
@@ -345,20 +360,20 @@ internal class WhatIfProcessor
                     freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.Insights/metricAlerts":
-                    resource = await Calculate<MonitorRetailQuery, MonitorEstimationCalculation>(change, id);
+                    resource = await Calculate<MonitorRetailQuery, MonitorEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.Insights/scheduledQueryRules":
-                    resource = await Calculate<MonitorRetailQuery, MonitorEstimationCalculation>(change, id);
+                    resource = await Calculate<MonitorRetailQuery, MonitorEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.DBforMariaDB/servers":
-                    resource = await Calculate<MariaDBRetailQuery, MariaDBEstimationCalculation>(change, id);
+                    resource = await Calculate<MariaDBRetailQuery, MariaDBEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.DBforMariaDB/servers/virtualNetworkRules":
                     resource = new EstimatedResourceData(0, 0, id);
                     freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.Cache/redis":
-                    resource = await Calculate<RedisRetailQuery, RedisEstimationCalculation>(change, id);
+                    resource = await Calculate<RedisRetailQuery, RedisEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.Network/ipGroups":
                     resource = new EstimatedResourceData(0, 0, id);
@@ -372,7 +387,7 @@ internal class WhatIfProcessor
                     freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.Network/azureFirewalls":
-                    resource = await Calculate<FirewallRetailQuery, FirewallEstimationCalculation>(change, id);
+                    resource = await Calculate<FirewallRetailQuery, FirewallEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.Storage/storageAccounts/blobServices":
                     resource = new EstimatedResourceData(0, 0, id);
@@ -383,7 +398,7 @@ internal class WhatIfProcessor
                     freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.Automation/automationAccounts":
-                    resource = await Calculate<AutomationAccountRetailQuery, AutomationAccountEstimationCalculation>(change, id);
+                    resource = await Calculate<AutomationAccountRetailQuery, AutomationAccountEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.Automation/automationAccounts/runbooks":
                     resource = new EstimatedResourceData(0, 0, id);
@@ -394,13 +409,13 @@ internal class WhatIfProcessor
                     freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.DBforPostgreSQL/servers":
-                    resource = await Calculate<PostgreSQLRetailQuery, PostgreSQLEstimationCalculation>(change, id);
+                    resource = await Calculate<PostgreSQLRetailQuery, PostgreSQLEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.DBforPostgreSQL/flexibleServers":
-                    resource = await Calculate<PostgreSQLFlexibleRetailQuery, PostgreSQLFlexibleEstimationCalculation>(change, id);
+                    resource = await Calculate<PostgreSQLFlexibleRetailQuery, PostgreSQLFlexibleEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.ServiceBus/namespaces":
-                    resource = await Calculate<ServiceBusRetailQuery, ServiceBusEstimationCalculation>(change, id);
+                    resource = await Calculate<ServiceBusRetailQuery, ServiceBusEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.DataFactory/factories/datasets":
                     resource = new EstimatedResourceData(0, 0, id);
@@ -415,14 +430,14 @@ internal class WhatIfProcessor
                     freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.DataFactory/factories":
-                    resource = await Calculate<DataFactoryRetailQuery, DataFactoryEstimationCalculation>(change, id);
+                    resource = await Calculate<DataFactoryRetailQuery, DataFactoryEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.Compute/availabilitySets":
                     resource = new EstimatedResourceData(0, 0, id);
                     freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.Compute/virtualMachineScaleSets":
-                    resource = await Calculate<VmssRetailQuery, VmssEstimationCalculation>(change, id);
+                    resource = await Calculate<VmssRetailQuery, VmssEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.Authorization/policyAssignments":
                     resource = new EstimatedResourceData(0, 0, id);
@@ -433,14 +448,14 @@ internal class WhatIfProcessor
                     freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.Insights/diagnosticSettings":
-                    resource = await Calculate<DiagnosticSettingsRetailQuery, DiagnosticSettingsEstimationCalculation>(change, id);
+                    resource = await Calculate<DiagnosticSettingsRetailQuery, DiagnosticSettingsEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.ManagedIdentity/userAssignedIdentities":
                     resource = new EstimatedResourceData(0, 0, id);
                     freeResources.Add(id, change.changeType);
                     break;
                 case "Microsoft.Cache/redisEnterprise":
-                    resource = await Calculate<RedisEnterpriseRetailQuery, RedisEnterpriseEstimationCalculation>(change, id);
+                    resource = await Calculate<RedisEnterpriseRetailQuery, RedisEnterpriseEstimationCalculation>(change, id, token);
                     break;
                 case "Microsoft.Network/virtualNetworks/subnets":
                     resource = new EstimatedResourceData(0, 0, id);
@@ -512,12 +527,17 @@ internal class WhatIfProcessor
         return new EstimationOutput(totalCost, delta, resources, currency, changes.Length, unsupportedResources.Count);
     }
 
-    private async Task<EstimatedResourceData?> Calculate<TQuery, TCalculation>(WhatIfChange change, CommonResourceIdentifier id, bool? useFakeApiResponse = null)
+    private async Task<EstimatedResourceData?> Calculate<TQuery, TCalculation>(WhatIfChange change, CommonResourceIdentifier id, CancellationToken token, bool? useFakeApiResponse = null)
         where TQuery : BaseRetailQuery, IRetailQuery
         where TCalculation : BaseEstimation, IEstimationCalculation
     {
+        if (token.IsCancellationRequested)
+        {
+            return null;
+        }
+
         var data = useFakeApiResponse == null || useFakeApiResponse.Value == false ?
-            await GetRetailAPIResponse<TQuery>(change, id) :
+            await GetRetailAPIResponse<TQuery>(change, id, token) :
             GetFakeRetailAPIResponse<TQuery>(change, id);
 
         if (data == null || data.Items == null)
@@ -567,8 +587,13 @@ internal class WhatIfProcessor
         return new EstimatedResourceData(summary.TotalCost, delta, id);
     }
 
-    private async Task<RetailAPIResponse?> GetRetailAPIResponse<T>(WhatIfChange change, CommonResourceIdentifier id) where T : BaseRetailQuery, IRetailQuery
+    private async Task<RetailAPIResponse?> GetRetailAPIResponse<T>(WhatIfChange change, CommonResourceIdentifier id, CancellationToken token) where T : BaseRetailQuery, IRetailQuery
     {
+        if (token.IsCancellationRequested)
+        {
+            return null;
+        }
+
         var desiredState = change.after ?? change.before;
         if (desiredState == null || change.resourceId == null)
         {
@@ -606,7 +631,7 @@ internal class WhatIfProcessor
         }
 
 
-        var data = await TryGetCachedResultForUrl(url);
+        var data = await TryGetCachedResultForUrl(url, token);
         if (data == null || data.Items == null)
         {
             logger.LogWarning("Data for {resourceType} is not available.", id.GetResourceType());
@@ -616,9 +641,15 @@ internal class WhatIfProcessor
         return data;
     }
 
-    private async Task<RetailAPIResponse?> TryGetCachedResultForUrl(string url)
+    private async Task<RetailAPIResponse?> TryGetCachedResultForUrl(string url, CancellationToken token)
     {
         RetailAPIResponse? data;
+
+        if (token.IsCancellationRequested)
+        {
+            return null;
+        }
+
         var urlHash = Convert.ToBase64String(Encoding.UTF8.GetBytes(url));
         if (cachedResults.TryGetValue(urlHash, out var previousResponse))
         {
@@ -637,7 +668,7 @@ internal class WhatIfProcessor
                 return data;
             }
 
-            var response = await GetRetailDataResponse(url);
+            var response = await GetRetailDataResponse(url, token);
             if (response.IsSuccessStatusCode == false)
             {
                 return null;
@@ -672,10 +703,10 @@ internal class WhatIfProcessor
         return query.GetFakeResponse();
     }
 
-    private async Task<HttpResponseMessage> GetRetailDataResponse(string url)
+    private async Task<HttpResponseMessage> GetRetailDataResponse(string url, CancellationToken token)
     {
         var request = new HttpRequestMessage(HttpMethod.Get, url);
-        var response = await httpClient.Value.SendAsync(request);
+        var response = await httpClient.Value.SendAsync(request, token);
 
         if (response.StatusCode == HttpStatusCode.BadRequest)
         {

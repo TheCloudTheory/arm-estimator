@@ -14,8 +14,10 @@ internal class TerraformTemplateParser
         this.logger = logger;
     }
 
-    public WhatIfResponse? GetConfigurationAsWhatIfData()
+    public WhatIfResponse? GetConfigurationAsWhatIfData(CancellationToken token)
     {
+        if(token.IsCancellationRequested) return null;
+        
         var data = JsonSerializer.Deserialize<TerraformData>(this.template);
         if (data == null)
         {

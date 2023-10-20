@@ -2,6 +2,6 @@
 {
     internal interface ICompiler
     {
-        string? Compile(FileInfo templateFile);
+        string? Compile(FileInfo templateFile, CancellationToken token);
     }
 }

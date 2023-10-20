@@ -35,9 +35,9 @@ namespace ACE.Compilation
             return new ArmTemplateCompiler();
         }
 
-        public string? Compile()
+        public string? Compile(CancellationToken token)
         {
-            return this.compiler.Compile(this.templateFile);
+            return this.compiler.Compile(this.templateFile, token);
         }
     }
 }
