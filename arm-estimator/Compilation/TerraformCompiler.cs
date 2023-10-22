@@ -16,6 +16,7 @@ namespace ACE.Compilation
             }
         }
 
+        private readonly string? terraformExecutable;
         private readonly ILogger<Program> logger;
 
 #if Linux
@@ -27,10 +28,11 @@ namespace ACE.Compilation
 #if MacOs
         [DllImport("ace-terraform-parser-macos.dll")]
 #endif
-        public static extern void GenerateParsedPlan(GoString workingDir, GoString planFile);
+        public static extern void GenerateParsedPlan(GoString workingDir, GoString planFile, GoString tfExecutablePath);
 
-        public TerraformCompiler(ILogger<Program> logger)
+        public TerraformCompiler(string? terraformExecutable, ILogger<Program> logger)
         {
+            this.terraformExecutable = terraformExecutable;
             this.logger = logger;
         }
 
@@ -56,14 +58,17 @@ namespace ACE.Compilation
 
             TerraformCompiler.GenerateParsedPlan(
                 new GoString(workingDirectory, workingDirectory.Length),
-                new GoString(planFile, planFile.Length));
+                new GoString(planFile, planFile.Length),
+                string.IsNullOrEmpty(this.terraformExecutable) ? 
+                    new GoString(string.Empty, string.Empty.Length) : 
+                    new GoString(this.terraformExecutable, this.terraformExecutable.Length));
 
             if(File.Exists("ace-terraform-parser.log"))
             {
                 var content = File.ReadAllText("ace-terraform-parser.log");
                 if(string.IsNullOrEmpty(content) == false)
                 {
-                    this.logger.LogInformation("Parsing completed with errors:");
+                    this.logger.LogError("Parsing completed with errors:");
                     this.logger.LogError("Error: {error}", content);
                     this.logger.LogInformation("");
                     this.logger.LogInformation("------------------------------");

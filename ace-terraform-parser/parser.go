@@ -14,16 +14,23 @@ import (
 )
 
 //export GenerateParsedPlan
-func GenerateParsedPlan(workingDir string, planFile string) {
+func GenerateParsedPlan(workingDir string, planFile string, tfExecutablePath string) {
 	logFile, err := os.OpenFile("ace-terraform-parser.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		log.Fatalf("Error opening parser log file: %s", err)
 	}
 
-	path, err := exec.LookPath("terraform")
-	if err != nil {
-		logFile.WriteString(fmt.Sprintf("error looking for Terraform executable: %s", err))
-		return
+	var path string
+	if tfExecutablePath != "" {
+		path = tfExecutablePath
+	} else {
+		res, err := exec.LookPath("terraform")
+		if err != nil {
+			logFile.WriteString(fmt.Sprintf("error looking for Terraform executable: %s", err))
+			return
+		}
+
+		path = res
 	}
 
 	tf, err := tfexec.NewTerraform(workingDir, path)

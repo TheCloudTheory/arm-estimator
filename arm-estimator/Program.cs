@@ -44,6 +44,7 @@ public class Program
         var htmlOutputFilenameOption = new Option<string?>("--htmlOutputFilename", () => { return null; }, "Sets HTML output filename");
         var outputFormatOption = new Option<OutputFormat>("--outputFormat", () => { return OutputFormat.Default; }, "Sets output format");
         var disableCacheOption = new Option<bool>("--disable-cache", () => false, "Disables in-built cache mechanism");
+        var terraformExecutableOption = new Option<string?>("--tf-executable", () => null, "Provide path to Terraform executable. If omitted, ACE will try to find it in PATH");
 
         var rootCommand = new RootCommand("ACE (Azure Cost Estimator)");
 
@@ -62,6 +63,7 @@ public class Program
         rootCommand.AddGlobalOption(htmlOutputFilenameOption);
         rootCommand.AddGlobalOption(outputFormatOption);
         rootCommand.AddGlobalOption(disableCacheOption);
+        rootCommand.AddGlobalOption(terraformExecutableOption);
 
         rootCommand.AddArgument(templateFileArg);
         rootCommand.AddArgument(susbcriptionIdArg);
@@ -93,7 +95,8 @@ public class Program
                 dryRunOption,
                 htmlOutputFilenameOption,
                 outputFormatOption,
-                disableCacheOption
+                disableCacheOption,
+                terraformExecutableOption
         ));
 
         var subscriptionCommand = new Command("sub", "Calculate estimation for subscription");
@@ -127,7 +130,8 @@ public class Program
                 dryRunOption,
                 htmlOutputFilenameOption,
                 outputFormatOption,
-                disableCacheOption
+                disableCacheOption,
+                terraformExecutableOption
         ));
 
         var managementGroupCommand = new Command("mg", "Calculate estimation for management group");
@@ -161,7 +165,8 @@ public class Program
                 dryRunOption,
                 htmlOutputFilenameOption,
                 outputFormatOption,
-                disableCacheOption
+                disableCacheOption,
+                terraformExecutableOption
         ));
 
         var tenantCommand = new Command("tenant", "Calculate estimation for tenant");
@@ -193,7 +198,8 @@ public class Program
                 dryRunOption,
                 htmlOutputFilenameOption,
                 outputFormatOption,
-                disableCacheOption
+                disableCacheOption,
+                terraformExecutableOption
         ));
 
         rootCommand.AddCommand(subscriptionCommand);
@@ -221,7 +227,7 @@ public class Program
             DisplayWelcomeScreen(logger);
             DisplayUsedSettings(templateFile, scopeId, resourceGroupName, logger, options, commandType);
 
-            var template = GetTemplate(templateFile, logger, out var templateType);
+            var template = GetTemplate(templateFile, options.TerraformExecutable, logger, out var templateType);
             if (template == null)
             {
                 logger.LogError("There was a problem with processing template.");
@@ -322,9 +328,9 @@ public class Program
         }
     }
 
-    private static string? GetTemplate(FileInfo templateFile, ILogger<Program> logger, out TemplateType templateType)
+    private static string? GetTemplate(FileInfo templateFile, string? terraformExecutable, ILogger<Program> logger, out TemplateType templateType)
     {
-        var compiler = new TemplateCompiler(templateFile, logger);
+        var compiler = new TemplateCompiler(templateFile, terraformExecutable, logger);
         templateType = compiler.TemplateType;
 
         return compiler.Compile(_cancellationTokenSource.Token);

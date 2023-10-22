@@ -22,6 +22,7 @@ internal class EstimateOptionsBinder : BinderBase<EstimateOptions>
     private readonly Option<string?> htmlOutputFilename;
     private readonly Option<OutputFormat> outputFormat;
     private readonly Option<bool> disableCache;
+    private readonly Option<string?> terraformExecutable;
 
     public EstimateOptionsBinder(Option<DeploymentMode> mode,
                                  Option<int> threshold,
@@ -37,7 +38,8 @@ internal class EstimateOptionsBinder : BinderBase<EstimateOptions>
                                  Option<bool> dryRunOnly,
                                  Option<string?> htmlOutputFilenameOption,
                                  Option<OutputFormat> outputFormat,
-                                 Option<bool> disableCache)
+                                 Option<bool> disableCache,
+                                 Option<string?> terraformExecutable)
     {
         this.mode = mode;
         this.threshold = threshold;
@@ -54,6 +56,7 @@ internal class EstimateOptionsBinder : BinderBase<EstimateOptions>
         this.htmlOutputFilename = htmlOutputFilenameOption;
         this.outputFormat = outputFormat;
         this.disableCache = disableCache;
+        this.terraformExecutable = terraformExecutable;
     }
 
     protected override EstimateOptions GetBoundValue(BindingContext bindingContext)
@@ -73,7 +76,8 @@ internal class EstimateOptionsBinder : BinderBase<EstimateOptions>
             bindingContext.ParseResult.GetValueForOption(dryRunOnly),
             bindingContext.ParseResult.GetValueForOption(htmlOutputFilename),
             bindingContext.ParseResult.GetValueForOption(outputFormat),
-            bindingContext.ParseResult.GetValueForOption(disableCache)
+            bindingContext.ParseResult.GetValueForOption(disableCache),
+            bindingContext.ParseResult.GetValueForOption(terraformExecutable)
             );
     }
 }

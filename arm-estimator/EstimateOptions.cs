@@ -19,7 +19,8 @@ internal class EstimateOptions
                            bool dryRunOnly,
                            string? htmlOutputFilename,
                            OutputFormat outputFormat,
-                           bool disableCache)
+                           bool disableCache,
+                           string? terraformExecutable)
     {
         Mode = mode;
         Threshold = threshold;
@@ -36,6 +37,7 @@ internal class EstimateOptions
         HtmlOutputFilename = htmlOutputFilename;
         OutputFormat = outputFormat;
         DisableCache = disableCache;
+        TerraformExecutable = terraformExecutable;
     }
 
     public DeploymentMode Mode { get; }
@@ -53,4 +55,5 @@ internal class EstimateOptions
     public string? HtmlOutputFilename { get; }
     public OutputFormat OutputFormat { get; }
     public bool DisableCache { get; }
+    public string? TerraformExecutable { get; }
 }
