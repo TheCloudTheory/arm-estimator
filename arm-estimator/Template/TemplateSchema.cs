@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 
 internal class TemplateSchema
 {
@@ -35,7 +36,8 @@ internal class SpecialCaseResourceSchema
     public string Name { get; set; } = null!;
 
     [JsonPropertyName("properties")]
-    public SpecialCaseResourcePropertiesSchema Properties { get; set; } = null!;
+    [JsonConverter(typeof(SpecialCaseResourcePropertiesSchemaConverter))]
+    public SpecialCaseResourcePropertiesSchema? Properties { get; set; } = null!;
 }
 
 internal class SpecialCaseResourcePropertiesSchema
@@ -47,5 +49,30 @@ internal class SpecialCaseResourcePropertiesSchema
 internal class VirtualNetworkPeeringSchema
 {
     [JsonPropertyName("id")]
-    public string Id { get; set; } = null!;
+    public string? Id { get; set; } = null!;
+}
+
+/// <summary>
+/// Custom converter for <see cref="SpecialCaseResourcePropertiesSchema"/>. This is needed because the properties
+/// can be either an object or a string representing dynamically generated object, and the default converter doesn't handle that.
+/// </summary>
+internal class SpecialCaseResourcePropertiesSchemaConverter : JsonConverter<SpecialCaseResourcePropertiesSchema>
+{
+    public override SpecialCaseResourcePropertiesSchema? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        if(reader.TokenType == JsonTokenType.Null) return null;
+        if(reader.TokenType == JsonTokenType.StartObject)
+        {
+            var value = JsonSerializer.Deserialize<SpecialCaseResourcePropertiesSchema>(ref reader, options);
+            return value;
+        }
+
+        // If the value is not an object, it's most likely a string. As for now, we're ignoring such case.
+        return null;
+    }
+
+    public override void Write(Utf8JsonWriter writer, SpecialCaseResourcePropertiesSchema value, JsonSerializerOptions options)
+    {
+        throw new NotImplementedException();
+    }
 }
