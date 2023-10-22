@@ -42,8 +42,47 @@ namespace arm_estimator_tests.Terraform
             });
 
             Assert.That(output, Is.Not.Null);
-            Assert.That(output?.TotalCost.OriginalValue, Is.EqualTo(cost));
-            Assert.That(output?.TotalResourceCount, Is.EqualTo(numberOfResources));
+            Assert.Multiple(() =>
+            {
+                Assert.That(output?.TotalCost.OriginalValue, Is.EqualTo(cost));
+                Assert.That(output?.TotalResourceCount, Is.EqualTo(numberOfResources));
+            });
+        }
+
+        [Test]
+        [Ignore("This test is ignored because it requires passing a specific Terraform directory which is inconvienient for CICD runners.")]
+        [Parallelizable(ParallelScope.Self)]
+        [Category("Terraform")]
+        public async Task TF_WhenPassingExecutablePath_ItShouldRunProperEstimation()
+        {
+            InitializeAndCreateTerraformPlan("templates/terraform");
+
+            var outputFilename = $"ace_test_{DateTime.Now.Ticks}";
+            var exitCode = await Program.Main(new[] {
+                "templates/terraform/main.tf",
+                "cf70b558-b930-45e4-9048-ebcefb926adf",
+                "arm-estimator-tests-rg",
+                "--tf-executable",
+                "C:\\tf\\terraform.exe",
+                "--generateJsonOutput",
+                "--jsonOutputFilename",
+                outputFilename
+            });
+
+            Assert.That(exitCode, Is.EqualTo(0));
+
+            var outputFile = File.ReadAllText($"{outputFilename}.json");
+            var output = JsonSerializer.Deserialize<EstimationOutput>(outputFile, new JsonSerializerOptions()
+            {
+                PropertyNameCaseInsensitive = true
+            });
+
+            Assert.That(output, Is.Not.Null);
+            Assert.Multiple(() =>
+            {
+                Assert.That(output?.TotalCost.OriginalValue, Is.EqualTo(5.0979999999999999d));
+                Assert.That(output?.TotalResourceCount, Is.EqualTo(3));
+            });
         }
 
         private void InitializeAndCreateTerraformPlan(string workingDirectory)
