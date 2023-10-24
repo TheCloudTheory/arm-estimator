@@ -1,11 +1,10 @@
 ﻿using ACE.Calculation;
 using ACE.WhatIf;
-using Azure.Core;
 
 internal class ContainerAppsEstimationCalculation : BaseEstimation, IEstimationCalculation
 {
-    public ContainerAppsEstimationCalculation(RetailItem[] items, CommonResourceIdentifier id, WhatIfAfterBeforeChange change)
-        : base(items, id, change)
+    public ContainerAppsEstimationCalculation(RetailItem[] items, CommonResourceIdentifier id, WhatIfAfterBeforeChange change, double conversionRate)
+        : base(items, id, change, conversionRate)
     {
     }
 
