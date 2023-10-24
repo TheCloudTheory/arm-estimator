@@ -14,8 +14,8 @@ internal class RedisEnterpriseEstimationCalculation : BaseEstimation, IEstimatio
         { "F1500", 14111.63d }
     };
 
-    public RedisEnterpriseEstimationCalculation(RetailItem[] items, CommonResourceIdentifier id, WhatIfAfterBeforeChange change)
-        : base(items, id, change)
+    public RedisEnterpriseEstimationCalculation(RetailItem[] items, CommonResourceIdentifier id, WhatIfAfterBeforeChange change, double conversionRate)
+        : base(items, id, change, conversionRate)
     {
     }
 

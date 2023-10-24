@@ -4,8 +4,8 @@ using System.Text.Json;
 
 internal class AKSEstimationCalculation : BaseEstimation, IEstimationCalculation
 {
-    public AKSEstimationCalculation(RetailItem[] items, CommonResourceIdentifier id, WhatIfAfterBeforeChange change)
-        : base(items, id, change)
+    public AKSEstimationCalculation(RetailItem[] items, CommonResourceIdentifier id, WhatIfAfterBeforeChange change, double conversionRate)
+        : base(items, id, change, conversionRate)
     {
     }
 

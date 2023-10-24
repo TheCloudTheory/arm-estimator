@@ -20,7 +20,8 @@ internal class EstimateOptions
                            string? htmlOutputFilename,
                            OutputFormat outputFormat,
                            bool disableCache,
-                           string? terraformExecutable)
+                           string? terraformExecutable,
+                           double conversionRate)
     {
         Mode = mode;
         Threshold = threshold;
@@ -38,6 +39,7 @@ internal class EstimateOptions
         OutputFormat = outputFormat;
         DisableCache = disableCache;
         TerraformExecutable = terraformExecutable;
+        ConversionRate = conversionRate;
     }
 
     public DeploymentMode Mode { get; }
@@ -56,4 +58,5 @@ internal class EstimateOptions
     public OutputFormat OutputFormat { get; }
     public bool DisableCache { get; }
     public string? TerraformExecutable { get; }
+    public double ConversionRate { get; }
 }

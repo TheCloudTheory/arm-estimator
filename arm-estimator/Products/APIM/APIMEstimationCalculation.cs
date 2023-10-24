@@ -3,8 +3,8 @@ using ACE.WhatIf;
 
 internal class APIMEstimationCalculation : BaseEstimation, IEstimationCalculation
 {
-    public APIMEstimationCalculation(RetailItem[] items, CommonResourceIdentifier id, WhatIfAfterBeforeChange change)
-        : base(items, id, change)
+    public APIMEstimationCalculation(RetailItem[] items, CommonResourceIdentifier id, WhatIfAfterBeforeChange change, double conversionRate)
+        : base(items, id, change, conversionRate)
     {
     }
 

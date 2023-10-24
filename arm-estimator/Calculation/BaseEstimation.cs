@@ -4,16 +4,22 @@ namespace ACE.Calculation;
 
 internal abstract class BaseEstimation
 {
-    internal static readonly int HoursInMonth = 730;
-    internal readonly RetailItem[] items;
-    internal readonly CommonResourceIdentifier id;
-    internal readonly WhatIfAfterBeforeChange change;
+    protected static readonly int HoursInMonth = 730;
+    protected readonly RetailItem[] items;
+    protected readonly CommonResourceIdentifier id;
+    protected readonly WhatIfAfterBeforeChange change;
+    protected readonly double conversionRate;
 
-    public BaseEstimation(RetailItem[] items, CommonResourceIdentifier id, WhatIfAfterBeforeChange change)
+    public BaseEstimation(
+        RetailItem[] items, 
+        CommonResourceIdentifier id, 
+        WhatIfAfterBeforeChange change,
+        double conversionRate)
     {
         this.items = items;
         this.id = id;
         this.change = change;
+        this.conversionRate = conversionRate;
     }
 
     protected int IncludeUsagePattern(string key, IDictionary<string, string>? usagePatterns, int defaultUsage = 1)

@@ -45,6 +45,7 @@ public class Program
         var outputFormatOption = new Option<OutputFormat>("--outputFormat", () => { return OutputFormat.Default; }, "Sets output format");
         var disableCacheOption = new Option<bool>("--disable-cache", () => false, "Disables in-built cache mechanism");
         var terraformExecutableOption = new Option<string?>("--tf-executable", () => null, "Provide path to Terraform executable. If omitted, ACE will try to find it in PATH");
+        var conversionRateOption = new Option<double>("--conversion-rate", () => 1.0, "Conversion rate from USD to selected currency.");
 
         var rootCommand = new RootCommand("ACE (Azure Cost Estimator)");
 
@@ -64,6 +65,7 @@ public class Program
         rootCommand.AddGlobalOption(outputFormatOption);
         rootCommand.AddGlobalOption(disableCacheOption);
         rootCommand.AddGlobalOption(terraformExecutableOption);
+        rootCommand.AddGlobalOption(conversionRateOption);
 
         rootCommand.AddArgument(templateFileArg);
         rootCommand.AddArgument(susbcriptionIdArg);
@@ -96,7 +98,8 @@ public class Program
                 htmlOutputFilenameOption,
                 outputFormatOption,
                 disableCacheOption,
-                terraformExecutableOption
+                terraformExecutableOption,
+                conversionRateOption
         ));
 
         var subscriptionCommand = new Command("sub", "Calculate estimation for subscription");
@@ -131,7 +134,8 @@ public class Program
                 htmlOutputFilenameOption,
                 outputFormatOption,
                 disableCacheOption,
-                terraformExecutableOption
+                terraformExecutableOption,
+                conversionRateOption
         ));
 
         var managementGroupCommand = new Command("mg", "Calculate estimation for management group");
@@ -166,7 +170,8 @@ public class Program
                 htmlOutputFilenameOption,
                 outputFormatOption,
                 disableCacheOption,
-                terraformExecutableOption
+                terraformExecutableOption,
+                conversionRateOption
         ));
 
         var tenantCommand = new Command("tenant", "Calculate estimation for tenant");
@@ -199,7 +204,8 @@ public class Program
                 htmlOutputFilenameOption,
                 outputFormatOption,
                 disableCacheOption,
-                terraformExecutableOption
+                terraformExecutableOption,
+                conversionRateOption
         ));
 
         rootCommand.AddCommand(subscriptionCommand);
@@ -315,6 +321,7 @@ public class Program
                                                    options.DisableDetailedMetrics,
                                                    parser?.Template,
                                                    options.OutputFormat,
+                                                   options.ConversionRate,
                                                    _cancellationTokenSource.Token).Process(_cancellationTokenSource.Token);
             GenerateOutputIfNeeded(options, output, logger);
 

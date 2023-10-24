@@ -4,8 +4,8 @@ using System.Text.Json;
 
 internal class PostgreSQLFlexibleEstimationCalculation : BaseEstimation, IEstimationCalculation
 {
-    public PostgreSQLFlexibleEstimationCalculation(RetailItem[] items, CommonResourceIdentifier id, WhatIfAfterBeforeChange change)
-        : base(items, id, change)
+    public PostgreSQLFlexibleEstimationCalculation(RetailItem[] items, CommonResourceIdentifier id, WhatIfAfterBeforeChange change, double conversionRate)
+        : base(items, id, change, conversionRate)
     {
     }
 

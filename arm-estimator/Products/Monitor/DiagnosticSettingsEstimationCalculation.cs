@@ -7,16 +7,16 @@ internal class DiagnosticSettingsEstimationCalculation : BaseEstimation, IEstima
     private readonly StorageAccountEstimationCalculation storageCalculation;
     private readonly EventHubEstimationCalculation ehCalculation;
 
-    public DiagnosticSettingsEstimationCalculation(RetailItem[] items, CommonResourceIdentifier id, WhatIfAfterBeforeChange change)
-        : base(items, id, change)
+    public DiagnosticSettingsEstimationCalculation(RetailItem[] items, CommonResourceIdentifier id, WhatIfAfterBeforeChange change, double conversionRate)
+        : base(items, id, change, conversionRate)
     {
         var laItems = items.Where(_ => _.serviceId == LogAnalyticsQueryFilter.ServiceId).ToArray();
         var storageItems = items.Where(_ => _.serviceId == StorageAccountQueryFilter.ServiceId).ToArray();
         var ehItems = items.Where(_ => _.serviceId == EventHubQueryFilter.ServiceId).ToArray();
 
-        this.laCalculation = new LogAnalyticsEstimationCalculation(laItems, id, change);
-        this.storageCalculation = new StorageAccountEstimationCalculation(storageItems, id, change);
-        this.ehCalculation = new EventHubEstimationCalculation(ehItems, id, change);
+        this.laCalculation = new LogAnalyticsEstimationCalculation(laItems, id, change, conversionRate);
+        this.storageCalculation = new StorageAccountEstimationCalculation(storageItems, id, change, conversionRate);
+        this.ehCalculation = new EventHubEstimationCalculation(ehItems, id, change, conversionRate);
     }
 
     public IOrderedEnumerable<RetailItem> GetItems()

@@ -1,12 +1,11 @@
 ﻿using ACE.Calculation;
 using ACE.WhatIf;
-using Azure.Core;
 using System.Text.Json;
 
 internal class ApplicationGatewayEstimationCalculation : BaseEstimation, IEstimationCalculation
 {
-    public ApplicationGatewayEstimationCalculation(RetailItem[] items, CommonResourceIdentifier id, WhatIfAfterBeforeChange change)
-        : base(items, id, change)
+    public ApplicationGatewayEstimationCalculation(RetailItem[] items, CommonResourceIdentifier id, WhatIfAfterBeforeChange change, double conversionRate)
+        : base(items, id, change, conversionRate)
     {
     }
 

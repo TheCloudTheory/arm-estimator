@@ -3,8 +3,8 @@ using ACE.WhatIf;
 
 internal class VmssEstimationCalculation : BaseEstimation, IEstimationCalculation
 {
-    public VmssEstimationCalculation(RetailItem[] items, CommonResourceIdentifier id, WhatIfAfterBeforeChange change)
-        : base(items, id, change)
+    public VmssEstimationCalculation(RetailItem[] items, CommonResourceIdentifier id, WhatIfAfterBeforeChange change, double conversionRate)
+        : base(items, id, change, conversionRate)
     {
     }
 

@@ -23,6 +23,7 @@ internal class WhatIfProcessor
     private readonly WhatIfChange[] changes;
     private readonly CurrencyCode currency;
     private readonly TemplateSchema template;
+    private readonly double conversionRate;
     private readonly IOutputFormatter outputFormatter;
 
     public WhatIfProcessor(ILogger logger,
@@ -31,12 +32,14 @@ internal class WhatIfProcessor
                            bool disableDetailedMetrics,
                            TemplateSchema template,
                            OutputFormat outputFormat,
+                           double conversionRate,
                            CancellationToken token)
     {
         this.logger = logger;
         this.changes = changes;
         this.currency = currency;
         this.template = template;
+        this.conversionRate = conversionRate;
         this.outputFormatter = new OutputGenerator(outputFormat, logger, currency, disableDetailedMetrics).GetFormatter();
 
         ReconcileResources(token);
@@ -561,7 +564,7 @@ internal class WhatIfProcessor
             return null;
         }
 
-        if (Activator.CreateInstance(typeof(TCalculation), new object[] { data.Items, id, desiredState }) is not TCalculation estimation)
+        if (Activator.CreateInstance(typeof(TCalculation), new object[] { data.Items, id, desiredState, this.conversionRate }) is not TCalculation estimation)
         {
             logger.LogError("Couldn't create an instance of {type}.", typeof(TCalculation));
             return null;

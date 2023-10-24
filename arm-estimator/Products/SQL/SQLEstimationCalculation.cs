@@ -1,13 +1,12 @@
 ﻿using ACE.Calculation;
 using ACE.WhatIf;
-using Azure.Core;
 
 internal class SQLEstimationCalculation : BaseEstimation, IEstimationCalculation
 {
     private const double HybridBenefitCost = 145.95d;
 
-    public SQLEstimationCalculation(RetailItem[] items, CommonResourceIdentifier id, WhatIfAfterBeforeChange change)
-        : base(items, id, change)
+    public SQLEstimationCalculation(RetailItem[] items, CommonResourceIdentifier id, WhatIfAfterBeforeChange change, double conversionRate)
+        : base(items, id, change, conversionRate)
     {
     }
 
@@ -112,6 +111,6 @@ internal class SQLEstimationCalculation : BaseEstimation, IEstimationCalculation
             return 0;
         }
 
-        return HybridBenefitCost * SQLQueryFilter.GetNumberOfCoresBasedOnSku(skuName) / 2;
+        return HybridBenefitCost * this.conversionRate * SQLQueryFilter.GetNumberOfCoresBasedOnSku(skuName) / 2;
     }
 }
