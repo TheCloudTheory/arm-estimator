@@ -5,8 +5,8 @@ internal class SQLElasticPoolEstimationCalculation : BaseEstimation, IEstimation
 {
     private const double HybridBenefitCost = 145.95d;
 
-    public SQLElasticPoolEstimationCalculation(RetailItem[] items, CommonResourceIdentifier id, WhatIfAfterBeforeChange change)
-        : base(items, id, change)
+    public SQLElasticPoolEstimationCalculation(RetailItem[] items, CommonResourceIdentifier id, WhatIfAfterBeforeChange change, double conversionRate)
+        : base(items, id, change, conversionRate)
     {
     }
 

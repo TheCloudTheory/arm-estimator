@@ -1,11 +1,10 @@
 ﻿using ACE.Calculation;
 using ACE.WhatIf;
-using Azure.Core;
 
 internal class MonitorEstimationCalculation : BaseEstimation, IEstimationCalculation
 {
-    public MonitorEstimationCalculation(RetailItem[] items, CommonResourceIdentifier id, WhatIfAfterBeforeChange change)
-        : base(items, id, change)
+    public MonitorEstimationCalculation(RetailItem[] items, CommonResourceIdentifier id, WhatIfAfterBeforeChange change, double conversionRate)
+        : base(items, id, change, conversionRate)
     {
     }
 

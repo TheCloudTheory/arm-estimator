@@ -1,11 +1,10 @@
 ﻿using ACE.Calculation;
 using ACE.WhatIf;
-using Azure.Core;
 
 internal class SignalREstimationCalculation : BaseEstimation, IEstimationCalculation
 {
-    public SignalREstimationCalculation(RetailItem[] items, CommonResourceIdentifier id, WhatIfAfterBeforeChange change)
-        : base(items, id, change)
+    public SignalREstimationCalculation(RetailItem[] items, CommonResourceIdentifier id, WhatIfAfterBeforeChange change, double conversionRate)
+        : base(items, id, change, conversionRate)
     {
     }
 

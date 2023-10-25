@@ -1,11 +1,10 @@
 ﻿using ACE.Calculation;
 using ACE.WhatIf;
-using Azure.Core;
 
 internal class ServiceBusEstimationCalculation : BaseEstimation, IEstimationCalculation
 {
-    public ServiceBusEstimationCalculation(RetailItem[] items, CommonResourceIdentifier id, WhatIfAfterBeforeChange change)
-        : base(items, id, change)
+    public ServiceBusEstimationCalculation(RetailItem[] items, CommonResourceIdentifier id, WhatIfAfterBeforeChange change, double conversionRate)
+        : base(items, id, change, conversionRate)
     {
     }
 
