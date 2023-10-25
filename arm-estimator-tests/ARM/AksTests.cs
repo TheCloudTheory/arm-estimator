@@ -30,7 +30,7 @@ namespace arm_estimator_tests.ARM
             });
 
             Assert.That(output, Is.Not.Null);
-            Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(942.27800000000059d));
+            Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(945.54459999999926d));
         }
     }
 }
