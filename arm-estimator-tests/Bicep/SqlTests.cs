@@ -97,8 +97,51 @@ namespace arm_estimator_tests.Bicep
             });
 
             Assert.That(output, Is.Not.Null);
-            Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(cost));
-            Assert.That(output.TotalResourceCount, Is.EqualTo(2));
+            Assert.Multiple(() =>
+            {
+                Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(cost));
+                Assert.That(output.TotalResourceCount, Is.EqualTo(2));
+            });
+        }
+
+        [Test]
+        [Parallelizable(ParallelScope.Self)]
+        public async Task SQLDatabase_WhenVCoreIsSelectedAndConversionRateProvided_ItShouldBeCorrectlyEstimated() 
+        {
+            var outputFilename = $"ace_test_{DateTime.Now.Ticks}";
+            var exitCode = await Program.Main(new[] {
+                "templates/bicep/sql/sqldatabase-vcore.bicep",
+                "cf70b558-b930-45e4-9048-ebcefb926adf",
+                "arm-estimator-tests-rg",
+                "--generateJsonOutput",
+                "--jsonOutputFilename",
+                outputFilename,
+                "--inline",
+                $"serverName=svr{DateTime.Now.Ticks}",
+                "--inline",
+                $"dbName=db{DateTime.Now.Ticks}",
+                "--inline",
+                $"dbSku=GP_Gen5_2",
+                "--currency",
+                "EUR",
+                "--conversion-rate",
+                "0.95"
+            });
+
+            Assert.That(exitCode, Is.EqualTo(0));
+
+            var outputFile = File.ReadAllText($"{outputFilename}.json");
+            var output = JsonSerializer.Deserialize<EstimationOutput>(outputFile, new JsonSerializerOptions()
+            {
+                PropertyNameCaseInsensitive = true
+            });
+
+            Assert.That(output, Is.Not.Null);
+            Assert.Multiple(() =>
+            {
+                Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(371.36070000000001d));
+                Assert.That(output.TotalResourceCount, Is.EqualTo(2));
+            });
         }
 
         [Test]
