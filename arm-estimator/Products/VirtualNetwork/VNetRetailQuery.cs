@@ -155,7 +155,7 @@ internal class VNetRetailQuery : BaseRetailQuery, IRetailQuery
     private PeeringType DecidePeeringType()
     {
         var peeringTypes = new List<PeeringType>();
-        var resourcesWithPeerings = this.template.SpecialCaseResources!.Where(resource => resource.Properties.VirtualNetworkPeerings != null);
+        var resourcesWithPeerings = this.template.SpecialCaseResources!.Where(resource => resource.Properties?.VirtualNetworkPeerings != null);
         if(resourcesWithPeerings == null || resourcesWithPeerings.Any() == false)
         {
             throw new InvalidOperationException("Cannot decide peering type for the current configuration.");
@@ -163,7 +163,7 @@ internal class VNetRetailQuery : BaseRetailQuery, IRetailQuery
 
         foreach (var peering in resourcesWithPeerings)
         {
-            var remoteVNet = base.changes.SingleOrDefault(c => peering.Properties.VirtualNetworkPeerings!.Any(peering => peering.Id == c.resourceId));
+            var remoteVNet = base.changes.SingleOrDefault(c => peering.Properties != null && peering.Properties.VirtualNetworkPeerings!.Any(peering => peering.Id == c.resourceId));
             if (remoteVNet == null)
             {
                 this.logger.LogWarning("Couldn't determine remote VNet for peering. Assuming it's Inter-Region.");
@@ -172,8 +172,7 @@ internal class VNetRetailQuery : BaseRetailQuery, IRetailQuery
                 continue;
             }
 
-            var remoteVNetId = new CommonResourceIdentifier(remoteVNet.resourceId!);
-            if (remoteVNetId.GetLocation() == this.id.GetLocation())
+            if (remoteVNet.after?.location == this.change.after?.location)
             {
                 peeringTypes.Add(PeeringType.IntraRegion);
                 break;
