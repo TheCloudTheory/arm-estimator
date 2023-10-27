@@ -7,7 +7,7 @@ namespace ACE.Caching;
 /// <summary>
 /// Implements a cache as a local file based on hash of provided values and WhatIfResponse object.
 /// </summary>
-internal class LocalCacheHandler
+internal class LocalCacheHandler : ICacheHandler
 {
     private readonly string key;
 
@@ -36,12 +36,13 @@ internal class LocalCacheHandler
     {
         return this.GenerateKey($"{scopeId}|{resourceGroupName}|{template}|{parameters}");
     }
+    
     private string GenerateKey(string value)
     {
         return Convert.ToHexString(SHA1.HashData(Encoding.UTF8.GetBytes(value)));
     }
 
-    public T? GetCachedData<T>()
+    public T? GetCachedData<T>() where T : class
     {
         if(this.CacheFileExists() == false)
         {

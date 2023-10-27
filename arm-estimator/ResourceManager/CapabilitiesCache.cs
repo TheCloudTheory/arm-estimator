@@ -7,7 +7,7 @@ namespace ACE.ResourceManager;
 
 internal class CapabilitiesCache
 {
-    private readonly LocalCacheHandler cache;
+    private readonly ICacheHandler cache;
 
     public CapabilitiesCache()
     {
