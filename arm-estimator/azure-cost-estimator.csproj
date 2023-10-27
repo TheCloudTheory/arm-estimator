@@ -29,6 +29,7 @@
 
   <ItemGroup>
     <PackageReference Include="Azure.ResourceManager.Compute" Version="1.1.0" />
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.18.0" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.1" />
 	<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="6.0.0" />
@@ -50,6 +51,7 @@
 	<None Include="..\ace-terraform-parser\ace-terraform-parser-macos.dll">
 		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	</None>
+	<None Include="Caching\ICacheHandler.cs" />
   </ItemGroup>
 
 </Project>
