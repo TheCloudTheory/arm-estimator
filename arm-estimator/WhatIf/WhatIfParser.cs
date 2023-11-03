@@ -9,35 +9,32 @@ internal class WhatIfParser
     private readonly string scopeId;
     private readonly string? resourceGroupName;
     private readonly string template;
-    private readonly DeploymentMode mode;
     private readonly string parameters;
     private readonly ILogger<Program> logger;
     private readonly CommandType commandType;
     private readonly string? location;
-    private readonly bool disableCache;
+    private readonly EstimateOptions options;
 
     public WhatIfParser(
         TemplateType templateType,
         string scopeId,
         string? resourceGroupName,
         string template,
-        DeploymentMode mode,
         string parameters,
         ILogger<Program> logger,
         CommandType commandType,
         string? location,
-        bool disableCache)
+        EstimateOptions options)
     {
         this.templateType = templateType;
         this.scopeId = scopeId;
         this.resourceGroupName = resourceGroupName;
         this.template = template;
-        this.mode = mode;
         this.parameters = parameters;
         this.logger = logger;
         this.commandType = commandType;
         this.location = location;
-        this.disableCache = disableCache;
+        this.options = options;
     }
 
     public async Task<WhatIfResponse?> GetWhatIfData(CancellationToken token)
@@ -48,12 +45,11 @@ internal class WhatIfParser
                 this.scopeId, 
                 this.resourceGroupName, 
                 this.template, 
-                this.mode, 
                 this.parameters, 
                 this.logger,
                 this.commandType,
                 this.location,
-                this.disableCache);
+                this.options);
 
             return await handler.GetResponseWithRetries(token);
         }

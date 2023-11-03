@@ -9,9 +9,11 @@ internal class CapabilitiesCache
 {
     private readonly ICacheHandler cache;
 
-    public CapabilitiesCache()
+    public CapabilitiesCache(CacheHandler cacheHandler, string? cacheHandlerStorageAccountName)
     {
-        this.cache = new LocalCacheHandler();
+        this.cache = cacheHandler == CacheHandler.Local ? 
+            new LocalCacheHandler() :
+            new AzureStorageCacheHandler("vm", cacheHandlerStorageAccountName!);
     }
 
     /// <summary>

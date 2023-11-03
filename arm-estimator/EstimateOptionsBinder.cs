@@ -24,6 +24,8 @@ internal class EstimateOptionsBinder : BinderBase<EstimateOptions>
     private readonly Option<bool> disableCache;
     private readonly Option<string?> terraformExecutable;
     private readonly Option<double> conversionRate;
+    private readonly Option<CacheHandler> cacheHandler;
+    private readonly Option<string?> cacheStorageAccountName;
 
     public EstimateOptionsBinder(Option<DeploymentMode> mode,
                                  Option<int> threshold,
@@ -41,7 +43,9 @@ internal class EstimateOptionsBinder : BinderBase<EstimateOptions>
                                  Option<OutputFormat> outputFormat,
                                  Option<bool> disableCache,
                                  Option<string?> terraformExecutable,
-                                 Option<double> conversionRateOption)
+                                 Option<double> conversionRateOption,
+                                 Option<CacheHandler> cacheHandlerOption,
+                                 Option<string?> cacheStorageAccountNameOption)
     {
         this.mode = mode;
         this.threshold = threshold;
@@ -60,6 +64,8 @@ internal class EstimateOptionsBinder : BinderBase<EstimateOptions>
         this.disableCache = disableCache;
         this.terraformExecutable = terraformExecutable;
         this.conversionRate = conversionRateOption;
+        this.cacheHandler = cacheHandlerOption;
+        this.cacheStorageAccountName = cacheStorageAccountNameOption;
     }
 
     protected override EstimateOptions GetBoundValue(BindingContext bindingContext)
@@ -81,7 +87,9 @@ internal class EstimateOptionsBinder : BinderBase<EstimateOptions>
             bindingContext.ParseResult.GetValueForOption(outputFormat),
             bindingContext.ParseResult.GetValueForOption(disableCache),
             bindingContext.ParseResult.GetValueForOption(terraformExecutable),
-            bindingContext.ParseResult.GetValueForOption(conversionRate)
+            bindingContext.ParseResult.GetValueForOption(conversionRate),
+            bindingContext.ParseResult.GetValueForOption(cacheHandler),
+            bindingContext.ParseResult.GetValueForOption(cacheStorageAccountName)
             );
     }
 }

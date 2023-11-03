@@ -28,22 +28,19 @@ internal class WhatIfProcessor
 
     public WhatIfProcessor(ILogger logger,
                            WhatIfChange[] changes,
-                           CurrencyCode currency,
-                           bool disableDetailedMetrics,
                            TemplateSchema template,
-                           OutputFormat outputFormat,
-                           double conversionRate,
+                           EstimateOptions options,
                            CancellationToken token)
     {
         this.logger = logger;
         this.changes = changes;
-        this.currency = currency;
+        this.currency = options.Currency;
         this.template = template;
-        this.conversionRate = conversionRate;
-        this.outputFormatter = new OutputGenerator(outputFormat, logger, currency, disableDetailedMetrics).GetFormatter();
+        this.conversionRate = options.ConversionRate;
+        this.outputFormatter = new OutputGenerator(options.OutputFormat, logger, options.Currency, options.DisableDetailedMetrics).GetFormatter();
 
         ReconcileResources(token);
-        BuildVMCapabilitiesIfNeeded(token);
+        BuildVMCapabilitiesIfNeeded(options.CacheHandler, options.CacheHandlerStorageAccountName, token);
     }
 
     /// <summary>
@@ -112,7 +109,7 @@ internal class WhatIfProcessor
         }
     }
 
-    private void BuildVMCapabilitiesIfNeeded(CancellationToken token)
+    private void BuildVMCapabilitiesIfNeeded(CacheHandler cacheHandler, string? cacheHandlerStorageAccountName, CancellationToken token)
     {
         if (token.IsCancellationRequested) return;
 
@@ -131,7 +128,7 @@ internal class WhatIfProcessor
                 return;
             }
 
-            WhatIfProcessor.cache = new CapabilitiesCache();
+            WhatIfProcessor.cache = new CapabilitiesCache(cacheHandler, cacheHandlerStorageAccountName);
             WhatIfProcessor.cache.InitializeVirtualMachineCapabilities(location, token);
 
             this.logger.AddEstimatorMessage("Capabilities cache initialized.");
