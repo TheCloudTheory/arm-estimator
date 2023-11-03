@@ -22,30 +22,31 @@ internal class AzureWhatIfHandler
     private readonly ILogger logger;
     private readonly CommandType commandType;
     private readonly string? location;
-    private readonly LocalCacheHandler? cache;
+    private readonly ICacheHandler? cache;
 
     public AzureWhatIfHandler(string scopeId,
                               string? resourceGroupName,
                               string template,
-                              DeploymentMode deploymentMode,
                               string parameters,
                               ILogger logger,
                               CommandType commandType,
                               string? location,
-                              bool disableCache)
+                              EstimateOptions options)
     {
         this.scopeId = scopeId;
         this.resourceGroupName = resourceGroupName;
         this.template = template;
-        this.deploymentMode = deploymentMode;
+        this.deploymentMode = options.Mode;
         this.parameters = parameters;
         this.logger = logger;
         this.commandType = commandType;
         this.location = location;
 
-        if(disableCache == false)
+        if(options.DisableCache == false)
         {
-            this.cache = new LocalCacheHandler(scopeId, resourceGroupName, template, parameters);
+            this.cache = options.CacheHandler == CacheHandler.Local ? 
+                new LocalCacheHandler(scopeId, resourceGroupName, template, parameters)
+                : new AzureStorageCacheHandler(scopeId, resourceGroupName, template, parameters, options.CacheHandlerStorageAccountName!);
         }
     }
 

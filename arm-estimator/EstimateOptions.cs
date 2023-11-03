@@ -21,7 +21,9 @@ internal class EstimateOptions
                            OutputFormat outputFormat,
                            bool disableCache,
                            string? terraformExecutable,
-                           double conversionRate)
+                           double conversionRate,
+                           CacheHandler cacheHandler,
+                           string? cacheHandlerStorageAccountName)
     {
         Mode = mode;
         Threshold = threshold;
@@ -40,6 +42,8 @@ internal class EstimateOptions
         DisableCache = disableCache;
         TerraformExecutable = terraformExecutable;
         ConversionRate = conversionRate;
+        CacheHandler = cacheHandler;
+        CacheHandlerStorageAccountName = cacheHandlerStorageAccountName;
     }
 
     public DeploymentMode Mode { get; }
@@ -59,4 +63,6 @@ internal class EstimateOptions
     public bool DisableCache { get; }
     public string? TerraformExecutable { get; }
     public double ConversionRate { get; }
+    public CacheHandler CacheHandler { get; }
+    public string? CacheHandlerStorageAccountName { get; }
 }

@@ -10,13 +10,11 @@ internal class VirtualMachineQueryFilter : IQueryFilter
 
     private readonly WhatIfAfterBeforeChange afterState;
     private readonly ILogger logger;
-    private readonly CapabilitiesCache cache;
 
     public VirtualMachineQueryFilter(WhatIfAfterBeforeChange afterState, ILogger logger)
     {
         this.afterState = afterState;
         this.logger = logger;
-        this.cache = new CapabilitiesCache();
     }
 
     public string? GetFiltersBasedOnDesiredState(string location)

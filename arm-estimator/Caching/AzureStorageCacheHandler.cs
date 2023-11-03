@@ -14,7 +14,9 @@ internal class AzureStorageCacheHandler : ICacheHandler
 
     private AzureStorageCacheHandler(string accountName)
     {
-        var accountUri = new Uri($"https://{accountName}.blob.core.windows.net/");
+        ArgumentNullException.ThrowIfNull(accountName, nameof(accountName));
+        
+        var accountUri = new Uri($"https://{accountName}.blob.core.windows.net");
 
         var serviceClient = new BlobServiceClient(accountUri, new DefaultAzureCredential());
         this.client = serviceClient.GetBlobContainerClient("acecache");
@@ -72,6 +74,6 @@ internal class AzureStorageCacheHandler : ICacheHandler
 
     public void SaveData(object data)
     {
-        throw new NotImplementedException();
+        this.client.GetBlobClient($"{this.key}.cache").Upload(new BinaryData(JsonSerializer.Serialize(data)));
     }
 }

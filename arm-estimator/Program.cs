@@ -46,6 +46,8 @@ public class Program
         var disableCacheOption = new Option<bool>("--disable-cache", () => false, "Disables in-built cache mechanism");
         var terraformExecutableOption = new Option<string?>("--tf-executable", () => null, "Provide path to Terraform executable. If omitted, ACE will try to find it in PATH");
         var conversionRateOption = new Option<double>("--conversion-rate", () => 1.0, "Conversion rate from USD to selected currency.");
+        var cacheHandlerOption = new Option<CacheHandler>("--cache-handler", () => { return CacheHandler.Local; }, "Selected cache handler to be used to store cached data");
+        var cacheStorageAccountNameOption = new Option<string?>("--cache-storage-account-name", () => { return null; }, "Name of Azure Storage account to be used as cache storage. Required, if cache handler is set to AzureStorage");
 
         var rootCommand = new RootCommand("ACE (Azure Cost Estimator)");
 
@@ -66,6 +68,8 @@ public class Program
         rootCommand.AddGlobalOption(disableCacheOption);
         rootCommand.AddGlobalOption(terraformExecutableOption);
         rootCommand.AddGlobalOption(conversionRateOption);
+        rootCommand.AddGlobalOption(cacheHandlerOption);
+        rootCommand.AddGlobalOption(cacheStorageAccountNameOption);
 
         rootCommand.AddArgument(templateFileArg);
         rootCommand.AddArgument(susbcriptionIdArg);
@@ -99,7 +103,9 @@ public class Program
                 outputFormatOption,
                 disableCacheOption,
                 terraformExecutableOption,
-                conversionRateOption
+                conversionRateOption,
+                cacheHandlerOption,
+                cacheStorageAccountNameOption
         ));
 
         var subscriptionCommand = new Command("sub", "Calculate estimation for subscription");
@@ -135,7 +141,9 @@ public class Program
                 outputFormatOption,
                 disableCacheOption,
                 terraformExecutableOption,
-                conversionRateOption
+                conversionRateOption,
+                cacheHandlerOption,
+                cacheStorageAccountNameOption
         ));
 
         var managementGroupCommand = new Command("mg", "Calculate estimation for management group");
@@ -171,7 +179,9 @@ public class Program
                 outputFormatOption,
                 disableCacheOption,
                 terraformExecutableOption,
-                conversionRateOption
+                conversionRateOption,
+                cacheHandlerOption,
+                cacheStorageAccountNameOption
         ));
 
         var tenantCommand = new Command("tenant", "Calculate estimation for tenant");
@@ -205,7 +215,9 @@ public class Program
                 outputFormatOption,
                 disableCacheOption,
                 terraformExecutableOption,
-                conversionRateOption
+                conversionRateOption,
+                cacheHandlerOption,
+                cacheStorageAccountNameOption
         ));
 
         rootCommand.AddCommand(subscriptionCommand);
@@ -269,7 +281,7 @@ public class Program
                 }
             }
 
-            var whatIfParser = new WhatIfParser(templateType, scopeId, resourceGroupName, template, options.Mode, parameters, logger, commandType, location, options.DisableCache);
+            var whatIfParser = new WhatIfParser(templateType, scopeId, resourceGroupName, template, parameters, logger, commandType, location, options);
             var whatIfData = await whatIfParser.GetWhatIfData(_cancellationTokenSource.Token);
             if (whatIfData == null)
             {
@@ -317,11 +329,8 @@ public class Program
 
             var output = await new WhatIfProcessor(logger,
                                                    whatIfData.properties.changes,
-                                                   options.Currency,
-                                                   options.DisableDetailedMetrics,
                                                    parser?.Template,
-                                                   options.OutputFormat,
-                                                   options.ConversionRate,
+                                                   options,
                                                    _cancellationTokenSource.Token).Process(_cancellationTokenSource.Token);
             GenerateOutputIfNeeded(options, output, logger);
 

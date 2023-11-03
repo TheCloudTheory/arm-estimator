@@ -1,0 +1,1 @@
+internal enum CacheHandler { Local, AzureStorage }
