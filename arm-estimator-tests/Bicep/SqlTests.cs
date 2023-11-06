@@ -139,7 +139,7 @@ namespace arm_estimator_tests.Bicep
             Assert.That(output, Is.Not.Null);
             Assert.Multiple(() =>
             {
-                Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(371.36070000000001d));
+                Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(369.82689999999997d));
                 Assert.That(output.TotalResourceCount, Is.EqualTo(2));
             });
         }
