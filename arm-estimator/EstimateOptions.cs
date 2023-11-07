@@ -23,7 +23,8 @@ internal class EstimateOptions
                            string? terraformExecutable,
                            double conversionRate,
                            CacheHandler cacheHandler,
-                           string? cacheHandlerStorageAccountName)
+                           string? cacheHandlerStorageAccountName,
+                           string? webhookUrl)
     {
         Mode = mode;
         Threshold = threshold;
@@ -44,6 +45,7 @@ internal class EstimateOptions
         ConversionRate = conversionRate;
         CacheHandler = cacheHandler;
         CacheHandlerStorageAccountName = cacheHandlerStorageAccountName;
+        WebhookUrl = webhookUrl;
     }
 
     public DeploymentMode Mode { get; }
@@ -65,4 +67,5 @@ internal class EstimateOptions
     public double ConversionRate { get; }
     public CacheHandler CacheHandler { get; }
     public string? CacheHandlerStorageAccountName { get; }
+    public string? WebhookUrl { get; }
 }

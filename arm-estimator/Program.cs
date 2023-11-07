@@ -48,6 +48,7 @@ public class Program
         var conversionRateOption = new Option<double>("--conversion-rate", () => 1.0, "Conversion rate from USD to selected currency.");
         var cacheHandlerOption = new Option<CacheHandler>("--cache-handler", () => { return CacheHandler.Local; }, "Selected cache handler to be used to store cached data");
         var cacheStorageAccountNameOption = new Option<string?>("--cache-storage-account-name", () => { return null; }, "Name of Azure Storage account to be used as cache storage. Required, if cache handler is set to AzureStorage");
+        var webhookUrlOption = new Option<string?>("--webhook-url", () => { return null; }, "Webhook URL to be used for sending estimation result");
 
         var rootCommand = new RootCommand("ACE (Azure Cost Estimator)");
 
@@ -70,6 +71,7 @@ public class Program
         rootCommand.AddGlobalOption(conversionRateOption);
         rootCommand.AddGlobalOption(cacheHandlerOption);
         rootCommand.AddGlobalOption(cacheStorageAccountNameOption);
+        rootCommand.AddGlobalOption(webhookUrlOption);
 
         rootCommand.AddArgument(templateFileArg);
         rootCommand.AddArgument(susbcriptionIdArg);
@@ -105,7 +107,8 @@ public class Program
                 terraformExecutableOption,
                 conversionRateOption,
                 cacheHandlerOption,
-                cacheStorageAccountNameOption
+                cacheStorageAccountNameOption,
+                webhookUrlOption
         ));
 
         var subscriptionCommand = new Command("sub", "Calculate estimation for subscription");
@@ -143,7 +146,8 @@ public class Program
                 terraformExecutableOption,
                 conversionRateOption,
                 cacheHandlerOption,
-                cacheStorageAccountNameOption
+                cacheStorageAccountNameOption,
+                webhookUrlOption
         ));
 
         var managementGroupCommand = new Command("mg", "Calculate estimation for management group");
@@ -181,7 +185,8 @@ public class Program
                 terraformExecutableOption,
                 conversionRateOption,
                 cacheHandlerOption,
-                cacheStorageAccountNameOption
+                cacheStorageAccountNameOption,
+                webhookUrlOption
         ));
 
         var tenantCommand = new Command("tenant", "Calculate estimation for tenant");
@@ -217,7 +222,8 @@ public class Program
                 terraformExecutableOption,
                 conversionRateOption,
                 cacheHandlerOption,
-                cacheStorageAccountNameOption
+                cacheStorageAccountNameOption,
+                webhookUrlOption
         ));
 
         rootCommand.AddCommand(subscriptionCommand);
@@ -443,6 +449,9 @@ public class Program
         logger.AddEstimatorMessage("HTML output filename: {0}", string.IsNullOrEmpty(options.HtmlOutputFilename) ? "Not Set" : options.HtmlOutputFilename + ".html");
         logger.AddEstimatorMessage("Dry run enabled: {0}", options.DryRunOnly);
         logger.AddEstimatorMessage("Cache disabled: {0}", options.DisableCache);
+        logger.AddEstimatorMessage("Cache handler: {0}", options.DisableCache ? "Disabled" : options.CacheHandler.ToString());
+        logger.AddEstimatorMessage("Conversion rate: {0}", options.ConversionRate);
+        logger.AddEstimatorMessage("Webhook URL: {0}", string.IsNullOrEmpty(options.WebhookUrl) ? "Disabled" : options.WebhookUrl);
         logger.LogInformation("");
         logger.LogInformation("------------------------------");
         logger.LogInformation("");

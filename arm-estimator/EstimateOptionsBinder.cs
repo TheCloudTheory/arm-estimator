@@ -26,6 +26,7 @@ internal class EstimateOptionsBinder : BinderBase<EstimateOptions>
     private readonly Option<double> conversionRate;
     private readonly Option<CacheHandler> cacheHandler;
     private readonly Option<string?> cacheStorageAccountName;
+    private readonly Option<string?> webhookUrl;
 
     public EstimateOptionsBinder(Option<DeploymentMode> mode,
                                  Option<int> threshold,
@@ -45,7 +46,8 @@ internal class EstimateOptionsBinder : BinderBase<EstimateOptions>
                                  Option<string?> terraformExecutable,
                                  Option<double> conversionRateOption,
                                  Option<CacheHandler> cacheHandlerOption,
-                                 Option<string?> cacheStorageAccountNameOption)
+                                 Option<string?> cacheStorageAccountNameOption,
+                                 Option<string?> webhookUrlOption)
     {
         this.mode = mode;
         this.threshold = threshold;
@@ -66,6 +68,7 @@ internal class EstimateOptionsBinder : BinderBase<EstimateOptions>
         this.conversionRate = conversionRateOption;
         this.cacheHandler = cacheHandlerOption;
         this.cacheStorageAccountName = cacheStorageAccountNameOption;
+        this.webhookUrl = webhookUrlOption;
     }
 
     protected override EstimateOptions GetBoundValue(BindingContext bindingContext)
@@ -89,7 +92,8 @@ internal class EstimateOptionsBinder : BinderBase<EstimateOptions>
             bindingContext.ParseResult.GetValueForOption(terraformExecutable),
             bindingContext.ParseResult.GetValueForOption(conversionRate),
             bindingContext.ParseResult.GetValueForOption(cacheHandler),
-            bindingContext.ParseResult.GetValueForOption(cacheStorageAccountName)
+            bindingContext.ParseResult.GetValueForOption(cacheStorageAccountName),
+            bindingContext.ParseResult.GetValueForOption(webhookUrl)
             );
     }
 }
