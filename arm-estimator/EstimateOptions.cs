@@ -24,7 +24,8 @@ internal class EstimateOptions
                            double conversionRate,
                            CacheHandler cacheHandler,
                            string? cacheHandlerStorageAccountName,
-                           string? webhookUrl)
+                           string? webhookUrl,
+                           string? webhookAuthorization)
     {
         Mode = mode;
         Threshold = threshold;
@@ -46,6 +47,7 @@ internal class EstimateOptions
         CacheHandler = cacheHandler;
         CacheHandlerStorageAccountName = cacheHandlerStorageAccountName;
         WebhookUrl = webhookUrl;
+        WebhookAuthorization = webhookAuthorization;
     }
 
     public DeploymentMode Mode { get; }
@@ -68,4 +70,5 @@ internal class EstimateOptions
     public CacheHandler CacheHandler { get; }
     public string? CacheHandlerStorageAccountName { get; }
     public string? WebhookUrl { get; }
+    public string? WebhookAuthorization { get; }
 }
