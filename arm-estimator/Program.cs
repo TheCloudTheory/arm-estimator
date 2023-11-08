@@ -4,6 +4,7 @@ using ACE.WhatIf;
 using Microsoft.Extensions.Logging;
 using System.CommandLine;
 using System.Reflection;
+using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 
@@ -49,6 +50,7 @@ public class Program
         var cacheHandlerOption = new Option<CacheHandler>("--cache-handler", () => { return CacheHandler.Local; }, "Selected cache handler to be used to store cached data");
         var cacheStorageAccountNameOption = new Option<string?>("--cache-storage-account-name", () => { return null; }, "Name of Azure Storage account to be used as cache storage. Required, if cache handler is set to AzureStorage");
         var webhookUrlOption = new Option<string?>("--webhook-url", () => { return null; }, "Webhook URL to be used for sending estimation result");
+        var webhookAuthorizationOption = new Option<string?>("--webhook-authorization", () => { return null; }, "Webhook Authorization header value");
 
         var rootCommand = new RootCommand("ACE (Azure Cost Estimator)");
 
@@ -72,6 +74,7 @@ public class Program
         rootCommand.AddGlobalOption(cacheHandlerOption);
         rootCommand.AddGlobalOption(cacheStorageAccountNameOption);
         rootCommand.AddGlobalOption(webhookUrlOption);
+        rootCommand.AddGlobalOption(webhookAuthorizationOption);
 
         rootCommand.AddArgument(templateFileArg);
         rootCommand.AddArgument(susbcriptionIdArg);
@@ -108,7 +111,8 @@ public class Program
                 conversionRateOption,
                 cacheHandlerOption,
                 cacheStorageAccountNameOption,
-                webhookUrlOption
+                webhookUrlOption,
+                webhookAuthorizationOption
         ));
 
         var subscriptionCommand = new Command("sub", "Calculate estimation for subscription");
@@ -147,7 +151,8 @@ public class Program
                 conversionRateOption,
                 cacheHandlerOption,
                 cacheStorageAccountNameOption,
-                webhookUrlOption
+                webhookUrlOption,
+                webhookAuthorizationOption
         ));
 
         var managementGroupCommand = new Command("mg", "Calculate estimation for management group");
@@ -186,7 +191,8 @@ public class Program
                 conversionRateOption,
                 cacheHandlerOption,
                 cacheStorageAccountNameOption,
-                webhookUrlOption
+                webhookUrlOption,
+                webhookAuthorizationOption
         ));
 
         var tenantCommand = new Command("tenant", "Calculate estimation for tenant");
@@ -223,7 +229,8 @@ public class Program
                 conversionRateOption,
                 cacheHandlerOption,
                 cacheStorageAccountNameOption,
-                webhookUrlOption
+                webhookUrlOption,
+                webhookAuthorizationOption
         ));
 
         rootCommand.AddCommand(subscriptionCommand);
@@ -338,7 +345,7 @@ public class Program
                                                    parser?.Template,
                                                    options,
                                                    _cancellationTokenSource.Token).Process(_cancellationTokenSource.Token);
-            GenerateOutputIfNeeded(options, output, logger);
+            await GenerateOutputIfNeeded(options, output, logger);
 
             if (options.Threshold != -1 && output.TotalCost.OriginalValue > options.Threshold)
             {
@@ -358,7 +365,7 @@ public class Program
         return compiler.Compile(_cancellationTokenSource.Token);
     }
 
-    private static void GenerateOutputIfNeeded(EstimateOptions options, EstimationOutput output, ILogger<Program> logger)
+    private static async Task GenerateOutputIfNeeded(EstimateOptions options, EstimationOutput output, ILogger<Program> logger)
     {
         if (options.ShouldGenerateJsonOutput || options.ShouldGenerateHtmlOutput)
         {
@@ -382,7 +389,39 @@ public class Program
                 var generator = new HtmlOutputGenerator(output, logger, options.HtmlOutputFilename);
                 generator.Generate();
             }
+
+            if(!string.IsNullOrEmpty(options.WebhookUrl))
+            {
+                logger.AddEstimatorMessage("Sending estimation result to webhook URL {0}", options.WebhookUrl);
+
+                var client = new HttpClient();
+                var message = new HttpRequestMessage(HttpMethod.Post, options.WebhookUrl)
+                {
+                    Content = new StringContent(JsonSerializer.Serialize(output), Encoding.UTF8, "application/json")
+                };
+
+                if(string.IsNullOrEmpty(options.WebhookAuthorization))
+                {
+                    logger.AddEstimatorMessage("Webhook authorization header not set, skipping.");
+                }
+                else
+                {
+                    message.Headers.Add("Authorization", options.WebhookAuthorization);
+                }
+
+                var response = await client.SendAsync(message);
+                if (!response.IsSuccessStatusCode)
+                {
+                    logger.LogError("Couldn't send estimation result to webhook URL {url}. Status code: {code}", options.WebhookUrl, response.StatusCode);
+                }
+                else 
+                {
+                    logger.AddEstimatorMessage("Estimation result sent successfully to webhook URL {0}", options.WebhookUrl);
+                }
+            }
         }
+
+        return;
     }
 
     private static void DisplayWelcomeScreen(ILogger<Program> logger)

@@ -27,6 +27,7 @@ internal class EstimateOptionsBinder : BinderBase<EstimateOptions>
     private readonly Option<CacheHandler> cacheHandler;
     private readonly Option<string?> cacheStorageAccountName;
     private readonly Option<string?> webhookUrl;
+    private readonly Option<string?> webhookAuthorization;
 
     public EstimateOptionsBinder(Option<DeploymentMode> mode,
                                  Option<int> threshold,
@@ -47,7 +48,8 @@ internal class EstimateOptionsBinder : BinderBase<EstimateOptions>
                                  Option<double> conversionRateOption,
                                  Option<CacheHandler> cacheHandlerOption,
                                  Option<string?> cacheStorageAccountNameOption,
-                                 Option<string?> webhookUrlOption)
+                                 Option<string?> webhookUrlOption,
+                                 Option<string?> webhookAuthorizationOption)
     {
         this.mode = mode;
         this.threshold = threshold;
@@ -69,6 +71,7 @@ internal class EstimateOptionsBinder : BinderBase<EstimateOptions>
         this.cacheHandler = cacheHandlerOption;
         this.cacheStorageAccountName = cacheStorageAccountNameOption;
         this.webhookUrl = webhookUrlOption;
+        this.webhookAuthorization = webhookAuthorizationOption;
     }
 
     protected override EstimateOptions GetBoundValue(BindingContext bindingContext)
@@ -93,7 +96,8 @@ internal class EstimateOptionsBinder : BinderBase<EstimateOptions>
             bindingContext.ParseResult.GetValueForOption(conversionRate),
             bindingContext.ParseResult.GetValueForOption(cacheHandler),
             bindingContext.ParseResult.GetValueForOption(cacheStorageAccountName),
-            bindingContext.ParseResult.GetValueForOption(webhookUrl)
+            bindingContext.ParseResult.GetValueForOption(webhookUrl),
+            bindingContext.ParseResult.GetValueForOption(webhookAuthorization)
             );
     }
 }
