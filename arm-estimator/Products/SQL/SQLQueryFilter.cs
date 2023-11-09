@@ -1,4 +1,4 @@
-﻿using ACE.WhatIf;
+﻿    using ACE.WhatIf;
 using Microsoft.Extensions.Logging;
 
 internal class SQLQueryFilter : IQueryFilter
@@ -35,12 +35,27 @@ internal class SQLQueryFilter : IQueryFilter
             // It's vCore model we're talking about here
             sku = $"{skuParts[2]} vCore";
 
+            
             if(IsZoneRedundantDatabase())
             {
                 sku += " Zone Redundancy";
             }
 
-            return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and ((skuName eq '{sku}' and productName eq 'SQL Database Single/Elastic Pool General Purpose - Compute Gen5') or (productName eq 'SQL Database Single/Elastic Pool General Purpose - Storage' and meterName eq 'General Purpose Data Stored'))";
+            var tier = "General Purpose";
+            if(skuParts[0] == "BC")
+            {
+                tier = "Business Critical";
+
+                return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and ((skuName eq '{sku}' and productName eq 'SQL Database Single/Elastic Pool {tier} - Compute Gen5') or (productName eq 'SQL Database Single/Elastic Pool Business Critical - Storage'))";
+            }
+
+            if(skuParts[0] == "HS")
+            {
+                return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and ((skuName eq '{sku}' and productName eq 'SQL Database SingleDB/Elastic Pool Hyperscale - Compute Gen5') or (skuName eq 'Hyperscale' and productName eq 'SQL Database SingleDB Hyperscale - Storage'))";
+            }
+
+
+            return $"serviceId eq '{ServiceId}' and armRegionName eq '{location}' and ((skuName eq '{sku}' and productName eq 'SQL Database Single/Elastic Pool {tier} - Compute Gen5') or (productName eq 'SQL Database Single/Elastic Pool General Purpose - Storage' and meterName eq 'General Purpose Data Stored'))";
         }
 
         if(IsStandardTierWithAdditionalStorageTier(sku))
@@ -77,6 +92,9 @@ internal class SQLQueryFilter : IQueryFilter
         return tiers.Contains(sku);
     }
 
+    // Calculate number of cores based on SKU name. As Azure SQL SKUs
+    // for vCore model are in format like "GP_Gen5_2", we can extract
+    // number of cores from the SKU name and use it in calculations.
     public static int GetNumberOfCoresBasedOnSku(string sku)
     {
         var skuParts = sku.Split('_');

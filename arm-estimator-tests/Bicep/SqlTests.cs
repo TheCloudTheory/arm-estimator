@@ -69,6 +69,14 @@ namespace arm_estimator_tests.Bicep
         [TestCase("GP_Gen5_32", 6246.7118899999996d)]
         [TestCase("GP_Gen5_40", 7808.3556500000004d)]
         [TestCase("GP_Gen5_80", 15616.574450000002d)]
+        [TestCase("BC_Gen5_2", 1036.95884d)]
+        [TestCase("BC_Gen5_4", 2073.3821800000001d)]
+        [TestCase("BC_Gen5_6", 3109.8055199999999d)]
+        [TestCase("BC_Gen5_8", 4146.2288600000002d)]
+        [TestCase("HS_Gen5_2", 439.65895999999998d)]
+        [TestCase("HS_Gen5_4", 878.96091999999999d)]
+        [TestCase("HS_Gen5_6", 1318.26288d)]
+        [TestCase("HS_Gen5_8", 1757.5648399999998d)]
         [Parallelizable(ParallelScope.All)]
         public async Task SQLDatabase_WhenGivenVCoreIsProvided_ItShouldBeCorrectlyEstimated(string sku, double cost)
         {
