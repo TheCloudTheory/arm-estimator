@@ -4,6 +4,7 @@ using ACE.WhatIf;
 internal class SQLEstimationCalculation : BaseEstimation, IEstimationCalculation
 {
     private const double HybridBenefitCost = 145.95d;
+    private const double HybridBenefitCost_BusinessCritical = 547.50d;
 
     public SQLEstimationCalculation(RetailItem[] items, CommonResourceIdentifier id, WhatIfAfterBeforeChange change, double conversionRate)
         : base(items, id, change, conversionRate)
@@ -111,6 +112,8 @@ internal class SQLEstimationCalculation : BaseEstimation, IEstimationCalculation
             return 0;
         }
 
-        return HybridBenefitCost * this.conversionRate * SQLQueryFilter.GetNumberOfCoresBasedOnSku(skuName) / 2;
+        var rawCost = skuName.StartsWith("BC_") ? HybridBenefitCost_BusinessCritical : HybridBenefitCost;
+
+        return rawCost * this.conversionRate * SQLQueryFilter.GetNumberOfCoresBasedOnSku(skuName) / 2;
     }
 }
