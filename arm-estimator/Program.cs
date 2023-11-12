@@ -51,6 +51,7 @@ public class Program
         var cacheStorageAccountNameOption = new Option<string?>("--cache-storage-account-name", () => { return null; }, "Name of Azure Storage account to be used as cache storage. Required, if cache handler is set to AzureStorage");
         var webhookUrlOption = new Option<string?>("--webhook-url", () => { return null; }, "Webhook URL to be used for sending estimation result");
         var webhookAuthorizationOption = new Option<string?>("--webhook-authorization", () => { return null; }, "Webhook Authorization header value");
+        var logFileOption = new Option<string?>("--log-file", () => { return null; }, "Path to a log file");
 
         var rootCommand = new RootCommand("ACE (Azure Cost Estimator)");
 
@@ -75,6 +76,7 @@ public class Program
         rootCommand.AddGlobalOption(cacheStorageAccountNameOption);
         rootCommand.AddGlobalOption(webhookUrlOption);
         rootCommand.AddGlobalOption(webhookAuthorizationOption);
+        rootCommand.AddGlobalOption(logFileOption);
 
         rootCommand.AddArgument(templateFileArg);
         rootCommand.AddArgument(susbcriptionIdArg);
@@ -112,7 +114,8 @@ public class Program
                 cacheHandlerOption,
                 cacheStorageAccountNameOption,
                 webhookUrlOption,
-                webhookAuthorizationOption
+                webhookAuthorizationOption,
+                logFileOption
         ));
 
         var subscriptionCommand = new Command("sub", "Calculate estimation for subscription");
@@ -152,7 +155,8 @@ public class Program
                 cacheHandlerOption,
                 cacheStorageAccountNameOption,
                 webhookUrlOption,
-                webhookAuthorizationOption
+                webhookAuthorizationOption,
+                logFileOption
         ));
 
         var managementGroupCommand = new Command("mg", "Calculate estimation for management group");
@@ -192,7 +196,8 @@ public class Program
                 cacheHandlerOption,
                 cacheStorageAccountNameOption,
                 webhookUrlOption,
-                webhookAuthorizationOption
+                webhookAuthorizationOption,
+                logFileOption
         ));
 
         var tenantCommand = new Command("tenant", "Calculate estimation for tenant");
@@ -230,7 +235,8 @@ public class Program
                 cacheHandlerOption,
                 cacheStorageAccountNameOption,
                 webhookUrlOption,
-                webhookAuthorizationOption
+                webhookAuthorizationOption,
+                logFileOption
         ));
 
         rootCommand.AddCommand(subscriptionCommand);
@@ -250,7 +256,7 @@ public class Program
         using (var loggerFactory = LoggerFactory.Create(builder =>
         {
             builder.ClearProviders();
-            builder.AddEstimatorLogger(options.ShouldBeSilent);
+            builder.AddEstimatorLogger(options.ShouldBeSilent, options.LogFile);
         }))
         {
             var logger = loggerFactory.CreateLogger<Program>();
