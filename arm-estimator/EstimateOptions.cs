@@ -25,7 +25,8 @@ internal class EstimateOptions
                            CacheHandler cacheHandler,
                            string? cacheHandlerStorageAccountName,
                            string? webhookUrl,
-                           string? webhookAuthorization)
+                           string? webhookAuthorization,
+                           string? logFile)
     {
         Mode = mode;
         Threshold = threshold;
@@ -48,6 +49,7 @@ internal class EstimateOptions
         CacheHandlerStorageAccountName = cacheHandlerStorageAccountName;
         WebhookUrl = webhookUrl;
         WebhookAuthorization = webhookAuthorization;
+        LogFile = logFile;
     }
 
     public DeploymentMode Mode { get; }
@@ -71,4 +73,5 @@ internal class EstimateOptions
     public string? CacheHandlerStorageAccountName { get; }
     public string? WebhookUrl { get; }
     public string? WebhookAuthorization { get; }
+    public string? LogFile { get; }
 }

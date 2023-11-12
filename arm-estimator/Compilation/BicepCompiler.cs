@@ -24,6 +24,8 @@ namespace ACE.Compilation
                     return null;
                 }
 
+                CheckIfBicepConfigExists(templateFile);
+
                 this.logger.AddEstimatorMessage("Attempting to compile Bicep file using Bicep CLI.");
                 CompileBicepWith("bicep", $"build {templateFile} --stdout", token, logger, out template);
             }
@@ -36,6 +38,21 @@ namespace ACE.Compilation
             }
 
             return template;
+        }
+
+        private void CheckIfBicepConfigExists(FileInfo templateFile)
+        {
+            if(templateFile.DirectoryName == null)
+            {
+                this.logger.LogWarning("Couldn't find directory name for template file, skipping check for 'bicepconfig.json' file.");
+                return;
+            }
+
+            if(File.Exists(Path.Combine(templateFile.DirectoryName, "bicepconfig.json")))
+            {
+                this.logger.LogWarning("Found configuration file 'bicepconfig.json' in the current directory. This file will be used to compile the Bicep file and may affect the result. See https://github.com/TheCloudTheory/arm-estimator/issues/197 for more information.");
+                return;
+            }
         }
 
         private static void CompileBicepWith(string fileName, string arguments, CancellationToken token, ILogger logger, out string? template)

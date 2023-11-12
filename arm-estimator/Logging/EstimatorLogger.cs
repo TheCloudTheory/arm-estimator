@@ -4,13 +4,25 @@ using Microsoft.Extensions.Logging;
 internal class EstimatorLogger : ILogger
 {
     private readonly bool isSilent;
+    private readonly string? logFile;
 
     public IDisposable BeginScope<TState>(TState state) => default!;
     public bool IsEnabled(LogLevel logLevel) => true;
 
-    public EstimatorLogger(bool isSilent)
+    public EstimatorLogger(bool isSilent, string? logFile)
     {
         this.isSilent = isSilent;
+        this.logFile = logFile;
+
+        ClearLogFile();
+    }
+
+    private void ClearLogFile()
+    {
+        if (this.logFile != null)
+        {
+            File.WriteAllText($"{this.logFile}.log", string.Empty);
+        }
     }
 
     public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
@@ -20,12 +32,14 @@ internal class EstimatorLogger : ILogger
         if(exception != null)
         {
             Console.WriteLine(exception);
+            WriteToLogFile(exception.ToString());
         }
         else
         {
             if(typeof(TState) == typeof(NonSilentMessage))
             {
                 Console.WriteLine(formatter(state, exception));
+                WriteToLogFile(formatter(state, exception));
                 return;
             }
 
@@ -40,6 +54,7 @@ internal class EstimatorLogger : ILogger
                     Console.Write(message.ChangeType);
                     Console.ResetColor();
                     Console.Write($"] {message.Message}{Environment.NewLine}");
+                    WriteToLogFile(message.Message);
                 }
             }
             else
@@ -52,6 +67,7 @@ internal class EstimatorLogger : ILogger
                     Console.ResetColor();
                     Console.Write("] ");
                     Console.Write($"{formatter(state, exception)}{Environment.NewLine}");
+                    WriteToLogFile(formatter(state, exception));
                 }
                 else if (logLevel == LogLevel.Error)
                 {
@@ -61,12 +77,22 @@ internal class EstimatorLogger : ILogger
                     Console.ResetColor();
                     Console.Write("] ");
                     Console.Write($"{formatter(state, exception)}{Environment.NewLine}");
+                    WriteToLogFile(formatter(state, exception));
                 }
                 else
                 {
                     Console.WriteLine(formatter(state, exception));
+                    WriteToLogFile(formatter(state, exception));
                 }         
             }
+        }
+    }
+
+    private void WriteToLogFile(string message)
+    {
+        if (this.logFile != null)
+        {
+            File.AppendAllText(this.logFile, $"{message}{Environment.NewLine}");
         }
     }
 
