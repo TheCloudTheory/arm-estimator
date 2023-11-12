@@ -8,11 +8,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.gitignore = .gitignore
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "azure-cost-estimator-generator", "arm-estimator-generator\azure-cost-estimator-generator.csproj", "{29E06D28-7839-418E-B261-0FE9F3D78DB5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "azure-cost-estimator-generator", "ace-generator\azure-cost-estimator-generator.csproj", "{29E06D28-7839-418E-B261-0FE9F3D78DB5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "azure-cost-estimator", "arm-estimator\azure-cost-estimator.csproj", "{4D5DFE1A-2AC4-4218-98A7-238FE78AE799}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "azure-cost-estimator", "ace\azure-cost-estimator.csproj", "{4D5DFE1A-2AC4-4218-98A7-238FE78AE799}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "azure-cost-estimator-tests", "arm-estimator-tests\azure-cost-estimator-tests.csproj", "{75EF9C17-E2AA-4E54-88A9-B6F7C6F7B53F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "azure-cost-estimator-tests", "ace-tests\azure-cost-estimator-tests.csproj", "{75EF9C17-E2AA-4E54-88A9-B6F7C6F7B53F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

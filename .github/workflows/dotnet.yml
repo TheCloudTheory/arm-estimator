@@ -8,7 +8,7 @@ on:
 
 defaults:
  run:
-  working-directory: ./arm-estimator
+  working-directory: ./ace
 
 jobs:
   build:
@@ -35,15 +35,15 @@ jobs:
       uses: actions/upload-artifact@v3.1.0
       with:
         name: win-x64
-        path: ${{ github.workspace }}/arm-estimator/bin/Release/net6.0/publish/win-x64
+        path: ${{ github.workspace }}/ace/bin/Release/net6.0/publish/win-x64
     - name: Upload Linux artifact
       uses: actions/upload-artifact@v3.1.0
       with:
         name: linux-x64
-        path: ${{ github.workspace }}/arm-estimator/bin/Release/net6.0/publish/linux-x64
+        path: ${{ github.workspace }}/ace/bin/Release/net6.0/publish/linux-x64
     - name: Upload MacOS artifact
       uses: actions/upload-artifact@v3.1.0
       with:
         name: osx-x64
-        path: ${{ github.workspace }}/arm-estimator/bin/Release/net6.0/publish/osx-x64
+        path: ${{ github.workspace }}/ace/bin/Release/net6.0/publish/osx-x64
       

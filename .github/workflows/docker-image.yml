@@ -23,10 +23,10 @@ jobs:
       run: docker login -u thecloudtheory -p ${{ secrets.DOCKER_HUB_KEY }}
     - name: Build the Docker image (latest)
       if: ${{ env.TAG == '' }}
-      run: docker build . --file ./arm-estimator/Dockerfile --tag thecloudtheory/azure-cost-estimator:latest
+      run: docker build . --file ./ace/Dockerfile --tag thecloudtheory/azure-cost-estimator:latest
     - name: Build the Docker image (tag)
       if: ${{ env.TAG != '' }}
-      run: docker build . --file ./arm-estimator/Dockerfile --tag thecloudtheory/azure-cost-estimator:$TAG
+      run: docker build . --file ./ace/Dockerfile --tag thecloudtheory/azure-cost-estimator:$TAG
     - name: Tag latest
       if: ${{ env.TAG != '' }}
       run: docker tag thecloudtheory/azure-cost-estimator:$TAG thecloudtheory/azure-cost-estimator:latest
