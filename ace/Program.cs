@@ -31,7 +31,7 @@ public class Program
         var locationArg = new Argument<string>("location", "Deployment location");
 
         var deploymentModeOption = new Option<DeploymentMode>("--mode", () => { return DeploymentMode.Incremental; }, "Deployment mode");
-        var thresholdOption = new Option<int>("--threshold", () => { return -1; }, "Estimation threshold");
+        var thresholdOption = new Option<int?>("--threshold", () => { return null; }, "Estimation threshold");
         var parametersOption = new Option<FileInfo?>("--parameters", () => { return null; }, "Path to a file containing values of template parameters");
         var currencyOption = new Option<CurrencyCode>("--currency", () => { return CurrencyCode.USD; }, "Currency code");
         var jsonOutputOption = new Option<bool>("--generateJsonOutput", () => { return false; }, "Should generate JSON output");
@@ -52,6 +52,7 @@ public class Program
         var webhookUrlOption = new Option<string?>("--webhook-url", () => { return null; }, "Webhook URL to be used for sending estimation result");
         var webhookAuthorizationOption = new Option<string?>("--webhook-authorization", () => { return null; }, "Webhook Authorization header value");
         var logFileOption = new Option<string?>("--log-file", () => { return null; }, "Path to a log file");
+        var configurationFileOption = new Option<FileInfo?>("--configuration-file", () => { return null; }, "Path to configuration file for ACE");
 
         var rootCommand = new RootCommand("ACE (Azure Cost Estimator)");
 
@@ -77,6 +78,7 @@ public class Program
         rootCommand.AddGlobalOption(webhookUrlOption);
         rootCommand.AddGlobalOption(webhookAuthorizationOption);
         rootCommand.AddGlobalOption(logFileOption);
+        rootCommand.AddGlobalOption(configurationFileOption);
 
         rootCommand.AddArgument(templateFileArg);
         rootCommand.AddArgument(susbcriptionIdArg);
@@ -115,7 +117,8 @@ public class Program
                 cacheStorageAccountNameOption,
                 webhookUrlOption,
                 webhookAuthorizationOption,
-                logFileOption
+                logFileOption,
+                configurationFileOption
         ));
 
         var subscriptionCommand = new Command("sub", "Calculate estimation for subscription");
@@ -156,7 +159,8 @@ public class Program
                 cacheStorageAccountNameOption,
                 webhookUrlOption,
                 webhookAuthorizationOption,
-                logFileOption
+                logFileOption,
+                configurationFileOption
         ));
 
         var managementGroupCommand = new Command("mg", "Calculate estimation for management group");
@@ -197,7 +201,8 @@ public class Program
                 cacheStorageAccountNameOption,
                 webhookUrlOption,
                 webhookAuthorizationOption,
-                logFileOption
+                logFileOption,
+                configurationFileOption
         ));
 
         var tenantCommand = new Command("tenant", "Calculate estimation for tenant");
@@ -236,7 +241,8 @@ public class Program
                 cacheStorageAccountNameOption,
                 webhookUrlOption,
                 webhookAuthorizationOption,
-                logFileOption
+                logFileOption,
+                configurationFileOption
         ));
 
         rootCommand.AddCommand(subscriptionCommand);

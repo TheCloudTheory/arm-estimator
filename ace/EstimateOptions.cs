@@ -6,7 +6,7 @@ namespace ACE;
 internal class EstimateOptions
 {
     public EstimateOptions(DeploymentMode mode,
-                           int threshold,
+                           int? threshold,
                            FileInfo? parametersFile,
                            CurrencyCode currency,
                            bool shouldGenerateOutput,
@@ -53,7 +53,7 @@ internal class EstimateOptions
     }
 
     public DeploymentMode Mode { get; }
-    public int Threshold { get; }
+    public int? Threshold { get; }
     public FileInfo? ParametersFile { get; }
     public CurrencyCode Currency { get; }
     public bool ShouldGenerateJsonOutput { get; }
