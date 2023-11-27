@@ -2,13 +2,14 @@
 using ACE.WhatIf;
 using System.CommandLine;
 using System.CommandLine.Binding;
+using System.Text.Json;
 
 namespace ACE;
 
 internal class EstimateOptionsBinder : BinderBase<EstimateOptions>
 {
     private readonly Option<DeploymentMode> mode;
-    private readonly Option<int> threshold;
+    private readonly Option<int?> threshold;
     private readonly Option<FileInfo?> parameters;
     private readonly Option<CurrencyCode> currency;
     private readonly Option<bool> generateJsonOutput;
@@ -29,9 +30,10 @@ internal class EstimateOptionsBinder : BinderBase<EstimateOptions>
     private readonly Option<string?> webhookUrl;
     private readonly Option<string?> webhookAuthorization;
     private readonly Option<string?> logFile;
+    private readonly Option<FileInfo?> configurationFile;
 
     public EstimateOptionsBinder(Option<DeploymentMode> mode,
-                                 Option<int> threshold,
+                                 Option<int?> threshold,
                                  Option<FileInfo?> parameters,
                                  Option<CurrencyCode> currency,
                                  Option<bool> generateJsonOutput,
@@ -51,7 +53,8 @@ internal class EstimateOptionsBinder : BinderBase<EstimateOptions>
                                  Option<string?> cacheStorageAccountNameOption,
                                  Option<string?> webhookUrlOption,
                                  Option<string?> webhookAuthorizationOption,
-                                 Option<string?> logFileOption)
+                                 Option<string?> logFileOption,
+                                 Option<FileInfo?> configurationFileOption)
     {
         this.mode = mode;
         this.threshold = threshold;
@@ -75,10 +78,47 @@ internal class EstimateOptionsBinder : BinderBase<EstimateOptions>
         this.webhookUrl = webhookUrlOption;
         this.webhookAuthorization = webhookAuthorizationOption;
         this.logFile = logFileOption;
+        this.configurationFile = configurationFileOption;
     }
 
     protected override EstimateOptions GetBoundValue(BindingContext bindingContext)
     {
+        if(this.configurationFile != null)
+        {
+            ValidateProperUse();
+
+            var value = bindingContext.ParseResult.GetValueForOption(configurationFile) ?? throw new Exception("Configuration file is null");
+            var configuration = JsonSerializer.Deserialize<Configuration>(File.ReadAllText(value.FullName), new JsonSerializerOptions()
+            {
+                PropertyNameCaseInsensitive = true
+            }) ?? throw new Exception("Couldn't deserialize configuration file");
+
+            return new EstimateOptions(
+                configuration.Mode,
+                configuration.Threshold,
+                configuration.Parameters,
+                configuration.Currency,
+                configuration.GenerateJsonOutput,
+                configuration.Silent,
+                configuration.Stdout,
+                configuration.DisableDetailedMetrics,
+                configuration.JsonOutputFilename,
+                configuration.GenerateHtmlOutput,
+                bindingContext.ParseResult.GetValueForOption(inlineParameters),
+                configuration.DryRun,
+                configuration.HtmlOutputFilename,
+                configuration.OutputFormat,
+                configuration.DisableCache,
+                configuration.TfExecutable,
+                configuration.ConversionRate,
+                configuration.CacheHandler,
+                configuration.CacheStorageAccountName,
+                configuration.WebhookUrl,
+                bindingContext.ParseResult.GetValueForOption(webhookAuthorization),
+                configuration.LogFile
+                );
+        }
+
         return new EstimateOptions(
             bindingContext.ParseResult.GetValueForOption(mode),
             bindingContext.ParseResult.GetValueForOption(threshold),
@@ -103,5 +143,32 @@ internal class EstimateOptionsBinder : BinderBase<EstimateOptions>
             bindingContext.ParseResult.GetValueForOption(webhookAuthorization),
             bindingContext.ParseResult.GetValueForOption(logFile)
             );
+    }
+
+    private void ValidateProperUse()
+    {
+        if(this.mode != null 
+        || this.threshold != null 
+        || this.parameters != null 
+        || this.currency != null 
+        || this.generateJsonOutput != null 
+        || this.shouldBeSilent != null 
+        || this.stdout != null 
+        || this.disableDetails != null 
+        || this.jsonOutputFilename != null 
+        || this.generateHtmlOutput != null 
+        || this.dryRunOnly != null 
+        || this.htmlOutputFilename != null 
+        || this.outputFormat != null 
+        || this.disableCache != null 
+        || this.terraformExecutable != null 
+        || this.conversionRate != null 
+        || this.cacheHandler != null 
+        || this.cacheStorageAccountName != null 
+        || this.webhookUrl != null
+        || this.logFile != null)
+        {
+            throw new Exception("Cannot use both --configuration-file and other options besides --webhook-authorization and --inline.");
+        }
     }
 }
