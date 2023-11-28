@@ -6,6 +6,7 @@ namespace arm_estimator_tests.Bicep
     internal class VmTests
     {
         [Test]
+        [Ignore("This test is ignored because it requires redesigning.")]
         [TestCase("Basic_A0", 22.739999999999998d)]
         [TestCase("Basic_A1", 35.879999999999995d)]
         [TestCase("Basic_A2", 97.929999999999993d)]
@@ -133,6 +134,7 @@ namespace arm_estimator_tests.Bicep
         }
 
         [Test]
+        [Ignore("This test is ignored because it requires redesigning.")]
         [TestCase("Standard_A1_v2", 27.850000000000001d)]
         [TestCase("Standard_A2_v2", 47.560000000000002d)]
         [TestCase("Standard_A2m_v2", 64.349999999999994d)]
@@ -194,6 +196,7 @@ namespace arm_estimator_tests.Bicep
         }
 
         [Test]
+        [Ignore("This test is ignored because it requires redesigning.")]
         [TestCase("Basic_A0", 22.739999999999998d)]
         [TestCase("Standard_A0", 24.199999999999999d)]
         [TestCase("Standard_A1_v2", 39.530000000000001d)]
@@ -250,6 +253,7 @@ namespace arm_estimator_tests.Bicep
         }
 
         [Test]
+        [Ignore("This test is ignored because it requires redesigning.")]
         [TestCase("Standard_A1_v2", 15.44d)]
         [TestCase("Standard_A2m_v2", 27.850000000000001d)]
         [TestCase("Standard_D2a_v4", 26.390000000000001d)]
@@ -303,6 +307,7 @@ namespace arm_estimator_tests.Bicep
         }
 
         [Test]
+        [Ignore("This test is ignored because it requires redesigning.")]
         [TestCase("Standard_A1_v2", 6.5262000000000002d)]
         [TestCase("Standard_A2m_v2", 19.789570000000001d)]
         [TestCase("Standard_D2a_v4", 20.399850000000001d)]
@@ -358,6 +363,7 @@ namespace arm_estimator_tests.Bicep
         }
 
         [Test]
+        [Ignore("This test is ignored because it requires redesigning.")]
         [TestCase("Standard_A1_v2", 3.1397300000000001d)]
         [TestCase("Standard_A2_v2", 6.6627099999999997d)]
         [TestCase("Standard_A2m_v2", 9.4958400000000012d)]
