@@ -26,7 +26,8 @@ internal class EstimateOptions
                            string? cacheHandlerStorageAccountName,
                            string? webhookUrl,
                            string? webhookAuthorization,
-                           string? logFile)
+                           string? logFile,
+                           bool optOutCheckingNewVersion)
     {
         Mode = mode;
         Threshold = threshold;
@@ -50,6 +51,7 @@ internal class EstimateOptions
         WebhookUrl = webhookUrl;
         WebhookAuthorization = webhookAuthorization;
         LogFile = logFile;
+        OptOutCheckingNewVersion = optOutCheckingNewVersion;
     }
 
     public DeploymentMode Mode { get; }
@@ -74,4 +76,5 @@ internal class EstimateOptions
     public string? WebhookUrl { get; }
     public string? WebhookAuthorization { get; }
     public string? LogFile { get; }
+    public bool OptOutCheckingNewVersion { get; }
 }
