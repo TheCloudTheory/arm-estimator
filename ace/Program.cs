@@ -30,29 +30,30 @@ public class Program
         var managementGroupArg = new Argument<string>("management-group", "Management group name");
         var locationArg = new Argument<string>("location", "Deployment location");
 
-        var deploymentModeOption = new Option<DeploymentMode>("--mode", () => { return DeploymentMode.Incremental; }, "Deployment mode");
+        var deploymentModeOption = new Option<DeploymentMode?>("--mode", () => { return Defaults.Mode; }, "Deployment mode");
         var thresholdOption = new Option<int?>("--threshold", () => { return null; }, "Estimation threshold");
         var parametersOption = new Option<FileInfo?>("--parameters", () => { return null; }, "Path to a file containing values of template parameters");
-        var currencyOption = new Option<CurrencyCode>("--currency", () => { return CurrencyCode.USD; }, "Currency code");
-        var jsonOutputOption = new Option<bool>("--generateJsonOutput", () => { return false; }, "Should generate JSON output");
-        var silentOption = new Option<bool>("--silent", () => { return false; }, "Mute all logs");
-        var stdoutOption = new Option<bool>("--stdout", () => { return false; }, "Redirects JSON output to stdout");
-        var disableDetailsOption = new Option<bool>("--disableDetailedMetrics", () => { return false; }, "Disables reporting of detailed metrics");
+        var currencyOption = new Option<CurrencyCode?>("--currency", () => { return Defaults.Currency; }, "Currency code");
+        var jsonOutputOption = new Option<bool?>("--generateJsonOutput", () => { return Defaults.ShouldGenerateJsonOutput; }, "Should generate JSON output");
+        var silentOption = new Option<bool?>("--silent", () => { return Defaults.ShouldBeSilent; }, "Mute all logs");
+        var stdoutOption = new Option<bool?>("--stdout", () => { return Defaults.Stdout; }, "Redirects JSON output to stdout");
+        var disableDetailsOption = new Option<bool?>("--disableDetailedMetrics", () => { return Defaults.DisableDetailedMetrics; }, "Disables reporting of detailed metrics");
         var jsonOutputFilenameOption = new Option<string?>("--jsonOutputFilename", () => { return null; }, "Sets JSON output filename");
-        var htmlOutputOption = new Option<bool>("--generateHtmlOutput", () => { return false; }, "Should generate HTML output");
+        var htmlOutputOption = new Option<bool?>("--generateHtmlOutput", () => { return Defaults.ShouldGenerateHtmlOutput; }, "Should generate HTML output");
         var inlineOptions = new Option<IEnumerable<string>>("--inline", () => { return Enumerable.Empty<string>(); }, "List of inline parameters");
-        var dryRunOption = new Option<bool>("--dry-run", () => { return false; }, "Run template validation only");
+        var dryRunOption = new Option<bool?>("--dry-run", () => { return Defaults.DryRunOnly; }, "Run template validation only");
         var htmlOutputFilenameOption = new Option<string?>("--htmlOutputFilename", () => { return null; }, "Sets HTML output filename");
-        var outputFormatOption = new Option<OutputFormat>("--outputFormat", () => { return OutputFormat.Default; }, "Sets output format");
-        var disableCacheOption = new Option<bool>("--disable-cache", () => false, "Disables in-built cache mechanism");
+        var outputFormatOption = new Option<OutputFormat?>("--outputFormat", () => { return Defaults.Output; }, "Sets output format");
+        var disableCacheOption = new Option<bool?>("--disable-cache", () => Defaults.DisableCache, "Disables in-built cache mechanism");
         var terraformExecutableOption = new Option<string?>("--tf-executable", () => null, "Provide path to Terraform executable. If omitted, ACE will try to find it in PATH");
-        var conversionRateOption = new Option<double>("--conversion-rate", () => 1.0, "Conversion rate from USD to selected currency.");
-        var cacheHandlerOption = new Option<CacheHandler>("--cache-handler", () => { return CacheHandler.Local; }, "Selected cache handler to be used to store cached data");
+        var conversionRateOption = new Option<double?>("--conversion-rate", () => Defaults.ConversionRate, "Conversion rate from USD to selected currency.");
+        var cacheHandlerOption = new Option<CacheHandler?>("--cache-handler", () => { return Defaults.Cache; }, "Selected cache handler to be used to store cached data");
         var cacheStorageAccountNameOption = new Option<string?>("--cache-storage-account-name", () => { return null; }, "Name of Azure Storage account to be used as cache storage. Required, if cache handler is set to AzureStorage");
         var webhookUrlOption = new Option<string?>("--webhook-url", () => { return null; }, "Webhook URL to be used for sending estimation result");
         var webhookAuthorizationOption = new Option<string?>("--webhook-authorization", () => { return null; }, "Webhook Authorization header value");
         var logFileOption = new Option<string?>("--log-file", () => { return null; }, "Path to a log file");
         var configurationFileOption = new Option<FileInfo?>("--configuration-file", () => { return null; }, "Path to configuration file for ACE");
+        var optOutCheckingNewVersionOption = new Option<bool?>("--disable-version-check", () => { return Defaults.OptOutCheckingNewVersion; }, "Whether to disable checking for new version of ACE");
 
         var rootCommand = new RootCommand("ACE (Azure Cost Estimator)");
 
@@ -79,6 +80,7 @@ public class Program
         rootCommand.AddGlobalOption(webhookAuthorizationOption);
         rootCommand.AddGlobalOption(logFileOption);
         rootCommand.AddGlobalOption(configurationFileOption);
+        rootCommand.AddGlobalOption(optOutCheckingNewVersionOption);
 
         rootCommand.AddArgument(templateFileArg);
         rootCommand.AddArgument(susbcriptionIdArg);
@@ -118,7 +120,8 @@ public class Program
                 webhookUrlOption,
                 webhookAuthorizationOption,
                 logFileOption,
-                configurationFileOption
+                configurationFileOption,
+                optOutCheckingNewVersionOption
         ));
 
         var subscriptionCommand = new Command("sub", "Calculate estimation for subscription");
@@ -160,7 +163,8 @@ public class Program
                 webhookUrlOption,
                 webhookAuthorizationOption,
                 logFileOption,
-                configurationFileOption
+                configurationFileOption,
+                optOutCheckingNewVersionOption
         ));
 
         var managementGroupCommand = new Command("mg", "Calculate estimation for management group");
@@ -202,7 +206,8 @@ public class Program
                 webhookUrlOption,
                 webhookAuthorizationOption,
                 logFileOption,
-                configurationFileOption
+                configurationFileOption,
+                optOutCheckingNewVersionOption
         ));
 
         var tenantCommand = new Command("tenant", "Calculate estimation for tenant");
@@ -242,7 +247,8 @@ public class Program
                 webhookUrlOption,
                 webhookAuthorizationOption,
                 logFileOption,
-                configurationFileOption
+                configurationFileOption,
+                optOutCheckingNewVersionOption
         ));
 
         rootCommand.AddCommand(subscriptionCommand);
@@ -267,7 +273,7 @@ public class Program
         {
             var logger = loggerFactory.CreateLogger<Program>();
 
-            DisplayWelcomeScreen(logger);
+            await DisplayWelcomeScreenAsync(logger, options.OptOutCheckingNewVersion);
             DisplayUsedSettings(templateFile, scopeId, resourceGroupName, logger, options, commandType);
 
             var template = GetTemplate(templateFile, options.TerraformExecutable, logger, out var templateType);
@@ -436,7 +442,7 @@ public class Program
         return;
     }
 
-    private static void DisplayWelcomeScreen(ILogger<Program> logger)
+    private static async Task DisplayWelcomeScreenAsync(ILogger<Program> logger, bool isNewVersionCheckDisabled)
     {
         logger.LogInformation(@"                                                                                                   
                                               .***      ***                                         
@@ -462,6 +468,9 @@ public class Program
         logger.LogInformation("");
         logger.LogInformation("------------------------------");
         logger.LogInformation("");
+
+        var check = new NewestVersionCheck(logger);
+        await check.DisplayCheckInfoAsync(GetInformationalVersion()!, isNewVersionCheckDisabled);
     }
 
     private static void DisplayUsedSettings(FileInfo templateFile, string scopeId, string? resourceGroupName, ILogger<Program> logger, EstimateOptions options, CommandType commandType)

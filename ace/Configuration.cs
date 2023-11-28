@@ -25,4 +25,5 @@ internal class Configuration
     public string? CacheStorageAccountName { get; set; }
     public string? WebhookUrl { get; set; }
     public string? LogFile { get; set; }
+    public bool DisableVersionCheck { get; set; }
 }
