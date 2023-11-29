@@ -9,7 +9,7 @@ jobs:
     steps:
       - name: Run action
         id: run
-        uses: TheCloudTheory/arm-estimator@latest
+        uses: TheCloudTheory/arm-estimator@main
         with:
           template-file: 'path'
           resource-group-name: 'rg'
