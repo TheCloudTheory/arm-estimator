@@ -1,3 +1,5 @@
+name: Test GitHub action
+
 on: [workflow_dispatch]
 
 jobs:
@@ -7,7 +9,7 @@ jobs:
     steps:
       - name: Run action
         id: run
-        uses: TheCloudTheory/arm-estimator
+        uses: TheCloudTheory/arm-estimator@latest
         with:
           template-file: 'path'
           resource-group-name: 'rg'
