@@ -7,6 +7,11 @@ jobs:
     runs-on: ubuntu-latest
     name: A job to test GitHub Action
     steps:
+      - uses: actions/checkout@v3
+      - name: Azure Login
+        uses: Azure/login@v1.4.6
+        with:
+          creds: ${{ secrets.SP_CREDS }}
       - name: Run action
         id: run
         uses: TheCloudTheory/azure-cost-estimator-action@0.0.5-preview
