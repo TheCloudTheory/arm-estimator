@@ -9,7 +9,7 @@ jobs:
     steps:
       - name: Run action
         id: run
-        uses: TheCloudTheory/azure-cost-estimator-action@0.0.4-preview
+        uses: TheCloudTheory/azure-cost-estimator-action@0.0.5-preview
         with:
           template-file: 'ace-tests/templates/acr.json'
           subscription-id: 'cf70b558-b930-45e4-9048-ebcefb926adf'
