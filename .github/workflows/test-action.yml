@@ -9,7 +9,7 @@ jobs:
     steps:
       - name: Run action
         id: run
-        uses: TheCloudTheory/azure-cost-estimator-action@aa1077087ced819bbfd1e297d8741d7edb960dea
+        uses: TheCloudTheory/azure-cost-estimator-action@0.0.1-preview
         with:
           template-file: 'path'
           resource-group-name: 'rg'
