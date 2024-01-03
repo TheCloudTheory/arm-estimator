@@ -572,7 +572,7 @@ internal class WhatIfProcessor
         double? delta = null;
         if (change.before != null)
         {
-            if (Activator.CreateInstance(typeof(TCalculation), new object[] { data.Items, id, desiredState }) is not TCalculation previousStateEstimation)
+            if (Activator.CreateInstance(typeof(TCalculation), new object[] { data.Items, id, desiredState, this.conversionRate }) is not TCalculation previousStateEstimation)
             {
                 logger.LogError("Couldn't create an instance of {type}.", typeof(TCalculation));
             }
