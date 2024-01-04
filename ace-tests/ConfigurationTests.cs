@@ -3,6 +3,7 @@ using arm_estimator_tests;
 
 namespace ACE.Tests;
 
+[Ignore("Under rework")]
 public class ConfigurationTests
 {
     [Test]

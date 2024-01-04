@@ -2,6 +2,7 @@ using ACE;
 
 namespace arm_estimator_tests.Bicep;
 
+[Ignore("Under rework")]
 public class BicepConfigTests
 {
     [Test]

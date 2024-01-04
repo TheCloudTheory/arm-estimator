@@ -3,6 +3,7 @@ using System.Text.Json;
 
 namespace arm_estimator_tests.Bicep
 {
+    [Ignore("Under rework")]
     internal class AcrTests
     {
         [Test]

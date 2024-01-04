@@ -34,6 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="templates\bicep\keyvault\keyvault.bicep" />
     <None Remove="templates\configuration\configuration.json" />
   </ItemGroup>
 

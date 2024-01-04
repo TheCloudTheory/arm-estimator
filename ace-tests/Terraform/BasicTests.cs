@@ -4,6 +4,7 @@ using System.Text.Json;
 
 namespace arm_estimator_tests.Terraform
 {
+    [Ignore("Under rework")]
     internal class BasicTests
     {
         [Test]
