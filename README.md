@@ -36,6 +36,9 @@ ACE follows a concept of [_running cost as architecture fitness function_](https
 ## Documentation
 Check [wiki](https://github.com/TheCloudTheory/arm-estimator/wiki/About-wiki) for detailed information about installation, usage and available features
 
+## GitHub Action
+ACE comes with a dedicated GitHub Action for your worflows for easy integration. See [this](https://github.com/TheCloudTheory/azure-cost-estimator-action) repository for more information.
+
 ## Services support
 Services not listed are considered TBD. Below list represents the latest commit available, which isn't always aligned with the most recent release.
 Service|Support level|Terraform support|More information
