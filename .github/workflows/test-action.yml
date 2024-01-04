@@ -7,9 +7,20 @@ jobs:
     runs-on: ubuntu-latest
     name: A job to test GitHub Action
     steps:
-      - name: Run action
-        id: run
-        uses: TheCloudTheory/azure-cost-estimator-action@aa1077087ced819bbfd1e297d8741d7edb960dea
+      - uses: actions/checkout@v3
+      - name: Azure Login
+        uses: Azure/login@v1.4.6
         with:
-          template-file: 'path'
-          resource-group-name: 'rg'
+          creds: ${{ secrets.SP_CREDS }}
+      - name: Run action for ARM Template
+        uses: TheCloudTheory/azure-cost-estimator-action@0.0.11-preview
+        with:
+          template-file: 'ace-tests/templates/acr.json'
+          subscription-id: 'cf70b558-b930-45e4-9048-ebcefb926adf'
+          resource-group-name: 'arm-estimator-tests-rg'
+      - name: Run action for Bicep
+        uses: TheCloudTheory/azure-cost-estimator-action@0.0.11-preview
+        with:
+          template-file: 'ace-tests/templates/bicep/acr.bicep'
+          subscription-id: 'cf70b558-b930-45e4-9048-ebcefb926adf'
+          resource-group-name: 'arm-estimator-tests-rg'
