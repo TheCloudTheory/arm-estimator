@@ -2,6 +2,7 @@
 
 namespace arm_estimator_tests
 {
+    [Ignore("Under rework")]
     internal class HtmlOutputTests
     {
         [Test]

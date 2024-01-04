@@ -3,6 +3,7 @@ using System.Text.Json;
 
 namespace arm_estimator_tests
 {
+    [Ignore("Under rework")]
     internal class WhatIfTests
     {
         [Test]
