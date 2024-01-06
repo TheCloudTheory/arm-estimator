@@ -43,6 +43,7 @@
   <ItemGroup>
     <None Remove="templates\bicep\keyvault\keyvault.bicep" />
     <None Remove="templates\configuration\configuration.json" />
+    <None Remove="templates\reworked\aks\availability-set.bicep" />
     <None Remove="templates\reworked\aks\ultrassd.bicep" />
   </ItemGroup>
 
