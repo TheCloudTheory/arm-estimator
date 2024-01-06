@@ -25,6 +25,7 @@ internal class WhatIfProcessor
     private readonly TemplateSchema template;
     private readonly double conversionRate;
     private readonly IOutputFormatter outputFormatter;
+    private readonly FileInfo? mockedRetailAPIResponsePath;
 
     public WhatIfProcessor(ILogger logger,
                            WhatIfChange[] changes,
@@ -38,6 +39,7 @@ internal class WhatIfProcessor
         this.template = template;
         this.conversionRate = options.ConversionRate;
         this.outputFormatter = new OutputGenerator(options.OutputFormat, logger, options.Currency, options.DisableDetailedMetrics).GetFormatter();
+        this.mockedRetailAPIResponsePath = options.MockedRetailAPIResponsePath;
 
         ReconcileResources(token);
         BuildVMCapabilitiesIfNeeded(options.CacheHandler, options.CacheHandlerStorageAccountName, token);
@@ -587,23 +589,37 @@ internal class WhatIfProcessor
         return new EstimatedResourceData(summary.TotalCost, delta, id);
     }
 
-    private async Task<RetailAPIResponse?> GetRetailAPIResponse<T>(WhatIfChange change, CommonResourceIdentifier id, CancellationToken token) where T : BaseRetailQuery, IRetailQuery
+    private async Task<RetailAPIResponse?> GetRetailAPIResponse<T>(WhatIfChange change,
+                                                                   CommonResourceIdentifier id,
+                                                                   CancellationToken token) where T : BaseRetailQuery, IRetailQuery
     {
         if (token.IsCancellationRequested)
         {
             return null;
         }
 
+        bool ShouldTakeMockedData() 
+        {
+            return this.mockedRetailAPIResponsePath != null && this.mockedRetailAPIResponsePath.Exists;
+        }
+
+        if (ShouldTakeMockedData())
+        {
+            this.logger.LogWarning("Using mocked data for {type}.", typeof(T));
+            var mockedData = await File.ReadAllTextAsync(this.mockedRetailAPIResponsePath!.FullName, token);
+            return JsonSerializer.Deserialize<RetailAPIResponse>(mockedData);
+        }
+
         var desiredState = change.after ?? change.before;
         if (desiredState == null || change.resourceId == null)
         {
-            logger.LogError("Couldn't determine desired state for {type}.", typeof(T));
+            this.logger.LogError("Couldn't determine desired state for {type}.", typeof(T));
             return null;
         }
 
         if (Activator.CreateInstance(typeof(T), new object[] { change, id, logger, currency, changes, this.template }) is not T query)
         {
-            logger.LogError("Couldn't create an instance of {type}.", typeof(T));
+            this.logger.LogError("Couldn't create an instance of {type}.", typeof(T));
             return null;
         }
 
