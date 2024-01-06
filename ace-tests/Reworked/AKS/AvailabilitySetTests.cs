@@ -4,22 +4,22 @@ using arm_estimator_tests;
 
 namespace ACE_Tests.Reworked.AKS;
 
-public class DiskCalculationTests
+public class AvailabilitySetTests
 {
     [Test]
     [Parallelizable(ParallelScope.Self)]
-    public async Task AKS_DiskCalculation_WhenTemplateDefinesUltraSSDDisk_ItShouldBeCalculatedCorrectly()
+    public async Task AKS_AvailabilitySet_WhenTemplateDefinesAvailabilitySet_ItShouldBeCalculatedCorrectly()
     {
         var outputFilename = $"ace_test_{DateTime.Now.Ticks}";
         var exitCode = await Program.Main(new[] {
-                "templates/reworked/aks/ultrassd.bicep",
+                "templates/reworked/aks/availability-set.bicep",
                 "cf70b558-b930-45e4-9048-ebcefb926adf",
                 "arm-estimator-tests-rg",
                 "--generateJsonOutput",
                 "--jsonOutputFilename",
                 outputFilename,
                 "--mocked-retail-api-response-path",
-                "mocked-responses/retail-api/aks/ultrassd.json"
+                "mocked-responses/retail-api/aks/availability-set.json"
             });
 
         Assert.That(exitCode, Is.EqualTo(0));

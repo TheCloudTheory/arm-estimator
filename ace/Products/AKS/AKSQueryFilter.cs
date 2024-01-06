@@ -29,7 +29,10 @@ internal class AKSQueryFilter : IQueryFilter
         {
             foreach (var profile in properties.AgentPoolProfiles)
             {
-                if (profile.Type == "VirtualMachineScaleSets")
+                // From the perspective of cost estimation, it doesn't matter if the agent pool is
+                // a VMSS or an AS, as long as the VM size and count are known. To generate a filter,
+                // we'll use the VMSS filter, as it's more generic.
+                if (profile.Type == "VirtualMachineScaleSets" || profile.Type == "AvailabilitySet")
                 {
                     var vmssFilter = new VmssQueryFilter(new WhatIfAfterBeforeChange()
                     {
