@@ -32,7 +32,7 @@ public class DiskCalculationTests
         Assert.That(output, Is.Not.Null);
         Assert.Multiple(() =>
         {
-            Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(162.22352000000001d));
+            Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(176.44d));
             Assert.That(output.TotalResourceCount, Is.EqualTo(1));
         });
 

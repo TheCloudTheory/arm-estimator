@@ -67,53 +67,6 @@ internal class AKSEstimationCalculation : BaseEstimation, IEstimationCalculation
                     }
                 }
             }
-            else if (item.productName != null && item.productName.Contains("Ultra Disks"))
-            {
-                if (properties != null && properties.AgentPoolProfiles != null)
-                {
-                    foreach (var pool in properties.AgentPoolProfiles)
-                    {
-                        if (item.meterName == "Ultra LRS Provisioned Capacity")
-                        {
-                            if (pool.EnableUltraSSD == true)
-                            {
-                                var agentCount = pool.Count;
-                                cost = item.retailPrice * agentCount * HoursInMonth * pool.OSDiskSizeGB;
-
-                                // When there's more than a single agent pool, once found,
-                                // break the loop so another item can be processed
-                                break;
-                            }
-                        }
-
-                        if (item.meterName == "Ultra LRS Provisioned Throughput (MBps)")
-                        {
-                            if (pool.EnableUltraSSD == true)
-                            {
-                                var agentCount = pool.Count;
-                                cost = item.retailPrice * agentCount * HoursInMonth;
-
-                                // When there's more than a single agent pool, once found,
-                                // break the loop so another item can be processed
-                                break;
-                            }
-                        }
-
-                        if (item.meterName == "Ultra LRS Provisioned IOPS")
-                        {
-                            if (pool.EnableUltraSSD == true)
-                            {
-                                var agentCount = pool.Count;
-                                cost = item.retailPrice * agentCount * HoursInMonth * 100;
-
-                                // When there's more than a single agent pool, once found,
-                                // break the loop so another item can be processed
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
             else
             {
                 cost = item.retailPrice;

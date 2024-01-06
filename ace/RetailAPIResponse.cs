@@ -1,6 +1,7 @@
 ﻿internal class RetailAPIResponse
 {
     public RetailItem[]? Items { get; set; }
+    public string? Url { get; set; }
 }
 
 internal class RetailItem
