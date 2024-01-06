@@ -67,6 +67,11 @@ internal class AKSQueryFilter : IQueryFilter
                     }
 
                     filters.Add($"({vmssFilter})");
+                } 
+                else 
+                {
+                    this.logger.LogWarning("Couldn't generate filter for AKS agent profile of type {type}.", profile.Type);
+                    continue;
                 }
             }
         }

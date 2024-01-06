@@ -34,8 +34,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="mocked-responses\**\*.*">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content> 
+  </ItemGroup>
+
+
+  <ItemGroup>
     <None Remove="templates\bicep\keyvault\keyvault.bicep" />
     <None Remove="templates\configuration\configuration.json" />
+    <None Remove="templates\reworked\aks\ultrassd.bicep" />
   </ItemGroup>
 
 </Project>

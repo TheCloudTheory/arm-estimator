@@ -24,6 +24,12 @@ internal class AgentPoolProfile
 
     [JsonPropertyName("vmSize")]
     public virtual string? VmSize { get; set; }
+
+    [JsonPropertyName("enableUltraSSD")]
+    public virtual bool? EnableUltraSSD { get; set; }
+
+    [JsonPropertyName("osDiskSizeGB")]
+    public virtual int? OSDiskSizeGB { get; set; }
 }
 
 internal class AgentPoolProfile_TF : AgentPoolProfile
@@ -39,4 +45,10 @@ internal class AgentPoolProfile_TF : AgentPoolProfile
 
     [JsonPropertyName("vm_size")]
     public override string? VmSize { get; set; }
+
+    [JsonPropertyName("ultra_ssd_enabled")]
+    public override bool? EnableUltraSSD { get; set; }
+
+    [JsonPropertyName("os_disk_size_gb")]
+    public override int? OSDiskSizeGB { get; set; }
 }
