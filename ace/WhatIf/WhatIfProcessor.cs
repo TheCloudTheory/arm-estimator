@@ -569,7 +569,7 @@ internal class WhatIfProcessor
             return null;
         }
 
-        var summary = estimation.GetTotalCost(changes, template?.Metadata?.UsagePatterns);
+        var summary = estimation.GetTotalCost(changes, this.template?.Metadata?.UsagePatterns);
 
         double? delta = null;
         if (change.before != null)
