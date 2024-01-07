@@ -41,10 +41,12 @@
 
 
   <ItemGroup>
+    <None Remove="mocked-responses\retail-api\automation-account\usage-patterns.json" />
     <None Remove="templates\bicep\keyvault\keyvault.bicep" />
     <None Remove="templates\configuration\configuration.json" />
     <None Remove="templates\reworked\aks\availability-set.bicep" />
     <None Remove="templates\reworked\aks\ultrassd.bicep" />
+    <None Remove="templates\reworked\automation-account\usage-patterns.bicep" />
   </ItemGroup>
 
 </Project>

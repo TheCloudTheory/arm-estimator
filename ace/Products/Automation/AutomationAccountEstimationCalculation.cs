@@ -25,11 +25,11 @@ internal class AutomationAccountEstimationCalculation : BaseEstimation, IEstimat
 
             if (item.meterName == "Watcher")
             {
-                cost = item.retailPrice * HoursInMonth;
+                cost = item.retailPrice * HoursInMonth * base.IncludeUsagePattern("Microsoft_Automation_automationAccounts_Watcher_Count", usagePatterns);
             }
             else if (item.meterName == "Basic Runtime")
             {
-                cost = item.retailPrice;
+                cost = item.retailPrice * base.IncludeUsagePattern("Microsoft_Automation_automationAccounts_Basic_Runtime", usagePatterns);
             }
             else
             {
