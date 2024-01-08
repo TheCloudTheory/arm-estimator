@@ -44,10 +44,19 @@ internal class TerraformTemplateParser
             return new WhatIfChange();
         }
 
+        var afterName = change.Change.After!.ContainsKey("name") ? change.Change.After["name"] : 
+                    change.Change.AfterUnknown!.ContainsKey("name") ? $"[known after apply]" : null;    
+
+        if(afterName == null)
+        {
+            this.logger.LogError("Couldn't find name if after state for {type}.{name}", change.Type, change.Name);
+            return new WhatIfChange();
+        }
+
         return new WhatIfChange()
         {
             changeType = DetermineChangeType(change),
-            resourceId = $"terraform{DetermineParent(change, data)}.{change.Type}.{change.Name}.{GetLocation(change)}.{change.Change?.After!["name"]}",
+            resourceId = $"terraform{DetermineParent(change, data)}.{change.Type}.{change.Name}.{GetLocation(change)}.{afterName}",
             after = new WhatIfAfterBeforeChange()
             {
                 type = change.Type,

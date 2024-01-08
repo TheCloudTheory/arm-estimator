@@ -33,6 +33,9 @@ internal class ResourceChangeData
 
     [JsonPropertyName("after")]
     public IDictionary<string, object>? After { get; set; }
+
+    [JsonPropertyName("after_unknown")]
+    public IDictionary<string, object>? AfterUnknown { get; set; }
 }
 
 internal class TerraformConfiguration
