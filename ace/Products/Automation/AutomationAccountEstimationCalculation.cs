@@ -25,11 +25,24 @@ internal class AutomationAccountEstimationCalculation : BaseEstimation, IEstimat
 
             if (item.meterName == "Watcher")
             {
-                cost = item.retailPrice * HoursInMonth * base.IncludeUsagePattern("Microsoft_Automation_automationAccounts_Watcher_Count", usagePatterns);
+                var numberOfWatchers = base.IncludeUsagePattern("Microsoft_Automation_automationAccounts_Watcher_Count", usagePatterns);
+                if(numberOfWatchers == 1) {
+                    cost = 0;
+                    continue;
+                }
+
+                // 744 hours of Watcher is free so we need to subtract that from the total
+                cost = item.retailPrice * HoursInMonth * (numberOfWatchers - 1);
             }
             else if (item.meterName == "Basic Runtime")
             {
-                cost = item.retailPrice * base.IncludeUsagePattern("Microsoft_Automation_automationAccounts_Basic_Runtime", usagePatterns);
+                var runningMinutes = base.IncludeUsagePattern("Microsoft_Automation_automationAccounts_Basic_Runtime", usagePatterns);
+                if(runningMinutes <= 500) {
+                    cost = 0;
+                    continue;
+                }
+
+                cost = item.retailPrice * (runningMinutes - 500);
             }
             else
             {
