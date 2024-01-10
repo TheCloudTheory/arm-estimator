@@ -35,6 +35,5 @@ public class AutomationAccountTests
             Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(0));
             Assert.That(output.TotalResourceCount, Is.EqualTo(1));
         });
-
     }
 }
