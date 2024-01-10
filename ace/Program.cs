@@ -402,7 +402,7 @@ public class Program
                 }
                 else
                 {
-                    var fileName = options.JsonOutputFilename != null ? $"{options.JsonOutputFilename}.json" : $"ace_estimation_{DateTime.UtcNow:yyyyMMddHHmmss}.json";
+                    var fileName = GenerateJsonOutputFilename(options);
                     logger.AddEstimatorMessage("Generating JSON output file as {0}", fileName);
                     File.WriteAllText(fileName, outputData);
                 }
@@ -446,6 +446,21 @@ public class Program
         }
 
         return;
+    }
+
+    private static string GenerateJsonOutputFilename(EstimateOptions options)
+    {
+        if(string.IsNullOrWhiteSpace(options.JsonOutputFilename))
+        {
+            return $"ace_estimation_{DateTime.UtcNow:yyyyMMddHHmmss}.json";
+        }
+
+        if(options.JsonOutputFilename.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
+        {
+            return options.JsonOutputFilename;
+        }
+
+        return $"{options.JsonOutputFilename}.json";
     }
 
     private static async Task DisplayWelcomeScreenAsync(ILogger<Program> logger, bool isNewVersionCheckDisabled)
