@@ -292,7 +292,14 @@ public class Program
             var parameters = "{}";
             if (options.ParametersFile != null)
             {
-                parameters = Regex.Replace(File.ReadAllText(options.ParametersFile.FullName), @"\s+", string.Empty);
+                var fileContent = options.ParametersFile.FullName.EndsWith(".bicepparam") ? new BicepCompiler(logger).CompileBicepparam(options.ParametersFile, _cancellationTokenSource.Token) : File.ReadAllText(options.ParametersFile.FullName);
+                if(fileContent == null)
+                {
+                    logger.LogError("Couldn't read parameters file {fileName}", options.ParametersFile.FullName);
+                    return 1;
+                }
+
+                parameters = Regex.Replace(fileContent, @"\s+", string.Empty);
             }
 
             TemplateParser? parser = null;

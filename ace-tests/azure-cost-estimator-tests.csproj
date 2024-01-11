@@ -47,6 +47,8 @@
     <None Remove="templates\reworked\aks\availability-set.bicep" />
     <None Remove="templates\reworked\aks\ultrassd.bicep" />
     <None Remove="templates\reworked\automation-account\automation-account.bicep" />
+    <None Remove="templates\reworked\automation-account\automation-parameters.bicep" />
+    <None Remove="templates\reworked\automation-account\automation-parameters.bicepparam" />
     <None Remove="templates\reworked\automation-account\tf\generic\main.tf" />
     <None Remove="templates\reworked\automation-account\usage-patterns.bicep" />
   </ItemGroup>
