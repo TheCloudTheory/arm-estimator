@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Text.Json;
 
 namespace ACE.Compilation
 {
@@ -53,6 +54,40 @@ namespace ACE.Compilation
                 this.logger.LogWarning("Found configuration file 'bicepconfig.json' in the current directory. This file will be used to compile the Bicep file and may affect the result. See https://github.com/TheCloudTheory/arm-estimator/issues/197 for more information.");
                 return;
             }
+        }
+
+        public string? CompileBicepparam(FileInfo bicepparamFile, CancellationToken token)
+        {
+            string? parameters;
+
+            try
+            {
+                if(token.IsCancellationRequested)
+                {
+                    return null;
+                }
+
+                this.logger.AddEstimatorMessage("Attempting to compile Bicepparam file using Bicep CLI.");
+                CompileBicepWith("bicep", $"build-params {bicepparamFile} --stdout", token, logger, out parameters);
+
+                if(parameters == null)
+                {
+                    return null;
+                }
+
+                // Bicep CLI returns a JSON object with a single property "parametersJson" that contains the parameters
+                var result = JsonSerializer.Deserialize<BicepparamStdoutResult>(parameters);
+                return result?.ParametersJson;
+            }
+            catch (Win32Exception)
+            {
+                // First compilation may not work if Bicep CLI is not installed directly,
+                // try to use Azure CLI instead
+                this.logger.AddEstimatorMessage("Compilation failed, attempting to compile Bicepparam file using Azure CLI.");
+                CompileBicepWith("az", $"bicep build-params --file {bicepparamFile} --stdout", token, logger, out parameters);
+            }
+
+            return parameters;
         }
 
         private static void CompileBicepWith(string fileName, string arguments, CancellationToken token, ILogger logger, out string? template)
