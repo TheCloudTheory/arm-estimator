@@ -25,7 +25,7 @@ ACE follows a concept of [_running cost as architecture fitness function_](https
 * Support for both Incremental / Complete deployment modes (see `Usage` section)
 * Displaying delta describing difference between your current estimated cost and after changes are applied
 * An option to stop CICD process if estimations exceed given limit (see `Usage` section)
-* Supports passing parameters along with your template
+* Supports passing parameters along with your template (including `.bicepparam` files)
 * Handles extension resources as long as they're correctly configured (i.e. define `scope` parameter)
 * Works with both individually defined resources and nested resources
 * Supports 17 different currencies
