@@ -26,5 +26,5 @@ internal class Configuration
     public string? WebhookUrl { get; set; }
     public string? LogFile { get; set; }
     public bool DisableVersionCheck { get; set; }
-    public FileInfo? MockedRetailAPIResponsePath { get; set; }
+    public FileInfo[]? MockedRetailAPIResponsePaths { get; set; }
 }

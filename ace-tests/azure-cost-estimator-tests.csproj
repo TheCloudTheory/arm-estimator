@@ -41,6 +41,9 @@
 
 
   <ItemGroup>
+    <None Remove="mocked-responses\retail-api\asr\inferred-1.json" />
+    <None Remove="mocked-responses\retail-api\asr\inferred-2.json" />
+    <None Remove="mocked-responses\retail-api\asr\inferred-3.json" />
     <None Remove="mocked-responses\retail-api\automation-account\usage-patterns.json" />
     <None Remove="templates\bicep\keyvault\keyvault.bicep" />
     <None Remove="templates\configuration\configuration.json" />
