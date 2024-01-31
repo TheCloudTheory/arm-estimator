@@ -16,7 +16,13 @@ public class SiteRecoveryInferredMetricsTests
                 "arm-estimator-tests-rg",
                 "--generateJsonOutput",
                 "--jsonOutputFilename",
-                outputFilename
+                outputFilename,
+                "--mocked-retail-api-response-path",
+                "mocked-responses/retail-api/asr/inferred-1.json",
+                "--mocked-retail-api-response-path",
+                "mocked-responses/retail-api/asr/inferred-2.json",
+                "--mocked-retail-api-response-path",
+                "mocked-responses/retail-api/asr/inferred-3.json"
             });
 
         Assert.That(exitCode, Is.EqualTo(0));
@@ -30,7 +36,7 @@ public class SiteRecoveryInferredMetricsTests
         Assert.That(output, Is.Not.Null);
         Assert.Multiple(() =>
         {
-            Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(246.01479999999998d));
+            Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(239.44479999999999d));
             Assert.That(output.TotalResourceCount, Is.EqualTo(7));
         });
     }

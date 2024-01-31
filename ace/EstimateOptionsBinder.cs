@@ -32,7 +32,7 @@ internal class EstimateOptionsBinder : BinderBase<EstimateOptions>
     private readonly Option<string?> logFile;
     private readonly Option<FileInfo?> configurationFile;
     private readonly Option<bool?> optOutCheckingNewVersion;
-    private readonly Option<FileInfo?> mockedRetailAPIResponsePath;
+    private readonly Option<FileInfo[]?> mockedRetailAPIResponsePaths;
 
     public EstimateOptionsBinder(Option<DeploymentMode?> mode,
                                  Option<int?> threshold,
@@ -58,7 +58,7 @@ internal class EstimateOptionsBinder : BinderBase<EstimateOptions>
                                  Option<string?> logFileOption,
                                  Option<FileInfo?> configurationFileOption,
                                  Option<bool?> optOutCheckingNewVersionOption,
-                                 Option<FileInfo?> mockedRetailAPIResponsePathOption)
+                                 Option<FileInfo[]?> mockedRetailAPIResponsePathOption)
     {
         this.mode = mode;
         this.threshold = threshold;
@@ -84,7 +84,7 @@ internal class EstimateOptionsBinder : BinderBase<EstimateOptions>
         this.logFile = logFileOption;
         this.configurationFile = configurationFileOption;
         this.optOutCheckingNewVersion = optOutCheckingNewVersionOption;
-        this.mockedRetailAPIResponsePath = mockedRetailAPIResponsePathOption;
+        this.mockedRetailAPIResponsePaths = mockedRetailAPIResponsePathOption;
     }
 
     protected override EstimateOptions GetBoundValue(BindingContext bindingContext)
@@ -123,7 +123,7 @@ internal class EstimateOptionsBinder : BinderBase<EstimateOptions>
                 bindingContext.ParseResult.GetValueForOption(webhookAuthorization),
                 configuration.LogFile,
                 configuration.DisableVersionCheck,
-                configuration.MockedRetailAPIResponsePath
+                configuration.MockedRetailAPIResponsePaths
                 );
         }
 
@@ -151,7 +151,7 @@ internal class EstimateOptionsBinder : BinderBase<EstimateOptions>
             bindingContext.ParseResult.GetValueForOption(webhookAuthorization),
             bindingContext.ParseResult.GetValueForOption(logFile),
             bindingContext.ParseResult.GetValueForOption(optOutCheckingNewVersion) ?? Defaults.OptOutCheckingNewVersion,
-            bindingContext.ParseResult.GetValueForOption(mockedRetailAPIResponsePath)
+            bindingContext.ParseResult.GetValueForOption(mockedRetailAPIResponsePaths)
             );
     }
 

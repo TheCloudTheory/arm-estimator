@@ -54,7 +54,7 @@ public class Program
         var logFileOption = new Option<string?>("--log-file", "Path to a log file");
         var configurationFileOption = new Option<FileInfo?>("--configuration-file", "Path to configuration file for ACE");
         var optOutCheckingNewVersionOption = new Option<bool?>("--disable-version-check", "Whether to disable checking for new version of ACE");
-        var retailAPIResponsePathOption = new Option<FileInfo?>("--mocked-retail-api-response-path", "Path to a file containing mocked Retail API response. Used for testing purposes only.");
+        var retailAPIResponsePathOption = new Option<FileInfo[]?>("--mocked-retail-api-response-path", "Path to a file containing mocked Retail API response. Used for testing purposes only.");
 
         var rootCommand = new RootCommand("ACE (Azure Cost Estimator)");
 
