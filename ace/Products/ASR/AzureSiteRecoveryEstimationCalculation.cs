@@ -27,6 +27,11 @@ internal class AzureSiteRecoveryEstimationCalculation : BaseEstimation, IEstimat
             {
                 cost = item.retailPrice * 30;
             }
+            else if (item.serviceId == "DZH313Z7MMC8")
+            {
+                var calculation = new VirtualMachineEstimationCalculation(new[] { item}, this.id, this.change, this.conversionRate);
+                cost = calculation.GetTotalCost(changes, usagePatterns).TotalCost;
+            }
             else
             {
                 cost = item.retailPrice;
