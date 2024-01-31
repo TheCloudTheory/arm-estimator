@@ -88,7 +88,7 @@ internal class AzureSiteRecoveryRetailQuery : BaseRetailQuery, IRetailQuery
                                             vmChange.location = replicaLocation;
 
                                             var replicaFilter = new VirtualMachineQueryFilter(vmChange, logger).GetFiltersBasedOnDesiredState(replicaLocation);
-                                            return $"{baseQuery}({filter}) or ({replicaFilter})";
+                                            return $"{baseQuery}({filter}) or (priceType eq 'Consumption' and {replicaFilter})";
                                         }
                                         else
                                         {

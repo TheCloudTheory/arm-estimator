@@ -30,8 +30,8 @@ public class SiteRecoveryInferredMetricsTests
         Assert.That(output, Is.Not.Null);
         Assert.Multiple(() =>
         {
-            Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(0));
-            Assert.That(output.TotalResourceCount, Is.EqualTo(1));
+            Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(246.01479999999998d));
+            Assert.That(output.TotalResourceCount, Is.EqualTo(7));
         });
     }
 }
