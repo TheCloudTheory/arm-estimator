@@ -67,7 +67,8 @@ internal sealed class VNetZones
                 productName = "Virtual Network Peering",
                 meterName = "Inbound data transfer",
                 retailPrice = GetCost(inLocation),
-                unitOfMeasure = "GB"
+                unitOfMeasure = "GB",
+                location = inLocation
             },
             new RetailItem()
             {
@@ -75,7 +76,8 @@ internal sealed class VNetZones
                 productName = "Virtual Network Peering",
                 meterName = "Outbound data transfer",
                 retailPrice = GetCost(outLocation),
-                unitOfMeasure = "GB"
+                unitOfMeasure = "GB",
+                location = outLocation
             }
         };
     }
