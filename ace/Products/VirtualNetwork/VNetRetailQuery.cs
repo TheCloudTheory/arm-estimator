@@ -52,32 +52,16 @@ internal class VNetRetailQuery : BaseRetailQuery, IRetailQuery
                 this.logger.LogWarning("ACE currently doesn't support calculating VNet peerings cost for other currency than USD. Make appropriate adjustment to reflect real cost of this service.");
             }
 
-            var peeringTypes = DetectPeeringTypes(peerings);
+            var peeringsMetadata = BuildPeeringsMetadata(peerings);
             var items = new List<RetailItem>();
-            foreach (var peeringType in peeringTypes)
+            foreach (var metadata in peeringsMetadata)
             {
-                if (peeringType == PeeringType.InterRegion)
+                if (metadata.Type == PeeringType.InterRegion)
                 {
-                    items.Add(new RetailItem()
-                    {
-                        skuName = "Inter-Region",
-                        productName = "Virtual Network Peering",
-                        meterName = "Inbound data transfer",
-                        retailPrice = 0.035d,
-                        unitOfMeasure = "GB"
-                    });
-
-                    items.Add(new RetailItem()
-                    {
-                        skuName = "Inter-Region",
-                        productName = "Virtual Network Peering",
-                        meterName = "Outbound data transfer",
-                        retailPrice = 0.035d,
-                        unitOfMeasure = "GB"
-                    });
+                    items.AddRange(VNetZones.GetCost(metadata.RemoteVNetLocation, metadata.VNetLocation));
                 }
 
-                if (peeringType == PeeringType.IntraRegion)
+                if (metadata.Type == PeeringType.IntraRegion)
                 {
                     items.Add(new RetailItem()
                     {
@@ -98,7 +82,7 @@ internal class VNetRetailQuery : BaseRetailQuery, IRetailQuery
                     });
                 }
 
-                if (peeringType == PeeringType.Both)
+                if (metadata.Type == PeeringType.Both)
                 {
                     items.Add(new RetailItem()
                     {
@@ -150,29 +134,29 @@ internal class VNetRetailQuery : BaseRetailQuery, IRetailQuery
         };
     }
 
-    private PeeringType[] DetectPeeringTypes(Peering[] peerings)
+    private PeeringMetadata[] BuildPeeringsMetadata(Peering[] peerings)
     {
-        var peeringTypes = new List<PeeringType>();
+        var peeringTypes = new List<PeeringMetadata>();
 
         foreach (var peering in peerings)
         {
             var remoteVNet = base.changes.SingleOrDefault(c => peering.Properties != null && peering.Properties.RemoteVirtualNetwork != null && peering.Properties.RemoteVirtualNetwork.Id == c.resourceId);
             if (remoteVNet == null)
             {
-                this.logger.LogWarning("Couldn't determine remote VNet for peering. Assuming it's Inter-Region.");
-                peeringTypes.Add(PeeringType.InterRegion);
+                this.logger.LogWarning("Couldn't determine remote VNet for peering. Assuming it's Intra-Region.");
+                peeringTypes.Add(new PeeringMetadata(PeeringType.IntraRegion));
 
                 continue;
             }
 
             if (remoteVNet.after?.location == this.change.after?.location)
             {
-                peeringTypes.Add(PeeringType.IntraRegion);
+                peeringTypes.Add(new PeeringMetadata(PeeringType.IntraRegion));
                 break;
             }
             else
             {
-                peeringTypes.Add(PeeringType.InterRegion);
+                 peeringTypes.Add(new PeeringMetadata(PeeringType.InterRegion, this.change.after?.location!, remoteVNet.after?.location!));
             }
         }
 
@@ -184,20 +168,20 @@ internal class VNetRetailQuery : BaseRetailQuery, IRetailQuery
                 var remoteVNet = base.changes.SingleOrDefault(c => peering.Properties != null && peering.Properties.VirtualNetworkPeerings!.Any(peering => peering.Id == c.resourceId));
                 if (remoteVNet == null)
                 {
-                    this.logger.LogWarning("Couldn't determine remote VNet for peering. Assuming it's Inter-Region.");
-                    peeringTypes.Add(PeeringType.InterRegion);
+                    this.logger.LogWarning("Couldn't determine remote VNet for peering. Assuming it's Intra-Region.");
+                    peeringTypes.Add(new PeeringMetadata(PeeringType.IntraRegion));
 
                     continue;
                 }
 
                 if (remoteVNet.after?.location == this.change.after?.location)
                 {
-                    peeringTypes.Add(PeeringType.IntraRegion);
+                    peeringTypes.Add(new PeeringMetadata(PeeringType.IntraRegion));
                     break;
                 }
                 else
                 {
-                    peeringTypes.Add(PeeringType.InterRegion);
+                    peeringTypes.Add(new PeeringMetadata(PeeringType.InterRegion, this.change.after?.location!, remoteVNet.after?.location!));
                 }
             }
         }

@@ -156,6 +156,7 @@ internal class WhatIfProcessor
         var resources = new List<EstimatedResourceData>();
         var unsupportedResources = new List<CommonResourceIdentifier>();
         var freeResources = new Dictionary<CommonResourceIdentifier, WhatIfChangeType?>();
+        var otherResources = new Dictionary<CommonResourceIdentifier, WhatIfChangeType?>();
 
         foreach (WhatIfChange change in this.changes)
         {
@@ -468,6 +469,10 @@ internal class WhatIfProcessor
                     resource = new EstimatedResourceData(0, 0, id);
                     freeResources.Add(id, change.changeType);
                     break;
+                case "Microsoft.Network/virtualNetworks/virtualNetworkPeerings":
+                    resource = new EstimatedResourceData(0, 0, id);
+                    otherResources.Add(id, change.changeType);
+                    break;
                 default:
                     if (id?.GetName() != null)
                     {
@@ -510,6 +515,11 @@ internal class WhatIfProcessor
         }
 
         this.outputFormatter.EndEstimationsBlock();
+
+        if (otherResources.Count > 0)
+        {
+            this.outputFormatter.RenderOtherResourcesBlock(otherResources);
+        }
 
         if (freeResources.Count > 0)
         {

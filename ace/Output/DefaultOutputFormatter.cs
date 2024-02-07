@@ -135,5 +135,20 @@ namespace ACE.Output
                 this.logger.AddEstimatorMessage("{0} [{1}]", resource.GetName(), resource.GetResourceType());
             }
         }
+
+        public void RenderOtherResourcesBlock(Dictionary<CommonResourceIdentifier, WhatIfChangeType?> otherResources)
+        {
+            this.logger.LogInformation("Other resources (already included in estimation):");
+            this.logger.LogInformation("");
+
+            foreach (var resource in otherResources)
+            {
+                ReportResourceWithoutCost(resource.Key, resource.Value);
+            }
+
+            this.logger.LogInformation("");
+            this.logger.LogInformation("-------------------------------");
+            this.logger.LogInformation("");
+        }
     }
 }

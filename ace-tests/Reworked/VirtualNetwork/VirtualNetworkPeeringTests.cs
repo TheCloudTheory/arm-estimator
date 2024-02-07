@@ -30,8 +30,8 @@ namespace ACE_Tests.Reworked.VirtualNetwork
             Assert.That(output, Is.Not.Null);
             Assert.Multiple(() =>
             {
-                Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(0.0d));
-                Assert.That(output.TotalResourceCount, Is.EqualTo(1));
+                Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(0.25d));
+                Assert.That(output.TotalResourceCount, Is.EqualTo(4));
             });
         }
 
@@ -40,18 +40,12 @@ namespace ACE_Tests.Reworked.VirtualNetwork
         {
             var outputFilename = $"ace_test_{DateTime.Now.Ticks}";
             var exitCode = await Program.Main(new[] {
-                    "templates/reworked/virtual-network/virtual-network-peering.bicep",
+                    "templates/reworked/virtual-network/peering-1-3.bicep",
                     "cf70b558-b930-45e4-9048-ebcefb926adf",
                     "arm-estimator-tests-rg",
                     "--generateJsonOutput",
                     "--jsonOutputFilename",
-                    outputFilename,
-                    "--mocked-retail-api-response-path",
-                    "mocked-responses/retail-api/vnet/peering-1.json",
-                    "--mocked-retail-api-response-path",
-                    "mocked-responses/retail-api/vnet/peering-2.json",
-                    "--mocked-retail-api-response-path",
-                    "mocked-responses/retail-api/vnet/peering-3.json"
+                    outputFilename
                 });
 
             Assert.That(exitCode, Is.EqualTo(0));
@@ -65,8 +59,8 @@ namespace ACE_Tests.Reworked.VirtualNetwork
             Assert.That(output, Is.Not.Null);
             Assert.Multiple(() =>
             {
-                Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(0.0d));
-                Assert.That(output.TotalResourceCount, Is.EqualTo(1));
+                Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(0.39d));
+                Assert.That(output.TotalResourceCount, Is.EqualTo(4));
             });
         }
 
@@ -75,18 +69,12 @@ namespace ACE_Tests.Reworked.VirtualNetwork
         {
             var outputFilename = $"ace_test_{DateTime.Now.Ticks}";
             var exitCode = await Program.Main(new[] {
-                    "templates/reworked/virtual-network/virtual-network-peering.bicep",
+                    "templates/reworked/virtual-network/peering-2-3.bicep",
                     "cf70b558-b930-45e4-9048-ebcefb926adf",
                     "arm-estimator-tests-rg",
                     "--generateJsonOutput",
                     "--jsonOutputFilename",
-                    outputFilename,
-                    "--mocked-retail-api-response-path",
-                    "mocked-responses/retail-api/vnet/peering-1.json",
-                    "--mocked-retail-api-response-path",
-                    "mocked-responses/retail-api/vnet/peering-2.json",
-                    "--mocked-retail-api-response-path",
-                    "mocked-responses/retail-api/vnet/peering-3.json"
+                    outputFilename
                 });
 
             Assert.That(exitCode, Is.EqualTo(0));
@@ -100,8 +88,8 @@ namespace ACE_Tests.Reworked.VirtualNetwork
             Assert.That(output, Is.Not.Null);
             Assert.Multiple(() =>
             {
-                Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(0.0d));
-                Assert.That(output.TotalResourceCount, Is.EqualTo(1));
+                Assert.That(output.TotalCost.OriginalValue, Is.EqualTo(0.5d));
+                Assert.That(output.TotalResourceCount, Is.EqualTo(4));
             });
         }
     }

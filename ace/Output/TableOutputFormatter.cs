@@ -9,6 +9,7 @@ namespace ACE.Output
     {
         private readonly ConsoleTable estimationsTable;
         private readonly ConsoleTable freeResourcesTable;
+        private readonly ConsoleTable otherResourcesTable;
         private readonly ConsoleTable unsupportedResourcesTable;
         private readonly CurrencyCode currency;
 
@@ -25,6 +26,13 @@ namespace ACE.Output
             }, logger);
 
             this.freeResourcesTable = new ConsoleTable("Free Resources", new[]
+            {
+                "Change type",
+                "Resource name",
+                "Resource type"
+            }, logger);
+
+            this.otherResourcesTable = new ConsoleTable("Free Resources", new[]
             {
                 "Change type",
                 "Resource name",
@@ -54,6 +62,19 @@ namespace ACE.Output
             foreach(var resource in freeResources)
             {
                 this.freeResourcesTable.AddRow(new[] {
+                    resource.Value.ToString().GetValueOrNotAvailable(),
+                    resource.Key.GetName(),
+                    resource.Key.GetResourceType().GetValueOrNotAvailable()});
+            }
+
+            this.freeResourcesTable.Draw();
+        }
+
+        public void RenderOtherResourcesBlock(Dictionary<CommonResourceIdentifier, WhatIfChangeType?> otherResources)
+        {
+            foreach(var resource in otherResources)
+            {
+                this.otherResourcesTable.AddRow(new[] {
                     resource.Value.ToString().GetValueOrNotAvailable(),
                     resource.Key.GetName(),
                     resource.Key.GetResourceType().GetValueOrNotAvailable()});
