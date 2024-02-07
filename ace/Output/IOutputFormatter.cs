@@ -16,5 +16,6 @@ namespace ACE.Output
         void EndEstimationsBlock();
         void RenderFreeResourcesBlock(Dictionary<CommonResourceIdentifier, WhatIfChangeType?> freeResources);
         void RenderUnsupportedResourcesBlock(List<CommonResourceIdentifier> unsupportedResources);
+        void RenderOtherResourcesBlock(Dictionary<CommonResourceIdentifier, WhatIfChangeType?> otherResources);
     }
 }
