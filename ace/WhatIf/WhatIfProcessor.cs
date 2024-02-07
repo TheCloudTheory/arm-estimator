@@ -596,7 +596,7 @@ internal class WhatIfProcessor
             }
         }
 
-        this.outputFormatter.ReportEstimationToConsole(id, estimation.GetItems(), summary, change.changeType, delta, data.Items?.FirstOrDefault()?.location);
+        this.outputFormatter.ReportEstimationToConsole(id, estimation.GetItems(), summary, change.changeType, delta, change.GetChange()?.location);
         return new EstimatedResourceData(summary.TotalCost, delta, id);
     }
 

@@ -69,7 +69,8 @@ internal class VNetRetailQuery : BaseRetailQuery, IRetailQuery
                         productName = "Virtual Network Peering",
                         meterName = "Inbound data transfer",
                         retailPrice = 0.01d,
-                        unitOfMeasure = "GB"
+                        unitOfMeasure = "GB",
+                        location = properties["location"]?.ToString()
                     });
 
                     items.Add(new RetailItem()
@@ -78,7 +79,8 @@ internal class VNetRetailQuery : BaseRetailQuery, IRetailQuery
                         productName = "Virtual Network Peering",
                         meterName = "Outbound data transfer",
                         retailPrice = 0.01d,
-                        unitOfMeasure = "GB"
+                        unitOfMeasure = "GB",
+                        location = properties["location"]?.ToString()
                     });
                 }
 
@@ -90,7 +92,8 @@ internal class VNetRetailQuery : BaseRetailQuery, IRetailQuery
                         productName = "Virtual Network Peering",
                         meterName = "Inbound data transfer",
                         retailPrice = 0.01d,
-                        unitOfMeasure = "GB"
+                        unitOfMeasure = "GB",
+                        location = properties["location"]?.ToString()
                     });
 
                     items.Add(new RetailItem()
@@ -99,7 +102,8 @@ internal class VNetRetailQuery : BaseRetailQuery, IRetailQuery
                         productName = "Virtual Network Peering",
                         meterName = "Outbound data transfer",
                         retailPrice = 0.01d,
-                        unitOfMeasure = "GB"
+                        unitOfMeasure = "GB",
+                        location = properties["location"]?.ToString()
                     });
 
                     items.Add(new RetailItem()
@@ -108,7 +112,8 @@ internal class VNetRetailQuery : BaseRetailQuery, IRetailQuery
                         productName = "Virtual Network Peering",
                         meterName = "Inbound data transfer",
                         retailPrice = 0.035d,
-                        unitOfMeasure = "GB"
+                        unitOfMeasure = "GB",
+                        location = properties["location"]?.ToString()
                     });
 
                     items.Add(new RetailItem()
@@ -117,7 +122,8 @@ internal class VNetRetailQuery : BaseRetailQuery, IRetailQuery
                         productName = "Virtual Network Peering",
                         meterName = "Outbound data transfer",
                         retailPrice = 0.035d,
-                        unitOfMeasure = "GB"
+                        unitOfMeasure = "GB",
+                        location = properties["location"]?.ToString()
                     });
                 }
             }
