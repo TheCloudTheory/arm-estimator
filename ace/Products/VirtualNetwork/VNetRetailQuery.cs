@@ -38,7 +38,7 @@ internal class VNetRetailQuery : BaseRetailQuery, IRetailQuery
             return null;
         }
 
-        if (properties.ContainsKey("virtualNetworkPeerings") && this.template.SpecialCaseResources != null)
+        if (properties.ContainsKey("virtualNetworkPeerings"))
         {
             var peerings = ((JsonElement)properties["virtualNetworkPeerings"]!).Deserialize<Peering[]>();
             if (peerings == null)
@@ -52,97 +52,95 @@ internal class VNetRetailQuery : BaseRetailQuery, IRetailQuery
                 this.logger.LogWarning("ACE currently doesn't support calculating VNet peerings cost for other currency than USD. Make appropriate adjustment to reflect real cost of this service.");
             }
 
-            var peeringType = DecidePeeringType();
-
-            if (peeringType == PeeringType.InterRegion)
+            var peeringTypes = DetectPeeringTypes(peerings);
+            var items = new List<RetailItem>();
+            foreach (var peeringType in peeringTypes)
             {
-                return new RetailAPIResponse()
+                if (peeringType == PeeringType.InterRegion)
                 {
-                    Items = new[]
+                    items.Add(new RetailItem()
                     {
-                        new RetailItem()
-                        {
-                            skuName = "Inter-Region",
-                            productName = "Virtual Network Peering",
-                            meterName = "Inbound data transfer",
-                            retailPrice = 0.035d,
-                            unitOfMeasure = "GB"
-                        },
-                        new RetailItem()
-                        {
-                            skuName = "Inter-Region",
-                            productName = "Virtual Network Peering",
-                            meterName = "Outbound data transfer",
-                            retailPrice = 0.035d,
-                            unitOfMeasure = "GB"
-                        }
-                    }
-                };
-            }
+                        skuName = "Inter-Region",
+                        productName = "Virtual Network Peering",
+                        meterName = "Inbound data transfer",
+                        retailPrice = 0.035d,
+                        unitOfMeasure = "GB"
+                    });
 
-            if (peeringType == PeeringType.IntraRegion)
-            {
-                return new RetailAPIResponse()
-                {
-                    Items = new[]
+                    items.Add(new RetailItem()
                     {
-                    new RetailItem()
+                        skuName = "Inter-Region",
+                        productName = "Virtual Network Peering",
+                        meterName = "Outbound data transfer",
+                        retailPrice = 0.035d,
+                        unitOfMeasure = "GB"
+                    });
+                }
+
+                if (peeringType == PeeringType.IntraRegion)
+                {
+                    items.Add(new RetailItem()
                     {
                         skuName = "Intra-Region",
                         productName = "Virtual Network Peering",
                         meterName = "Inbound data transfer",
                         retailPrice = 0.01d,
                         unitOfMeasure = "GB"
-                    },
-                    new RetailItem()
+                    });
+
+                    items.Add(new RetailItem()
                     {
                         skuName = "Intra-Region",
                         productName = "Virtual Network Peering",
                         meterName = "Outbound data transfer",
                         retailPrice = 0.01d,
                         unitOfMeasure = "GB"
-                    }
+                    });
                 }
-                };
+
+                if (peeringType == PeeringType.Both)
+                {
+                    items.Add(new RetailItem()
+                    {
+                        skuName = "Intra-Region",
+                        productName = "Virtual Network Peering",
+                        meterName = "Inbound data transfer",
+                        retailPrice = 0.01d,
+                        unitOfMeasure = "GB"
+                    });
+
+                    items.Add(new RetailItem()
+                    {
+                        skuName = "Intra-Region",
+                        productName = "Virtual Network Peering",
+                        meterName = "Outbound data transfer",
+                        retailPrice = 0.01d,
+                        unitOfMeasure = "GB"
+                    });
+
+                    items.Add(new RetailItem()
+                    {
+                        skuName = "Inter-Region",
+                        productName = "Virtual Network Peering",
+                        meterName = "Inbound data transfer",
+                        retailPrice = 0.035d,
+                        unitOfMeasure = "GB"
+                    });
+
+                    items.Add(new RetailItem()
+                    {
+                        skuName = "Inter-Region",
+                        productName = "Virtual Network Peering",
+                        meterName = "Outbound data transfer",
+                        retailPrice = 0.035d,
+                        unitOfMeasure = "GB"
+                    });
+                }
             }
 
             return new RetailAPIResponse()
             {
-                Items = new[]
-                {
-                   new RetailItem()
-                   {
-                       skuName = "Intra-Region",
-                       productName = "Virtual Network Peering",
-                       meterName = "Inbound data transfer",
-                       retailPrice = 0.01d,
-                       unitOfMeasure = "GB"
-                   },
-                   new RetailItem()
-                   {
-                       skuName = "Intra-Region",
-                       productName = "Virtual Network Peering",
-                       meterName = "Outbound data transfer",
-                       retailPrice = 0.01d,
-                       unitOfMeasure = "GB"
-                   },
-                   new RetailItem()
-                    {
-                        skuName = "Inter-Region",
-                        productName = "Virtual Network Peering",
-                        meterName = "Inbound data transfer",
-                        retailPrice = 0.035d,
-                        unitOfMeasure = "GB"
-                    },
-                    new RetailItem()
-                    {
-                        skuName = "Inter-Region",
-                        productName = "Virtual Network Peering",
-                        meterName = "Outbound data transfer",
-                        retailPrice = 0.035d,
-                        unitOfMeasure = "GB"
-                    }
-               }
+                Items = items.ToArray()
             };
         }
 
@@ -152,18 +150,13 @@ internal class VNetRetailQuery : BaseRetailQuery, IRetailQuery
         };
     }
 
-    private PeeringType DecidePeeringType()
+    private PeeringType[] DetectPeeringTypes(Peering[] peerings)
     {
         var peeringTypes = new List<PeeringType>();
-        var resourcesWithPeerings = this.template.SpecialCaseResources!.Where(resource => resource.Properties?.VirtualNetworkPeerings != null);
-        if(resourcesWithPeerings == null || resourcesWithPeerings.Any() == false)
-        {
-            throw new InvalidOperationException("Cannot decide peering type for the current configuration.");
-        }
 
-        foreach (var peering in resourcesWithPeerings)
+        foreach (var peering in peerings)
         {
-            var remoteVNet = base.changes.SingleOrDefault(c => peering.Properties != null && peering.Properties.VirtualNetworkPeerings!.Any(peering => peering.Id == c.resourceId));
+            var remoteVNet = base.changes.SingleOrDefault(c => peering.Properties != null && peering.Properties.RemoteVirtualNetwork != null && peering.Properties.RemoteVirtualNetwork.Id == c.resourceId);
             if (remoteVNet == null)
             {
                 this.logger.LogWarning("Couldn't determine remote VNet for peering. Assuming it's Inter-Region.");
@@ -183,9 +176,33 @@ internal class VNetRetailQuery : BaseRetailQuery, IRetailQuery
             }
         }
 
-        return peeringTypes.Contains(PeeringType.IntraRegion) && peeringTypes.Contains(PeeringType.InterRegion) ?
-            PeeringType.Both :
-            peeringTypes.First();
+        var resourcesWithPeerings = this.template.SpecialCaseResources!.Where(resource => resource.Properties?.VirtualNetworkPeerings != null);
+        if (resourcesWithPeerings != null)
+        {
+            foreach (var peering in resourcesWithPeerings)
+            {
+                var remoteVNet = base.changes.SingleOrDefault(c => peering.Properties != null && peering.Properties.VirtualNetworkPeerings!.Any(peering => peering.Id == c.resourceId));
+                if (remoteVNet == null)
+                {
+                    this.logger.LogWarning("Couldn't determine remote VNet for peering. Assuming it's Inter-Region.");
+                    peeringTypes.Add(PeeringType.InterRegion);
+
+                    continue;
+                }
+
+                if (remoteVNet.after?.location == this.change.after?.location)
+                {
+                    peeringTypes.Add(PeeringType.IntraRegion);
+                    break;
+                }
+                else
+                {
+                    peeringTypes.Add(PeeringType.InterRegion);
+                }
+            }
+        }
+
+        return peeringTypes.ToArray();
     }
 
     public string? GetQueryUrl(string location)

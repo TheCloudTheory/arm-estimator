@@ -4,5 +4,6 @@ internal enum PeeringType
 {
     IntraRegion,
     InterRegion,
-    Both
+    Both,
+    Unknown
 }
