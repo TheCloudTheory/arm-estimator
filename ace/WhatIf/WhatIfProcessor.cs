@@ -473,6 +473,18 @@ internal class WhatIfProcessor
                     resource = new EstimatedResourceData(0, 0, id);
                     otherResources.Add(id, change.changeType);
                     break;
+                case "microsoft.alertsManagement/smartDetectorAlertRules":
+                    resource = new EstimatedResourceData(0, 0, id);
+                    freeResources.Add(id, change.changeType);
+                    break;
+                case "microsoft.insights/actiongroups":
+                    resource = new EstimatedResourceData(0, 0, id);
+                    freeResources.Add(id, change.changeType);
+                    break;
+                case "Microsoft.Web/certificates":
+                    resource = new EstimatedResourceData(0, 0, id);
+                    freeResources.Add(id, change.changeType);
+                    break;
                 default:
                     if (id?.GetName() != null)
                     {
