@@ -6,7 +6,7 @@ internal class EstimatorLogger : ILogger
     private readonly bool isSilent;
     private readonly string? logFile;
 
-    public IDisposable BeginScope<TState>(TState state) => default!;
+    IDisposable ILogger.BeginScope<TState>(TState state) => default!;
     public bool IsEnabled(LogLevel logLevel) => true;
 
     public EstimatorLogger(bool isSilent, string? logFile)

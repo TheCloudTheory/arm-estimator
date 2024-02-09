@@ -61,7 +61,7 @@ internal class TerraformTemplateParser
             {
                 type = change.Type,
                 location = GetLocation(change),
-                properties = change.Change?.After,
+                properties = change.Change?.After!,
                 sku = CreateSkuObjectIfProvided(change.Change)
             }
         };

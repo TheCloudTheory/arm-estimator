@@ -35,7 +35,7 @@ internal class TemplateParser
             {
                 foreach(var peering in specialCaseResource.Properties.VirtualNetworkPeerings)
                 {
-                    if (peering == null) continue;
+                    if (peering == null || peering.Id == null) continue;
 
                     var peeringId = peering.Id.Replace("[", string.Empty);
                     peeringId = peeringId.Replace("]", string.Empty);

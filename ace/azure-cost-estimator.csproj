@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <RootNamespace>ACE</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
@@ -28,14 +28,14 @@
 	</PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Azure.ResourceManager.Compute" Version="1.1.0" />
-    <PackageReference Include="Azure.Storage.Blobs" Version="12.18.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.1" />
-	<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="6.0.0" />
+    <PackageReference Include="Azure.ResourceManager.Compute" Version="1.3.0" />
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.19.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
+	<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="8.0.0" />
 	<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.15.1" />
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
-    <PackageReference Include="Azure.Identity" Version="1.10.2" />
+    <PackageReference Include="Azure.Identity" Version="1.10.4" />
   </ItemGroup>
 
   <ItemGroup>

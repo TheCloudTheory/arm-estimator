@@ -373,7 +373,7 @@ public class Program
 
             var output = await new WhatIfProcessor(logger,
                                                    whatIfData.properties.changes,
-                                                   parser?.Template,
+                                                   parser?.Template!,
                                                    options,
                                                    _cancellationTokenSource.Token).Process(_cancellationTokenSource.Token);
             await GenerateOutputIfNeeded(options, output, logger);
