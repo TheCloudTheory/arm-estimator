@@ -46,6 +46,6 @@ internal static class EstimatorLoggerExtensions
         }
 
         var formattedMessage = string.Format(message, args);
-        logger.Log(LogLevel.Debug, new EventId(), "[DEBUG] {message}", null, (val1, val2) => formattedMessage);
+        logger.Log(LogLevel.Information, new EventId(), "[DEBUG] {message}", formattedMessage);
     }
 }
