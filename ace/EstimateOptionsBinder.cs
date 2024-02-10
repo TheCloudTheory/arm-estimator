@@ -33,6 +33,7 @@ internal class EstimateOptionsBinder : BinderBase<EstimateOptions>
     private readonly Option<FileInfo?> configurationFile;
     private readonly Option<bool?> optOutCheckingNewVersion;
     private readonly Option<FileInfo[]?> mockedRetailAPIResponsePaths;
+    private readonly Option<bool> debug;
 
     public EstimateOptionsBinder(Option<DeploymentMode?> mode,
                                  Option<int?> threshold,
@@ -58,7 +59,8 @@ internal class EstimateOptionsBinder : BinderBase<EstimateOptions>
                                  Option<string?> logFileOption,
                                  Option<FileInfo?> configurationFileOption,
                                  Option<bool?> optOutCheckingNewVersionOption,
-                                 Option<FileInfo[]?> mockedRetailAPIResponsePathOption)
+                                 Option<FileInfo[]?> mockedRetailAPIResponsePathOption,
+                                 Option<bool> debugOption)
     {
         this.mode = mode;
         this.threshold = threshold;
@@ -85,6 +87,7 @@ internal class EstimateOptionsBinder : BinderBase<EstimateOptions>
         this.configurationFile = configurationFileOption;
         this.optOutCheckingNewVersion = optOutCheckingNewVersionOption;
         this.mockedRetailAPIResponsePaths = mockedRetailAPIResponsePathOption;
+        this.debug = debugOption;
     }
 
     protected override EstimateOptions GetBoundValue(BindingContext bindingContext)
@@ -123,7 +126,8 @@ internal class EstimateOptionsBinder : BinderBase<EstimateOptions>
                 bindingContext.ParseResult.GetValueForOption(webhookAuthorization),
                 configuration.LogFile,
                 configuration.DisableVersionCheck,
-                configuration.MockedRetailAPIResponsePaths
+                configuration.MockedRetailAPIResponsePaths,
+                configuration.Debug
                 );
         }
 
@@ -151,7 +155,8 @@ internal class EstimateOptionsBinder : BinderBase<EstimateOptions>
             bindingContext.ParseResult.GetValueForOption(webhookAuthorization),
             bindingContext.ParseResult.GetValueForOption(logFile),
             bindingContext.ParseResult.GetValueForOption(optOutCheckingNewVersion) ?? Defaults.OptOutCheckingNewVersion,
-            bindingContext.ParseResult.GetValueForOption(mockedRetailAPIResponsePaths)
+            bindingContext.ParseResult.GetValueForOption(mockedRetailAPIResponsePaths),
+            bindingContext.ParseResult.GetValueForOption(debug)
             );
     }
 
@@ -178,7 +183,8 @@ internal class EstimateOptionsBinder : BinderBase<EstimateOptions>
         bindingContext.ParseResult.GetValueForOption(cacheStorageAccountName) != null ||
         bindingContext.ParseResult.GetValueForOption(webhookUrl) != null ||
         bindingContext.ParseResult.GetValueForOption(logFile) != null ||
-        bindingContext.ParseResult.GetValueForOption(optOutCheckingNewVersion) != null))
+        bindingContext.ParseResult.GetValueForOption(optOutCheckingNewVersion) != null) ||
+        bindingContext.ParseResult.GetValueForOption(mockedRetailAPIResponsePaths) != null)
         {
             throw new Exception("Cannot use both --configuration-file and other options besides --webhook-authorization and --inline.");
         }
