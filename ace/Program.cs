@@ -55,6 +55,7 @@ public class Program
         var configurationFileOption = new Option<FileInfo?>("--configuration-file", "Path to configuration file for ACE");
         var optOutCheckingNewVersionOption = new Option<bool?>("--disable-version-check", "Whether to disable checking for new version of ACE");
         var retailAPIResponsePathOption = new Option<FileInfo[]?>("--mocked-retail-api-response-path", "Path to a file containing mocked Retail API response. Used for testing purposes only.");
+        var debugOption = new Option<bool>("--debug", "Enables verbose logging");
 
         var rootCommand = new RootCommand("ACE (Azure Cost Estimator)");
 
@@ -83,6 +84,7 @@ public class Program
         rootCommand.AddGlobalOption(configurationFileOption);
         rootCommand.AddGlobalOption(optOutCheckingNewVersionOption);
         rootCommand.AddGlobalOption(retailAPIResponsePathOption);
+        rootCommand.AddGlobalOption(debugOption);
 
         rootCommand.AddArgument(templateFileArg);
         rootCommand.AddArgument(susbcriptionIdArg);
@@ -124,7 +126,8 @@ public class Program
                 logFileOption,
                 configurationFileOption,
                 optOutCheckingNewVersionOption,
-                retailAPIResponsePathOption
+                retailAPIResponsePathOption,
+                debugOption
         ));
 
         var subscriptionCommand = new Command("sub", "Calculate estimation for subscription");
@@ -168,7 +171,8 @@ public class Program
                 logFileOption,
                 configurationFileOption,
                 optOutCheckingNewVersionOption,
-                retailAPIResponsePathOption
+                retailAPIResponsePathOption,
+                debugOption
         ));
 
         var managementGroupCommand = new Command("mg", "Calculate estimation for management group");
@@ -212,7 +216,8 @@ public class Program
                 logFileOption,
                 configurationFileOption,
                 optOutCheckingNewVersionOption,
-                retailAPIResponsePathOption
+                retailAPIResponsePathOption,
+                debugOption
         ));
 
         var tenantCommand = new Command("tenant", "Calculate estimation for tenant");
@@ -254,7 +259,8 @@ public class Program
                 logFileOption,
                 configurationFileOption,
                 optOutCheckingNewVersionOption,
-                retailAPIResponsePathOption
+                retailAPIResponsePathOption,
+                debugOption
         ));
 
         rootCommand.AddCommand(subscriptionCommand);

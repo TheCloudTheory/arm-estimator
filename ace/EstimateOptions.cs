@@ -28,7 +28,8 @@ internal class EstimateOptions
                            string? webhookAuthorization,
                            string? logFile,
                            bool optOutCheckingNewVersion,
-                           FileInfo[]? mockedRetailAPIResponsePaths)
+                           FileInfo[]? mockedRetailAPIResponsePaths,
+                           bool debug)
     {
         Mode = mode;
         Threshold = threshold;
@@ -54,6 +55,7 @@ internal class EstimateOptions
         LogFile = logFile;
         OptOutCheckingNewVersion = optOutCheckingNewVersion;
         MockedRetailAPIResponsePaths = mockedRetailAPIResponsePaths;
+        Debug = debug;
     }
 
     public DeploymentMode Mode { get; }
@@ -80,4 +82,5 @@ internal class EstimateOptions
     public string? LogFile { get; }
     public bool OptOutCheckingNewVersion { get; }
     public FileInfo[]? MockedRetailAPIResponsePaths { get; }
+    public bool Debug { get; }
 }

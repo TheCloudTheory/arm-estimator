@@ -37,4 +37,15 @@ internal static class EstimatorLoggerExtensions
     {
         logger.Log(LogLevel.Information, new EventId(), new NonSilentMessage(message), null, (val1, val2) => message);
     }
+
+    public static void AddDebugMessage(this ILogger logger, string message, bool isDebugEnabled, params object?[] args)
+    {
+        if (!isDebugEnabled)
+        {
+            return;
+        }
+
+        var formattedMessage = string.Format(message, args);
+        logger.Log(LogLevel.Debug, new EventId(), "[DEBUG] {message}", null, (val1, val2) => formattedMessage);
+    }
 }

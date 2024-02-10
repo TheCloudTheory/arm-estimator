@@ -16,7 +16,7 @@ internal class WhatIfProcessor
 {
     private static readonly Lazy<HttpClient> httpClient = new(() => new HttpClient());
     private static readonly ConcurrentDictionary<string, RetailAPIResponse> cachedResults = new();
-    private static readonly Dictionary<string, string> resourceIdToLocationMap = new();
+    private static readonly Dictionary<string, string> resourceIdToLocationMap = [];
 
     internal static CapabilitiesCache? cache;
 
@@ -27,6 +27,7 @@ internal class WhatIfProcessor
     private readonly double conversionRate;
     private readonly IOutputFormatter outputFormatter;
     private readonly FileInfo[]? mockedRetailAPIResponsePaths;
+    private readonly bool debug;
 
     public WhatIfProcessor(ILogger logger,
                            WhatIfChange[] changes,
@@ -41,6 +42,7 @@ internal class WhatIfProcessor
         this.conversionRate = options.ConversionRate;
         this.outputFormatter = new OutputGenerator(options.OutputFormat, logger, options.Currency, options.DisableDetailedMetrics).GetFormatter();
         this.mockedRetailAPIResponsePaths = options.MockedRetailAPIResponsePaths;
+        this.debug = options.Debug;
 
         ReconcileResources(token);
         BuildVMCapabilitiesIfNeeded(options.CacheHandler, options.CacheHandlerStorageAccountName, token);
@@ -597,7 +599,7 @@ internal class WhatIfProcessor
         double? delta = null;
         if (change.before != null)
         {
-            if (Activator.CreateInstance(typeof(TCalculation), new object[] { data.Items, id, desiredState, this.conversionRate }) is not TCalculation previousStateEstimation)
+            if (Activator.CreateInstance(typeof(TCalculation), [data.Items, id, desiredState, this.conversionRate]) is not TCalculation previousStateEstimation)
             {
                 logger.LogError("Couldn't create an instance of {type}.", typeof(TCalculation));
             }
@@ -628,7 +630,7 @@ internal class WhatIfProcessor
             return null;
         }
 
-        if (Activator.CreateInstance(typeof(T), new object[] { change, id, logger, currency, changes, this.template }) is not T query)
+        if (Activator.CreateInstance(typeof(T), [change, id, logger, currency, changes, this.template]) is not T query)
         {
             this.logger.LogError("Couldn't create an instance of {type}.", typeof(T));
             return null;
@@ -650,6 +652,8 @@ internal class WhatIfProcessor
                 logger.LogError("URL generated for {type} is null.", typeof(T));
                 return null;
             }
+
+            this.logger.AddDebugMessage(url, this.debug);
         }
         catch (KeyNotFoundException)
         {
