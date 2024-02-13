@@ -3,6 +3,8 @@ using ACE.Output;
 using ACE.WhatIf;
 using Microsoft.Extensions.Logging;
 using System.CommandLine;
+using System.CommandLine.Builder;
+using System.CommandLine.Parsing;
 using System.Reflection;
 using System.Text;
 using System.Text.Json;
@@ -267,7 +269,19 @@ public class Program
         rootCommand.AddCommand(managementGroupCommand);
         rootCommand.AddCommand(tenantCommand);
 
-        return await rootCommand.InvokeAsync(args);
+        try
+        {
+            var parser = new CommandLineBuilder(rootCommand)
+                .UseDefaults()
+                .Build();
+
+            return parser.Invoke(args);
+        }
+        catch(Exception ex)
+        {
+            Console.Error.WriteLine("An error occurred: {0}", ex.Message);
+            return 1;
+        }
     }
 
     private static async Task<int> Estimate(FileInfo templateFile,
