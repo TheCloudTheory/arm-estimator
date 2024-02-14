@@ -26,7 +26,7 @@ public class Program
             eventArgs.Cancel = true;
         };
 
-        var templateFileArg = new Argument<FileInfo>("template-file", "Template file to analyze"); 
+        var templateFileArg = new Argument<FileInfo>("template-file", "Template file to analyze");
         var susbcriptionIdArg = new Argument<string>("subscription-id", "Subscription ID");
         var resourceGroupArg = new Argument<string>("resource-group", "Resource group name");
         var managementGroupArg = new Argument<string>("management-group", "Management group name");
@@ -59,232 +59,232 @@ public class Program
         var retailAPIResponsePathOption = new Option<FileInfo[]?>("--mocked-retail-api-response-path", "Path to a file containing mocked Retail API response. Used for testing purposes only.");
         var debugOption = new Option<bool>("--debug", "Enables verbose logging");
 
-        var rootCommand = new RootCommand("ACE (Azure Cost Estimator)");
-
-        rootCommand.AddGlobalOption(deploymentModeOption);
-        rootCommand.AddGlobalOption(thresholdOption);
-        rootCommand.AddGlobalOption(parametersOption);
-        rootCommand.AddGlobalOption(currencyOption);
-        rootCommand.AddGlobalOption(jsonOutputOption);
-        rootCommand.AddGlobalOption(silentOption);
-        rootCommand.AddGlobalOption(stdoutOption);
-        rootCommand.AddGlobalOption(disableDetailsOption);
-        rootCommand.AddGlobalOption(jsonOutputFilenameOption);
-        rootCommand.AddGlobalOption(htmlOutputOption);
-        rootCommand.AddGlobalOption(inlineOptions);
-        rootCommand.AddGlobalOption(dryRunOption);
-        rootCommand.AddGlobalOption(htmlOutputFilenameOption);
-        rootCommand.AddGlobalOption(outputFormatOption);
-        rootCommand.AddGlobalOption(disableCacheOption);
-        rootCommand.AddGlobalOption(terraformExecutableOption);
-        rootCommand.AddGlobalOption(conversionRateOption);
-        rootCommand.AddGlobalOption(cacheHandlerOption);
-        rootCommand.AddGlobalOption(cacheStorageAccountNameOption);
-        rootCommand.AddGlobalOption(webhookUrlOption);
-        rootCommand.AddGlobalOption(webhookAuthorizationOption);
-        rootCommand.AddGlobalOption(logFileOption);
-        rootCommand.AddGlobalOption(configurationFileOption);
-        rootCommand.AddGlobalOption(optOutCheckingNewVersionOption);
-        rootCommand.AddGlobalOption(retailAPIResponsePathOption);
-        rootCommand.AddGlobalOption(debugOption);
-
-        rootCommand.AddArgument(templateFileArg);
-        rootCommand.AddArgument(susbcriptionIdArg);
-        rootCommand.AddArgument(resourceGroupArg);
-
-        rootCommand.SetHandler(async (file, subscription, resourceGroup, options) =>
-        {
-            var exitCode = await Estimate(file, subscription, resourceGroup, null, options, CommandType.ResourceGroup);
-            if (exitCode != 0)
-            {
-                throw new Exception();
-            }
-        },
-            templateFileArg,
-            susbcriptionIdArg,
-            resourceGroupArg,
-            new EstimateOptionsBinder(
-                deploymentModeOption,
-                thresholdOption,
-                parametersOption,
-                currencyOption,
-                jsonOutputOption,
-                silentOption,
-                stdoutOption,
-                disableDetailsOption,
-                jsonOutputFilenameOption,
-                htmlOutputOption,
-                inlineOptions,
-                dryRunOption,
-                htmlOutputFilenameOption,
-                outputFormatOption,
-                disableCacheOption,
-                terraformExecutableOption,
-                conversionRateOption,
-                cacheHandlerOption,
-                cacheStorageAccountNameOption,
-                webhookUrlOption,
-                webhookAuthorizationOption,
-                logFileOption,
-                configurationFileOption,
-                optOutCheckingNewVersionOption,
-                retailAPIResponsePathOption,
-                debugOption
-        ));
-
-        var subscriptionCommand = new Command("sub", "Calculate estimation for subscription");
-        subscriptionCommand.AddArgument(templateFileArg);
-        subscriptionCommand.AddArgument(susbcriptionIdArg);
-        subscriptionCommand.AddArgument(locationArg);
-
-        subscriptionCommand.SetHandler(async (file, subscription, location, options) =>
-        {
-            var exitCode = await Estimate(file, subscription, null, location, options, CommandType.Subscription);
-            if (exitCode != 0)
-            {
-                throw new Exception();
-            }
-        },
-            templateFileArg,
-            susbcriptionIdArg,
-            locationArg,
-            new EstimateOptionsBinder(
-                deploymentModeOption,
-                thresholdOption,
-                parametersOption,
-                currencyOption,
-                jsonOutputOption,
-                silentOption,
-                stdoutOption,
-                disableDetailsOption,
-                jsonOutputFilenameOption,
-                htmlOutputOption,
-                inlineOptions,
-                dryRunOption,
-                htmlOutputFilenameOption,
-                outputFormatOption,
-                disableCacheOption,
-                terraformExecutableOption,
-                conversionRateOption,
-                cacheHandlerOption,
-                cacheStorageAccountNameOption,
-                webhookUrlOption,
-                webhookAuthorizationOption,
-                logFileOption,
-                configurationFileOption,
-                optOutCheckingNewVersionOption,
-                retailAPIResponsePathOption,
-                debugOption
-        ));
-
-        var managementGroupCommand = new Command("mg", "Calculate estimation for management group");
-        managementGroupCommand.AddArgument(templateFileArg);
-        managementGroupCommand.AddArgument(managementGroupArg);
-        managementGroupCommand.AddArgument(locationArg);
-
-        managementGroupCommand.SetHandler(async (file, managementGroup, location, options) =>
-        {
-            var exitCode = await Estimate(file, managementGroup, null, location, options, CommandType.ManagementGroup);
-            if (exitCode != 0)
-            {
-                throw new Exception();
-            }
-        },
-            templateFileArg,
-            managementGroupArg,
-            locationArg,
-            new EstimateOptionsBinder(
-                deploymentModeOption,
-                thresholdOption,
-                parametersOption,
-                currencyOption,
-                jsonOutputOption,
-                silentOption,
-                stdoutOption,
-                disableDetailsOption,
-                jsonOutputFilenameOption,
-                htmlOutputOption,
-                inlineOptions,
-                dryRunOption,
-                htmlOutputFilenameOption,
-                outputFormatOption,
-                disableCacheOption,
-                terraformExecutableOption,
-                conversionRateOption,
-                cacheHandlerOption,
-                cacheStorageAccountNameOption,
-                webhookUrlOption,
-                webhookAuthorizationOption,
-                logFileOption,
-                configurationFileOption,
-                optOutCheckingNewVersionOption,
-                retailAPIResponsePathOption,
-                debugOption
-        ));
-
-        var tenantCommand = new Command("tenant", "Calculate estimation for tenant");
-        tenantCommand.AddArgument(templateFileArg);
-        tenantCommand.AddArgument(locationArg);
-
-        tenantCommand.SetHandler(async (file, location, options) =>
-        {
-            var exitCode = await Estimate(file, "<tenant>", null, location, options, CommandType.Tenant);
-            if (exitCode != 0)
-            {
-                throw new Exception();
-            }
-        },
-            templateFileArg,
-            locationArg,
-            new EstimateOptionsBinder(
-                deploymentModeOption,
-                thresholdOption,
-                parametersOption,
-                currencyOption,
-                jsonOutputOption,
-                silentOption,
-                stdoutOption,
-                disableDetailsOption,
-                jsonOutputFilenameOption,
-                htmlOutputOption,
-                inlineOptions,
-                dryRunOption,
-                htmlOutputFilenameOption,
-                outputFormatOption,
-                disableCacheOption,
-                terraformExecutableOption,
-                conversionRateOption,
-                cacheHandlerOption,
-                cacheStorageAccountNameOption,
-                webhookUrlOption,
-                webhookAuthorizationOption,
-                logFileOption,
-                configurationFileOption,
-                optOutCheckingNewVersionOption,
-                retailAPIResponsePathOption,
-                debugOption
-        ));
-
-        rootCommand.AddCommand(subscriptionCommand);
-        rootCommand.AddCommand(managementGroupCommand);
-        rootCommand.AddCommand(tenantCommand);
-
         try
         {
+            var rootCommand = new RootCommand("ACE (Azure Cost Estimator)");
+
+            rootCommand.AddGlobalOption(deploymentModeOption);
+            rootCommand.AddGlobalOption(thresholdOption);
+            rootCommand.AddGlobalOption(parametersOption);
+            rootCommand.AddGlobalOption(currencyOption);
+            rootCommand.AddGlobalOption(jsonOutputOption);
+            rootCommand.AddGlobalOption(silentOption);
+            rootCommand.AddGlobalOption(stdoutOption);
+            rootCommand.AddGlobalOption(disableDetailsOption);
+            rootCommand.AddGlobalOption(jsonOutputFilenameOption);
+            rootCommand.AddGlobalOption(htmlOutputOption);
+            rootCommand.AddGlobalOption(inlineOptions);
+            rootCommand.AddGlobalOption(dryRunOption);
+            rootCommand.AddGlobalOption(htmlOutputFilenameOption);
+            rootCommand.AddGlobalOption(outputFormatOption);
+            rootCommand.AddGlobalOption(disableCacheOption);
+            rootCommand.AddGlobalOption(terraformExecutableOption);
+            rootCommand.AddGlobalOption(conversionRateOption);
+            rootCommand.AddGlobalOption(cacheHandlerOption);
+            rootCommand.AddGlobalOption(cacheStorageAccountNameOption);
+            rootCommand.AddGlobalOption(webhookUrlOption);
+            rootCommand.AddGlobalOption(webhookAuthorizationOption);
+            rootCommand.AddGlobalOption(logFileOption);
+            rootCommand.AddGlobalOption(configurationFileOption);
+            rootCommand.AddGlobalOption(optOutCheckingNewVersionOption);
+            rootCommand.AddGlobalOption(retailAPIResponsePathOption);
+            rootCommand.AddGlobalOption(debugOption);
+
+            rootCommand.AddArgument(templateFileArg);
+            rootCommand.AddArgument(susbcriptionIdArg);
+            rootCommand.AddArgument(resourceGroupArg);
+
+            rootCommand.SetHandler(async (file, subscription, resourceGroup, options) =>
+            {
+                var result = await Estimate(file, subscription, resourceGroup, null, options, CommandType.ResourceGroup);
+                if (result.ExitCode != 0)
+                {
+                    throw new Exception(result.ErrorMessage);
+                }
+            },
+                templateFileArg,
+                susbcriptionIdArg,
+                resourceGroupArg,
+                new EstimateOptionsBinder(
+                    deploymentModeOption,
+                    thresholdOption,
+                    parametersOption,
+                    currencyOption,
+                    jsonOutputOption,
+                    silentOption,
+                    stdoutOption,
+                    disableDetailsOption,
+                    jsonOutputFilenameOption,
+                    htmlOutputOption,
+                    inlineOptions,
+                    dryRunOption,
+                    htmlOutputFilenameOption,
+                    outputFormatOption,
+                    disableCacheOption,
+                    terraformExecutableOption,
+                    conversionRateOption,
+                    cacheHandlerOption,
+                    cacheStorageAccountNameOption,
+                    webhookUrlOption,
+                    webhookAuthorizationOption,
+                    logFileOption,
+                    configurationFileOption,
+                    optOutCheckingNewVersionOption,
+                    retailAPIResponsePathOption,
+                    debugOption
+            ));
+
+            var subscriptionCommand = new Command("sub", "Calculate estimation for subscription");
+            subscriptionCommand.AddArgument(templateFileArg);
+            subscriptionCommand.AddArgument(susbcriptionIdArg);
+            subscriptionCommand.AddArgument(locationArg);
+
+            subscriptionCommand.SetHandler(async (file, subscription, location, options) =>
+            {
+                var result = await Estimate(file, subscription, null, location, options, CommandType.Subscription);
+                if (result.ExitCode != 0)
+                {
+                    throw new Exception(result.ErrorMessage);
+                }
+            },
+                templateFileArg,
+                susbcriptionIdArg,
+                locationArg,
+                new EstimateOptionsBinder(
+                    deploymentModeOption,
+                    thresholdOption,
+                    parametersOption,
+                    currencyOption,
+                    jsonOutputOption,
+                    silentOption,
+                    stdoutOption,
+                    disableDetailsOption,
+                    jsonOutputFilenameOption,
+                    htmlOutputOption,
+                    inlineOptions,
+                    dryRunOption,
+                    htmlOutputFilenameOption,
+                    outputFormatOption,
+                    disableCacheOption,
+                    terraformExecutableOption,
+                    conversionRateOption,
+                    cacheHandlerOption,
+                    cacheStorageAccountNameOption,
+                    webhookUrlOption,
+                    webhookAuthorizationOption,
+                    logFileOption,
+                    configurationFileOption,
+                    optOutCheckingNewVersionOption,
+                    retailAPIResponsePathOption,
+                    debugOption
+            ));
+
+            var managementGroupCommand = new Command("mg", "Calculate estimation for management group");
+            managementGroupCommand.AddArgument(templateFileArg);
+            managementGroupCommand.AddArgument(managementGroupArg);
+            managementGroupCommand.AddArgument(locationArg);
+
+            managementGroupCommand.SetHandler(async (file, managementGroup, location, options) =>
+            {
+                var result = await Estimate(file, managementGroup, null, location, options, CommandType.ManagementGroup);
+                if (result.ExitCode != 0)
+                {
+                    throw new Exception(result.ErrorMessage);
+                }
+            },
+                templateFileArg,
+                managementGroupArg,
+                locationArg,
+                new EstimateOptionsBinder(
+                    deploymentModeOption,
+                    thresholdOption,
+                    parametersOption,
+                    currencyOption,
+                    jsonOutputOption,
+                    silentOption,
+                    stdoutOption,
+                    disableDetailsOption,
+                    jsonOutputFilenameOption,
+                    htmlOutputOption,
+                    inlineOptions,
+                    dryRunOption,
+                    htmlOutputFilenameOption,
+                    outputFormatOption,
+                    disableCacheOption,
+                    terraformExecutableOption,
+                    conversionRateOption,
+                    cacheHandlerOption,
+                    cacheStorageAccountNameOption,
+                    webhookUrlOption,
+                    webhookAuthorizationOption,
+                    logFileOption,
+                    configurationFileOption,
+                    optOutCheckingNewVersionOption,
+                    retailAPIResponsePathOption,
+                    debugOption
+            ));
+
+            var tenantCommand = new Command("tenant", "Calculate estimation for tenant");
+            tenantCommand.AddArgument(templateFileArg);
+            tenantCommand.AddArgument(locationArg);
+
+            tenantCommand.SetHandler(async (file, location, options) =>
+            {
+                var result = await Estimate(file, "<tenant>", null, location, options, CommandType.Tenant);
+                if (result.ExitCode != 0)
+                {
+                    throw new Exception(result.ErrorMessage);
+                }
+            },
+                templateFileArg,
+                locationArg,
+                new EstimateOptionsBinder(
+                    deploymentModeOption,
+                    thresholdOption,
+                    parametersOption,
+                    currencyOption,
+                    jsonOutputOption,
+                    silentOption,
+                    stdoutOption,
+                    disableDetailsOption,
+                    jsonOutputFilenameOption,
+                    htmlOutputOption,
+                    inlineOptions,
+                    dryRunOption,
+                    htmlOutputFilenameOption,
+                    outputFormatOption,
+                    disableCacheOption,
+                    terraformExecutableOption,
+                    conversionRateOption,
+                    cacheHandlerOption,
+                    cacheStorageAccountNameOption,
+                    webhookUrlOption,
+                    webhookAuthorizationOption,
+                    logFileOption,
+                    configurationFileOption,
+                    optOutCheckingNewVersionOption,
+                    retailAPIResponsePathOption,
+                    debugOption
+            ));
+
+            rootCommand.AddCommand(subscriptionCommand);
+            rootCommand.AddCommand(managementGroupCommand);
+            rootCommand.AddCommand(tenantCommand);
+
             var parser = new CommandLineBuilder(rootCommand)
                 .UseDefaults()
                 .Build();
 
             return parser.Invoke(args);
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             Console.Error.WriteLine("An error occurred: {0}", ex.Message);
             return 1;
         }
     }
 
-    private static async Task<int> Estimate(FileInfo templateFile,
+    private static async Task<ApplicationResult> Estimate(FileInfo templateFile,
                                             string scopeId,
                                             string? resourceGroupName,
                                             string? location,
@@ -305,18 +305,22 @@ public class Program
             var template = GetTemplate(templateFile, options.TerraformExecutable, logger, out var templateType);
             if (template == null)
             {
-                logger.LogError("There was a problem with processing template.");
-                return 1;
+                var error = "There was a problem with processing template.";
+                logger.LogError("{error}", error);
+
+                return new ApplicationResult(1,error);
             }
 
             var parameters = "{}";
             if (options.ParametersFile != null)
             {
                 var fileContent = options.ParametersFile.FullName.EndsWith(".bicepparam") ? new BicepCompiler(logger).CompileBicepparam(options.ParametersFile, _cancellationTokenSource.Token) : File.ReadAllText(options.ParametersFile.FullName);
-                if(fileContent == null)
+                if (fileContent == null)
                 {
-                    logger.LogError("Couldn't read parameters file {fileName}", options.ParametersFile.FullName);
-                    return 1;
+                    var error = $"Couldn't read parameters file {options.ParametersFile.FullName}";
+                    logger.LogError("{error}", error);
+                    
+                    return new ApplicationResult(1, error);
                 }
 
                 parameters = Regex.Replace(fileContent, @"\s+", string.Empty);
@@ -331,8 +335,10 @@ public class Program
                 }
                 catch (JsonException ex)
                 {
-                    logger.LogError("Couldn't parse the following template - {template}. Error: {error}", template, ex.Message);
-                    return 1;
+                    var error = $"Couldn't parse the following template - {template}. Error: { ex.Message}";
+                    logger.LogError("{error}", error);
+                    
+                    return new ApplicationResult(1, error);
                 }
 
                 if (options.InlineParameters != null && options.InlineParameters.Any())
@@ -349,13 +355,16 @@ public class Program
             var whatIfData = await whatIfParser.GetWhatIfData(_cancellationTokenSource.Token);
             if (whatIfData == null)
             {
-                logger.LogError("Couldn't fetch data for What If request.");
-                return 1;
+                var error = "Couldn't fetch data for What If request.";
+                logger.LogError("{error}", error);
+                
+                return new ApplicationResult(1, error);
             }
 
             if (whatIfData != null && whatIfData.status == "Failed")
             {
-                logger.LogError("An error happened when performing WhatIf operation.");
+                var error = "An error happened when performing WhatIf operation.";
+                logger.LogError("{error}", error);
 
                 if (whatIfData.error != null)
                 {
@@ -367,13 +376,13 @@ public class Program
                     logger.LogError("{error}", errorDetails);
                 }
 
-                return 1;
+                return new ApplicationResult(1, error);
             }
 
             if (whatIfData == null || whatIfData.properties == null || whatIfData.properties.changes == null || whatIfData.properties.changes.Length == 0)
             {
                 logger.AddEstimatorMessage("No changes detected.");
-                return 0;
+                return new ApplicationResult(0, null);
             }
 
             logger.AddEstimatorMessage("Detected {0} resources.", whatIfData.properties.changes.Length);
@@ -388,7 +397,7 @@ public class Program
             if (options.DryRunOnly)
             {
                 logger.LogInformation("Dry run enabled, skipping estimation.");
-                return 0;
+                return new ApplicationResult(0, null);;
             }
 
             var output = await new WhatIfProcessor(logger,
@@ -400,11 +409,13 @@ public class Program
 
             if (options.Threshold != -1 && output.TotalCost.OriginalValue > options.Threshold)
             {
-                logger.LogError("Estimated cost [{totalCost} USD] exceeds configured threshold [{threshold} USD].", output.TotalCost, options.Threshold);
-                return 1;
+                var error = $"Estimated cost [{output.TotalCost} USD] exceeds configured threshold [{options.Threshold} USD].";
+                logger.LogError("{error}", error);
+                
+                return new ApplicationResult(1, error);
             }
 
-            return 0;
+            return new ApplicationResult(0, null);
         }
     }
 
@@ -441,7 +452,7 @@ public class Program
                 generator.Generate();
             }
 
-            if(!string.IsNullOrEmpty(options.WebhookUrl))
+            if (!string.IsNullOrEmpty(options.WebhookUrl))
             {
                 logger.AddEstimatorMessage("Sending estimation result to webhook URL {0}", options.WebhookUrl);
 
@@ -451,7 +462,7 @@ public class Program
                     Content = new StringContent(JsonSerializer.Serialize(output), Encoding.UTF8, "application/json")
                 };
 
-                if(string.IsNullOrEmpty(options.WebhookAuthorization))
+                if (string.IsNullOrEmpty(options.WebhookAuthorization))
                 {
                     logger.AddEstimatorMessage("Webhook authorization header not set, skipping.");
                 }
@@ -465,7 +476,7 @@ public class Program
                 {
                     logger.LogError("Couldn't send estimation result to webhook URL {url}. Status code: {code}", options.WebhookUrl, response.StatusCode);
                 }
-                else 
+                else
                 {
                     logger.AddEstimatorMessage("Estimation result sent successfully to webhook URL {0}", options.WebhookUrl);
                 }
@@ -477,12 +488,12 @@ public class Program
 
     private static string GenerateJsonOutputFilename(EstimateOptions options)
     {
-        if(string.IsNullOrWhiteSpace(options.JsonOutputFilename))
+        if (string.IsNullOrWhiteSpace(options.JsonOutputFilename))
         {
             return $"ace_estimation_{DateTime.UtcNow:yyyyMMddHHmmss}.json";
         }
 
-        if(options.JsonOutputFilename.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
+        if (options.JsonOutputFilename.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
         {
             return options.JsonOutputFilename;
         }
