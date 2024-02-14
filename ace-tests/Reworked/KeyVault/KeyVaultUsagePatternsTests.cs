@@ -7,10 +7,10 @@ namespace ACE_Tests.Reworked.KeyVault;
 public class KeyVaultUsagePatternsTests
 {
     [Test]
-    public async Task KeyVault_UsagePatterns_WhenThereIsAzureKeyVaultUsagePattern1_ItShouldBeInferredForCalculation()
+    public void KeyVault_UsagePatterns_WhenThereIsAzureKeyVaultUsagePattern1_ItShouldBeInferredForCalculation()
     {
         var outputFilename = $"ace_test_{DateTime.Now.Ticks}";
-        var exitCode = await Program.Main([
+        var exitCode = Program.Main([
                     "templates/reworked/key-vault/usage-patterns-1.bicep",
                     "cf70b558-b930-45e4-9048-ebcefb926adf",
                     "arm-estimator-tests-rg",

@@ -17,7 +17,7 @@ public class Program
     private static string? GetInformationalVersion() => Assembly.GetEntryAssembly()?.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
     private static readonly CancellationTokenSource _cancellationTokenSource = new();
 
-    public static async Task<int> Main(string[] args)
+    public static int Main(string[] args)
     {
         Console.CancelKeyPress += (sender, eventArgs) =>
         {
