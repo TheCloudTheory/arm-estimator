@@ -487,6 +487,9 @@ internal class WhatIfProcessor
                     resource = new EstimatedResourceData(0, 0, id);
                     freeResources.Add(id, change.changeType);
                     break;
+                case "Microsoft.Web/staticSites":
+                    resource = await Calculate<StaticWebAppRetailQuery, StaticWebAppEstimationCalculation>(change, id, token);
+                    break;
                 default:
                     if (id?.GetName() != null)
                     {
@@ -653,6 +656,14 @@ internal class WhatIfProcessor
                 return null;
             }
 
+            if (url == "FREE")
+            {
+                return new RetailAPIResponse()
+                {
+                    Items = Enumerable.Empty<RetailItem>().ToArray()
+                };
+            }
+
             this.logger.AddDebugMessage(url, this.debug);
         }
         catch (KeyNotFoundException)
@@ -750,7 +761,7 @@ internal class WhatIfProcessor
 
     private RetailAPIResponse? GetFakeRetailAPIResponse<T>(WhatIfChange change, CommonResourceIdentifier id) where T : BaseRetailQuery, IRetailQuery
     {
-        if (Activator.CreateInstance(typeof(T), new object[] { change, id, logger, currency, changes, this.template }) is not T query)
+        if (Activator.CreateInstance(typeof(T), [change, id, logger, currency, changes, this.template]) is not T query)
         {
             logger.LogError("Couldn't create an instance of {type}.", typeof(T));
             return null;

@@ -1,0 +1,32 @@
+{
+    "Url": "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter=priceType eq 'Consumption' and serviceId eq 'DZH317GT8G5N' and armRegionName eq 'westeurope' and skuName eq 'Standard' and productName eq 'Static Web Apps' and meterName eq 'Standard App'",
+    "BillingCurrency": "USD",
+    "CustomerEntityId": "Default",
+    "CustomerEntityType": "Retail",
+    "Items": [
+      {
+        "currencyCode": "USD",
+        "tierMinimumUnits": 0.0,
+        "retailPrice": 9.0,
+        "unitPrice": 9.0,
+        "armRegionName": "westeurope",
+        "location": "EU West",
+        "effectiveStartDate": "2021-05-01T00:00:00Z",
+        "meterId": "56c80fab-f20c-5e41-951d-667dc9503604",
+        "meterName": "Standard App",
+        "productId": "DZH318Z08W5K",
+        "skuId": "DZH318Z08W5K/0002",
+        "productName": "Static Web Apps",
+        "skuName": "Standard",
+        "serviceName": "Azure App Service",
+        "serviceId": "DZH317GT8G5N",
+        "serviceFamily": "Compute",
+        "unitOfMeasure": "1/Month",
+        "type": "Consumption",
+        "isPrimaryMeterRegion": true,
+        "armSkuName": ""
+      }
+    ],
+    "NextPageLink": null,
+    "Count": 1
+  }

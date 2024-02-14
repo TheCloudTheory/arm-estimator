@@ -1,18 +1,12 @@
 ﻿using ACE.WhatIf;
 using Microsoft.Extensions.Logging;
 
-internal class ContainerRegistryQueryFilter : IQueryFilter
+internal class ContainerRegistryQueryFilter(WhatIfAfterBeforeChange afterState, ILogger logger) : IQueryFilter
 {
     private const string ServiceId = "DZH315F9L8DM";
 
-    private readonly WhatIfAfterBeforeChange afterState;
-    private readonly ILogger logger;
-
-    public ContainerRegistryQueryFilter(WhatIfAfterBeforeChange afterState, ILogger logger)
-    {
-        this.afterState = afterState;
-        this.logger = logger;
-    }
+    private readonly WhatIfAfterBeforeChange afterState = afterState;
+    private readonly ILogger logger = logger;
 
     public string? GetFiltersBasedOnDesiredState(string location)
     {
