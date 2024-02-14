@@ -2,7 +2,7 @@
 using ACE.WhatIf;
 using Microsoft.Extensions.Logging;
 
-internal class ContainerRegistryRetailQuery(WhatIfChange change, CommonResourceIdentifier id, ILogger logger, CurrencyCode currency, WhatIfChange[] changes, TemplateSchema template) 
+internal class StaticWebAppRetailQuery(WhatIfChange change, CommonResourceIdentifier id, ILogger logger, CurrencyCode currency, WhatIfChange[] changes, TemplateSchema template) 
     : BaseRetailQuery(change, id, logger, currency, changes, template), IRetailQuery
 {
     public RetailAPIResponse? GetFakeResponse()
@@ -25,7 +25,12 @@ internal class ContainerRegistryRetailQuery(WhatIfChange change, CommonResourceI
             return null;
         }
 
-        var filter = new ContainerRegistryQueryFilter(change, this.logger).GetFiltersBasedOnDesiredState(location);
+        var filter = new StaticWebAppQueryFilter(change, this.logger).GetFiltersBasedOnDesiredState(location);
+        if(filter == "FREE")
+        {
+            return filter;
+        }
+
         return $"{baseQuery}{filter}";
     }
 }
