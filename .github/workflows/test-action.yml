@@ -13,22 +13,21 @@ jobs:
         with:
           creds: ${{ secrets.SP_CREDS }}
       - name: Run action for ARM Template
-        uses: TheCloudTheory/azure-cost-estimator-action@0.0.13-preview
+        uses: TheCloudTheory/azure-cost-estimator-action@0.0.15-preview
         with:
           template-file: 'ace-tests/templates/acr.json'
           subscription-id: 'cf70b558-b930-45e4-9048-ebcefb926adf'
           resource-group-name: 'arm-estimator-tests-rg'
       - name: Run action for Bicep
-        uses: TheCloudTheory/azure-cost-estimator-action@0.0.13-preview
+        uses: TheCloudTheory/azure-cost-estimator-action@0.0.15-preview
         with:
           template-file: 'ace-tests/templates/bicep/acr.bicep'
           subscription-id: 'cf70b558-b930-45e4-9048-ebcefb926adf'
           resource-group-name: 'arm-estimator-tests-rg'
       - name: Run action for Bicep (parameters)
-        uses: TheCloudTheory/azure-cost-estimator-action@0.0.13-preview
+        uses: TheCloudTheory/azure-cost-estimator-action@0.0.15-preview
         with:
           template-file: 'ace-tests/templates/reworked/key-vaylt/usage-patterns-1.bicep'
           subscription-id: 'cf70b558-b930-45e4-9048-ebcefb926adf'
           resource-group-name: 'arm-estimator-tests-rg'
-          inline-parameters:
-            parLocation: northeurope
+          inline-parameters: '{"parLocation":"northeurope"}'
