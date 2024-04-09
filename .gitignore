@@ -8,3 +8,5 @@
 **/.terraform
 **/.terraform.lock.hcl
 **/tfplan
+**/.mono
+**.csv
