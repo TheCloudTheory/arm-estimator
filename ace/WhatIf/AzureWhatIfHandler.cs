@@ -77,10 +77,15 @@ internal class AzureWhatIfHandler
 
         if(this.userGeneratedWhatIfFile != null)
         {
-            this.logger.AddEstimatorMessage("What If data loaded from provided file {file}.", this.userGeneratedWhatIfFile);
+            this.logger.AddEstimatorMessage("What If data loaded from provided file {0}.", this.userGeneratedWhatIfFile);
 
             var content = await File.ReadAllTextAsync(this.userGeneratedWhatIfFile, token);
-            return JsonSerializer.Deserialize<WhatIfResponse>(content);
+            var properties = JsonSerializer.Deserialize<WhatIfProperties>(content);
+
+            return new WhatIfResponse()
+            {
+                properties = properties
+            };
         }
         
         var response = await SendInitialRequest(token);

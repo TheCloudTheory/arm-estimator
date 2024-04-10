@@ -43,6 +43,7 @@
   <ItemGroup>
     <None Remove="mocked-responses/retail-api/key-vault/usage-patterns.json" />
     <None Remove="mocked-responses/retail-api/static-web-app/standard.json" />
+    <None Remove="mocked-responses/what-if/automation-account.json" />
     <None Remove="mocked-responses\retail-api\asr\inferred-1.json" />
     <None Remove="mocked-responses\retail-api\asr\inferred-2.json" />
     <None Remove="mocked-responses\retail-api\asr\inferred-3.json" />
