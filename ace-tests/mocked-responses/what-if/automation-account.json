@@ -1,0 +1,24 @@
+{
+    "changes": [
+      {
+        "after": {
+          "apiVersion": "2021-06-22",
+          "id": "/subscriptions/cf70b558-b930-45e4-9048-ebcefb926adf/resourceGroups/arm-estimator-tests-rg/providers/Microsoft.Automation/automationAccounts/ace-20240410073228",
+          "identity": {
+            "type": "SystemAssigned"
+          },
+          "location": "westeurope",
+          "name": "ace-20240410073228",
+          "resourceGroup": "arm-estimator-tests-rg",
+          "type": "Microsoft.Automation/automationAccounts"
+        },
+        "before": null,
+        "changeType": "Create",
+        "delta": null,
+        "resourceId": "/subscriptions/cf70b558-b930-45e4-9048-ebcefb926adf/resourceGroups/arm-estimator-tests-rg/providers/Microsoft.Automation/automationAccounts/ace-20240410073228",
+        "unsupportedReason": null
+      }
+    ],
+    "error": null,
+    "status": "Succeeded"
+  }
