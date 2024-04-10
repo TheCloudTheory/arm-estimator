@@ -29,7 +29,8 @@ internal class EstimateOptions
                            string? logFile,
                            bool optOutCheckingNewVersion,
                            FileInfo[]? mockedRetailAPIResponsePaths,
-                           bool debug)
+                           bool debug,
+                           string? userGeneratedWhatIf)
     {
         Mode = mode;
         Threshold = threshold;
@@ -56,6 +57,7 @@ internal class EstimateOptions
         OptOutCheckingNewVersion = optOutCheckingNewVersion;
         MockedRetailAPIResponsePaths = mockedRetailAPIResponsePaths;
         Debug = debug;
+        UserGeneratedWhatIfFile = userGeneratedWhatIf;
     }
 
     public DeploymentMode Mode { get; }
@@ -83,4 +85,5 @@ internal class EstimateOptions
     public bool OptOutCheckingNewVersion { get; }
     public FileInfo[]? MockedRetailAPIResponsePaths { get; }
     public bool Debug { get; }
+    public string? UserGeneratedWhatIfFile { get; }
 }

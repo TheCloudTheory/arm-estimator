@@ -22,6 +22,7 @@ internal class AzureWhatIfHandler
     private readonly ILogger logger;
     private readonly CommandType commandType;
     private readonly string? location;
+    private readonly string? userGeneratedWhatIfFile;
     private readonly ICacheHandler? cache;
 
     public AzureWhatIfHandler(string scopeId,
@@ -41,6 +42,7 @@ internal class AzureWhatIfHandler
         this.logger = logger;
         this.commandType = commandType;
         this.location = location;
+        this.userGeneratedWhatIfFile = options.UserGeneratedWhatIfFile;
 
         if(options.DisableCache == false)
         {
@@ -71,6 +73,14 @@ internal class AzureWhatIfHandler
         else
         {
             this.logger.AddEstimatorMessage("Cache is disabled.");
+        }
+
+        if(this.userGeneratedWhatIfFile != null)
+        {
+            this.logger.AddEstimatorMessage("What If data loaded from provided file {file}.", this.userGeneratedWhatIfFile);
+
+            var content = await File.ReadAllTextAsync(this.userGeneratedWhatIfFile, token);
+            return JsonSerializer.Deserialize<WhatIfResponse>(content);
         }
         
         var response = await SendInitialRequest(token);

@@ -12,7 +12,7 @@ using System.Text.RegularExpressions;
 
 namespace ACE;
 
-public class Program
+public partial class Program
 {
     private static string? GetInformationalVersion() => Assembly.GetEntryAssembly()?.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
     private static readonly CancellationTokenSource _cancellationTokenSource = new();
@@ -58,6 +58,7 @@ public class Program
         var optOutCheckingNewVersionOption = new Option<bool?>("--disable-version-check", "Whether to disable checking for new version of ACE");
         var retailAPIResponsePathOption = new Option<FileInfo[]?>("--mocked-retail-api-response-path", "Path to a file containing mocked Retail API response. Used for testing purposes only.");
         var debugOption = new Option<bool>("--debug", "Enables verbose logging");
+        var userGeneratedWhatIfOption = new Option<string?>("--what-if-file", "Path to a file containing user-generated WhatIf response");
 
         try
         {
@@ -89,6 +90,7 @@ public class Program
             rootCommand.AddGlobalOption(optOutCheckingNewVersionOption);
             rootCommand.AddGlobalOption(retailAPIResponsePathOption);
             rootCommand.AddGlobalOption(debugOption);
+            rootCommand.AddGlobalOption(userGeneratedWhatIfOption);
 
             rootCommand.AddArgument(templateFileArg);
             rootCommand.AddArgument(susbcriptionIdArg);
@@ -131,7 +133,8 @@ public class Program
                     configurationFileOption,
                     optOutCheckingNewVersionOption,
                     retailAPIResponsePathOption,
-                    debugOption
+                    debugOption,
+                    userGeneratedWhatIfOption
             ));
 
             var subscriptionCommand = new Command("sub", "Calculate estimation for subscription");
@@ -176,7 +179,8 @@ public class Program
                     configurationFileOption,
                     optOutCheckingNewVersionOption,
                     retailAPIResponsePathOption,
-                    debugOption
+                    debugOption,
+                    userGeneratedWhatIfOption
             ));
 
             var managementGroupCommand = new Command("mg", "Calculate estimation for management group");
@@ -221,7 +225,8 @@ public class Program
                     configurationFileOption,
                     optOutCheckingNewVersionOption,
                     retailAPIResponsePathOption,
-                    debugOption
+                    debugOption,
+                    userGeneratedWhatIfOption
             ));
 
             var tenantCommand = new Command("tenant", "Calculate estimation for tenant");
@@ -264,7 +269,8 @@ public class Program
                     configurationFileOption,
                     optOutCheckingNewVersionOption,
                     retailAPIResponsePathOption,
-                    debugOption
+                    debugOption,
+                    userGeneratedWhatIfOption
             ));
 
             rootCommand.AddCommand(subscriptionCommand);
@@ -323,7 +329,7 @@ public class Program
                     return new ApplicationResult(1, error);
                 }
 
-                parameters = Regex.Replace(fileContent, @"\s+", string.Empty);
+                parameters = WhitespacesRegex().Replace(fileContent, string.Empty);
             }
 
             TemplateParser? parser = null;
@@ -598,4 +604,7 @@ public class Program
             logger.AddEstimatorMessageSensibleToChange(change.changeType, "{0} [{1}]", id.GetName(), id.GetResourceType());
         }
     }
+
+    [GeneratedRegex(@"\s+")]
+    private static partial Regex WhitespacesRegex();
 }

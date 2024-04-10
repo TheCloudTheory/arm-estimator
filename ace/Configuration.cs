@@ -28,4 +28,5 @@ internal class Configuration
     public bool DisableVersionCheck { get; set; }
     public FileInfo[]? MockedRetailAPIResponsePaths { get; set; }
     public bool Debug { get; set; }
+    public string? UserGeneratedWhatIf { get; set; }
 }
