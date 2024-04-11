@@ -6,7 +6,6 @@ using System.CommandLine;
 using System.CommandLine.Builder;
 using System.CommandLine.Parsing;
 using System.Reflection;
-using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 
@@ -59,6 +58,8 @@ public partial class Program
         var retailAPIResponsePathOption = new Option<FileInfo[]?>("--mocked-retail-api-response-path", "Path to a file containing mocked Retail API response. Used for testing purposes only.");
         var debugOption = new Option<bool>("--debug", "Enables verbose logging");
         var userGeneratedWhatIfOption = new Option<string?>("--what-if-file", "Path to a file containing user-generated WhatIf response");
+        var markdownOutputOption = new Option<bool?>("--generate-markdown-output", "Should generate Markdown output");
+        var markdownOutputFilenameOption = new Option<string?>("--markdown-output-filename", "Sets Markdown output filename");
 
         try
         {
@@ -91,23 +92,14 @@ public partial class Program
             rootCommand.AddGlobalOption(retailAPIResponsePathOption);
             rootCommand.AddGlobalOption(debugOption);
             rootCommand.AddGlobalOption(userGeneratedWhatIfOption);
+            rootCommand.AddGlobalOption(markdownOutputOption);
+            rootCommand.AddGlobalOption(markdownOutputFilenameOption);
 
             rootCommand.AddArgument(templateFileArg);
             rootCommand.AddArgument(susbcriptionIdArg);
             rootCommand.AddArgument(resourceGroupArg);
 
-            rootCommand.SetHandler(async (file, subscription, resourceGroup, options) =>
-            {
-                var result = await Estimate(file, subscription, resourceGroup, null, options, CommandType.ResourceGroup);
-                if (result.ExitCode != 0)
-                {
-                    throw new Exception(result.ErrorMessage);
-                }
-            },
-                templateFileArg,
-                susbcriptionIdArg,
-                resourceGroupArg,
-                new EstimateOptionsBinder(
+            var binder = new EstimateOptionsBinder(
                     deploymentModeOption,
                     thresholdOption,
                     parametersOption,
@@ -134,8 +126,23 @@ public partial class Program
                     optOutCheckingNewVersionOption,
                     retailAPIResponsePathOption,
                     debugOption,
-                    userGeneratedWhatIfOption
-            ));
+                    userGeneratedWhatIfOption,
+                    markdownOutputOption,
+                    markdownOutputFilenameOption
+            );
+
+            rootCommand.SetHandler(async (file, subscription, resourceGroup, options) =>
+            {
+                var result = await Estimate(file, subscription, resourceGroup, null, options, CommandType.ResourceGroup);
+                if (result.ExitCode != 0)
+                {
+                    throw new Exception(result.ErrorMessage);
+                }
+            },
+                templateFileArg,
+                susbcriptionIdArg,
+                resourceGroupArg,
+                binder);
 
             var subscriptionCommand = new Command("sub", "Calculate estimation for subscription");
             subscriptionCommand.AddArgument(templateFileArg);
@@ -153,35 +160,7 @@ public partial class Program
                 templateFileArg,
                 susbcriptionIdArg,
                 locationArg,
-                new EstimateOptionsBinder(
-                    deploymentModeOption,
-                    thresholdOption,
-                    parametersOption,
-                    currencyOption,
-                    jsonOutputOption,
-                    silentOption,
-                    stdoutOption,
-                    disableDetailsOption,
-                    jsonOutputFilenameOption,
-                    htmlOutputOption,
-                    inlineOptions,
-                    dryRunOption,
-                    htmlOutputFilenameOption,
-                    outputFormatOption,
-                    disableCacheOption,
-                    terraformExecutableOption,
-                    conversionRateOption,
-                    cacheHandlerOption,
-                    cacheStorageAccountNameOption,
-                    webhookUrlOption,
-                    webhookAuthorizationOption,
-                    logFileOption,
-                    configurationFileOption,
-                    optOutCheckingNewVersionOption,
-                    retailAPIResponsePathOption,
-                    debugOption,
-                    userGeneratedWhatIfOption
-            ));
+                binder);
 
             var managementGroupCommand = new Command("mg", "Calculate estimation for management group");
             managementGroupCommand.AddArgument(templateFileArg);
@@ -199,35 +178,7 @@ public partial class Program
                 templateFileArg,
                 managementGroupArg,
                 locationArg,
-                new EstimateOptionsBinder(
-                    deploymentModeOption,
-                    thresholdOption,
-                    parametersOption,
-                    currencyOption,
-                    jsonOutputOption,
-                    silentOption,
-                    stdoutOption,
-                    disableDetailsOption,
-                    jsonOutputFilenameOption,
-                    htmlOutputOption,
-                    inlineOptions,
-                    dryRunOption,
-                    htmlOutputFilenameOption,
-                    outputFormatOption,
-                    disableCacheOption,
-                    terraformExecutableOption,
-                    conversionRateOption,
-                    cacheHandlerOption,
-                    cacheStorageAccountNameOption,
-                    webhookUrlOption,
-                    webhookAuthorizationOption,
-                    logFileOption,
-                    configurationFileOption,
-                    optOutCheckingNewVersionOption,
-                    retailAPIResponsePathOption,
-                    debugOption,
-                    userGeneratedWhatIfOption
-            ));
+                binder);
 
             var tenantCommand = new Command("tenant", "Calculate estimation for tenant");
             tenantCommand.AddArgument(templateFileArg);
@@ -243,35 +194,7 @@ public partial class Program
             },
                 templateFileArg,
                 locationArg,
-                new EstimateOptionsBinder(
-                    deploymentModeOption,
-                    thresholdOption,
-                    parametersOption,
-                    currencyOption,
-                    jsonOutputOption,
-                    silentOption,
-                    stdoutOption,
-                    disableDetailsOption,
-                    jsonOutputFilenameOption,
-                    htmlOutputOption,
-                    inlineOptions,
-                    dryRunOption,
-                    htmlOutputFilenameOption,
-                    outputFormatOption,
-                    disableCacheOption,
-                    terraformExecutableOption,
-                    conversionRateOption,
-                    cacheHandlerOption,
-                    cacheStorageAccountNameOption,
-                    webhookUrlOption,
-                    webhookAuthorizationOption,
-                    logFileOption,
-                    configurationFileOption,
-                    optOutCheckingNewVersionOption,
-                    retailAPIResponsePathOption,
-                    debugOption,
-                    userGeneratedWhatIfOption
-            ));
+                binder);
 
             rootCommand.AddCommand(subscriptionCommand);
             rootCommand.AddCommand(managementGroupCommand);

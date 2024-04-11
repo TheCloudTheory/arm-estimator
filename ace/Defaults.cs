@@ -18,4 +18,5 @@ internal class Defaults
     public const double ConversionRate = 1.0;
     public const CacheHandler Cache = CacheHandler.Local;
     public const bool OptOutCheckingNewVersion = false;
+    public const bool GenerateMarkdownOutput = false;
 }

@@ -29,4 +29,6 @@ internal class Configuration
     public FileInfo[]? MockedRetailAPIResponsePaths { get; set; }
     public bool Debug { get; set; }
     public string? UserGeneratedWhatIf { get; set; }
+    public bool? GenerateMarkdownOutput { get; set; }
+    public string? MarkdownOutputFilename { get; set; }
 }

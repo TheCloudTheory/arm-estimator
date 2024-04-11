@@ -30,7 +30,9 @@ internal class EstimateOptions
                            bool optOutCheckingNewVersion,
                            FileInfo[]? mockedRetailAPIResponsePaths,
                            bool debug,
-                           string? userGeneratedWhatIf)
+                           string? userGeneratedWhatIf,
+                           bool generateMarkdownOutput,
+                           string? markdownOutputFilename)
     {
         Mode = mode;
         Threshold = threshold;
@@ -58,6 +60,8 @@ internal class EstimateOptions
         MockedRetailAPIResponsePaths = mockedRetailAPIResponsePaths;
         Debug = debug;
         UserGeneratedWhatIfFile = userGeneratedWhatIf;
+        ShouldGenerateMarkdownOutput = generateMarkdownOutput;
+        MarkdownOutputFilename = markdownOutputFilename;
     }
 
     public DeploymentMode Mode { get; }
@@ -86,4 +90,6 @@ internal class EstimateOptions
     public FileInfo[]? MockedRetailAPIResponsePaths { get; }
     public bool Debug { get; }
     public string? UserGeneratedWhatIfFile { get; }
+    public bool ShouldGenerateMarkdownOutput { get; }
+    public string? MarkdownOutputFilename { get; }
 }

@@ -28,7 +28,7 @@ namespace ACE.Output
         /// <returns>A task representing the asynchronous operation.</returns>
         public async Task GenerateOutputIfNeeded(EstimateOptions options, EstimationOutput output)
         {
-            if (options.ShouldGenerateJsonOutput || options.ShouldGenerateHtmlOutput)
+            if (options.ShouldGenerateJsonOutput || options.ShouldGenerateHtmlOutput || options.ShouldGenerateMarkdownOutput)
             {
                 if (options.ShouldGenerateJsonOutput)
                 {
@@ -48,6 +48,12 @@ namespace ACE.Output
                 if (options.ShouldGenerateHtmlOutput)
                 {
                     var generator = new HtmlOutputGenerator(output, logger, options.HtmlOutputFilename);
+                    generator.Generate();
+                }
+
+                if (options.ShouldGenerateMarkdownOutput)
+                {
+                    var generator = new MarkdownOutputGenerator(output, logger, options.MarkdownOutputFilename);
                     generator.Generate();
                 }
 

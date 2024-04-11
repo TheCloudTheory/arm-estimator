@@ -35,6 +35,8 @@ internal class EstimateOptionsBinder : BinderBase<EstimateOptions>
     private readonly Option<FileInfo[]?> mockedRetailAPIResponsePaths;
     private readonly Option<bool> debug;
     private readonly Option<string?> userGeneratedWhatIf;
+    private readonly Option<bool?> generateMarkdownOutput;
+    private readonly Option<string?> markdownOutputFilename;
 
     public EstimateOptionsBinder(Option<DeploymentMode?> mode,
                                  Option<int?> threshold,
@@ -62,7 +64,9 @@ internal class EstimateOptionsBinder : BinderBase<EstimateOptions>
                                  Option<bool?> optOutCheckingNewVersionOption,
                                  Option<FileInfo[]?> mockedRetailAPIResponsePathOption,
                                  Option<bool> debugOption,
-                                 Option<string?> userGeneratedWhatIfOption)
+                                 Option<string?> userGeneratedWhatIfOption,
+                                 Option<bool?> generateMarkdownOutputOption,
+                                 Option<string?> markdownOutputFilenameOption)
     {
         this.mode = mode;
         this.threshold = threshold;
@@ -91,6 +95,8 @@ internal class EstimateOptionsBinder : BinderBase<EstimateOptions>
         this.mockedRetailAPIResponsePaths = mockedRetailAPIResponsePathOption;
         this.debug = debugOption;
         this.userGeneratedWhatIf = userGeneratedWhatIfOption;
+        this.generateMarkdownOutput = generateMarkdownOutputOption;
+        this.markdownOutputFilename = markdownOutputFilenameOption;
     }
 
     protected override EstimateOptions GetBoundValue(BindingContext bindingContext)
@@ -131,7 +137,9 @@ internal class EstimateOptionsBinder : BinderBase<EstimateOptions>
                 configuration.DisableVersionCheck,
                 configuration.MockedRetailAPIResponsePaths,
                 configuration.Debug,
-                configuration.UserGeneratedWhatIf
+                configuration.UserGeneratedWhatIf,
+                configuration.GenerateMarkdownOutput,
+                configuration.MarkdownOutputFilename
                 );
         }
 
@@ -161,7 +169,9 @@ internal class EstimateOptionsBinder : BinderBase<EstimateOptions>
             bindingContext.ParseResult.GetValueForOption(optOutCheckingNewVersion) ?? Defaults.OptOutCheckingNewVersion,
             bindingContext.ParseResult.GetValueForOption(mockedRetailAPIResponsePaths),
             bindingContext.ParseResult.GetValueForOption(debug),
-            bindingContext.ParseResult.GetValueForOption(userGeneratedWhatIf)
+            bindingContext.ParseResult.GetValueForOption(userGeneratedWhatIf),
+            bindingContext.ParseResult.GetValueForOption(generateMarkdownOutput) ?? Defaults.GenerateMarkdownOutput,
+            bindingContext.ParseResult.GetValueForOption(markdownOutputFilename)
             );
     }
 
@@ -190,7 +200,9 @@ internal class EstimateOptionsBinder : BinderBase<EstimateOptions>
         bindingContext.ParseResult.GetValueForOption(logFile) != null ||
         bindingContext.ParseResult.GetValueForOption(optOutCheckingNewVersion) != null ||
         bindingContext.ParseResult.GetValueForOption(mockedRetailAPIResponsePaths) != null ||
-        bindingContext.ParseResult.GetValueForOption(userGeneratedWhatIf) != null))
+        bindingContext.ParseResult.GetValueForOption(userGeneratedWhatIf) != null ||
+        bindingContext.ParseResult.GetValueForOption(generateMarkdownOutput) != null ||
+        bindingContext.ParseResult.GetValueForOption(markdownOutputFilename) != null))
         {
             throw new Exception("Cannot use both --configuration-file and other options besides --webhook-authorization and --inline.");
         }

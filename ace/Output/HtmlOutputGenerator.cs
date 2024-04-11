@@ -1,8 +1,7 @@
-﻿using ACE.Output;
-using Azure.Core;
+﻿using Azure.Core;
 using Microsoft.Extensions.Logging;
 
-namespace ACE;
+namespace ACE.Output;
 
 internal class HtmlOutputGenerator
 {
@@ -12,7 +11,7 @@ internal class HtmlOutputGenerator
 
     public HtmlOutputGenerator(EstimationOutput output, ILogger<Program> logger, string? htmlOutputFilename)
     {
-        this.fileName = string.IsNullOrEmpty(htmlOutputFilename) ? 
+        this.fileName = string.IsNullOrEmpty(htmlOutputFilename) ?
             $"ace_estimation_{DateTime.UtcNow:yyyyMMddHHmmss}.html" :
             $"{htmlOutputFilename}.html";
 
@@ -22,7 +21,7 @@ internal class HtmlOutputGenerator
 
     public void Generate()
     {
-        logger.AddEstimatorMessage("Generating HTML output file as {0}", fileName);
+        this.logger.AddEstimatorMessage("Generating HTML output file as {0}", this.fileName);
 
         var templatePath = Path.Combine("Html", "GeneratorTemplate.html");
         var template = File.ReadAllText(templatePath);
