@@ -411,6 +411,7 @@ public partial class Program
                                                    parser?.Template!,
                                                    options,
                                                    _cancellationTokenSource.Token).Process(_cancellationTokenSource.Token);
+
             await GenerateOutputIfNeeded(options, output, logger);
 
             if (options.Threshold != -1 && output.TotalCost.OriginalValue > options.Threshold)
@@ -435,76 +436,8 @@ public partial class Program
 
     private static async Task GenerateOutputIfNeeded(EstimateOptions options, EstimationOutput output, ILogger<Program> logger)
     {
-        if (options.ShouldGenerateJsonOutput || options.ShouldGenerateHtmlOutput)
-        {
-            if (options.ShouldGenerateJsonOutput)
-            {
-                var outputData = JsonSerializer.Serialize(output);
-                if (options.Stdout)
-                {
-                    logger.AddEstimatorNonSilentMessage(outputData);
-                }
-                else
-                {
-                    var fileName = GenerateJsonOutputFilename(options);
-                    logger.AddEstimatorMessage("Generating JSON output file as {0}", fileName);
-                    File.WriteAllText(fileName, outputData);
-                }
-            }
-
-            if (options.ShouldGenerateHtmlOutput)
-            {
-                var generator = new HtmlOutputGenerator(output, logger, options.HtmlOutputFilename);
-                generator.Generate();
-            }
-
-            if (!string.IsNullOrEmpty(options.WebhookUrl))
-            {
-                logger.AddEstimatorMessage("Sending estimation result to webhook URL {0}", options.WebhookUrl);
-
-                var client = new HttpClient();
-                var message = new HttpRequestMessage(HttpMethod.Post, options.WebhookUrl)
-                {
-                    Content = new StringContent(JsonSerializer.Serialize(output), Encoding.UTF8, "application/json")
-                };
-
-                if (string.IsNullOrEmpty(options.WebhookAuthorization))
-                {
-                    logger.AddEstimatorMessage("Webhook authorization header not set, skipping.");
-                }
-                else
-                {
-                    message.Headers.Add("Authorization", options.WebhookAuthorization);
-                }
-
-                var response = await client.SendAsync(message);
-                if (!response.IsSuccessStatusCode)
-                {
-                    logger.LogError("Couldn't send estimation result to webhook URL {url}. Status code: {code}", options.WebhookUrl, response.StatusCode);
-                }
-                else
-                {
-                    logger.AddEstimatorMessage("Estimation result sent successfully to webhook URL {0}", options.WebhookUrl);
-                }
-            }
-        }
-
-        return;
-    }
-
-    private static string GenerateJsonOutputFilename(EstimateOptions options)
-    {
-        if (string.IsNullOrWhiteSpace(options.JsonOutputFilename))
-        {
-            return $"ace_estimation_{DateTime.UtcNow:yyyyMMddHHmmss}.json";
-        }
-
-        if (options.JsonOutputFilename.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
-        {
-            return options.JsonOutputFilename;
-        }
-
-        return $"{options.JsonOutputFilename}.json";
+        var handler = new OutputHandler(logger);
+        await handler.GenerateOutputIfNeeded(options, output);
     }
 
     private static async Task DisplayWelcomeScreenAsync(ILogger<Program> logger, bool isNewVersionCheckDisabled)
