@@ -31,12 +31,12 @@ internal class MarkdownOutputGenerator
         foreach (var resource in output.Resources)
         {
             var id = new ResourceIdentifier(resource.Id);
-            resultRows += string.Format(tableRow, id.Name, id.ResourceType, $"{resource.TotalCost:F} {output.Currency}", $"{resource.Delta:F} {output.Currency}");
+            resultRows += string.Format(tableRow, id.Name, id.ResourceType, $"{resource.TotalCost.Value:F} {output.Currency}", $"{resource.Delta.Value:F} {output.Currency}");
         }
 
         template = template.Replace("@@@ [ACE-TBODY] @@@", resultRows);
-        template = template.Replace("@@@ [ACE-TFOOT-TOTALSUM] @@@", $"{output.TotalCost:F} {output.Currency}");
-        template = template.Replace("@@@ [ACE-TFOOT-DELTASUM] @@@", $"{output.Delta:F} {output.Currency}");
+        template = template.Replace("@@@ [ACE-TFOOT-TOTALSUM] @@@", $"{output.TotalCost.Value} {output.Currency}");
+        template = template.Replace("@@@ [ACE-TFOOT-DELTASUM] @@@", $"{output.Delta.Value} {output.Currency}");
         template = template.Replace("@@@ [ACE-FOOTER-REPORTDATE] @@@", DateTime.Now.ToString());
         template = template.Replace("@@@ [ACE-BASIC-TD-ALLRESOURCES] @@@", output.TotalResourceCount.ToString());
         template = template.Replace("@@@ [ACE-BASIC-TD-ESTIMATEDRESOURCES] @@@", output.EstimatedResourceCount.ToString());
