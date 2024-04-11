@@ -42,6 +42,9 @@
     <None Update="Html\GeneratorTemplate.html">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+	<None Update="Markdown\GeneratorTemplate.md">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
 	<None Include="..\ace-terraform-parser\ace-terraform-parser-linux.dll">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	</None>
