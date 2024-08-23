@@ -19,7 +19,7 @@ internal class LocalCacheHandler : ICacheHandler
         }
     }
 
-    public LocalCacheHandler(string scopeId, string? resourceGroupName, string template, string parameters)
+    public LocalCacheHandler(string scopeId, string? resourceGroupName, string template, ParametersSchema parameters)
     {
         this.key = this.GenerateKey(scopeId, resourceGroupName, template, parameters);
     }
@@ -32,7 +32,7 @@ internal class LocalCacheHandler : ICacheHandler
         this.key = this.GenerateKey("vm");
     }
 
-    private string GenerateKey(string scopeId, string? resourceGroupName, string template, string parameters)
+    private string GenerateKey(string scopeId, string? resourceGroupName, string template, ParametersSchema parameters)
     {
         return this.GenerateKey($"{scopeId}|{resourceGroupName}|{template}|{parameters}");
     }

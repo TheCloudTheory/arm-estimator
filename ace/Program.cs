@@ -241,9 +241,11 @@ public partial class Program
             }
 
             var parameters = "{}";
+            var isUsingBicepparamFile = false;
             if (options.ParametersFile != null)
-            {
-                var fileContent = options.ParametersFile.FullName.EndsWith(".bicepparam") ? new BicepCompiler(logger).CompileBicepparam(options.ParametersFile, _cancellationTokenSource.Token) : File.ReadAllText(options.ParametersFile.FullName);
+            {   
+                isUsingBicepparamFile = options.ParametersFile.FullName.EndsWith(".bicepparam");
+                var fileContent = isUsingBicepparamFile ? new BicepCompiler(logger).CompileBicepparam(options.ParametersFile, _cancellationTokenSource.Token) : File.ReadAllText(options.ParametersFile.FullName);
                 if (fileContent == null)
                 {
                     var error = $"Couldn't read parameters file {options.ParametersFile.FullName}";
@@ -260,7 +262,7 @@ public partial class Program
             {
                 try
                 {
-                    parser = new TemplateParser(template, parameters, options.InlineParameters, scopeId, resourceGroupName, logger);
+                    parser = new TemplateParser(template, parameters, options.InlineParameters, scopeId, resourceGroupName, isUsingBicepparamFile, logger);
                 }
                 catch (JsonException ex)
                 {
@@ -280,7 +282,7 @@ public partial class Program
                 }
             }
 
-            var whatIfParser = new WhatIfParser(templateType, scopeId, resourceGroupName, template, parameters, logger, commandType, location, options);
+            var whatIfParser = new WhatIfParser(templateType, scopeId, resourceGroupName, template, parser.Parameters, logger, commandType, location, options);
             var whatIfData = await whatIfParser.GetWhatIfData(_cancellationTokenSource.Token);
             if (whatIfData == null)
             {

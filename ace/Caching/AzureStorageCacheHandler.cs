@@ -35,13 +35,13 @@ internal class AzureStorageCacheHandler : ICacheHandler
         this.key = this.GenerateKey(key);
     }
 
-    public AzureStorageCacheHandler(string scopeId, string? resourceGroupName, string template, string parameters, string accountName)
+    public AzureStorageCacheHandler(string scopeId, string? resourceGroupName, string template, ParametersSchema parameters, string accountName)
         : this(accountName)
     {
         this.key = this.GenerateKey(scopeId, resourceGroupName, template, parameters);
     }
 
-    private string GenerateKey(string scopeId, string? resourceGroupName, string template, string parameters)
+    private string GenerateKey(string scopeId, string? resourceGroupName, string template, ParametersSchema parameters)
     {
         return this.GenerateKey($"{scopeId}|{resourceGroupName}|{template}|{parameters}");
     }

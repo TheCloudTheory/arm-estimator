@@ -10,12 +10,12 @@ internal class EstimatePayload
     public EstimatePayloadProperties properties { get; }
     public string? location { get; }
 
-    public EstimatePayload(string template, DeploymentMode deploymentMode, string parameters)
+    public EstimatePayload(string template, DeploymentMode deploymentMode, ParametersSchema parameters)
     {
         properties = new EstimatePayloadProperties(template, deploymentMode, parameters);
     }
 
-    public EstimatePayload(string template, DeploymentMode deploymentMode, string parameters, string? location)
+    public EstimatePayload(string template, DeploymentMode deploymentMode, ParametersSchema parameters, string? location)
     {
         properties = new EstimatePayloadProperties(template, deploymentMode, parameters);
         this.location = location;
@@ -30,12 +30,10 @@ internal class EstimatePayloadProperties
     [JsonConverter(typeof(RawJsonConverter))]
     public string parameters { get; }
 
-    public EstimatePayloadProperties(string template, DeploymentMode deploymentMode, string parameters)
+    public EstimatePayloadProperties(string template, DeploymentMode deploymentMode, ParametersSchema parameters)
     {
-        var templateParametersObject = JsonSerializer.Deserialize<TemplateParameters>(parameters);
-
         this.template = template;
-        this.parameters = JsonSerializer.Serialize(templateParametersObject?.parameters, new JsonSerializerOptions()
+        this.parameters = JsonSerializer.Serialize(parameters.Parameters, new JsonSerializerOptions()
         {
             Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
         });

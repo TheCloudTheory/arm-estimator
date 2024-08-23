@@ -18,7 +18,7 @@ internal class AzureWhatIfHandler
     private readonly string? resourceGroupName;
     private readonly string template;
     private readonly DeploymentMode deploymentMode;
-    private readonly string parameters;
+    private readonly ParametersSchema parameters;
     private readonly ILogger logger;
     private readonly CommandType commandType;
     private readonly string? location;
@@ -28,7 +28,7 @@ internal class AzureWhatIfHandler
     public AzureWhatIfHandler(string scopeId,
                               string? resourceGroupName,
                               string template,
-                              string parameters,
+                              ParametersSchema parameters,
                               ILogger logger,
                               CommandType commandType,
                               string? location,

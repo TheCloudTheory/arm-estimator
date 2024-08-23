@@ -9,7 +9,7 @@ internal class WhatIfParser
     private readonly string scopeId;
     private readonly string? resourceGroupName;
     private readonly string template;
-    private readonly string parameters;
+    private readonly ParametersSchema parameters;
     private readonly ILogger<Program> logger;
     private readonly CommandType commandType;
     private readonly string? location;
@@ -20,7 +20,7 @@ internal class WhatIfParser
         string scopeId,
         string? resourceGroupName,
         string template,
-        string parameters,
+        ParametersSchema parameters,
         ILogger<Program> logger,
         CommandType commandType,
         string? location,

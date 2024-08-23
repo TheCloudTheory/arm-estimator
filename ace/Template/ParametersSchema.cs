@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 
 internal class ParametersSchema
 {
@@ -15,6 +16,11 @@ internal class ParametersSchema
     {
         Schema = "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#";
         ContentVersion = "1.0.0.0";
+    }
+
+    public override string ToString()
+    {
+        return JsonSerializer.Serialize(this);
     }
 }
 

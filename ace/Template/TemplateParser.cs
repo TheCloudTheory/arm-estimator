@@ -1,22 +1,41 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using ACE.Template;
+using Microsoft.Extensions.Logging;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 
 internal class TemplateParser
 {
     public TemplateSchema Template { get; private set; }
+    public ParametersSchema? Parameters => this.parameters;
+
     private readonly ParametersSchema? parameters;
     private readonly IEnumerable<string>? inlineParameters;
     private readonly string scopeId;
     private readonly string? resourceGroupName;
     private readonly ILogger logger;
 
-    public TemplateParser(string template, string parameters, IEnumerable<string>? inlineParameters, string scopeId, string? resourceGroupName, ILogger logger)
+    public TemplateParser(
+        string template, 
+        string parameters, 
+        IEnumerable<string>? inlineParameters, 
+        string scopeId, 
+        string? resourceGroupName, 
+        bool isUsingBicepparamFile,
+        ILogger logger)
     {
         var t = JsonSerializer.Deserialize<TemplateSchema>(template) ?? throw new InvalidOperationException("Couldn't parse given template.");
         Template = t;
 
-        this.parameters = JsonSerializer.Deserialize<ParametersSchema>(parameters);
+        if(isUsingBicepparamFile)
+        {
+            var bicepparamSchema = JsonSerializer.Deserialize<BicepparamParametersSchema>(parameters);
+            this.parameters = JsonSerializer.Deserialize<ParametersSchema>(bicepparamSchema?.ParametersJson ?? "{}");
+        }
+        else
+        {
+            this.parameters = JsonSerializer.Deserialize<ParametersSchema>(parameters);
+        }
+
         this.inlineParameters = inlineParameters;
         this.scopeId = scopeId;
         this.resourceGroupName = resourceGroupName;
