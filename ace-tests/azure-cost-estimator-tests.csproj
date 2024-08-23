@@ -48,6 +48,7 @@
     <None Remove="mocked-responses\retail-api\asr\inferred-2.json" />
     <None Remove="mocked-responses\retail-api\asr\inferred-3.json" />
     <None Remove="mocked-responses\retail-api\automation-account\usage-patterns.json" />
+    <None Remove="templates/reworked/app-service/skus.bicep" />
     <None Remove="templates/reworked/key-vault/usage-patterns-1.bicep" />
     <None Remove="templates/reworked/postgresql/fix-261.bicep" />
     <None Remove="templates/reworked/static-web-app/static-web-app-free.bicep" />

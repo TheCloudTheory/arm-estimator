@@ -78,6 +78,7 @@ internal class AppServicePlanEstimationCalculation : BaseEstimation, IEstimation
                 || item.meterName == "P1 v2 App"
                 || item.meterName == "P2 v2 App"
                 || item.meterName == "P3 v2 App"
+                || item.meterName == "P0v3 App"
                 || item.meterName == "P1 v3 App"
                 || item.meterName == "P2 v3 App"
                 || item.meterName == "P3 v3 App"

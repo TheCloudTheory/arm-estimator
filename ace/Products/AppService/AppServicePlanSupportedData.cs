@@ -20,6 +20,7 @@
         { "P1V2", "DZH317GT8G5N" },
         { "P2V2", "DZH317GT8G5N" },
         { "P3V2", "DZH317GT8G5N" },
+        { "P0V3", "DZH317GT8G5N" },
         { "P1V3", "DZH317GT8G5N" },
         { "P2V3", "DZH317GT8G5N" },
         { "P3V3", "DZH317GT8G5N" },
@@ -86,6 +87,9 @@
         },
         { "P3V2",
             "P3 v2"
+        },
+        { "P0V3",
+            "P0v3"
         },
         { "P1V3",
             "P1 v3"
@@ -191,6 +195,12 @@
             "P3V2", new[]
             {
                 "Azure App Service Premium v2 Plan"
+            }
+        },
+        {
+            "P0V3", new[]
+            {
+                "Azure App Service Premium v3 Plan"
             }
         },
         {
@@ -315,6 +325,12 @@
             "P3V2", new[]
             {
                 "Azure App Service Premium v2 Plan - Linux"
+            }
+        },
+        {
+            "P0V3", new[]
+            {
+                "Azure App Service Premium v3 Plan - Linux"
             }
         },
         {
