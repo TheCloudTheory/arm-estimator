@@ -1,0 +1,5 @@
+{
+    "features": {
+        "ghcr.io/devcontainers/features/azure-cli:1": {}
+    }
+}
