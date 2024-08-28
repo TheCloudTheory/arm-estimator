@@ -5,14 +5,9 @@ using System.Text.Json;
 
 namespace ACE.Compilation
 {
-    internal class BicepCompiler : ICompiler
+    internal class BicepCompiler(ILogger<Program> logger) : ICompiler
     {
-        private readonly ILogger<Program> logger;
-
-        public BicepCompiler(ILogger<Program> logger)
-        {
-            this.logger = logger;
-        }
+        private readonly ILogger<Program> logger = logger;
 
         public string? Compile(FileInfo templateFile, CancellationToken token)
         {
@@ -28,14 +23,15 @@ namespace ACE.Compilation
                 CheckIfBicepConfigExists(templateFile);
 
                 this.logger.AddEstimatorMessage("Attempting to compile Bicep file using Bicep CLI.");
-                CompileBicepWith("bicep", $"build {templateFile} --stdout", token, logger, out template);
+                CompileBicepWith("az", $"bicep build --file {templateFile} --stdout", token, logger, out template);
+                
             }
             catch (Win32Exception)
             {
-                // First compilation may not work if Bicep CLI is not installed directly,
-                // try to use Azure CLI instead
+                // First compilation may not work if Azure CLI is not installed directly,
+                // try to use Bicep CLI instead
                 this.logger.AddEstimatorMessage("Compilation failed, attempting to compile Bicep file using Azure CLI.");
-                CompileBicepWith("az", $"bicep build --file {templateFile} --stdout", token, logger, out template);
+                CompileBicepWith("bicep", $"build {templateFile} --stdout", token, logger, out template);
             }
 
             return template;
