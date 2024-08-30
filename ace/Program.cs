@@ -284,7 +284,7 @@ public partial class Program
                 }
             }
 
-            var whatIfParser = new WhatIfParser(templateType, scopeId, resourceGroupName, template, parser.Parameters, logger, commandType, location, options);
+            var whatIfParser = new WhatIfParser(templateType, scopeId, resourceGroupName, template, parser?.Parameters, logger, commandType, location, options);
             var whatIfData = await whatIfParser.GetWhatIfData(_cancellationTokenSource.Token);
             if (whatIfData == null)
             {

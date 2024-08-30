@@ -20,7 +20,7 @@ internal class WhatIfParser
         string scopeId,
         string? resourceGroupName,
         string template,
-        ParametersSchema parameters,
+        ParametersSchema? parameters,
         ILogger<Program> logger,
         CommandType commandType,
         string? location,
@@ -30,7 +30,7 @@ internal class WhatIfParser
         this.scopeId = scopeId;
         this.resourceGroupName = resourceGroupName;
         this.template = template;
-        this.parameters = parameters;
+        this.parameters = parameters ?? new ParametersSchema();
         this.logger = logger;
         this.commandType = commandType;
         this.location = location;
