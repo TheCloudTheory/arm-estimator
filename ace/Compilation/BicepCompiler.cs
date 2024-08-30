@@ -41,7 +41,7 @@ namespace ACE.Compilation
             {
                 // First compilation may not work if Azure CLI is not installed directly,
                 // try to use Bicep CLI instead
-                this.logger.AddEstimatorMessage("Compilation failed, attempting to compile Bicep file using Azure CLI.");
+                this.logger.AddEstimatorMessage("Compilation failed, attempting to compile Bicep file using Bicep CLI.");
                 CompileBicepWith("bicep", $"build {templateFile} --stdout", token, logger, out template);
             }
 

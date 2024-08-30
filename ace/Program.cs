@@ -297,7 +297,7 @@ public partial class Program
 
             if (whatIfData != null && whatIfData.status == "Failed")
             {
-                var error = "An error happened when performing WhatIf operation.";
+                var error = $"An error happened when performing WhatIf operation with status {whatIfData.status}.";
                 logger.LogError("{error}", error);
 
                 if (whatIfData.error != null)
