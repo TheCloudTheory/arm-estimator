@@ -81,7 +81,7 @@ namespace ACE.Compilation
                 }
                 else
                 {
-                    this.logger.AddEstimatorMessage("Compilation failed, attempting to compile Bicepparam file using Azure CLI.");
+                    this.logger.AddEstimatorMessage("Compiling Bicepparam file using Azure CLI.");
                     CompileBicepWith("az", $"bicep build-params --file {bicepparamFile} --stdout", token, logger, out parameters);
                 }
 

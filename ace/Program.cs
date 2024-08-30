@@ -244,10 +244,9 @@ public partial class Program
             }
 
             var parameters = "{}";
-            var isUsingBicepparamFile = false;
             if (options.ParametersFile != null)
             {   
-                isUsingBicepparamFile = options.ParametersFile.FullName.EndsWith(".bicepparam");
+                var isUsingBicepparamFile = options.ParametersFile.FullName.EndsWith(".bicepparam");
                 var fileContent = isUsingBicepparamFile ? new BicepCompiler(options.ForceUsingBicepCli, logger).CompileBicepparam(options.ParametersFile, _cancellationTokenSource.Token) : File.ReadAllText(options.ParametersFile.FullName);
                 if (fileContent == null)
                 {
@@ -265,7 +264,7 @@ public partial class Program
             {
                 try
                 {
-                    parser = new TemplateParser(template, parameters, options.InlineParameters, scopeId, resourceGroupName, isUsingBicepparamFile, logger);
+                    parser = new TemplateParser(template, parameters, options.InlineParameters, scopeId, resourceGroupName, logger);
                 }
                 catch (JsonException ex)
                 {

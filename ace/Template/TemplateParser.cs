@@ -20,21 +20,12 @@ internal class TemplateParser
         IEnumerable<string>? inlineParameters, 
         string scopeId, 
         string? resourceGroupName, 
-        bool isUsingBicepparamFile,
         ILogger logger)
     {
         var t = JsonSerializer.Deserialize<TemplateSchema>(template) ?? throw new InvalidOperationException("Couldn't parse given template.");
         Template = t;
 
-        if(isUsingBicepparamFile)
-        {
-            var bicepparamSchema = JsonSerializer.Deserialize<BicepparamParametersSchema>(parameters);
-            this.parameters = JsonSerializer.Deserialize<ParametersSchema>(bicepparamSchema?.ParametersJson ?? "{}");
-        }
-        else
-        {
-            this.parameters = JsonSerializer.Deserialize<ParametersSchema>(parameters);
-        }
+        this.parameters = JsonSerializer.Deserialize<ParametersSchema>(parameters);
 
         this.inlineParameters = inlineParameters;
         this.scopeId = scopeId;
