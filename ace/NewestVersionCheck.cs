@@ -44,38 +44,46 @@ internal class NewestVersionCheck
     {
         using (var client = new HttpClient())
         {
-            client.DefaultRequestHeaders.Add("User-Agent", "arm-estimator");
-            var response = await client.GetAsync(GitHubReleasesUrl);
-            response.EnsureSuccessStatusCode();
-
-            var responseContent = response.Content;
-            if (responseContent != null)
+            try
             {
-                var responseString = responseContent.ReadAsStringAsync().Result;
-                var releases = JsonSerializer.Deserialize<List<GitHubRelease>>(responseString);
-                if (releases != null)
+                client.DefaultRequestHeaders.Add("User-Agent", "arm-estimator");
+                var response = await client.GetAsync(GitHubReleasesUrl);
+                response.EnsureSuccessStatusCode();
+
+                var responseContent = response.Content;
+                if (responseContent != null)
                 {
-                    var latestRelease = releases.FirstOrDefault(_ => _.draft == false);
-                    if (latestRelease != null)
+                    var responseString = responseContent.ReadAsStringAsync().Result;
+                    var releases = JsonSerializer.Deserialize<List<GitHubRelease>>(responseString);
+                    if (releases != null)
                     {
-                        return latestRelease.tag_name;
+                        var latestRelease = releases.FirstOrDefault(_ => _.draft == false);
+                        if (latestRelease != null)
+                        {
+                            return latestRelease.tag_name;
+                        }
+                        else
+                        {
+                            this.logger.LogError("Failed to get information about the latest version of ACE");
+                        }
                     }
                     else
                     {
-                        throw new Exception("Failed to get latest version of ACE.");
+                        this.logger.LogError("Failed to get information about the latest version of ACE");
                     }
                 }
                 else
                 {
-                    throw new Exception("Failed to get latest version of ACE.");
+                    this.logger.LogError("Failed to get information about the latest version of ACE");
                 }
             }
-            else
+            catch (HttpRequestException ex)
             {
-                throw new Exception("Failed to get latest version of ACE.");
+                this.logger.LogError("Failed to get information about the latest version of ACE - {message}", ex.Message);
             }
-        }
 
+            return string.Empty;
+        }
     }
 }
 
