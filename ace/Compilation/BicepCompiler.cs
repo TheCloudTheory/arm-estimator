@@ -5,14 +5,13 @@ using System.Text.Json;
 
 namespace ACE.Compilation
 {
-    internal class BicepCompiler : ICompiler
+    internal class BicepCompiler(
+        bool forceUsingBicepCli,
+        ILogger<Program> logger
+        ) : ICompiler
     {
-        private readonly ILogger<Program> logger;
-
-        public BicepCompiler(ILogger<Program> logger)
-        {
-            this.logger = logger;
-        }
+        private readonly bool forceUsingBicepCli = forceUsingBicepCli;
+        private readonly ILogger<Program> logger = logger;
 
         public string? Compile(FileInfo templateFile, CancellationToken token)
         {
@@ -20,15 +19,23 @@ namespace ACE.Compilation
 
             try
             {
-                if(token.IsCancellationRequested)
+                if (token.IsCancellationRequested)
                 {
                     return null;
                 }
 
                 CheckIfBicepConfigExists(templateFile);
 
-                this.logger.AddEstimatorMessage("Attempting to compile Bicep file using Bicep CLI.");
-                CompileBicepWith("bicep", $"build {templateFile} --stdout", token, logger, out template);
+                if (this.forceUsingBicepCli == true)
+                {
+                    this.logger.AddEstimatorMessage("Force Bicep CLI compilation.");
+                    CompileBicepWith("az", $"bicep build --file {templateFile} --stdout", token, logger, out template);
+                }
+                else
+                {
+                    this.logger.AddEstimatorMessage("Attempting to compile Bicep file using Bicep CLI.");
+                    CompileBicepWith("bicep", $"build {templateFile} --stdout", token, logger, out template);
+                }
             }
             catch (Win32Exception)
             {
@@ -43,13 +50,13 @@ namespace ACE.Compilation
 
         private void CheckIfBicepConfigExists(FileInfo templateFile)
         {
-            if(templateFile.DirectoryName == null)
+            if (templateFile.DirectoryName == null)
             {
                 this.logger.LogWarning("Couldn't find directory name for template file, skipping check for 'bicepconfig.json' file.");
                 return;
             }
 
-            if(File.Exists(Path.Combine(templateFile.DirectoryName, "bicepconfig.json")))
+            if (File.Exists(Path.Combine(templateFile.DirectoryName, "bicepconfig.json")))
             {
                 this.logger.LogWarning("Found configuration file 'bicepconfig.json' in the current directory. This file will be used to compile the Bicep file and may affect the result. See https://github.com/TheCloudTheory/arm-estimator/issues/197 for more information.");
                 return;
@@ -62,7 +69,7 @@ namespace ACE.Compilation
 
             try
             {
-                if(token.IsCancellationRequested)
+                if (token.IsCancellationRequested)
                 {
                     return null;
                 }
@@ -70,7 +77,7 @@ namespace ACE.Compilation
                 this.logger.AddEstimatorMessage("Attempting to compile Bicepparam file using Bicep CLI.");
                 CompileBicepWith("bicep", $"build-params {bicepparamFile} --stdout", token, logger, out parameters);
 
-                if(parameters == null)
+                if (parameters == null)
                 {
                     return null;
                 }

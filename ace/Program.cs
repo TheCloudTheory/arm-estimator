@@ -60,6 +60,7 @@ public partial class Program
         var userGeneratedWhatIfOption = new Option<string?>("--what-if-file", "Path to a file containing user-generated WhatIf response");
         var markdownOutputOption = new Option<bool?>("--generate-markdown-output", "Should generate Markdown output");
         var markdownOutputFilenameOption = new Option<string?>("--markdown-output-filename", "Sets Markdown output filename");
+        var forceUsingBicepCliOption = new Option<bool>("--force-bicep-cli", () => false, "Force using Bicep CLI in case ACE couldn't correctly fallback after Azure CLI fails.");
 
         try
         {
@@ -94,6 +95,7 @@ public partial class Program
             rootCommand.AddGlobalOption(userGeneratedWhatIfOption);
             rootCommand.AddGlobalOption(markdownOutputOption);
             rootCommand.AddGlobalOption(markdownOutputFilenameOption);
+            rootCommand.AddGlobalOption(forceUsingBicepCliOption);
 
             rootCommand.AddArgument(templateFileArg);
             rootCommand.AddArgument(susbcriptionIdArg);
@@ -128,7 +130,8 @@ public partial class Program
                     debugOption,
                     userGeneratedWhatIfOption,
                     markdownOutputOption,
-                    markdownOutputFilenameOption
+                    markdownOutputFilenameOption,
+                    forceUsingBicepCliOption
             );
 
             rootCommand.SetHandler(async (file, subscription, resourceGroup, options) =>
@@ -245,7 +248,7 @@ public partial class Program
             if (options.ParametersFile != null)
             {   
                 isUsingBicepparamFile = options.ParametersFile.FullName.EndsWith(".bicepparam");
-                var fileContent = isUsingBicepparamFile ? new BicepCompiler(logger).CompileBicepparam(options.ParametersFile, _cancellationTokenSource.Token) : File.ReadAllText(options.ParametersFile.FullName);
+                var fileContent = isUsingBicepparamFile ? new BicepCompiler(options.ForceUsingBicepCli, logger).CompileBicepparam(options.ParametersFile, _cancellationTokenSource.Token) : File.ReadAllText(options.ParametersFile.FullName);
                 if (fileContent == null)
                 {
                     var error = $"Couldn't read parameters file {options.ParametersFile.FullName}";

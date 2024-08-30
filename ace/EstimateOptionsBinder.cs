@@ -6,98 +6,67 @@ using System.Text.Json;
 
 namespace ACE;
 
-internal class EstimateOptionsBinder : BinderBase<EstimateOptions>
+internal class EstimateOptionsBinder(Option<DeploymentMode?> mode,
+                             Option<int?> threshold,
+                             Option<FileInfo?> parameters,
+                             Option<CurrencyCode?> currency,
+                             Option<bool?> generateJsonOutput,
+                             Option<bool?> shouldBeSilent,
+                             Option<bool?> stdout,
+                             Option<bool?> disableDetailsOptions,
+                             Option<string?> jsonOutputFilenameOption,
+                             Option<bool?> generateHtmlOutput,
+                             Option<IEnumerable<string>> inlineParameters,
+                             Option<bool?> dryRunOnly,
+                             Option<string?> htmlOutputFilenameOption,
+                             Option<OutputFormat?> outputFormat,
+                             Option<bool?> disableCache,
+                             Option<string?> terraformExecutable,
+                             Option<double?> conversionRateOption,
+                             Option<CacheHandler?> cacheHandlerOption,
+                             Option<string?> cacheStorageAccountNameOption,
+                             Option<string?> webhookUrlOption,
+                             Option<string?> webhookAuthorizationOption,
+                             Option<string?> logFileOption,
+                             Option<FileInfo?> configurationFileOption,
+                             Option<bool?> optOutCheckingNewVersionOption,
+                             Option<FileInfo[]?> mockedRetailAPIResponsePathOption,
+                             Option<bool> debugOption,
+                             Option<string?> userGeneratedWhatIfOption,
+                             Option<bool?> generateMarkdownOutputOption,
+                             Option<string?> markdownOutputFilenameOption,
+                             Option<bool> forceUsingBicepCliOption) : BinderBase<EstimateOptions>
 {
-    private readonly Option<DeploymentMode?> mode;
-    private readonly Option<int?> threshold;
-    private readonly Option<FileInfo?> parameters;
-    private readonly Option<CurrencyCode?> currency;
-    private readonly Option<bool?> generateJsonOutput;
-    private readonly Option<bool?> shouldBeSilent;
-    private readonly Option<bool?> stdout;
-    private readonly Option<bool?> disableDetails;
-    private readonly Option<string?> jsonOutputFilename;
-    private readonly Option<bool?> generateHtmlOutput;
-    private readonly Option<IEnumerable<string>> inlineParameters;
-    private readonly Option<bool?> dryRunOnly;
-    private readonly Option<string?> htmlOutputFilename;
-    private readonly Option<OutputFormat?> outputFormat;
-    private readonly Option<bool?> disableCache;
-    private readonly Option<string?> terraformExecutable;
-    private readonly Option<double?> conversionRate;
-    private readonly Option<CacheHandler?> cacheHandler;
-    private readonly Option<string?> cacheStorageAccountName;
-    private readonly Option<string?> webhookUrl;
-    private readonly Option<string?> webhookAuthorization;
-    private readonly Option<string?> logFile;
-    private readonly Option<FileInfo?> configurationFile;
-    private readonly Option<bool?> optOutCheckingNewVersion;
-    private readonly Option<FileInfo[]?> mockedRetailAPIResponsePaths;
-    private readonly Option<bool> debug;
-    private readonly Option<string?> userGeneratedWhatIf;
-    private readonly Option<bool?> generateMarkdownOutput;
-    private readonly Option<string?> markdownOutputFilename;
-
-    public EstimateOptionsBinder(Option<DeploymentMode?> mode,
-                                 Option<int?> threshold,
-                                 Option<FileInfo?> parameters,
-                                 Option<CurrencyCode?> currency,
-                                 Option<bool?> generateJsonOutput,
-                                 Option<bool?> shouldBeSilent,
-                                 Option<bool?> stdout,
-                                 Option<bool?> disableDetailsOptions,
-                                 Option<string?> jsonOutputFilenameOption,
-                                 Option<bool?> generateHtmlOutput,
-                                 Option<IEnumerable<string>> inlineParameters,
-                                 Option<bool?> dryRunOnly,
-                                 Option<string?> htmlOutputFilenameOption,
-                                 Option<OutputFormat?> outputFormat,
-                                 Option<bool?> disableCache,
-                                 Option<string?> terraformExecutable,
-                                 Option<double?> conversionRateOption,
-                                 Option<CacheHandler?> cacheHandlerOption,
-                                 Option<string?> cacheStorageAccountNameOption,
-                                 Option<string?> webhookUrlOption,
-                                 Option<string?> webhookAuthorizationOption,
-                                 Option<string?> logFileOption,
-                                 Option<FileInfo?> configurationFileOption,
-                                 Option<bool?> optOutCheckingNewVersionOption,
-                                 Option<FileInfo[]?> mockedRetailAPIResponsePathOption,
-                                 Option<bool> debugOption,
-                                 Option<string?> userGeneratedWhatIfOption,
-                                 Option<bool?> generateMarkdownOutputOption,
-                                 Option<string?> markdownOutputFilenameOption)
-    {
-        this.mode = mode;
-        this.threshold = threshold;
-        this.parameters = parameters;
-        this.currency = currency;
-        this.generateJsonOutput = generateJsonOutput;
-        this.shouldBeSilent = shouldBeSilent;
-        this.stdout = stdout;
-        this.disableDetails = disableDetailsOptions;
-        this.jsonOutputFilename = jsonOutputFilenameOption;
-        this.generateHtmlOutput = generateHtmlOutput;
-        this.inlineParameters = inlineParameters;
-        this.dryRunOnly = dryRunOnly;
-        this.htmlOutputFilename = htmlOutputFilenameOption;
-        this.outputFormat = outputFormat;
-        this.disableCache = disableCache;
-        this.terraformExecutable = terraformExecutable;
-        this.conversionRate = conversionRateOption;
-        this.cacheHandler = cacheHandlerOption;
-        this.cacheStorageAccountName = cacheStorageAccountNameOption;
-        this.webhookUrl = webhookUrlOption;
-        this.webhookAuthorization = webhookAuthorizationOption;
-        this.logFile = logFileOption;
-        this.configurationFile = configurationFileOption;
-        this.optOutCheckingNewVersion = optOutCheckingNewVersionOption;
-        this.mockedRetailAPIResponsePaths = mockedRetailAPIResponsePathOption;
-        this.debug = debugOption;
-        this.userGeneratedWhatIf = userGeneratedWhatIfOption;
-        this.generateMarkdownOutput = generateMarkdownOutputOption;
-        this.markdownOutputFilename = markdownOutputFilenameOption;
-    }
+    private readonly Option<DeploymentMode?> mode = mode;
+    private readonly Option<int?> threshold = threshold;
+    private readonly Option<FileInfo?> parameters = parameters;
+    private readonly Option<CurrencyCode?> currency = currency;
+    private readonly Option<bool?> generateJsonOutput = generateJsonOutput;
+    private readonly Option<bool?> shouldBeSilent = shouldBeSilent;
+    private readonly Option<bool?> stdout = stdout;
+    private readonly Option<bool?> disableDetails = disableDetailsOptions;
+    private readonly Option<string?> jsonOutputFilename = jsonOutputFilenameOption;
+    private readonly Option<bool?> generateHtmlOutput = generateHtmlOutput;
+    private readonly Option<IEnumerable<string>> inlineParameters = inlineParameters;
+    private readonly Option<bool?> dryRunOnly = dryRunOnly;
+    private readonly Option<string?> htmlOutputFilename = htmlOutputFilenameOption;
+    private readonly Option<OutputFormat?> outputFormat = outputFormat;
+    private readonly Option<bool?> disableCache = disableCache;
+    private readonly Option<string?> terraformExecutable = terraformExecutable;
+    private readonly Option<double?> conversionRate = conversionRateOption;
+    private readonly Option<CacheHandler?> cacheHandler = cacheHandlerOption;
+    private readonly Option<string?> cacheStorageAccountName = cacheStorageAccountNameOption;
+    private readonly Option<string?> webhookUrl = webhookUrlOption;
+    private readonly Option<string?> webhookAuthorization = webhookAuthorizationOption;
+    private readonly Option<string?> logFile = logFileOption;
+    private readonly Option<FileInfo?> configurationFile = configurationFileOption;
+    private readonly Option<bool?> optOutCheckingNewVersion = optOutCheckingNewVersionOption;
+    private readonly Option<FileInfo[]?> mockedRetailAPIResponsePaths = mockedRetailAPIResponsePathOption;
+    private readonly Option<bool> debug = debugOption;
+    private readonly Option<string?> userGeneratedWhatIf = userGeneratedWhatIfOption;
+    private readonly Option<bool?> generateMarkdownOutput = generateMarkdownOutputOption;
+    private readonly Option<string?> markdownOutputFilename = markdownOutputFilenameOption;
+    private readonly Option<bool> forceUsingBicepCli = forceUsingBicepCliOption;
 
     protected override EstimateOptions GetBoundValue(BindingContext bindingContext)
     {
@@ -139,7 +108,8 @@ internal class EstimateOptionsBinder : BinderBase<EstimateOptions>
                 configuration.Debug,
                 configuration.UserGeneratedWhatIf,
                 configuration.GenerateMarkdownOutput,
-                configuration.MarkdownOutputFilename
+                configuration.MarkdownOutputFilename,
+                configuration.ForceUsingBicepCli
                 );
         }
 
@@ -171,7 +141,8 @@ internal class EstimateOptionsBinder : BinderBase<EstimateOptions>
             bindingContext.ParseResult.GetValueForOption(debug),
             bindingContext.ParseResult.GetValueForOption(userGeneratedWhatIf),
             bindingContext.ParseResult.GetValueForOption(generateMarkdownOutput) ?? Defaults.GenerateMarkdownOutput,
-            bindingContext.ParseResult.GetValueForOption(markdownOutputFilename)
+            bindingContext.ParseResult.GetValueForOption(markdownOutputFilename),
+            bindingContext.ParseResult.GetValueForOption(forceUsingBicepCli)
             );
     }
 

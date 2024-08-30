@@ -31,4 +31,5 @@ internal class Configuration
     public string? UserGeneratedWhatIf { get; set; }
     public bool GenerateMarkdownOutput { get; set; }
     public string? MarkdownOutputFilename { get; set; }
+    public bool ForceUsingBicepCli { get; set; }
 }
