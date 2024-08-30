@@ -28,21 +28,21 @@ namespace ACE.Compilation
 
                 if (this.forceUsingBicepCli == true)
                 {
-                    this.logger.AddEstimatorMessage("Force Bicep CLI compilation.");
-                    CompileBicepWith("az", $"bicep build --file {templateFile} --stdout", token, logger, out template);
+                    this.logger.AddEstimatorMessage("Force Bicep CLI compilation.");                  
+                    CompileBicepWith("bicep", $"build {templateFile} --stdout", token, logger, out template);
                 }
                 else
                 {
-                    this.logger.AddEstimatorMessage("Attempting to compile Bicep file using Bicep CLI.");
-                    CompileBicepWith("bicep", $"build {templateFile} --stdout", token, logger, out template);
+                    this.logger.AddEstimatorMessage("Attempting to compile Bicep file using Azure CLI.");
+                    CompileBicepWith("az", $"bicep build --file {templateFile} --stdout", token, logger, out template);
                 }
             }
             catch (Win32Exception)
             {
-                // First compilation may not work if Bicep CLI is not installed directly,
-                // try to use Azure CLI instead
+                // First compilation may not work if Azure CLI is not installed directly,
+                // try to use Bicep CLI instead
                 this.logger.AddEstimatorMessage("Compilation failed, attempting to compile Bicep file using Azure CLI.");
-                CompileBicepWith("az", $"bicep build --file {templateFile} --stdout", token, logger, out template);
+                CompileBicepWith("bicep", $"build {templateFile} --stdout", token, logger, out template);
             }
 
             return template;
@@ -74,8 +74,16 @@ namespace ACE.Compilation
                     return null;
                 }
 
-                this.logger.AddEstimatorMessage("Attempting to compile Bicepparam file using Bicep CLI.");
-                CompileBicepWith("bicep", $"build-params {bicepparamFile} --stdout", token, logger, out parameters);
+                if (this.forceUsingBicepCli == true)
+                {
+                    this.logger.AddEstimatorMessage("Force Bicep CLI compilation.");                  
+                    CompileBicepWith("bicep", $"build-params {bicepparamFile} --stdout", token, logger, out parameters);
+                }
+                else
+                {
+                    this.logger.AddEstimatorMessage("Compilation failed, attempting to compile Bicepparam file using Azure CLI.");
+                    CompileBicepWith("az", $"bicep build-params --file {bicepparamFile} --stdout", token, logger, out parameters);
+                }
 
                 if (parameters == null)
                 {
@@ -88,10 +96,10 @@ namespace ACE.Compilation
             }
             catch (Win32Exception)
             {
-                // First compilation may not work if Bicep CLI is not installed directly,
-                // try to use Azure CLI instead
-                this.logger.AddEstimatorMessage("Compilation failed, attempting to compile Bicepparam file using Azure CLI.");
-                CompileBicepWith("az", $"bicep build-params --file {bicepparamFile} --stdout", token, logger, out parameters);
+                // First compilation may not work if Azure CLI is not installed directly,
+                // try to use Bicep CLI instead
+                this.logger.AddEstimatorMessage("Compilation failed, attempting to compile Bicepparam file using Bicep CLI.");
+                CompileBicepWith("bicep", $"build-params {bicepparamFile} --stdout", token, logger, out parameters);
             }
 
             return parameters;

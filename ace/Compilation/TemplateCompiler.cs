@@ -11,20 +11,21 @@ namespace ACE.Compilation
 
         public TemplateType TemplateType { get; private set; }
 
-        public TemplateCompiler(FileInfo templateFile, string? terraformExecutable, ILogger<Program> logger)
+        public TemplateCompiler(FileInfo templateFile, string? terraformExecutable, bool forceUsingBicepCli, ILogger<Program> logger)
         {
             this.templateFile = templateFile;
             this.terraformExecutable = terraformExecutable;
             this.logger = logger;
-            this.compiler = DetermineCompiler();
+            
+            this.compiler = DetermineCompiler(forceUsingBicepCli);
         }
 
-        private ICompiler DetermineCompiler()
+        private ICompiler DetermineCompiler(bool forceUsingBicepCli)
         {
             if(this.templateFile.Extension == ".bicep")
             {
                 TemplateType = TemplateType.ArmTemplateOrBicep;
-                return new BicepCompiler(this.logger);
+                return new BicepCompiler(forceUsingBicepCli, this.logger);
             }
 
             if(this.templateFile.Extension == ".tf")

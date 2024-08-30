@@ -234,7 +234,7 @@ public partial class Program
             await DisplayWelcomeScreenAsync(logger, options.OptOutCheckingNewVersion);
             DisplayUsedSettings(templateFile, scopeId, resourceGroupName, logger, options, commandType);
 
-            var template = GetTemplate(templateFile, options.TerraformExecutable, logger, out var templateType);
+            var template = GetTemplate(templateFile, options.TerraformExecutable, options.ForceUsingBicepCli, logger, out var templateType);
             if (template == null)
             {
                 var error = "There was a problem with processing template.";
@@ -354,9 +354,9 @@ public partial class Program
         }
     }
 
-    private static string? GetTemplate(FileInfo templateFile, string? terraformExecutable, ILogger<Program> logger, out TemplateType templateType)
+    private static string? GetTemplate(FileInfo templateFile, string? terraformExecutable, bool forceUsingBicepCli, ILogger<Program> logger, out TemplateType templateType)
     {
-        var compiler = new TemplateCompiler(templateFile, terraformExecutable, logger);
+        var compiler = new TemplateCompiler(templateFile, terraformExecutable, forceUsingBicepCli, logger);
         templateType = compiler.TemplateType;
 
         return compiler.Compile(_cancellationTokenSource.Token);
