@@ -14,8 +14,8 @@ public class AvailabilitySetTests
                 "templates/reworked/aks/availability-set.bicep",
                 "cf70b558-b930-45e4-9048-ebcefb926adf",
                 "arm-estimator-tests-rg",
-                "--generateJsonOutput",
-                "--jsonOutputFilename",
+                "--generate-json-output",
+                "--json-output-filename",
                 outputFilename,
                 "--mocked-retail-api-response-path",
                 "mocked-responses/retail-api/aks/availability-set.json"

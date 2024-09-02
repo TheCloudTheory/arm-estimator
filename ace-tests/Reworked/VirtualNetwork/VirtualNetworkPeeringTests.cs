@@ -14,8 +14,8 @@ public class VirtualNetworkPeeringTests
                     "templates/reworked/virtual-network/peering-1-2.bicep",
                     "cf70b558-b930-45e4-9048-ebcefb926adf",
                     "arm-estimator-tests-rg",
-                    "--generateJsonOutput",
-                    "--jsonOutputFilename",
+                    "--generate-json-output",
+                    "--json-output-filename",
                     outputFilename
                 ]);
 
@@ -40,8 +40,8 @@ public class VirtualNetworkPeeringTests
                     "templates/reworked/virtual-network/peering-1-3.bicep",
                     "cf70b558-b930-45e4-9048-ebcefb926adf",
                     "arm-estimator-tests-rg",
-                    "--generateJsonOutput",
-                    "--jsonOutputFilename",
+                    "--generate-json-output",
+                    "--json-output-filename",
                     outputFilename
                 ]);
 
@@ -66,8 +66,8 @@ public class VirtualNetworkPeeringTests
                     "templates/reworked/virtual-network/peering-2-3.bicep",
                     "cf70b558-b930-45e4-9048-ebcefb926adf",
                     "arm-estimator-tests-rg",
-                    "--generateJsonOutput",
-                    "--jsonOutputFilename",
+                    "--generate-json-output",
+                    "--json-output-filename",
                     outputFilename
                 ]);
 
