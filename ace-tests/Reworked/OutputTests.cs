@@ -68,4 +68,26 @@ public class OutputTests
         
         Assert.That(outputFile, Is.Not.Null);
     }
+
+    [Test]
+    public void Output_WhenHtmlOutputIsRequested_ItShouldGenerateWithoutError()
+    {
+        var outputFilename = $"ace_test_{DateTime.Now.Ticks}";
+        var exitCode = Program.Main([
+                "templates/reworked/automation-account/automation-account.bicep",
+                "cf70b558-b930-45e4-9048-ebcefb926adf",
+                "arm-estimator-tests-rg",
+                "--generateHtmlOutput",
+                "--htmlOutputFilename",
+                outputFilename,
+                "--mocked-retail-api-response-path",
+                "mocked-responses/retail-api/automation-account/usage-patterns.json"
+            ]);
+
+        Assert.That(exitCode, Is.EqualTo(0));
+
+        var outputFile = File.ReadAllText($"{outputFilename}.html");
+        
+        Assert.That(outputFile, Is.Not.Null);
+    }
 }
