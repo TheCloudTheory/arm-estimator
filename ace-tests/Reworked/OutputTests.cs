@@ -99,7 +99,7 @@ public class OutputTests
                 "templates/reworked/automation-account/automation-account.bicep",
                 "cf70b558-b930-45e4-9048-ebcefb926adf",
                 "arm-estimator-tests-rg",
-                "--generateJsonOutput",
+                "--generate-json-output",
                 "--json-output-filename",
                 outputFilename,
                 "--output-format",
