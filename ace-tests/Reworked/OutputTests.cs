@@ -77,8 +77,8 @@ public class OutputTests
                 "templates/reworked/automation-account/automation-account.bicep",
                 "cf70b558-b930-45e4-9048-ebcefb926adf",
                 "arm-estimator-tests-rg",
-                "--generateHtmlOutput",
-                "--htmlOutputFilename",
+                "--generate-html-output",
+                "--html-output-filename",
                 outputFilename,
                 "--mocked-retail-api-response-path",
                 "mocked-responses/retail-api/automation-account/usage-patterns.json"
@@ -100,9 +100,9 @@ public class OutputTests
                 "cf70b558-b930-45e4-9048-ebcefb926adf",
                 "arm-estimator-tests-rg",
                 "--generateJsonOutput",
-                "--jsonOutputFilename",
+                "--json-output-filename",
                 outputFilename,
-                "--outputFormat",
+                "--output-format",
                 "Table",
                 "--mocked-retail-api-response-path",
                 "mocked-responses/retail-api/automation-account/usage-patterns.json"
