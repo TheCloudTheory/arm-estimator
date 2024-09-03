@@ -437,6 +437,11 @@ public partial class Program
         logger.AddEstimatorMessage("Cache handler: {0}", options.DisableCache ? "Disabled" : options.CacheHandler.ToString());
         logger.AddEstimatorMessage("Conversion rate: {0}", options.ConversionRate);
         logger.AddEstimatorMessage("Webhook URL: {0}", string.IsNullOrEmpty(options.WebhookUrl) ? "Disabled" : options.WebhookUrl);
+        logger.AddEstimatorMessage("Log file: {0}", string.IsNullOrEmpty(options.LogFile) ? "Disabled" : options.LogFile);
+        logger.AddEstimatorMessage("Disable version check: {0}", options.OptOutCheckingNewVersion ? "True" : "False");
+        logger.AddEstimatorMessage("Generated What If file:", string.IsNullOrEmpty(options.UserGeneratedWhatIfFile) ? "Disabled" : options.UserGeneratedWhatIfFile);
+        logger.AddEstimatorMessage("Generate Markdown output: {0}", options.ShouldGenerateMarkdownOutput);
+        logger.AddEstimatorMessage("Markdown output filename: {0}", string.IsNullOrEmpty(options.MarkdownOutputFilename) ? "Not Set" : options.MarkdownOutputFilename);
         logger.LogInformation("");
         logger.LogInformation("------------------------------");
         logger.LogInformation("");
