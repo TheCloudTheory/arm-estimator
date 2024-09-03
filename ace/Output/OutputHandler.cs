@@ -56,35 +56,35 @@ namespace ACE.Output
                     var generator = new MarkdownOutputGenerator(output, logger, options.MarkdownOutputFilename);
                     generator.Generate();
                 }
+            }
 
-                if (!string.IsNullOrEmpty(options.WebhookUrl))
+            if (!string.IsNullOrEmpty(options.WebhookUrl))
+            {
+                logger.AddEstimatorMessage("Sending estimation result to webhook URL {0}", options.WebhookUrl);
+
+                using var client = new HttpClient();
+                var message = new HttpRequestMessage(HttpMethod.Post, options.WebhookUrl)
                 {
-                    logger.AddEstimatorMessage("Sending estimation result to webhook URL {0}", options.WebhookUrl);
+                    Content = new StringContent(JsonSerializer.Serialize(output), Encoding.UTF8, "application/json")
+                };
 
-                    var client = new HttpClient();
-                    var message = new HttpRequestMessage(HttpMethod.Post, options.WebhookUrl)
-                    {
-                        Content = new StringContent(JsonSerializer.Serialize(output), Encoding.UTF8, "application/json")
-                    };
+                if (string.IsNullOrEmpty(options.WebhookAuthorization))
+                {
+                    logger.AddEstimatorMessage("Webhook authorization header not set, skipping.");
+                }
+                else
+                {
+                    message.Headers.Add("Authorization", options.WebhookAuthorization);
+                }
 
-                    if (string.IsNullOrEmpty(options.WebhookAuthorization))
-                    {
-                        logger.AddEstimatorMessage("Webhook authorization header not set, skipping.");
-                    }
-                    else
-                    {
-                        message.Headers.Add("Authorization", options.WebhookAuthorization);
-                    }
-
-                    var response = await client.SendAsync(message);
-                    if (!response.IsSuccessStatusCode)
-                    {
-                        logger.LogError("Couldn't send estimation result to webhook URL {url}. Status code: {code}", options.WebhookUrl, response.StatusCode);
-                    }
-                    else
-                    {
-                        logger.AddEstimatorMessage("Estimation result sent successfully to webhook URL {0}", options.WebhookUrl);
-                    }
+                var response = await client.SendAsync(message);
+                if (!response.IsSuccessStatusCode)
+                {
+                    logger.LogError("Couldn't send estimation result to webhook URL {url}. Status code: {code}", options.WebhookUrl, response.StatusCode);
+                }
+                else
+                {
+                    logger.AddEstimatorMessage("Estimation result sent successfully to webhook URL {0}", options.WebhookUrl);
                 }
             }
 
