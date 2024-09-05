@@ -333,11 +333,13 @@ public partial class Program
                 return new ApplicationResult(0, null);;
             }
 
-            var output = await new WhatIfProcessor(logger,
+            using var processor =  new WhatIfProcessor(logger,
                                                    whatIfData.properties.changes,
                                                    parser?.Template!,
                                                    options,
-                                                   _cancellationTokenSource.Token).Process(_cancellationTokenSource.Token);
+                                                   _cancellationTokenSource.Token);
+
+            var output = await processor.ProcessAsync(_cancellationTokenSource.Token);
 
             await GenerateOutputIfNeeded(options, output, logger);
 

@@ -12,7 +12,7 @@ using System.Text.Json;
 
 namespace ACE.WhatIf;
 
-internal class WhatIfProcessor
+internal class WhatIfProcessor : IDisposable
 {
     private static readonly Lazy<HttpClient> httpClient = new(() => new HttpClient());
     private static readonly ConcurrentDictionary<string, RetailAPIResponse> cachedResults = new();
@@ -143,11 +143,11 @@ internal class WhatIfProcessor
         }
     }
 
-    public async Task<EstimationOutput> Process(CancellationToken token)
+    public async Task<EstimationOutput> ProcessAsync(CancellationToken token)
     {
         if (token.IsCancellationRequested)
         {
-            return new EstimationOutput(0, 0, new List<EstimatedResourceData>(), this.currency, 0, 0);
+            return new EstimationOutput(0, 0, [], this.currency, 0, 0);
         }
 
         double totalCost = 0;
@@ -164,7 +164,7 @@ internal class WhatIfProcessor
         {
             if (token.IsCancellationRequested)
             {
-                return new EstimationOutput(0, 0, new List<EstimatedResourceData>(), this.currency, 0, 0);
+                return new EstimationOutput(0, 0, [], this.currency, 0, 0);
             }
 
             if (change.resourceId == null)
@@ -792,5 +792,10 @@ internal class WhatIfProcessor
             response.EnsureSuccessStatusCode();
             return response;
         }
+    }
+
+    public void Dispose()
+    {
+        httpClient.Value.Dispose();
     }
 }
