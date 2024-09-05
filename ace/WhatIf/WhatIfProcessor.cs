@@ -735,7 +735,7 @@ internal class WhatIfProcessor
                 return data;
             }
 
-            var response = await GetRetailDataResponse(url, token);
+            var response = await GetRetailDataResponseAsync(url, token);
             if (response.IsSuccessStatusCode == false)
             {
                 return null;
@@ -770,13 +770,21 @@ internal class WhatIfProcessor
         return query.GetFakeResponse();
     }
 
-    private async Task<HttpResponseMessage> GetRetailDataResponse(string url, CancellationToken token)
+    private async Task<HttpResponseMessage> GetRetailDataResponseAsync(string url, CancellationToken token)
     {
         var request = new HttpRequestMessage(HttpMethod.Get, url);
         var response = await httpClient.Value.SendAsync(request, token);
 
         if (response.StatusCode == HttpStatusCode.BadRequest)
         {
+            return response;
+        }
+        else if (response.StatusCode == HttpStatusCode.TooManyRequests)
+        {
+            this.logger.LogWarning("What If API is throttling requests, resuming in 30 seconds...");
+
+            await Task.Delay(30 * 1000, token);
+            response = await GetRetailDataResponseAsync(url, token);
             return response;
         }
         else
