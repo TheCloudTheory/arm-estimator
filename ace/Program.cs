@@ -425,7 +425,7 @@ public partial class Program
 
         logger.AddEstimatorMessage("Template file: {0}", templateFile);
         logger.AddEstimatorMessage("Deployment mode: {0}", options.Mode);
-        logger.AddEstimatorMessage("Threshold: {0}", options.Threshold == -1 ? "Not Set" : options.Threshold.ToString());
+        logger.AddEstimatorMessage("Threshold: {0}", options.Threshold.HasValue == false ? "Not Set" : options.Threshold.ToString());
         logger.AddEstimatorMessage("Parameters file: {0}", options.ParametersFile?.Name ?? "Not Set");
         logger.AddEstimatorMessage("Currency: {0}", options.Currency);
         logger.AddEstimatorMessage("Generate JSON output: {0}", options.ShouldGenerateJsonOutput);
