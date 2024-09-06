@@ -14,7 +14,6 @@ namespace ACE.WhatIf;
 
 internal class WhatIfProcessor : IDisposable
 {
-    private static readonly Lazy<HttpClient> httpClient = new(() => new HttpClient());
     private static readonly ConcurrentDictionary<string, RetailAPIResponse> cachedResults = new();
     private static readonly Dictionary<string, string> resourceIdToLocationMap = [];
 
@@ -28,6 +27,7 @@ internal class WhatIfProcessor : IDisposable
     private readonly IOutputFormatter outputFormatter;
     private readonly FileInfo[]? mockedRetailAPIResponsePaths;
     private readonly bool debug;
+    private readonly HttpClient httpClient;
 
     public WhatIfProcessor(ILogger logger,
                            WhatIfChange[] changes,
@@ -43,6 +43,7 @@ internal class WhatIfProcessor : IDisposable
         this.outputFormatter = new OutputGenerator(options.OutputFormat, logger, options.Currency, options.DisableDetailedMetrics).GetFormatter();
         this.mockedRetailAPIResponsePaths = options.MockedRetailAPIResponsePaths;
         this.debug = options.Debug;
+        this.httpClient = new HttpClient();
 
         ReconcileResources(token);
         BuildVMCapabilitiesIfNeeded(options.CacheHandler, options.CacheHandlerStorageAccountName, token);
@@ -773,7 +774,7 @@ internal class WhatIfProcessor : IDisposable
     private async Task<HttpResponseMessage> GetRetailDataResponseAsync(string url, CancellationToken token)
     {
         var request = new HttpRequestMessage(HttpMethod.Get, url);
-        var response = await httpClient.Value.SendAsync(request, token);
+        var response = await this.httpClient.SendAsync(request, token);
 
         if (response.StatusCode == HttpStatusCode.BadRequest)
         {
@@ -796,6 +797,6 @@ internal class WhatIfProcessor : IDisposable
 
     public void Dispose()
     {
-        httpClient.Value.Dispose();
+        this.httpClient.Dispose();
     }
 }
