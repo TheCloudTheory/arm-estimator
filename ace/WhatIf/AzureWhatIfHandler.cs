@@ -128,7 +128,7 @@ internal class AzureWhatIfHandler
         return data;
     }
 
-    private async Task<HttpResponseMessage> SendInitialRequest(CancellationToken cancellationToken)
+    private async Task<HttpResponseMessage> SendInitialRequest(CancellationToken cancellationToken, int retryCount = 0)
     {
         var token = GetToken(cancellationToken);
         var request = new HttpRequestMessage(HttpMethod.Post, CreateUrlBasedOnScope());
@@ -152,8 +152,23 @@ internal class AzureWhatIfHandler
         request.Content = new StringContent(templateContent, Encoding.UTF8, "application/json");
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-        var response = await httpClient.Value.SendAsync(request, cancellationToken);
-        return response;
+        try
+        {
+            var response = await httpClient.Value.SendAsync(request, cancellationToken);
+            return response;
+        }
+        catch(IOException ex)
+        {
+            if(retryCount < 3)
+            {
+                this.logger.LogError(ex, "Error while sending request to What If API. Retrying...");
+                await Task.Delay(5000, cancellationToken);
+                return await SendInitialRequest(cancellationToken, retryCount + 1);
+            }
+
+            this.logger.LogError(ex, "Error while sending request to What If API.");
+            throw;
+        }
     }
 
     private string CreateUrlBasedOnScope()
