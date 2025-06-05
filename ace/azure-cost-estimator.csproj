@@ -7,7 +7,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 	<PublishSingleFile>true</PublishSingleFile>
-	<Version>1.6</Version>
+	<Version>1.6.1</Version>
 	<AssemblyVersion></AssemblyVersion>
 	<FileVersion></FileVersion>
 	<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
