@@ -3,6 +3,7 @@ using ACE.WhatIf;
 using System.CommandLine;
 using System.CommandLine.Binding;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace ACE;
 
@@ -148,34 +149,42 @@ internal class EstimateOptionsBinder(Option<DeploymentMode?> mode,
 
     private void ValidateProperUse(BindingContext bindingContext)
     {
-        if(bindingContext.ParseResult.GetValueForOption(configurationFile) != null && 
-        (bindingContext.ParseResult.GetValueForOption(mode) != null ||
-        bindingContext.ParseResult.GetValueForOption(threshold) != null ||
-        bindingContext.ParseResult.GetValueForOption(parameters) != null ||
-        bindingContext.ParseResult.GetValueForOption(currency) != null ||
-        bindingContext.ParseResult.GetValueForOption(generateJsonOutput) != null ||
-        bindingContext.ParseResult.GetValueForOption(shouldBeSilent) != null ||
-        bindingContext.ParseResult.GetValueForOption(stdout) != null ||
-        bindingContext.ParseResult.GetValueForOption(disableDetails) != null ||
-        bindingContext.ParseResult.GetValueForOption(jsonOutputFilename) != null ||
-        bindingContext.ParseResult.GetValueForOption(generateHtmlOutput) != null ||
-        bindingContext.ParseResult.GetValueForOption(dryRunOnly) != null ||
-        bindingContext.ParseResult.GetValueForOption(htmlOutputFilename) != null ||
-        bindingContext.ParseResult.GetValueForOption(outputFormat) != null ||
-        bindingContext.ParseResult.GetValueForOption(disableCache) != null ||
-        bindingContext.ParseResult.GetValueForOption(terraformExecutable) != null ||
-        bindingContext.ParseResult.GetValueForOption(conversionRate) != null ||
-        bindingContext.ParseResult.GetValueForOption(cacheHandler) != null ||
-        bindingContext.ParseResult.GetValueForOption(cacheStorageAccountName) != null ||
-        bindingContext.ParseResult.GetValueForOption(webhookUrl) != null ||
-        bindingContext.ParseResult.GetValueForOption(logFile) != null ||
-        bindingContext.ParseResult.GetValueForOption(optOutCheckingNewVersion) != null ||
-        bindingContext.ParseResult.GetValueForOption(mockedRetailAPIResponsePaths) != null ||
-        bindingContext.ParseResult.GetValueForOption(userGeneratedWhatIf) != null ||
-        bindingContext.ParseResult.GetValueForOption(generateMarkdownOutput) != null ||
-        bindingContext.ParseResult.GetValueForOption(markdownOutputFilename) != null))
+        var options = new Dictionary<string, object?>
         {
-            throw new Exception("Cannot use both --configuration-file and other options besides --webhook-authorization and --inline.");
-        }
+            { mode.Name, bindingContext.ParseResult.GetValueForOption(mode) },
+            { threshold.Name, bindingContext.ParseResult.GetValueForOption(threshold) },
+            { parameters.Name, bindingContext.ParseResult.GetValueForOption(parameters) },
+            { currency.Name, bindingContext.ParseResult.GetValueForOption(currency) },
+            { generateJsonOutput.Name, bindingContext.ParseResult.GetValueForOption(generateJsonOutput) },
+            { shouldBeSilent.Name, bindingContext.ParseResult.GetValueForOption(shouldBeSilent) },
+            { stdout.Name, bindingContext.ParseResult.GetValueForOption(stdout) },
+            { disableDetails.Name, bindingContext.ParseResult.GetValueForOption(disableDetails) },
+            { jsonOutputFilename.Name, bindingContext.ParseResult.GetValueForOption(jsonOutputFilename) },
+            { generateHtmlOutput.Name, bindingContext.ParseResult.GetValueForOption(generateHtmlOutput) },
+            { outputFormat.Name, bindingContext.ParseResult.GetValueForOption(outputFormat) },
+            { disableCache.Name, bindingContext.ParseResult.GetValueForOption(disableCache) },
+            { terraformExecutable.Name, bindingContext.ParseResult.GetValueForOption(terraformExecutable) },
+            { conversionRate.Name, bindingContext.ParseResult.GetValueForOption(conversionRate) },
+            { cacheHandler.Name, bindingContext.ParseResult.GetValueForOption(cacheHandler) },
+            { cacheStorageAccountName.Name, bindingContext.ParseResult.GetValueForOption(cacheStorageAccountName) },
+            { webhookUrl.Name, bindingContext.ParseResult.GetValueForOption(webhookUrl) },
+            { logFile.Name, bindingContext.ParseResult.GetValueForOption(logFile) },
+            { optOutCheckingNewVersion.Name, bindingContext.ParseResult.GetValueForOption(optOutCheckingNewVersion) },
+            { mockedRetailAPIResponsePaths.Name, bindingContext.ParseResult.GetValueForOption(mockedRetailAPIResponsePaths) },
+            { userGeneratedWhatIf.Name, bindingContext.ParseResult.GetValueForOption(userGeneratedWhatIf) },
+            { generateMarkdownOutput.Name, bindingContext.ParseResult.GetValueForOption(generateMarkdownOutput) },
+            { markdownOutputFilename.Name, bindingContext.ParseResult.GetValueForOption(markdownOutputFilename) },
+        };
+
+        if (bindingContext.ParseResult.GetValueForOption(configurationFile) == null) return;
+        
+        var optionsWithNonNullValue = options.Where(o => o.Value != null).ToArray();
+        if (optionsWithNonNullValue.Length == 0) return;
+        
+        var parsedNonNullableOptions = string.Join(", ", optionsWithNonNullValue.Select(o => $"[{o.Key}]:[{o.Value}]"));
+        
+        throw new Exception(
+            $"Cannot use both --configuration-file and other options besides --webhook-authorization and --inline. Those options are: {parsedNonNullableOptions}");
+        
     }
 }
