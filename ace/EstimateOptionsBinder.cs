@@ -67,7 +67,6 @@ internal class EstimateOptionsBinder(Option<DeploymentMode?> mode,
     private readonly Option<string?> userGeneratedWhatIf = userGeneratedWhatIfOption;
     private readonly Option<bool?> generateMarkdownOutput = generateMarkdownOutputOption;
     private readonly Option<string?> markdownOutputFilename = markdownOutputFilenameOption;
-    private readonly Option<bool> forceUsingBicepCli = forceUsingBicepCliOption;
 
     protected override EstimateOptions GetBoundValue(BindingContext bindingContext)
     {
@@ -143,7 +142,7 @@ internal class EstimateOptionsBinder(Option<DeploymentMode?> mode,
             bindingContext.ParseResult.GetValueForOption(userGeneratedWhatIf),
             bindingContext.ParseResult.GetValueForOption(generateMarkdownOutput) ?? Defaults.GenerateMarkdownOutput,
             bindingContext.ParseResult.GetValueForOption(markdownOutputFilename),
-            bindingContext.ParseResult.GetValueForOption(forceUsingBicepCli)
+            bindingContext.ParseResult.GetValueForOption(forceUsingBicepCliOption)
             );
     }
 
@@ -170,12 +169,12 @@ internal class EstimateOptionsBinder(Option<DeploymentMode?> mode,
             { webhookUrl.Name, bindingContext.ParseResult.GetValueForOption(webhookUrl) },
             { logFile.Name, bindingContext.ParseResult.GetValueForOption(logFile) },
             { optOutCheckingNewVersion.Name, bindingContext.ParseResult.GetValueForOption(optOutCheckingNewVersion) },
-            { mockedRetailAPIResponsePaths.Name, bindingContext.ParseResult.GetValueForOption(mockedRetailAPIResponsePaths) },
+            { mockedRetailAPIResponsePaths.Name, GetNullFileInfoIfNull(bindingContext.ParseResult.GetValueForOption(mockedRetailAPIResponsePaths)) },
             { userGeneratedWhatIf.Name, bindingContext.ParseResult.GetValueForOption(userGeneratedWhatIf) },
             { generateMarkdownOutput.Name, bindingContext.ParseResult.GetValueForOption(generateMarkdownOutput) },
             { markdownOutputFilename.Name, bindingContext.ParseResult.GetValueForOption(markdownOutputFilename) },
         };
-
+        
         if (bindingContext.ParseResult.GetValueForOption(configurationFile) == null) return;
         
         var optionsWithNonNullValue = options.Where(o => o.Value != null).ToArray();
@@ -186,5 +185,15 @@ internal class EstimateOptionsBinder(Option<DeploymentMode?> mode,
         throw new Exception(
             $"Cannot use both --configuration-file and other options besides --webhook-authorization and --inline. Those options are: {parsedNonNullableOptions}");
         
+    }
+
+    /// <summary>
+    /// As System.CommandLine tends to parse a nullable array as an empty array,
+    /// this method implement a safeguard to overcome that issue. 
+    /// </summary>
+    private FileInfo[]? GetNullFileInfoIfNull(FileInfo[]? fileInfos)
+    {
+        if (fileInfos == null) return null;
+        return fileInfos.Length == 0 ? null : fileInfos;
     }
 }
