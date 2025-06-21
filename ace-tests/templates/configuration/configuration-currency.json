@@ -1,0 +1,10 @@
+{
+  "Currency": "EUR",
+  "DisableCache": true,
+  "DisableDetailedMetrics": false,
+  "DryRun": false,
+  "GenerateHtmlOutput": false,
+  "GenerateJsonOutput": false,
+  "GenerateMarkdownOutput": true,
+  "MockedRetailAPIResponsePaths": ["mocked-responses/retail-api/automation-account/usage-patterns.json"]
+}

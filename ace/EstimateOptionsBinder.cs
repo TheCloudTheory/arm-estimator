@@ -75,10 +75,10 @@ internal class EstimateOptionsBinder(Option<DeploymentMode?> mode,
         {
             ValidateProperUse(bindingContext);
 
-            var configuration = JsonSerializer.Deserialize<Configuration>(File.ReadAllText(file.FullName), new JsonSerializerOptions()
-            {
-                PropertyNameCaseInsensitive = true
-            }) ?? throw new Exception("Couldn't deserialize configuration file");
+            var options = new JsonSerializerOptions();
+            options.Converters.Add(new JsonStringEnumConverter());
+            
+            var configuration = JsonSerializer.Deserialize<Configuration>(File.ReadAllText(file.FullName), options) ?? throw new Exception("Couldn't deserialize configuration file");
 
             return new EstimateOptions(
                 configuration.Mode,
