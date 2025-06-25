@@ -10,6 +10,7 @@ internal class TemplateSchema
     public MetadataSchema? Metadata { get; set; }
 
     [JsonPropertyName("resources")]
+    [JsonConverter(typeof(Language20ResourceSchemaConverter))]
     public SpecialCaseResourceSchema[]? SpecialCaseResources { get; set; }
 }
 
@@ -72,6 +73,32 @@ internal class SpecialCaseResourcePropertiesSchemaConverter : JsonConverter<Spec
     }
 
     public override void Write(Utf8JsonWriter writer, SpecialCaseResourcePropertiesSchema value, JsonSerializerOptions options)
+    {
+        throw new NotImplementedException();
+    }
+}
+
+internal class Language20ResourceSchemaConverter : JsonConverter<SpecialCaseResourceSchema[]?>
+{
+    public override SpecialCaseResourceSchema[]? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        if(reader.TokenType == JsonTokenType.Null) return null;
+        if (reader.TokenType == JsonTokenType.StartArray)
+        {
+            var value = JsonSerializer.Deserialize<SpecialCaseResourceSchema[]>(ref reader, options);
+            return value;
+        }
+        
+        if(reader.TokenType == JsonTokenType.StartObject)
+        {
+            var value = JsonSerializer.Deserialize<IDictionary<string, SpecialCaseResourceSchema>>(ref reader, options);
+            return value!.Select(r => r.Value).ToArray();
+        }
+        
+        return null;
+    }
+
+    public override void Write(Utf8JsonWriter writer, SpecialCaseResourceSchema[]? value, JsonSerializerOptions options)
     {
         throw new NotImplementedException();
     }
