@@ -30,7 +30,7 @@ internal class SQLQueryFilter : IQueryFilter
         }
 
         var skuParts = sku.Split('_');
-        if(skuParts.Length > 1)
+        if(skuParts.Length > 2)
         {
             // It's vCore model we're talking about here
             sku = $"{skuParts[2]} vCore";
@@ -98,7 +98,7 @@ internal class SQLQueryFilter : IQueryFilter
     public static int GetNumberOfCoresBasedOnSku(string sku)
     {
         var skuParts = sku.Split('_');
-        if(skuParts.Length > 1)
+        if(skuParts.Length > 2)
         {
             return int.Parse(skuParts[2]);
         }
