@@ -15,7 +15,9 @@ public class OutputTests
                 "--json-output-filename",
                 outputFilename,
                 "--mocked-retail-api-response-path",
-                "mocked-responses/retail-api/automation-account/usage-patterns.json"
+                "mocked-responses/retail-api/automation-account/usage-patterns.json",
+                "--what-if-file",
+                "mocked-responses/what-if/automation-account.json"
             ]);
 
         Assert.That(exitCode, Is.EqualTo(0));
@@ -37,7 +39,9 @@ public class OutputTests
                 "--json-output-filename",
                 outputFilename,
                 "--mocked-retail-api-response-path",
-                "mocked-responses/retail-api/automation-account/usage-patterns.json"
+                "mocked-responses/retail-api/automation-account/usage-patterns.json",
+                "--what-if-file",
+                "mocked-responses/what-if/automation-account.json"
             ]);
 
         Assert.That(exitCode, Is.EqualTo(0));
@@ -59,7 +63,9 @@ public class OutputTests
                 "--markdown-output-filename",
                 outputFilename,
                 "--mocked-retail-api-response-path",
-                "mocked-responses/retail-api/automation-account/usage-patterns.json"
+                "mocked-responses/retail-api/automation-account/usage-patterns.json",
+                "--what-if-file",
+                "mocked-responses/what-if/automation-account.json"
             ]);
 
         Assert.That(exitCode, Is.EqualTo(0));
@@ -81,7 +87,9 @@ public class OutputTests
                 "--html-output-filename",
                 outputFilename,
                 "--mocked-retail-api-response-path",
-                "mocked-responses/retail-api/automation-account/usage-patterns.json"
+                "mocked-responses/retail-api/automation-account/usage-patterns.json",
+                "--what-if-file",
+                "mocked-responses/what-if/automation-account.json"
             ]);
 
         Assert.That(exitCode, Is.EqualTo(0));
@@ -105,7 +113,9 @@ public class OutputTests
                 "--output-format",
                 "Table",
                 "--mocked-retail-api-response-path",
-                "mocked-responses/retail-api/automation-account/usage-patterns.json"
+                "mocked-responses/retail-api/automation-account/usage-patterns.json",
+                "--what-if-file",
+                "mocked-responses/what-if/automation-account.json"
             ]);
 
         Assert.That(exitCode, Is.EqualTo(0));
