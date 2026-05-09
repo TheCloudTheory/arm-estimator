@@ -1,0 +1,62 @@
+{
+    "changes": [
+        {
+            "changeType": "Create",
+            "resourceId": "/subscriptions/cf70b558-b930-45e4-9048-ebcefb926adf/resourceGroups/arm-estimator-tests-rg/providers/Microsoft.Network/virtualNetworks/vnet1-p12mock",
+            "after": {
+                "location": "northeurope",
+                "properties": {
+                    "virtualNetworkPeerings": [
+                        {
+                            "id": "/subscriptions/cf70b558-b930-45e4-9048-ebcefb926adf/resourceGroups/arm-estimator-tests-rg/providers/Microsoft.Network/virtualNetworks/vnet1-p12mock/virtualNetworkPeerings/vnet1-to-vnet2",
+                            "name": "vnet1-to-vnet2",
+                            "properties": {
+                                "remoteVirtualNetwork": {
+                                    "id": "/subscriptions/cf70b558-b930-45e4-9048-ebcefb926adf/resourceGroups/arm-estimator-tests-rg/providers/Microsoft.Network/virtualNetworks/vnet2-p12mock"
+                                }
+                            }
+                        }
+                    ]
+                }
+            },
+            "before": null
+        },
+        {
+            "changeType": "Create",
+            "resourceId": "/subscriptions/cf70b558-b930-45e4-9048-ebcefb926adf/resourceGroups/arm-estimator-tests-rg/providers/Microsoft.Network/virtualNetworks/vnet1-p12mock/virtualNetworkPeerings/vnet1-to-vnet2",
+            "after": {
+                "properties": {}
+            },
+            "before": null
+        },
+        {
+            "changeType": "Create",
+            "resourceId": "/subscriptions/cf70b558-b930-45e4-9048-ebcefb926adf/resourceGroups/arm-estimator-tests-rg/providers/Microsoft.Network/virtualNetworks/vnet2-p12mock",
+            "after": {
+                "location": "eastasia",
+                "properties": {
+                    "virtualNetworkPeerings": [
+                        {
+                            "id": "/subscriptions/cf70b558-b930-45e4-9048-ebcefb926adf/resourceGroups/arm-estimator-tests-rg/providers/Microsoft.Network/virtualNetworks/vnet2-p12mock/virtualNetworkPeerings/vnet2-to-vnet1",
+                            "name": "vnet2-to-vnet1",
+                            "properties": {
+                                "remoteVirtualNetwork": {
+                                    "id": "/subscriptions/cf70b558-b930-45e4-9048-ebcefb926adf/resourceGroups/arm-estimator-tests-rg/providers/Microsoft.Network/virtualNetworks/vnet1-p12mock"
+                                }
+                            }
+                        }
+                    ]
+                }
+            },
+            "before": null
+        },
+        {
+            "changeType": "Create",
+            "resourceId": "/subscriptions/cf70b558-b930-45e4-9048-ebcefb926adf/resourceGroups/arm-estimator-tests-rg/providers/Microsoft.Network/virtualNetworks/vnet2-p12mock/virtualNetworkPeerings/vnet2-to-vnet1",
+            "after": {
+                "properties": {}
+            },
+            "before": null
+        }
+    ]
+}

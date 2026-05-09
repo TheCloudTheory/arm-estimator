@@ -16,7 +16,9 @@ public class VirtualNetworkPeeringTests
                     "arm-estimator-tests-rg",
                     "--generate-json-output",
                     "--json-output-filename",
-                    outputFilename
+                    outputFilename,
+                    "--what-if-file",
+                    "mocked-responses/what-if/vnet-peering-1-2.json"
                 ]);
 
         Assert.That(exitCode, Is.EqualTo(0));
@@ -42,7 +44,9 @@ public class VirtualNetworkPeeringTests
                     "arm-estimator-tests-rg",
                     "--generate-json-output",
                     "--json-output-filename",
-                    outputFilename
+                    outputFilename,
+                    "--what-if-file",
+                    "mocked-responses/what-if/vnet-peering-1-3.json"
                 ]);
 
         Assert.That(exitCode, Is.EqualTo(0));
@@ -68,7 +72,9 @@ public class VirtualNetworkPeeringTests
                     "arm-estimator-tests-rg",
                     "--generate-json-output",
                     "--json-output-filename",
-                    outputFilename
+                    outputFilename,
+                    "--what-if-file",
+                    "mocked-responses/what-if/vnet-peering-2-3.json"
                 ]);
 
         Assert.That(exitCode, Is.EqualTo(0));
