@@ -80,7 +80,7 @@ namespace ACE.Output
                     resource.Key.GetResourceType().GetValueOrNotAvailable()});
             }
 
-            this.freeResourcesTable.Draw();
+            this.otherResourcesTable.Draw();
         }
 
         public void RenderUnsupportedResourcesBlock(List<CommonResourceIdentifier> unsupportedResources)

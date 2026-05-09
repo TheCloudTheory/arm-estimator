@@ -35,6 +35,8 @@ namespace ACE.Output
         /// </summary>
         public void Draw()
         {
+            if (this.rows.Count == 0) return;
+
             CalculateColumnsWidth();
 
             DrawHeader();
@@ -170,7 +172,7 @@ namespace ACE.Output
                 }       
                 else
                 {
-                    DrawBorder('└', '┴', '┘');
+                    DrawBorder('└', '┘', '┴');
                 }
 
                 index++;
