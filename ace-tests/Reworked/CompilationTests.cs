@@ -18,6 +18,8 @@ public class CompilationTests
                 "templates/reworked/automation-account/automation-parameters.bicepparam",
                 "--mocked-retail-api-response-path",
                 "mocked-responses/retail-api/automation-account/usage-patterns.json",
+                "--what-if-file",
+                "mocked-responses/what-if/automation-account.json",
                 "--force-bicep-cli"
             ]);
 
