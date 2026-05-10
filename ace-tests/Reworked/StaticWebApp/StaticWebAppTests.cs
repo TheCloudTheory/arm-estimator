@@ -19,6 +19,8 @@ namespace ACE_Tests.Reworked.StaticWebApp
                     outputFilename,
                     "--inline",
                     "parLocation=westeurope",
+                    "--what-if-file",
+                    "mocked-responses/what-if/static-web-app-free.json",
                     "--debug"
                 ]);
 
@@ -48,6 +50,8 @@ namespace ACE_Tests.Reworked.StaticWebApp
                     outputFilename,
                     "--inline",
                     "parLocation=westeurope",
+                    "--what-if-file",
+                    "mocked-responses/what-if/static-web-app-standard.json",
                     "--mocked-retail-api-response-path",
                     "mocked-responses/retail-api/static-web-app/standard.json",
                     "--debug"

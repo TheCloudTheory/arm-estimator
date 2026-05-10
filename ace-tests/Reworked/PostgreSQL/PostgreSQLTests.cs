@@ -15,6 +15,8 @@ public class PostgreSQLTests
                     "--json-output-filename",
                     outputFilename,
                     "--debug",
+                    "--what-if-file",
+                    "mocked-responses/what-if/postgresql.json",
                     "--mocked-retail-api-response-path",
                     "mocked-responses/retail-api/postgresql/burstable.json"
                 ]);

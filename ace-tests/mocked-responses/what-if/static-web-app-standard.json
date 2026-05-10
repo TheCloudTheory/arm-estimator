@@ -1,0 +1,24 @@
+{
+  "changes": [
+    {
+      "after": {
+        "apiVersion": "2023-01-01",
+        "id": "/subscriptions/cf70b558-b930-45e4-9048-ebcefb926adf/resourceGroups/arm-estimator-tests-rg/providers/Microsoft.Web/staticSites/static-site-20240410073228",
+        "location": "westeurope",
+        "name": "static-site-20240410073228",
+        "resourceGroup": "arm-estimator-tests-rg",
+        "sku": {
+          "name": "Standard"
+        },
+        "type": "Microsoft.Web/staticSites"
+      },
+      "before": null,
+      "changeType": "Create",
+      "delta": null,
+      "resourceId": "/subscriptions/cf70b558-b930-45e4-9048-ebcefb926adf/resourceGroups/arm-estimator-tests-rg/providers/Microsoft.Web/staticSites/static-site-20240410073228",
+      "unsupportedReason": null
+    }
+  ],
+  "error": null,
+  "status": "Succeeded"
+}

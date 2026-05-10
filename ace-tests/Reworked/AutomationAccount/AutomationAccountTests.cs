@@ -17,6 +17,8 @@ public class AutomationAccountTests
                 "--generate-json-output",
                 "--json-output-filename",
                 outputFilename,
+                "--what-if-file",
+                "mocked-responses/what-if/automation-account.json",
                 "--mocked-retail-api-response-path",
                 "mocked-responses/retail-api/automation-account/usage-patterns.json"
             ]);

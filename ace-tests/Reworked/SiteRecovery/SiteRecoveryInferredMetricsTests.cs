@@ -17,6 +17,8 @@ public class SiteRecoveryInferredMetricsTests
                 "--generate-json-output",
                 "--json-output-filename",
                 outputFilename,
+                "--what-if-file",
+                "mocked-responses/what-if/site-recovery.json",
                 "--mocked-retail-api-response-path",
                 "mocked-responses/retail-api/asr/inferred-1.json",
                 "--mocked-retail-api-response-path",

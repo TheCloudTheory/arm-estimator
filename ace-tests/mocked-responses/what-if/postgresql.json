@@ -1,0 +1,25 @@
+{
+  "changes": [
+    {
+      "after": {
+        "apiVersion": "2022-12-01",
+        "id": "/subscriptions/cf70b558-b930-45e4-9048-ebcefb926adf/resourceGroups/arm-estimator-tests-rg/providers/Microsoft.DBforPostgreSQL/flexibleServers/postgresqlserver1-20240410073228",
+        "location": "westeurope",
+        "name": "postgresqlserver1-20240410073228",
+        "resourceGroup": "arm-estimator-tests-rg",
+        "sku": {
+          "name": "Standard_B1MS",
+          "tier": "Burstable"
+        },
+        "type": "Microsoft.DBforPostgreSQL/flexibleServers"
+      },
+      "before": null,
+      "changeType": "Create",
+      "delta": null,
+      "resourceId": "/subscriptions/cf70b558-b930-45e4-9048-ebcefb926adf/resourceGroups/arm-estimator-tests-rg/providers/Microsoft.DBforPostgreSQL/flexibleServers/postgresqlserver1-20240410073228",
+      "unsupportedReason": null
+    }
+  ],
+  "error": null,
+  "status": "Succeeded"
+}
