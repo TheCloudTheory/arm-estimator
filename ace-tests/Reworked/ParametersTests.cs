@@ -6,7 +6,7 @@ public class ParametersTests
     [Test]
     public void Parameters_Bicepparam_WhenOnlyBicepparamParametersAreProvided_ItShouldProperlyUseThemAndEstimateTemplate()
     {
-        var outputFilename = $"ace_test_{DateTime.Now.Ticks}.json";
+        var outputFilename = $"ace_test_{DateTime.Now.Ticks}";
         var exitCode = Program.Main([
                 "templates/reworked/automation-account/automation-parameters.bicep",
                 "cf70b558-b930-45e4-9048-ebcefb926adf",
@@ -17,12 +17,14 @@ public class ParametersTests
                 "--parameters",
                 "templates/reworked/automation-account/automation-parameters.bicepparam",
                 "--mocked-retail-api-response-path",
-                "mocked-responses/retail-api/automation-account/usage-patterns.json"
+                "mocked-responses/retail-api/automation-account/usage-patterns.json",
+                "--what-if-file",
+                "mocked-responses/what-if/automation-account.json"
             ]);
 
         Assert.That(exitCode, Is.EqualTo(0));
 
-        var outputFile = File.ReadAllText($"{outputFilename}");
+        var outputFile = File.ReadAllText($"{outputFilename}.json");
         var output = JsonSerializer.Deserialize<EstimationOutput>(outputFile, Shared.JsonSerializerOptions);
 
         Assert.That(output, Is.Not.Null);
@@ -37,7 +39,7 @@ public class ParametersTests
     [Test]
     public void Parameters_Bicepparam_WhenBothBicepparamAndInlineParametersAreProvided_ItShouldProperlyUseThemAndEstimateTemplate()
     {
-        var outputFilename = $"ace_test_{DateTime.Now.Ticks}.json";
+        var outputFilename = $"ace_test_{DateTime.Now.Ticks}";
         var exitCode = Program.Main([
                 "templates/reworked/automation-account/automation-parameters.bicep",
                 "cf70b558-b930-45e4-9048-ebcefb926adf",
@@ -50,12 +52,14 @@ public class ParametersTests
                 "--inline",
                 "parSuffix=bicepparam",
                 "--mocked-retail-api-response-path",
-                "mocked-responses/retail-api/automation-account/usage-patterns.json"
+                "mocked-responses/retail-api/automation-account/usage-patterns.json",
+                "--what-if-file",
+                "mocked-responses/what-if/automation-account.json"
             ]);
 
         Assert.That(exitCode, Is.EqualTo(0));
 
-        var outputFile = File.ReadAllText($"{outputFilename}");
+        var outputFile = File.ReadAllText($"{outputFilename}.json");
         var output = JsonSerializer.Deserialize<EstimationOutput>(outputFile, Shared.JsonSerializerOptions);
 
         Assert.That(output, Is.Not.Null);
