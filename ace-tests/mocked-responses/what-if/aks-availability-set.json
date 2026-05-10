@@ -1,0 +1,36 @@
+{
+    "changes": [
+      {
+        "after": {
+          "apiVersion": "2023-10-01",
+          "id": "/subscriptions/cf70b558-b930-45e4-9048-ebcefb926adf/resourceGroups/arm-estimator-tests-rg/providers/Microsoft.ContainerService/managedClusters/aks-20240410073228",
+          "location": "westeurope",
+          "name": "aks-20240410073228",
+          "resourceGroup": "arm-estimator-tests-rg",
+          "type": "Microsoft.ContainerService/managedClusters",
+          "sku": {
+            "tier": "Free"
+          },
+          "properties": {
+            "agentPoolProfiles": [
+              {
+                "name": "agentpool",
+                "type": "AvailabilitySet",
+                "count": 1,
+                "vmSize": "Standard_D2s_v3",
+                "osDiskSizeGB": 4,
+                "osType": "Windows"
+              }
+            ]
+          }
+        },
+        "before": null,
+        "changeType": "Create",
+        "delta": null,
+        "resourceId": "/subscriptions/cf70b558-b930-45e4-9048-ebcefb926adf/resourceGroups/arm-estimator-tests-rg/providers/Microsoft.ContainerService/managedClusters/aks-20240410073228",
+        "unsupportedReason": null
+      }
+    ],
+    "error": null,
+    "status": "Succeeded"
+  }

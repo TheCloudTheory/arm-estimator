@@ -19,7 +19,9 @@ public class DiskCalculationTests
                 "--json-output-filename",
                 outputFilename,
                 "--mocked-retail-api-response-path",
-                "mocked-responses/retail-api/aks/ultrassd.json"
+                "mocked-responses/retail-api/aks/ultrassd.json",
+                "--what-if-file",
+                "mocked-responses/what-if/aks-ultrassd.json"
             ]);
 
         Assert.That(exitCode, Is.EqualTo(0));

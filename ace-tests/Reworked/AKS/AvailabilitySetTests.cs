@@ -18,7 +18,9 @@ public class AvailabilitySetTests
                 "--json-output-filename",
                 outputFilename,
                 "--mocked-retail-api-response-path",
-                "mocked-responses/retail-api/aks/availability-set.json"
+                "mocked-responses/retail-api/aks/availability-set.json",
+                "--what-if-file",
+                "mocked-responses/what-if/aks-availability-set.json"
             ]);
 
         Assert.That(exitCode, Is.EqualTo(0));
