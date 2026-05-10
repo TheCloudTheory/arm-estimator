@@ -1,0 +1,27 @@
+{
+    "changes": [
+      {
+        "after": {
+          "apiVersion": "2023-07-01",
+          "id": "/subscriptions/cf70b558-b930-45e4-9048-ebcefb926adf/resourceGroups/arm-estimator-tests-rg/providers/Microsoft.KeyVault/vaults/kv20240410073228",
+          "location": "westeurope",
+          "name": "kv20240410073228",
+          "resourceGroup": "arm-estimator-tests-rg",
+          "type": "Microsoft.KeyVault/vaults",
+          "properties": {
+            "sku": {
+              "family": "A",
+              "name": "standard"
+            }
+          }
+        },
+        "before": null,
+        "changeType": "Create",
+        "delta": null,
+        "resourceId": "/subscriptions/cf70b558-b930-45e4-9048-ebcefb926adf/resourceGroups/arm-estimator-tests-rg/providers/Microsoft.KeyVault/vaults/kv20240410073228",
+        "unsupportedReason": null
+      }
+    ],
+    "error": null,
+    "status": "Succeeded"
+  }

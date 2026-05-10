@@ -15,7 +15,9 @@ public class KeyVaultWithUdfTests
             outputFilename,
             "--debug",
             "--mocked-retail-api-response-path",
-            "mocked-responses/retail-api/key-vault/usage-patterns.json"
+            "mocked-responses/retail-api/key-vault/usage-patterns.json",
+            "--what-if-file",
+            "mocked-responses/what-if/key-vault.json"
         ]);
 
         Assert.That(exitCode, Is.EqualTo(0));
