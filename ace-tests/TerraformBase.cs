@@ -16,6 +16,8 @@ public class TerraformBase
             process.StartInfo.RedirectStandardError = true;
             process.StartInfo.WorkingDirectory = workingDirectory;
 
+            UseAzureCliCredentials(process.StartInfo);
+
             string? error = null;
             process.ErrorDataReceived += new DataReceivedEventHandler((sender, e) => { error += e.Data; });
 
@@ -41,6 +43,8 @@ public class TerraformBase
             process.StartInfo.RedirectStandardError = true;
             process.StartInfo.WorkingDirectory = workingDirectory;
 
+            UseAzureCliCredentials(process.StartInfo);
+
             string? error = null;
             process.ErrorDataReceived += new DataReceivedEventHandler((sender, e) => { error += e.Data; });
 
@@ -56,5 +60,13 @@ public class TerraformBase
 
             Assert.That(string.IsNullOrEmpty(error), Is.True);
         }
+    }
+
+    // Remove service principal credentials so the azurerm provider falls back to
+    // Azure CLI auth, which is already configured by the Azure Login step in CI.
+    private static void UseAzureCliCredentials(ProcessStartInfo startInfo)
+    {
+        startInfo.EnvironmentVariables.Remove("ARM_CLIENT_ID");
+        startInfo.EnvironmentVariables.Remove("ARM_CLIENT_SECRET");
     }
 }
