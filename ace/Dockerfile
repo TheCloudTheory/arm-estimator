@@ -4,6 +4,7 @@ WORKDIR /app
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 COPY ./ace ./ace
+COPY ./ace-core ./ace-core
 COPY ./ace-terraform-parser ./ace-terraform-parser
 RUN dotnet restore "ace/azure-cost-estimator.csproj"
 RUN dotnet build "ace/azure-cost-estimator.csproj" -c Release -o /app/build --no-restore
