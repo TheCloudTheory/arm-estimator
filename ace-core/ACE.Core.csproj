@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>ACE</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+
+    <!-- NuGet metadata -->
+    <PackageId>ACE.Core</PackageId>
+    <Version>1.6.5</Version>
+    <Authors>TheCloudTheory</Authors>
+    <Description>Core cost-estimation engine for ACE (Azure Cost Estimator). Provides a library API to price Azure resources without any CLI or output dependencies.</Description>
+    <PackageTags>azure;cost;estimation;finops;arm</PackageTags>
+    <PackageProjectUrl>https://github.com/TheCloudTheory/arm-estimator</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/TheCloudTheory/arm-estimator</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Azure.ResourceManager.Compute" Version="1.3.0" />
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.19.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.0" />
+    <PackageReference Include="Azure.Identity" Version="1.11.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="../README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+</Project>

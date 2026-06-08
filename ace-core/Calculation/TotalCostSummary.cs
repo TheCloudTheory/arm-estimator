@@ -1,6 +1,6 @@
 ﻿namespace ACE.Calculation;
 
-internal class TotalCostSummary
+public class TotalCostSummary
 {
     public double TotalCost { get; set; }
     public IDictionary<string, double?> DetailedCost { get; }

@@ -3,7 +3,8 @@ using System.Text.Json.Serialization;
 
 namespace ACE
 {
-    internal record HumanFriendlyCost
+    /// <summary>A cost value with both a formatted string and the raw double.</summary>
+    public record HumanFriendlyCost
     {
         private static readonly NumberFormatInfo Precision = new()
         {

@@ -37,7 +37,8 @@ internal class WhatIfProperties
     public WhatIfChange[]? changes { get; set; }
 }
 
-internal class WhatIfChange
+/// <summary>Describes a single resource change in a What-If operation or inventory snapshot.</summary>
+public class WhatIfChange
 {
     public string? resourceId { get; set; }
 
@@ -47,7 +48,8 @@ internal class WhatIfChange
     public WhatIfAfterBeforeChange? before { get; set; }
 }
 
-internal class WhatIfAfterBeforeChange
+/// <summary>ARM resource state snapshot (before or after a change).</summary>
+public class WhatIfAfterBeforeChange
 {
     public string? location { get; set; }
     public WhatIfSku? sku { get; set; }
@@ -57,12 +59,14 @@ internal class WhatIfAfterBeforeChange
     public OmsPlan? plan { get; set; }
 }
 
-internal class OmsPlan
+/// <summary>OMS/Marketplace plan attached to a resource.</summary>
+public class OmsPlan
 {
     public string? product { get; set; }
 }
 
-internal class WhatIfSku
+/// <summary>SKU information for a resource.</summary>
+public class WhatIfSku
 {
     public string? name { get; set; }
     public string? tier { get; set; }

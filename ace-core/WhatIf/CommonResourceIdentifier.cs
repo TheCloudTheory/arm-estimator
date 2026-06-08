@@ -15,7 +15,8 @@ namespace ACE.WhatIf;
 /// each resource ID (no matter which tool was used under the hood) behaves
 /// the same way.
 /// </summary>
-internal class CommonResourceIdentifier
+/// <summary>Unified resource identifier abstraction for both ARM and Terraform resource IDs.</summary>
+public class CommonResourceIdentifier
 {
     private readonly CommonResourceIdentifierType type;
     private readonly ResourceIdentifier? azureResourceIdentifier;

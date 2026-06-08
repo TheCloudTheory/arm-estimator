@@ -1,6 +1,7 @@
 ﻿namespace ACE.WhatIf;
 
-internal enum WhatIfChangeType
+/// <summary>The type of change detected or declared for a resource.</summary>
+public enum WhatIfChangeType
 {
     Create,
     Delete,

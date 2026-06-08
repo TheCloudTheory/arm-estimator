@@ -1,5 +1,7 @@
 ﻿using ACE.Calculation;
+using ACE.Core;
 using ACE.Extensions;
+using ACE.Logging;
 using ACE.Output;
 using ACE.Products.ASR;
 using ACE.Products.VirtualNetwork;
@@ -29,18 +31,19 @@ internal class WhatIfProcessor : IDisposable
     private readonly bool debug;
     private readonly HttpClient httpClient;
 
-    public WhatIfProcessor(ILogger logger,
-                           WhatIfChange[] changes,
-                           TemplateSchema template,
-                           EstimateOptions options,
-                           CancellationToken token)
+    internal WhatIfProcessor(ILogger logger,
+                             WhatIfChange[] changes,
+                             TemplateSchema template,
+                             CoreEstimationOptions options,
+                             IOutputFormatter outputFormatter,
+                             CancellationToken token)
     {
         this.logger = logger;
         this.changes = changes;
         this.currency = options.Currency;
         this.template = template;
         this.conversionRate = options.ConversionRate;
-        this.outputFormatter = new OutputGenerator(options.OutputFormat, logger, options.Currency, options.DisableDetailedMetrics).GetFormatter();
+        this.outputFormatter = outputFormatter;
         this.mockedRetailAPIResponsePaths = options.MockedRetailAPIResponsePaths;
         this.debug = options.Debug;
         this.httpClient = new HttpClient();

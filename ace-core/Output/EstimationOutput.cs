@@ -2,7 +2,8 @@
 
 namespace ACE.Output;
 
-internal class EstimationOutput
+/// <summary>Aggregate result returned by <see cref="ACE.Core.EstimationService.EstimateAsync"/>.</summary>
+public class EstimationOutput
 {
     public HumanFriendlyCost TotalCost { get; }
     public HumanFriendlyCost Delta { get; }
@@ -12,7 +13,8 @@ internal class EstimationOutput
     public int EstimatedResourceCount { get; }
     public int SkippedResourceCount { get; }
 
-    internal EstimationOutput(double totalCost,
+    internal EstimationOutput( // constructed only by WhatIfProcessor
+                              double totalCost,
                               double delta,
                               IEnumerable<EstimatedResourceData> resources,
                               CurrencyCode currency,
@@ -29,7 +31,8 @@ internal class EstimationOutput
     }
 }
 
-internal class EstimatedResourceData
+/// <summary>Per-resource cost breakdown entry within an <see cref="EstimationOutput"/>.</summary>
+public class EstimatedResourceData
 {
     public string Id { get; }
     public HumanFriendlyCost TotalCost { get; }

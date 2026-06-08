@@ -39,6 +39,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ace-core\ACE.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="Html\GeneratorTemplate.html">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

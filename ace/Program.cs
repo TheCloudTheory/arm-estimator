@@ -336,7 +336,16 @@ public partial class Program
             using var processor =  new WhatIfProcessor(logger,
                                                    whatIfData.properties.changes,
                                                    parser?.Template!,
-                                                   options,
+                                                   new ACE.Core.CoreEstimationOptions
+                                                   {
+                                                       Currency = options.Currency,
+                                                       ConversionRate = options.ConversionRate,
+                                                       CacheHandler = options.CacheHandler,
+                                                       CacheHandlerStorageAccountName = options.CacheHandlerStorageAccountName,
+                                                       MockedRetailAPIResponsePaths = options.MockedRetailAPIResponsePaths,
+                                                       Debug = options.Debug
+                                                   },
+                                                   new OutputGenerator(options.OutputFormat, logger, options.Currency, options.DisableDetailedMetrics).GetFormatter(),
                                                    _cancellationTokenSource.Token);
 
             var output = await processor.ProcessAsync(_cancellationTokenSource.Token);

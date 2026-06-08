@@ -4,7 +4,8 @@
     public string? Url { get; set; }
 }
 
-internal class RetailItem
+/// <summary>A single pricing record returned by the Azure Retail Prices API.</summary>
+public class RetailItem
 {
     public double? retailPrice { get; set; }
     public string? type { get; set; }

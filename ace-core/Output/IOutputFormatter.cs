@@ -3,7 +3,8 @@ using ACE.WhatIf;
 
 namespace ACE.Output
 {
-    internal interface IOutputFormatter
+    /// <summary>Receives estimation progress events. Implement to redirect output to a custom sink.</summary>
+    public interface IOutputFormatter
     {
         void ReportEstimationToConsole(CommonResourceIdentifier id,
                                                IOrderedEnumerable<RetailItem> items,

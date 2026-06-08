@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ace\azure-cost-estimator.csproj" />
+    <ProjectReference Include="..\ace-core\ACE.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
