@@ -28,7 +28,7 @@ internal class CapabilitiesCache
     /// to remember, that Azure chooses disks with the best performance, i.e. if VM supports
     /// Premium SSD, inferred disk type will be exactly that.
     /// </summary>
-    public void InitializeVirtualMachineCapabilities(string location, CancellationToken token)
+    public void InitializeVirtualMachineCapabilities(string location, CancellationToken token, ArmClient? armClient = null)
     {
         if(token.IsCancellationRequested) return;
         if(this.cache.CacheFileExists())
@@ -36,9 +36,13 @@ internal class CapabilitiesCache
             return;
         }
 
-        var credentials = new DefaultAzureCredential();
-        var client = new ArmClient(credentials);
-        var defaultSubscription = client.GetDefaultSubscription(token);
+        if (armClient == null)
+        {
+            var credentials = new DefaultAzureCredential();
+            armClient = new ArmClient(credentials);
+        }
+
+        var defaultSubscription = armClient.GetDefaultSubscription(token);
         var vmSkuPremiumEnabled = new Dictionary<string, string>();
         
         foreach (var sku in defaultSubscription.GetComputeResourceSkus(filter: $"location eq '{location}'", cancellationToken: token))

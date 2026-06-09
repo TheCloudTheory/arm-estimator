@@ -1,5 +1,6 @@
 using ACE.Caching;
 using ACE.WhatIf;
+using Azure.ResourceManager;
 
 namespace ACE.Core;
 
@@ -35,4 +36,12 @@ public record CoreEstimationOptions
 
     /// <summary>Emit verbose debug log messages during estimation. Defaults to false.</summary>
     public bool Debug { get; init; }
+
+    /// <summary>
+    /// Optional <see cref="Azure.ResourceManager.ArmClient"/> used when fetching VM SKU capabilities.
+    /// When provided, the capabilities cache uses this client instead of constructing one from
+    /// <c>DefaultAzureCredential</c>. Set this to a client pointing at a local emulator (e.g. Topaz)
+    /// to avoid requiring real Azure credentials.
+    /// </summary>
+    public ArmClient? ArmClient { get; init; }
 }

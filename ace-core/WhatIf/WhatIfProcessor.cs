@@ -6,6 +6,7 @@ using ACE.Output;
 using ACE.Products.ASR;
 using ACE.Products.VirtualNetwork;
 using ACE.ResourceManager;
+using Azure.ResourceManager;
 using Microsoft.Extensions.Logging;
 using System.Collections.Concurrent;
 using System.Net;
@@ -49,7 +50,7 @@ internal class WhatIfProcessor : IDisposable
         this.httpClient = new HttpClient();
 
         ReconcileResources(token);
-        BuildVMCapabilitiesIfNeeded(options.CacheHandler, options.CacheHandlerStorageAccountName, token);
+        BuildVMCapabilitiesIfNeeded(options.CacheHandler, options.CacheHandlerStorageAccountName, options.ArmClient, token);
     }
 
     /// <summary>
@@ -118,7 +119,7 @@ internal class WhatIfProcessor : IDisposable
         }
     }
 
-    private void BuildVMCapabilitiesIfNeeded(CacheHandler cacheHandler, string? cacheHandlerStorageAccountName, CancellationToken token)
+    private void BuildVMCapabilitiesIfNeeded(CacheHandler cacheHandler, string? cacheHandlerStorageAccountName, ArmClient? armClient, CancellationToken token)
     {
         if (token.IsCancellationRequested) return;
 
@@ -138,7 +139,7 @@ internal class WhatIfProcessor : IDisposable
             }
 
             WhatIfProcessor.cache = new CapabilitiesCache(cacheHandler, cacheHandlerStorageAccountName);
-            WhatIfProcessor.cache.InitializeVirtualMachineCapabilities(location, token);
+            WhatIfProcessor.cache.InitializeVirtualMachineCapabilities(location, token, armClient);
 
             this.logger.AddEstimatorMessage("Capabilities cache initialized.");
             logger.LogInformation("");
