@@ -18,7 +18,7 @@ namespace ACE.WhatIf;
 internal class WhatIfProcessor : IDisposable
 {
     private static readonly ConcurrentDictionary<string, RetailAPIResponse> cachedResults = new();
-    private static readonly Dictionary<string, string> resourceIdToLocationMap = [];
+    private readonly Dictionary<string, string> resourceIdToLocationMap = [];
 
     internal static CapabilitiesCache? cache;
 
