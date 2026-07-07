@@ -9,13 +9,16 @@ namespace ACE.Caching;
 /// </summary>
 internal class LocalCacheHandler : ICacheHandler
 {
+    private static readonly string CacheDirectory =
+        Path.Combine(Path.GetTempPath(), ".ace");
+
     private readonly string key;
 
     static LocalCacheHandler()
     {
-        if (Directory.Exists(".ace") == false)
+        if (Directory.Exists(CacheDirectory) == false)
         {
-            Directory.CreateDirectory(".ace");
+            Directory.CreateDirectory(CacheDirectory);
         }
     }
 
@@ -49,7 +52,7 @@ internal class LocalCacheHandler : ICacheHandler
             return default;
         }
 
-        var content = File.ReadAllText(Path.Combine(".ace", $"{this.key}.cache"));
+        var content = File.ReadAllText(Path.Combine(CacheDirectory, $"{this.key}.cache"));
         if(string.IsNullOrEmpty(content))
         {
             return default;
@@ -60,11 +63,11 @@ internal class LocalCacheHandler : ICacheHandler
 
     public void SaveData(object data)
     {
-        File.WriteAllText(Path.Combine(".ace", $"{this.key}.cache"), JsonSerializer.Serialize(data));
+        File.WriteAllText(Path.Combine(CacheDirectory, $"{this.key}.cache"), JsonSerializer.Serialize(data));
     }
 
     public bool CacheFileExists()
     {
-        return File.Exists(Path.Combine(".ace", $"{this.key}.cache"));
+        return File.Exists(Path.Combine(CacheDirectory, $"{this.key}.cache"));
     }
 }

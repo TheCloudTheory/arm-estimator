@@ -10,7 +10,7 @@
 
     <!-- NuGet metadata -->
     <PackageId>TheCloudTheory.AzureCostEstimator.Core</PackageId>
-    <Version>1.8.1</Version>
+    <Version>1.9.0</Version>
     <Authors>TheCloudTheory</Authors>
     <Description>Core cost-estimation engine for ACE (Azure Cost Estimator). Provides a library API to price Azure resources without any CLI or output dependencies.</Description>
     <PackageTags>azure;cost;estimation;finops;arm</PackageTags>
