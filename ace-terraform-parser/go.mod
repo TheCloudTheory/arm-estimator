@@ -1,6 +1,6 @@
 module azure-cost-estimator/terraform-parser
 
-go 1.24.0
+go 1.25.0
 
 require github.com/hashicorp/terraform-exec v0.17.3
 
@@ -10,6 +10,6 @@ require (
 	github.com/hashicorp/terraform-json v0.14.0 // indirect
 	github.com/xanzy/ssh-agent v0.3.1 // indirect
 	github.com/zclconf/go-cty v1.12.1 // indirect
-	golang.org/x/crypto v0.45.0 // indirect
-	golang.org/x/text v0.31.0 // indirect
+	golang.org/x/crypto v0.52.0 // indirect
+	golang.org/x/text v0.37.0 // indirect
 )
