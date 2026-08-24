@@ -1,4 +1,5 @@
-﻿using ACE.WhatIf;
+﻿using ACE.Products.APIM;
+using ACE.WhatIf;
 using Azure.Core;
 using Microsoft.Extensions.Logging;
 
@@ -28,7 +29,7 @@ internal class APIMRetailQuery : BaseRetailQuery, IRetailQuery
             return null;
         }
 
-        var filter = new APIMQueryFilter(change, this.logger).GetFiltersBasedOnDesiredState(location);
+        var filter = new ApimQueryFilter(change, this.logger).GetFiltersBasedOnDesiredState(location);
         return $"{baseQuery}{filter}";
     }
 }

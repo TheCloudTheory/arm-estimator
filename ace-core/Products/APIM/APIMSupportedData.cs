@@ -3,47 +3,40 @@
     public static readonly IReadOnlyDictionary<string, string[]> SkuToSkuNameMap = new Dictionary<string, string[]>()
     {
         {
-            "Consumption", new[] 
-            {
+            "Consumption", [
                 "Consumption"
-            }
+            ]
         },
         {
-            "Basic", new[]
-            {
+            "Basic", [
                 "Basic"
-            }
+            ]
         },
         {
-            "Standard", new[]
-            {
+            "Standard", [
                 "Standard"
-            }
+            ]
         },
         {
-            "Developer", new[]
-            {
+            "Developer", [
                 "Developer"
-            }
+            ]
         },
         {
-            "Premium", new[]
-            {
+            "Premium", [
                 "Premium",
                 "Secondary"
-            }
+            ]
         },
         {
-            "Isolated", new[]
-            {
+            "Isolated", [
                 "Isolated"
-            }
+            ]
         },
         {
-            "Gateway", new[]
-            {
+            "Gateway", [
                 "Gateway"
-            }
+            ]
         }
     };
 }
